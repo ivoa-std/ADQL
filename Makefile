@@ -4,7 +4,7 @@
 DOCNAME = ADQL
 
 # count up; you probably do not want to bother with versions <1.0
-DOCVERSION = 2.0
+DOCVERSION = 2.1
 
 # Publication date, ISO format; update manually for "releases"
 DOCDATE = 2015-02-12
