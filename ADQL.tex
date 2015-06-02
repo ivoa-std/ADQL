@@ -155,6 +155,8 @@ The language allows simple Latin letters (lower and upper case, i.e.
     \item ampersand (\verb:&:)
     \item question mark (\verb:?:)
     \item vertical bar (\verb:|:)
+    \item curcumflex (\verb:^:)
+    \item tilde (\verb:~:)
 \end{itemize}
 
 \subsubsection{Keywords and Identifiers}
@@ -176,34 +178,31 @@ to the following list:
 
 \begin{verbatim}
 ABSOLUTE, ACTION, ADD, ALL, ALLOCATE, ALTER, AND, ANY, ARE, AS, ASC,
-ASSERTION, AT, AUTHORIZATION, AVG, BEGIN, BETWEEN, BIT, BIT_LENGTH,
-BOTH, BY, CASCADE, CASCADED, CASE, CAST, CATALOG, CHAR, CHARACTER,
-CHARACTER_LENGTH, CHAR_LENGTH, CHECK, CLOSE, COALESCE, COLLATE,
-COLLATION, COLUMN, COMMIT, CONNECT, CONNECTION, CONSTRAINT,
-CONSTRAINTS, CONTINUE, CONVERT, CORRESPONDING, COUNT, CREATE,
-CROSS, CURRENT, CURRENT_DATE, CURRENT_TIME, CURRENT_TIMESTAMP,
-CURRENT_USER, CURSOR, DATE, DAY, DEALLOCATE, DECIMAL, DECLARE,
-DEFAULT, DEFERRABLE, DEFERRED, DELETE, DESC, DESCRIBE, DESCRIPTOR,
-DIAGNOSTICS, DISCONNECT, DISTINCT, DOMAIN, DOUBLE, DROP, ELSE, END,
-END-EXEC, ESCAPE, EXCEPT, EXCEPTION, EXEC, EXECUTE, EXISTS, EXTERNAL,
-EXTRACT, FALSE, FETCH, FIRST, FLOAT, FOR, FOREIGN, FOUND, FROM,
-FULL, GET, GLOBAL, GO, GOTO, GRANT, GROUP, HAVING, HOUR, IDENTITY,
-IMMEDIATE, IN, INDICATOR, INITIALLY, INNER, INPUT, INSENSITIVE,
-INSERT, INT, INTEGER, INTERSECT, INTERVAL, INTO, IS, ISOLATION,
-JOIN, KEY, LANGUAGE, LAST, LEADING, LEFT, LEVEL, LIKE, LOCAL, LOWER,
-MATCH, MAX, MIN, MINUTE, MODULE, MONTH, NAMES, NATIONAL, NATURAL,
-NCHAR, NEXT, NO, NOT, NULL, NULLIF, NUMERIC, OCTET_LENGTH, OF, ON,
-ONLY, OPEN, OPTION, OR, ORDER, OUTER, OUTPUT, OVERLAPS, PAD, PARTIAL,
-POSITION, PRECISION, PREPARE, PRESERVE, PRIMARY, PRIOR, PRIVILEGES,
-PROCEDURE, PUBLIC, READ, REAL, REFERENCES, RELATIVE, RESTRICT,
-REVOKE, RIGHT, ROLLBACK, ROWS, SCHEMA, SCROLL, SECOND, SECTION,
-SELECT, SESSION, SESSION_USER, SET, SIZE, SMALLINT, SOME, SPACE, SQL,
-SQLCODE, SQLERROR, SQLSTATE, SUBSTRING, SUM, SYSTEM_USER, TABLE,
-TEMPORARY, THEN, TIME, TIMESTAMP, TIMEZONE_HOUR, TIMEZONE_MINUTE,
-TO, TRAILING, TRANSACTION, TRANSLATE, TRANSLATION, TRIM, TRUE,
-UNION, UNIQUE, UNKNOWN, UPDATE, UPPER, USAGE, USER, USING, VALUE,
-VALUES, VARCHAR, VARYING, VIEW, WHEN, WHENEVER, WHERE, WITH, WORK,
-WRITE, YEAR, ZONE
+ASSERTION, AT, AUTHORIZATION, AVG, BEGIN, BETWEEN, BIT, BIT_LENGTH, BOTH, BY,
+CASCADE, CASCADED, CASE, CAST, CATALOG, CHAR, CHARACTER, CHARACTER_LENGTH,
+CHAR_LENGTH, CHECK, CLOSE, COALESCE, COLLATE, COLLATION, COLUMN,
+COMMIT, CONNECT, CONNECTION, CONSTRAINT, CONSTRAINTS, CONTINUE, CONVERT,
+CORRESPONDING, COUNT, CREATE, CROSS, CURRENT, CURRENT_DATE, CURRENT_TIME,
+CURRENT_TIMESTAMP, CURRENT_USER, CURSOR, DATE, DAY, DEALLOCATE, DECIMAL,
+DECLARE, DEFAULT, DEFERRABLE, DEFERRED, DELETE, DESC, DESCRIBE, DESCRIPTOR,
+DIAGNOSTICS, DISCONNECT, DISTINCT, DOMAIN, DOUBLE, DROP, ELSE, END, END-EXEC,
+ESCAPE, EXCEPT, EXCEPTION, EXEC, EXECUTE, EXISTS, EXTERNAL, EXTRACT,
+FALSE, FETCH, FIRST, FLOAT, FOR, FOREIGN, FOUND, FROM, FULL, GET, GLOBAL,
+GO, GOTO, GRANT, GROUP, HAVING, HOUR, IDENTITY, IMMEDIATE, IN, INDICATOR,
+INITIALLY, INNER, INPUT, INSENSITIVE, INSERT, INT, INTEGER, INTERSECT,
+INTERVAL, INTO, IS, ISOLATION, JOIN, KEY, LANGUAGE, LAST, LEADING, LEFT,
+LEVEL, LIKE, LOCAL, LOWER, MATCH, MAX, MIN, MINUTE, MODULE, MONTH, NAMES,
+NATIONAL, NATURAL, NCHAR, NEXT, NO, NOT, NULL, NULLIF, NUMERIC, OCTET_LENGTH,
+OF, ON, ONLY, OPEN, OPTION, OR, ORDER, OUTER, OUTPUT, OVERLAPS, PAD, PARTIAL,
+POSITION, PRECISION, PREPARE, PRESERVE, PRIMARY, PRIOR, PRIVILEGES, PROCEDURE,
+PUBLIC, READ, REAL, REFERENCES, RELATIVE, RESTRICT, REVOKE, RIGHT, ROLLBACK,
+ROWS, SCHEMA, SCROLL, SECOND, SECTION, SELECT, SESSION, SESSION_USER, SET,
+SIZE, SMALLINT, SOME, SPACE, SQL, SQLCODE, SQLERROR, SQLSTATE, SUBSTRING,
+SUM, SYSTEM_USER, TABLE, TEMPORARY, THEN, TIME, TIMESTAMP, TIMEZONE_HOUR,
+TIMEZONE_MINUTE, TO, TRAILING, TRANSACTION, TRANSLATE, TRANSLATION, TRIM,
+TRUE, UNION, UNIQUE, UNKNOWN, UPDATE, UPPER, USAGE, USER, USING, VALUE,
+VALUES, VARCHAR, VARYING, VIEW, WHEN, WHENEVER, WHERE, WITH, WORK, WRITE,
+YEAR, ZONE
 \end{verbatim}
 
 \begin{itemize}
@@ -211,10 +210,27 @@ WRITE, YEAR, ZONE
 \end{itemize}
 
 \begin{verbatim}
-ABS, ACOS, ASIN, ATAN, ATAN2, CEILING, COS, DEGREES, EXP, FLOOR,
-LOG, LOG10, MOD, PI, POWER, RADIANS, RAND, ROUND, SIN, SQRT, TAN,
-TOP, TRUNCATE
+    ABS, ACOS, ASIN, ATAN, ATAN2, CEILING, COS, DEGREES, EXP, FLOOR, LOG,
+    LOG10, MOD, PI, POWER, RADIANS, RAND, ROUND, SIN, SQRT, TAN, TOP, TRUNCATE
 \end{verbatim}
+
+\begin{verbatim}
+    AREA, BOX, CENTROID, CIRCLE, CONTAINS, COORD1, COORD2, COORDSYS,
+    DISTANCE, INTERSECTS, POINT, POLYGON, REGION
+\end{verbatim}
+
+\begin{verbatim}
+    ILIKE
+\end{verbatim}
+
+\begin{verbatim}
+    IN_UNIT
+\end{verbatim}
+
+\begin{verbatim}
+    BIT_AND, BIT_NOT, BIT_OR, BIT_XOR
+\end{verbatim}
+
 
 The identifiers are used to express, for example, a table or a column
 reference name.
@@ -772,13 +788,22 @@ the \citet{std:TAPREGEXT} standard.
 
 In addition to the mathematical functions, ADQL provides a set of geometrical
 functions to enhance the astronomical usage of the language.
-The list of ADQL reserved keywords shown in Section \ref{sec:keywords}
-is therefore extended with the following function names:
 
-\begin{verbatim}
-    AREA, BOX, CENTROID, CIRCLE, CONTAINS, COORD1, COORD2,
-    COORDSYS, DISTANCE, INTERSECTS, POINT, POLYGON, REGION
-\end{verbatim}
+\begin{itemize}
+    \item AREA
+    \item BOX
+    \item CENTROID
+    \item CIRCLE
+    \item CONTAINS
+    \item COORD1
+    \item COORD2
+    \item COORDSYS
+    \item DISTANCE
+    \item INTERSECTS
+    \item POINT
+    \item POLYGON
+    \item REGION
+\end{itemize}
 
 A special attention has to be paid to the REGION function. As can be seen more
 in detail in Section 2.4.14, this construct is a general purpose function and
@@ -1533,14 +1558,6 @@ string manipulation and comparison operators.
     \item \verb:ILIKE: Case insensitive comparison
 \end{itemize}
 
-The list of ADQL reserved keywords shown in Section \ref{sec:keywords}
-is therefore extended to include the following:
-
-\begin{verbatim}
-    LOWER,
-    ILIKE
-\end{verbatim}
-
 \subsubsection{LOWER}
 \label{sec:string.functions.lower}
 {\footnotesize Language feature :}\\
@@ -1584,13 +1601,6 @@ set operators:
     \item \verb:EXCEPT:
     \item \verb:INTERSECT:
 \end{itemize}
-
-The list of ADQL reserved keywords shown in Section \ref{sec:keywords}
-is therefore extended to include the following:
-
-\begin{verbatim}
-    UNION, EXCEPT, INTERSECT
-\end{verbatim}
 
 \subsubsection{UNION}
 {\footnotesize Language feature :}\\
@@ -1681,13 +1691,6 @@ support for hierarchical or recursive queries :
     \item \verb:WITH:
 \end{itemize}
 
-The list of ADQL reserved keywords shown in Section \ref{sec:keywords}
-is therefore extended to include the following:
-
-\begin{verbatim}
-    WITH
-\end{verbatim}
-
 \subsubsection{WITH}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-hierarchical|}\\
@@ -1724,13 +1727,6 @@ type conversion functions:
 \begin{itemize}
     \item \verb:CAST():
 \end{itemize}
-
-The list of ADQL reserved keywords shown in Section \ref{sec:keywords}
-is therefore extended to include the following:
-
-\begin{verbatim}
-    CAST
-\end{verbatim}
 
 \subsubsection{CAST}
 \label{sec:type.cast}
@@ -1910,13 +1906,6 @@ unit conversion functions:
     \item \verb:IN_UNIT():
 \end{itemize}
 
-The list of ADQL reserved keywords shown in Section \ref{sec:keywords}
-is therefore extended to include the following:
-
-\begin{verbatim}
-    IN_UNIT
-\end{verbatim}
-
 \subsubsection{IN\_UNIT}
 \label{sec:unit.cast}
 {\footnotesize Language feature :}\\
@@ -1946,21 +1935,6 @@ bitwise comparison functions, and their corresponding operators:
     \item \verb:BIT_XOR(x,y)  x ^ y:
     \item \verb:BIT_NOT(x)    ~ x:
 \end{itemize}
-
-The list of ADQL special characters shown in Section \ref{sec:characters}
-is therefore extended to include the following:
-
-\begin{itemize}
-    \item curcumflex (\verb:^:)
-    \item tilde (\verb:~:)
-\end{itemize}
-
-The list of ADQL reserved keywords shown in Section \ref{sec:keywords}
-is therefore extended to include the following:
-
-\begin{verbatim}
-    BIT_AND, BIT_OR, BIT_XOR, BIT_NOT
-\end{verbatim}
 
 The function and operator form of each bitwise operation are treated as a
 pair. If an ADQL implementation declares support for one of the bitwise
@@ -2070,6 +2044,10 @@ An easier to navigate version of the BNF grammar can be found at\\
       | ASIN
       | ATAN
       | ATAN2
+      | BIT_AND
+      | BIT_NOT
+      | BIT_OR
+      | BIT_XOR
       | BOX
       | CEILING
       | CENTROID
@@ -2083,7 +2061,9 @@ An easier to navigate version of the BNF grammar can be found at\\
       | DISTANCE
       | EXP
       | FLOOR
+      | ILIKE
       | INTERSECTS
+      | IN_UNIT
       | LOG
       | LOG10
       | MOD
