@@ -5,6 +5,14 @@
 \usepackage{tabularx}
 \usepackage{mathtools}
 
+\usepackage{listings}
+\lstloadlanguages{XML,sh}
+\lstset{flexiblecolumns=true,numberstyle=\small,numbers=left}
+
+\usepackage{hyperref}
+
+%\newcommand{\hfoot}[1] {\footnote{See URL: \href{#1} {{\tt #1}}   }}
+
 \title{Astronomical Data Query Language}
 
 \ivoagroup{Data Access Layer Working Group}
@@ -53,7 +61,9 @@ education, and outreach. The \href{http://www.ivoa.net}{International Virtual
 Observatory Alliance (IVOA)} is a global collaboration of separately funded
 projects to develop standards and infrastructure that enable VO applications.
 
+\clearpage
 \section{Introduction}
+\label{sec:introduction}
 
 The Astronomical Data Query Language (ADQL) is the language used by the
 International Virtual Observatory Alliance (IVOA) to represent astronomy
@@ -79,7 +89,9 @@ therefore this specification defines syntactical correctness only. Type safety
 has been achieved as far as it can be done in SQL. The exact meaning of key
 words indicating requirement levels can be found in the References section [2].
 
+\clearpage
 \subsection{Role within the VO Architecture}
+\label{sec:role}
 
 \begin{figure}
 \centering
@@ -91,7 +103,9 @@ words indicating requirement levels can be found in the References section [2].
 Fig.~\ref{fig:archdiag} shows the role this document plays within the
 IVOA architecture \citep{note:VOARCH}.
 
+\clearpage
 \section{Astronomical Data Query Language (ADQL)}
+\label{sec:language}
 
 This section describes the ADQL language specification. We will define in
 subsequent sections the syntax for the special characters, reserved and non-
@@ -112,36 +126,39 @@ for ADQL. The following conventions are used through this document:
     \item Case insensitiveness otherwise stated
 \end{itemize}
 
+\clearpage
 \subsection{Characters, Keywords, Identifiers and Literals}
 \subsubsection{Characters}
+\label{sec:characters}
 
 The language allows simple Latin letters (lower and upper case, i.e.
 \verb:{aA-zZ}):, digits (\verb:{0-9}:) and the following special characters:
 
 \begin{itemize}
-\item space
-\item single quote (\verb:’:)
-\item double quote (\verb:“:)
-\item percent (\verb:%:)
-\item left and right parenthesis
-\item asterisk (\verb:*:)
-\item plus sign (\verb:+:)
-\item minus sign (\verb:-:)
-\item comma (\verb:,:)
-\item period (\verb:.:)
-\item solidus (\verb:/:)
-\item colon (\verb.:.)
-\item semicolon (\verb:;:)
-\item less than operator (\verb:<:)
-\item equals operator (\verb:=:)
-\item greater than operator (\verb:>:)
-\item underscore (\verb:_:)
-\item ampersand (\verb:&:)
-\item question mark (\verb:?:)
-\item vertical bar (\verb:|:)
+    \item space
+    \item single quote (\verb:’:)
+    \item double quote (\verb:“:)
+    \item percent (\verb:%:)
+    \item left and right parenthesis
+    \item asterisk (\verb:*:)
+    \item plus sign (\verb:+:)
+    \item minus sign (\verb:-:)
+    \item comma (\verb:,:)
+    \item period (\verb:.:)
+    \item solidus (\verb:/:)
+    \item colon (\verb.:.)
+    \item semicolon (\verb:;:)
+    \item less than operator (\verb:<:)
+    \item equals operator (\verb:=:)
+    \item greater than operator (\verb:>:)
+    \item underscore (\verb:_:)
+    \item ampersand (\verb:&:)
+    \item question mark (\verb:?:)
+    \item vertical bar (\verb:|:)
 \end{itemize}
 
 \subsubsection{Keywords and Identifiers}
+\label{sec:keywords}
 
 Besides the character set, the language provides a list of reserved keywords
 plus the syntax description for regular identifiers.
@@ -219,11 +236,17 @@ ADQL allows making use of the same quoting mechanism to handle the case
 sensitiveness if needed.
 
 \subsubsection{Literals}
+\label{sec:literals}
 
 Finally we define the syntax rules for the different data types: string
 and number.
 
 A string literal is a character expression delimited by single quotes.
+
+\begin{verbatim}
+    <character_string_literal> ::=
+        <quote> [ <character_representation>... ] <quote>
+\end{verbatim}
 
 Literal numbers are expressed in BNF as follows:
 
@@ -234,7 +257,7 @@ Literal numbers are expressed in BNF as follows:
 
     <exact_numeric_literal> ::=
         <unsigned_integer> [<period> [<unsigned_integer>]]
-        | <period><unsigned_integer>
+      | <period><unsigned_integer>
 
     <unsigned_integer> ::= <digit>...
 
@@ -257,7 +280,9 @@ form using a variety of techniques, where e.g. ISO 8601 is an acceptable
 format. Therefore, as with other string representations, it should be up to
 the service capability to understand such specific formats.
 
+\clearpage
 \subsection{Query syntax}
+\label{sec:syntax}
 
 A full and complete syntax of the select statement can be found in “Appendix
 A: BNF Grammar” at the \verb:<query_specification>: construct. Follows a simplified
@@ -304,6 +329,7 @@ expression. In the following sections some constructs requiring further
 description are presented.
 
 \subsubsection{Table subqueries and Joins}
+\label{sec:subqueries}
 
 Table subqueries are present and can be used by some existing predicates
 within the search condition (IN and BETWEEN most likely) or as an artifact
@@ -313,6 +339,7 @@ default is INNER. All of these can be NATURAL or not. The join condition
 does not support embedded sub joins.
 
 \subsubsection{Search condition}
+\label{sec:search}
 
 The search condition can be part of several other clauses: JOIN, HAVING and,
 obviously, WHERE. Standard logical operators are present in its description
@@ -327,7 +354,16 @@ different types of reserved keywords or characters are used:
     \item \verb:EXISTS:
 \end{itemize}
 
+In addition, some service implementations may also support for the optional
+ILIKE case-insensitive string comparison operator.
+
+\begin{itemize}
+    \item \verb:ILIKE:
+\end{itemize}
+
+\clearpage
 \subsection{Mathematical and Trigonometrical Functions}
+\label{sec:math.functions}
 
 ADQL declares a list of reserved keywords (section 2.1.2) which defines
 a set of mathematical and trigonometrical function names. Their syntax,
@@ -341,101 +377,117 @@ usage and description are detailed in the following tables:
         \textbf{Name} &
         \textbf{Argument \newline data type} &
         \textbf{Return \newline data type} &
-        \textbf{Description} \\
+        \textbf{Description}
+        \tabularnewline
 
         \hline
         abs(x) &
         double&double &
-        Returns the absolute value of x.\\
+        Returns the absolute value of x.
+        \tabularnewline
 
         \hline
         ceiling(x) &
         double&double &
-        Returns the smallest double value that is not less than the argument x and is equal to a mathematical integer.\\
+        Returns the smallest double value that is not less than the argument x and is equal to a mathematical integer.
+        \tabularnewline
 
         \hline
         degrees(x) &
         double &
         double &
-        Converts an angle to degrees. Argument x must be in radians.\\
+        Converts an angle to degrees. Argument x must be in radians.
+        \tabularnewline
 
         \hline
         exp(x) &
         double &
         double &
-        Returns Euler’s number e raised to the power of x.\\
+        Returns Euler’s number e raised to the power of x.
+        \tabularnewline
 
         \hline
         floor(x) &
         double &
         double &
-        Returns the largest double value that is not greater than the argument x and is equal to a mathematical integer.\\
+        Returns the largest double value that is not greater than the argument x and is equal to a mathematical integer.
+        \tabularnewline
 
         \hline
         log(x) &
         double &
         double &
-        Returns the natural logarithm (base e) of a double value. Value x must be greater than zero.\\
-        
+        Returns the natural logarithm (base e) of a double value. Value x must be greater than zero.
+        \tabularnewline
+
         \hline
         log10(x) &
         double &
         double &
-        Returns the base 10 logarithm of a double value. Value x must be greater than zero.\\
+        Returns the base 10 logarithm of a double value. Value x must be greater than zero.
+        \tabularnewline
 
         \hline
         mod(x, y) &
         double &
         double &
-        Returns the remainder of y/x.\\
+        Returns the remainder of y/x.
+        \tabularnewline
         
         \hline
         pi() &
         n/a &
         double &
-        The \(\pi\) constant.\\
+        The \(\pi\) constant.
+        \tabularnewline
         
         \hline
         power(x, y) &
         x double \newline y double &
         double &
-        Returns the value of the first argument raised to the power of the second argument.\\
+        Returns the value of the first argument raised to the power of the second argument.
+        \tabularnewline
 
         \hline
         radians(x) &
         double &
         double &
-        Converts an angle to radians. Argument x must be in degrees.\\
+        Converts an angle to radians. Argument x must be in degrees.
+        \tabularnewline
 
         \hline
         sqrt(x) &
         double &
         double &
-        Returns the positive square root of a double value.\\
+        Returns the positive square root of a double value.
+        \tabularnewline
 
         \hline
         rand(x) &
         integer &
         double &
-        Returns a random value between 0.0 and 1.0, where x is a seed  value.\\
+        Returns a random value between 0.0 and 1.0, where x is a seed  value.
+        \tabularnewline
 
         \hline
         round(x, n) &
         x double \newline n integer &
         double &
         Rounds double value x to n number of decimal places, with the default being to round to the nearest integer.
-        To round to the left of the decimal point, a negative number should be provided.\\
+        To round to the left of the decimal point, a negative number should be provided.
+        \tabularnewline
 
         \hline
         truncate(x, n) &
         x double \newline n integer &
         double &
-        Returns the result of truncating the argument x to n decimal places.\\
+        Returns the result of truncating the argument x to n decimal places.
+        \tabularnewline
 
         \hline
     \end{tabular}
     \caption{Mathematical functions}
-    \label{table:extable}
+    \label{table:math.functions.table}
 \end{table}
 
 \begin{table}[thm]\footnotesize
@@ -446,67 +498,286 @@ usage and description are detailed in the following tables:
         \textbf{Name} &
         \textbf{Argument \newline data type} &
         \textbf{Return \newline data type} &
-        \textbf{Description} \\
+        \textbf{Description}
+        \tabularnewline
 
         \hline
         acos(x) &
         double &
         double &
-        Returns the arc cosine of an angle, in the range of 0 through \(\pi\) radians. Absolute value of x must be lower or equal than 1.0.\\
+        Returns the arc cosine of an angle, in the range of 0 through \(\pi\) radians. Absolute value of x must be lower or equal than 1.0.
+        \tabularnewline
 
         \hline
         asin(x) &
         double &
         double &
-        Returns the arc sine of an angle, in the range of -\(\pi\)/2 through \(\pi\)/2 radians. Absolute value of x must be and lower or equal than 1.0.\\
+        Returns the arc sine of an angle, in the range of -\(\pi\)/2 through \(\pi\)/2 radians. Absolute value of x must be and lower or equal than 1.0.
+        \tabularnewline
 
         \hline
         atan(x) &
         double &
         double &
-        Returns the arc tangent of an angle, in the range of -\(\pi\)/2 through \(\pi\)/2 radians.\\
+        Returns the arc tangent of an angle, in the range of -\(\pi\)/2 through \(\pi\)/2 radians.
+        \tabularnewline
         
         \hline
         atan2(y,x) &
         double &
         double &
-        Converts rectangular coordinates x,y to polar angle. It computes the arc tangent of y/x in the range of –\(\pi\) through \(\pi\) radians.\\
+        Converts rectangular coordinates x,y to polar angle. It computes the arc tangent of y/x in the range of –\(\pi\) through \(\pi\) radians.
+        \tabularnewline
 
         \hline
         cos(x) &
         double &
         double &
-        Returns the cosine of an angle, in the range of -1.0 through 1.0. Argument x must be in radians.\\
+        Returns the cosine of an angle, in the range of -1.0 through 1.0. Argument x must be in radians.
+        \tabularnewline
 
         \hline
         sin(x) &
         double &
         double &
-        Returns the sine of an angle, in the range of -1.0 through 1.0. Argument x must be in radians.\\
+        Returns the sine of an angle, in the range of -1.0 through 1.0. Argument x must be in radians.
+        \tabularnewline
 
         \hline
         tan(x) &
         double &
         double &
-        Returns the tangent of an angle. Argument x must be in radians.\\
+        Returns the tangent of an angle. Argument x must be in radians.
+        \tabularnewline
 
         \hline
     \end{tabular}
     \caption{Trigonometrical functions}
-    \label{table:extable}
+    \label{table:trig.functions.table}
 \end{table}
 
+\clearpage
+\section{ADQL Type System}
+\label{sec:types}
+
+ADQL defines no data definition language (DDL).
+It is assumed that table definition and data ingestion are performed in
+the underlying database's native language and type system.
+
+However, column metadata needs to give column types in order to allow the
+construction of queries that are both syntactically and semantically correct.
+Examples of such metadata includes VODataService's \verb:TAPType:
+(\citet{std:VODS11}) or TAP's \verb:TAP_SCHEMA: (\citet{std:TAP}).
+
+Services SHOULD, if at all possible, try express their column metadata in
+these terms even if the underlying database employs different types.
+Services SHOULD also use the following mapping when interfacing to user data,
+either by serializing result sets into VOTables or by ingesting user-provided
+VOTables into ADQL-visible tables.
+Where non-ADQL types are employed in the underlying database, implementors
+SHOULD make sure that all operations that are possible with the recommended
+ADQL type are also possible with the type used in the backend engine.
+For instance, the ADQL string concatenation operator \verb:||: should be
+applicable to all columns resulting from VOTable char-typed columns.
+
+\begin{table}[thm]\footnotesize
+    \begin{tabular}{|p{0.15\textwidth}|p{0.15\textwidth}|p{0.25\textwidth}|p{0.30\textwidth}|}
+        \hline
+
+        \hline
+        \multicolumn{3}{|c|}{\textbf{VOTable}} &
+        \multicolumn{1}{|c|}{\textbf{ADQL}}
+        \tabularnewline
+        
+        \hline
+        \textbf{datatype} &
+        \textbf{arraysize} &
+        \textbf{xtype} &
+        \textbf{type}
+        \tabularnewline
+
+        \hline
+        boolean &
+        1 &
+        - &
+        implementation defined
+        \tabularnewline
+
+        \hline
+        short &
+        1 &
+        - &
+        SMALLINT
+        \tabularnewline
+
+        \hline
+        int &
+        1 &
+        - &
+        INTEGER
+        \tabularnewline
+
+        \hline
+        long &
+        1 &
+        - &
+        BIGINT
+        \tabularnewline
+
+        \hline
+        float &
+        1 &
+        - &
+        REAL
+        \tabularnewline
+
+        \hline
+        double &
+        1 &
+        - &
+        DOUBLE
+        \tabularnewline
+
+        \hline
+        (numeric) &
+        > 1 &
+        - &
+        implementation defined
+        \tabularnewline
+
+        \hline
+        char &
+        1 &
+        - &
+        CHAR(1)
+        \tabularnewline
+
+        \hline
+        char &
+        n &
+        - &
+        CHAR(n)
+        \tabularnewline
+
+        \hline
+        char &
+        n* &
+        - &
+        VARCHAR(n)
+        \tabularnewline
+
+        \hline
+        unsignedByte &
+        n &
+        - &
+        BINARY(n)
+        \tabularnewline
+
+        \hline
+        unsignedByte &
+        n* &
+        - &
+        VARBINARY(n)
+        \tabularnewline
+
+        \hline
+        unsignedByte &
+        n, *, n* &
+        adql:BLOB &
+        BLOB
+        \tabularnewline
+
+        \hline
+        char &
+        n, *, n* &
+        adql:CLOB &
+        CLOB
+        \tabularnewline
+
+        \hline
+        char &
+        n, *, n* &
+        adql:TIMESTAMP &
+        TIMESTAMP
+        \tabularnewline
+
+        \hline
+        char &
+        n, *, n* &
+        adql:POINT &
+        POINT
+        \tabularnewline
+
+        \hline
+        char &
+        n, *, n* &
+        adql:REGION &
+        REGION
+        \tabularnewline
+
+        \hline
+    \end{tabular}
+    \caption{VOTable/ADQL type mapping}
+    \label{table:adql.votable.type.map}
+\end{table}
+
+\textit{"Implementation defined"} in the above table means that an
+implementation is free to reject attempts to (de-)serialize values in
+these types.
+They are to be considered unsupported by ADQL, and the language provides
+no means to manipulate \textit{"native"} representations of them.
+
+References to REGION-typed columns must be valid wherever the ADQL
+\textit{region} nonterminal is allowed. References to POINT-typed columns
+must be valid wherever the ADQL \textit{point} nonterminal is allowed.
+
+\clearpage
+\section{Optional components}
+\label{sec:optional}
+
+In addition to the core components, the ADQL language also includes support
+for optional features and functions.
+
+The following sections define the optional features that are part of the
+the ADQL language, but are not required in order to meet the standard for
+a basic ADQL service.
+
+It is up to each service implementation to declare which optional or
+additional features it supports.
+
+If a service does not declare support for an optional or additional feature,
+then a client SHOULD NOT assume that the service supports that feature,
+and SHOULD NOT make use of that feature in any ADQL queries that it sends.
+
+\subsection{Service capabilities}
+\label{sec:capabilities}
+
+The \citet{std:TAPREGEXT} standard defines an XML schema that a service SHOULD
+use to declare which optional or additional features it supports.
+
+In general, each group of langauge features is identified by a \verb:type:
+URI, and each individual feature within the group is identified by the
+feature name.
+
+Appendix \ref{sec:features} contains examples of how to declare support
+for each of the langauge features defined in this document using the
+\citet{std:TAPREGEXT} XML schema.
+
+For full details on the XML schema and how it can be used, please refer to
+the \citet{std:TAPREGEXT} standard.
+
 \subsection{Geometrical Functions}
+\label{sec:geom.functions}
 \subsubsection{Overview}
 
 In addition to the mathematical functions, ADQL provides a set of geometrical
-functions to enhance the astronomical usage of the language. The list of
-ADQL reserved keywords shown in Section 2.1.2 is therefore extended with
-the following function names:
+functions to enhance the astronomical usage of the language.
+The list of ADQL reserved keywords shown in Section \ref{sec:keywords}
+is therefore extended with the following function names:
 
 \begin{verbatim}
-AREA, BOX, CENTROID, CIRCLE, CONTAINS, COORD1, COORD2,
-COORDSYS, DISTANCE, INTERSECTS, POINT, POLYGON, REGION
+    AREA, BOX, CENTROID, CIRCLE, CONTAINS, COORD1, COORD2,
+    COORDSYS, DISTANCE, INTERSECTS, POINT, POLYGON, REGION
 \end{verbatim}
 
 A special attention has to be paid to the REGION function. As can be seen more
@@ -528,16 +799,20 @@ but the already mention constrain that vectors should be normalized. It remains
 up to the service making use of ADQL to define the errors that should be raised
 when using values outside these ranges.
 
-For all these functions there is also a string parameter defining the
-coordinate system. The allowed values MUST be defined by any service making
-use of ADQL. A list of standard coordinate system literals can be found in
-the appendix of the STC specification [3].
+For historical reasons, the geometry constructors (BOX, CIRCLE, POINT,
+POLYGON) require a string-valued first argument. It was intended to carry
+information on a reference system or other coordinate system metadata.
+As of this version of the specification (2.1), this parameter has been
+marked as deprecated. Services are permitted to ignore this parameter and
+clients are advised to pass an empty string here. Future versions of this
+specification may remove this parameter from the listed functions.
 
 Generally speaking, all these geometrical functions cover three different
 topics: data types, predicates and utility calculations. Each of these are
 covered below.
 
-%\subsubsubsection{Data Type Functions}
+\subsubsection{Data Type Functions}
+\label{sec:geom.functions.type}
 
 Certain functions represent geometry data types. These data types are BOX,
 CENTROID, CIRCLE, POINT and POLYGON together with the generalized REGION data
@@ -556,9 +831,10 @@ Geometry data types are centered around the BNF construct
 \end{verbatim}
 
 A \verb:<geometry_value_expression>: does not simply cover data type functions
-(POINT, CIRCLE etc) but must also allow for column values where a geometry
-data type is stored in a column. Therefore, \verb:<geometry_value_expression>:
-is expanded as
+(POINT, CIRCLE etc) but must also allow for user defined functions and
+column values where a geometry data type is stored in a column.
+
+Therefore, \verb:<geometry_value_expression>: is expanded as
 
 \begin{verbatim}
     <geometry_value_expression> ::= 
@@ -576,11 +852,14 @@ is expanded as
       | <point>
       | <polygon>
       | <region>
+      | <user_defined_function>
 \end{verbatim}
 
 and \verb:<value_expression_primary>: makes possible to use a column reference.
 
-%\subsubsubsection{Predicate Functions}
+\subsubsection{Predicate Functions}
+\label{sec:geom.functions.predicate}
+{\footnotesize Language feature :}\\
 
 Functions CONTAINS and INTERSECTS each accept two geometry data types
 and return 1 or 0 according to whether the relevant verb (e.g.: "contains") is
@@ -598,11 +877,15 @@ One would expect later additions to ADQL to add to this range of functions. For
 example: equals, disjoint, touches, crosses, within, overlaps and relate
 are possibilities.
 
-%\subsubsubsection{Utility Functions}
+\subsubsection{Utility Functions}
+\label{sec:geom.functions.utility}
 
-Function COORDSYS extracts the coordinate system string from a given geometry. To do so it accepts a geometry expression and returns a calculated string value.
+Function COORDSYS extracts the coordinate system string from a given
+geometry. To do so it accepts a geometry expression and returns a calculated
+string value.
 
-This function has been included as a string value function because it returns a simple string value. Hence
+This function has been included as a string value function because it
+returns a simple string value. Hence
 
 \begin{verbatim}
     <string_value_function> :: =
@@ -613,6 +896,10 @@ This function has been included as a string value function because it returns a 
     <extract_coordsys> ::=
         COORDSYS <left_paren> <geometry_value_expression> <right_paren>
 \end{verbatim}
+
+Note - as of this version of the specification (2.1), the COORDSYS function has
+been marked as deprecated. This function may be removed in future versions
+of this specification.
 
 Other functions like AREA, COORD1, COORD2 and DISTANCE accept a geometry (or
 two geometries in the case of DISTANCE) and return a calculated numeric value.
@@ -636,7 +923,6 @@ value functions because they return simple numeric values. Thus
       | <non_predicate_geometry_function>
 \end{verbatim}
 
-
 and
 
 \begin{verbatim}
@@ -653,27 +939,34 @@ and
     <predicate_geometry_function> ::= <contains> | <intersects>
 \end{verbatim}
 
+%\subsubsection{Function definitions}
+\clearpage
+\label{sec:geom.functions.definitions}
+
 The following sections provide a detailed description for each geometrical
-function. Its functionality and usage is described rather than going into
-the BNF grammar details as above.
+function. In each case, the functionality and usage is described rather
+than going into the BNF grammar details as above.
 
 \subsubsection{AREA}
+\label{sec:geom.functions.area}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|name: AREA|}\\
 
 This function computes the area, in square degrees, of a given geometry.
 
-For example, the area of a circle of one degree radius centered in a position
-of (25.4, -20.0) degrees and defined according to the ICRS coordinate system
-with GEOCENTER reference position would be written as follows:
+For example, the area of a circle of one degree radius centered on a position
+of (25.4, -20.0) degrees would be written as follows:
 
 \begin{verbatim}
-    AREA(CIRCLE(‘ICRS GEOCENTER’, 25.4, -20.0, 1))
+    AREA(CIRCLE(‘’, 25.4, -20.0, 1))
 \end{verbatim}
 
 The coordinates of the circle center could also be directly derived from
 either a POINT function (See 2.4.12) or the coordinate’s column references:
 
 \begin{verbatim}
-    AREA(CIRCLE(‘ICRS GEOCENTER’, t.ra, t.dec, 1))
+    AREA(CIRCLE(‘’, t.ra, t.dec, 1))
 \end{verbatim}
 
 , where \textit{t} would be the table and \textit{ra}, \textit{dec} the
@@ -684,6 +977,10 @@ zero or throw an error message, the later to be defined by the service making
 use of ADQL.
 
 \subsubsection{BOX}
+\label{sec:geom.functions.box}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|name: BOX|}\\
 
 This function expresses a box on the sky. A box is a special case of Polygon,
 defined purely for convenience, and it corresponds semantically to the STC Box
@@ -703,12 +1000,11 @@ and both the width and height (arms) values, where
     \item and the arms are numeric value expressions in degrees.
 \end{itemize}
 
-For example, a function expressing a box of ten degrees centered in a position
-(25.4, -20.0) in degrees and defined according to the ICRS coordinate system
-with GEOCENTER reference position would be written as follows:
+For example, a function expressing a box of ten degrees centered on a position
+(25.4, -20.0) in degrees would be written as follows:
 
 \begin{verbatim}
-    BOX(‘ICRS GEOCENTER’, 25.4, -20.0, 10, 10)
+    BOX(‘’, 25.4, -20.0, 10, 10)
 \end{verbatim}
 
 As another example, the coordinates of the center position could also be
@@ -716,7 +1012,7 @@ extracted from either a POINT function (See 2.4.12) or the coordinate’s
 column references:
 
 \begin{verbatim}
-    BOX(‘ICRS GEOCENTER’, t.ra, t.dec, 10, 10)
+    BOX(‘’, t.ra, t.dec, 10, 10)
 \end{verbatim}
 
 , where \textit{t} would be the table and \textit{ra}, \textit{dec} the
@@ -726,19 +1022,26 @@ To see what this function would return when listed in the select clause,
 see Section 2.4.15.
 
 \subsubsection{CENTROID}
+\label{sec:geom.functions.centroid}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|name: CENTROID|}\\
 
 This function computes the centroid of a given geometry and returns a POINT
 (See 2.4.11).
 
 For example, the centroid of a circle of one degree radius centered in a
-position of (25.4, -20.0) degrees and defined according to the ICRS coordinate
-system with GEOCENTER reference position would be written as follows :
+position of (25.4, -20.0) degrees would be written as follows :
 
 \begin{verbatim}
-    CENTROID(CIRCLE (‘ICRS GEOCENTER’, 25.4, -20.0, 1))
+    CENTROID(CIRCLE (‘’, 25.4, -20.0, 1))
 \end{verbatim}
 
 \subsubsection{CIRCLE}
+\label{sec:geom.functions.circle}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|name: CIRCLE|}\\
 
 This function expresses a circular region on the sky (a cone in space) and
 corresponds semantically to the STC Circle region ([3], section 4.5.1.2).. The
@@ -751,19 +1054,18 @@ and the radius, where:
     \item and the radius is a numeric value expression in degrees.
 \end{itemize}
 
-For example, a function expressing a circle of one degree radius centered in a
-position of (25.4, -20.0) degrees and defined according to the ICRS coordinate
-system with GEOCENTER reference position, would be written as follows:
+For example, a function expressing a circle of one degree radius centered on a
+position of (25.4, -20.0) degrees would be written as follows:
 
 \begin{verbatim}
-    CIRCLE(‘ICRS GEOCENTER’, 25.4, -20.0, 1)
+    CIRCLE(‘’, 25.4, -20.0, 1)
 \end{verbatim}
 
 The coordinates of the center position could also be derived from either a
 POINT function (See 2.4.12) or the coordinate’s column references:
 
 \begin{verbatim}
-    CIRCLE(‘ICRS GEOCENTER’, t.ra, t.dec, 1)
+    CIRCLE(‘’, t.ra, t.dec, 1)
 \end{verbatim}
 
 , where \textit{t} would be the table and \textit{ra}, \textit{dec} the
@@ -773,20 +1075,23 @@ To see what this function would return when listed in the select clause, see
 Section 2.4.15.
 
 \subsubsection{CONTAINS}
+\label{sec:geom.functions.contains}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|name: CONTAINS|}\\
 
 This numeric function determines if a geometry is wholly contained within
 another. This is most commonly used to express the "point-in-shape" condition.
 
 For example, to determine if a point with right ascension of 25 degrees
-and declination of -19.5 degrees according to the ICRS coordinate system
-with GEOCENTER reference position is within a circle of one degree radius
+and declination of -19.5 degrees is within a circle of one degree radius
 centered in a position of (25.4, -20.0) degrees and defined according to the
 same coordinate system, we would make use of the CONTAINS function as follows:
 
 \begin{verbatim}
     CONTAINS(
-        POINT(‘ICRS GEOCENTER’, 25.0,-19.5),
-        CIRCLE(‘ICRS GEOCENTER’, 25.4, -20.0, 1)
+        POINT(‘’, 25.0,-19.5),
+        CIRCLE(‘’, 25.4, -20.0, 1)
         )
 \end{verbatim}
 
@@ -797,8 +1102,8 @@ of a query, the value must be compared to 0 or 1 to form an SQL predicate:
 
 \begin{verbatim}
     CONTAINS(
-        POINT(‘ICRS GEOCENTER’, 25.0,-19.5),
-        CIRCLE(‘ICRS GEOCENTER’, 25.4, -20.0, 1)
+        POINT(‘’, 25.0,-19.5),
+        CIRCLE(‘’, 25.4, -20.0, 1)
         ) = 1
 \end{verbatim}
 
@@ -806,8 +1111,8 @@ for "does contain" and
 
 \begin{verbatim}
     CONTAINS(
-        POINT(‘ICRS GEOCENTER’, 25.0,-19.5),
-        CIRCLE(‘ICRS GEOCENTER’, 25.4, -20.0, 1)
+        POINT(‘’, 25.0,-19.5),
+        CIRCLE(‘’, 25.4, -20.0, 1)
         ) = 0
 \end{verbatim}
 
@@ -821,16 +1126,19 @@ for converting one (or both). If it cannot do so, it SHOULD throw an error
 message, to be defined by the service making use of ADQL.
 
 \subsubsection{COORD1}
+\label{sec:geom.functions.coord1}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|name: COORD1|}\\
 
 This function extracts the first coordinate value, in degrees, of a given
 POINT (See 2.4.12) or column reference.
 
 For example, the right ascension of a point with position (25, -19.5) in
-degrees according to the ICRS coordinate system with GEOCENTER reference
-position, would be obtained using the following expression:
+degrees would be obtained using the following expression:
 
 \begin{verbatim}
-    COORD1(POINT(‘ICRS GEOCENTER’, 25.0,-19.5))
+    COORD1(POINT(‘’, 25.0,-19.5))
 \end{verbatim}
 
 , being the result a numeric value of 25.0 degrees. The fist coordinate
@@ -844,16 +1152,19 @@ could also be derived directly from a column reference as follows:
 the POINT geometry stored in the database table.
 
 \subsubsection{COORD2}
+\label{sec:geom.functions.coord2}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|name: COORD2|}\\
 
 This function extracts the second coordinate value, in degrees, of a given
 POINT (See 2.4.12) or column reference.
 
-For example, the declination of a point with position (25, -19.5) in degrees
-according to the ICRS coordinate system with GEOCENTER reference position,
+For example, the declination of a point with position (25, -19.5) in degrees,
 would be obtained using the following expression:
 
 \begin{verbatim}
-    COORD2(POINT(‘ICRS GEOCENTER’, 25.0,-19.5))
+    COORD2(POINT(‘’, 25.0,-19.5))
 \end{verbatim}
 
 , being the result a numeric value of -19.5 degrees. The second coordinate
@@ -867,6 +1178,14 @@ could also be derived directly from a column reference as follows:
 the POINT geometry stored in the database table.
 
 \subsubsection{COORDSYS}
+\label{sec:geom.functions.coordsys}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|name: COORDSYS|}\\
+
+Note - as of this version of the specification (2.1), the COORDSYS function has
+been marked as deprecated. This function may be removed in future versions
+of this specification.
 
 This function extracts the coordinate system string value from a given
 geometry.
@@ -895,18 +1214,20 @@ other geometry data type:
 for the CIRCLE geometry stored in the database table.
 
 \subsubsection{DISTANCE}
+\label{sec:geom.functions.distance}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|name: DISTANCE|}\\
 
 This function computes the arc length along a great circle between two points,
 and returns a numeric value expression in degrees.
 
 For example, a function computing the distance between two points of
-coordinates (25,-19.5) and (25.4,-20) both expressed according to the
-ICRS coordinate system with GEOCENTER reference position, would be written
-as follows:
+coordinates (25,-19.5) and (25.4,-20) would be written as follows:
 
 \begin{verbatim}
-    DISTANCE(POINT(‘ICRS GEOCENTER’,25.0,-19.5),
-    POINT(‘ICRS GEOCENTER’,25.4, -20.0))
+    DISTANCE(POINT(‘’,25.0,-19.5),
+    POINT(‘’,25.4, -20.0))
 \end{verbatim}
 
 , where all numeric values and the returned arc-length are in degrees.
@@ -927,21 +1248,23 @@ so, it SHOULD throw an error message, to be defined by the service making
 use of ADQL.
 
 \subsubsection{INTERSECTS}
+\label{sec:geom.functions.intersects}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|name: INTERSECTS|}\\
 
 This numeric function determines if two geometry values overlap. This is
 most commonly used to express a "shape-vs-shape" intersection test.
 
 For example, to determine whether a circle of one degree radius centered
-in a position of (25.4, -20.0) degrees and defined according to the ICRS
-coordinate system with GEOCENTER reference position overlaps with a box
-of ten degrees centered in a position (20.0, -15.0) in degrees and defined
-according to the same coordinate system, we would make use of the INTERSECTS
-function as follows:
+in a position of (25.4, -20.0) degrees overlaps with a box of ten degrees
+centered in a position (20.0, -15.0) in degrees, we would make use of the
+INTERSECTS function as follows:
 
 \begin{verbatim}
     INTERSECTS(
-        CIRCLE(‘ICRS GEOCENTER’, 25.4, -20.0, 1),
-        BOX(‘ICRS GEOCENTER’, 20.0, -15.0, 10, 10)
+        CIRCLE(‘’, 25.4, -20.0, 1),
+        BOX(‘’, 20.0, -15.0, 10, 10)
         )
 \end{verbatim}
 
@@ -950,8 +1273,8 @@ and 0 (false) otherwise. When used in the where clause of a query, the value
 must be compared to 0 or 1 to form an SQL predicate:
 
 \begin{verbatim}
-    INTERSECTS(CIRCLE(‘ICRS GEOCENTER’, 25.4, -20.0, 1),
-    BOX(‘ICRS GEOCENTER’, 20.0, -15.0, 10, 10)
+    INTERSECTS(CIRCLE(‘’, 25.4, -20.0, 1),
+    BOX(‘’, 20.0, -15.0, 10, 10)
     ) = 1
 \end{verbatim}
 
@@ -959,8 +1282,8 @@ for "does intersect" and
 
 \begin{verbatim}
     INTERSECTS(
-        CIRCLE(‘ICRS GEOCENTER’, 25.4, -20.0, 1),
-        BOX(‘ICRS GEOCENTER’, 20.0, -15.0, 10, 10)
+        CIRCLE(‘’, 25.4, -20.0, 1),
+        BOX(‘’, 20.0, -15.0, 10, 10)
         ) = 0
 \end{verbatim}
 
@@ -968,15 +1291,25 @@ for "does not intersect".
 
 The arguments to the INTERSECTS function can be (literal) values created from
 the geometry types or they can be single column names or aliases (for geometry
-stored in a database table). Note that if one of the arguments is a POINT,
-intersects is equivalent to contains (with the point argument first). Unlike
-CONTAINS, the function’s arguments are commutative, e.g. INTERSECTS(a,
-b) is equivalent to INTERSECTS(b, a). Since the two argument points may
-be expressed in different coordinate systems, the function is responsible
-for converting one (or both). If it cannot do so, it SHOULD throw an error
-message, to be defined by the service making use of ADQL.
+stored in a database table).
+
+Since the two argument points may be expressed in different coordinate
+systems, the function is responsible for converting one (or both). If it
+cannot do so, it SHOULD throw an error message, to be defined by the service
+making use of ADQL.
+
+The arguments to INTERSECTS SHOULD be geometric expressions evaluating to
+either BOX, CIRCLE, POLYGON, or REGION. Previous versions of this
+specification allow POINTs as well and require servers to interpret the
+expression as a CONTAINS with the POINT moved into the first position. Servers
+SHOULD still implement that behaviour, but clients SHOULD NOT expect it. This
+behaviour will be dropped in the next major version of this specification.
 
 \subsubsection{POINT}
+\label{sec:geom.functions.point}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|name: POINT|}\\
 
 This function expresses a single location on the sky, and corresponds
 semantically to an STC SpatialCoord ([3], section 4.4.2). The arguments
@@ -988,18 +1321,17 @@ specify the coordinate system and the position, where:
 \end{itemize}
 
 For example, a function expressing a point with right ascension of 25 degrees
-and declination of -19.5 degrees according to the ICRS coordinate system
-with GEOCENTER reference position, would be written as follows:
+and declination of -19.5 degrees would be written as follows:
 
 \begin{verbatim}
-    POINT(‘ICRS GEOCENTER’, 25.0,-19.5)
+    POINT(‘’, 25.0,-19.5)
 \end{verbatim}
 
 , where numeric values are in degrees. The coordinates of the POINT could
 also be derived from the coordinate’s column references:
 
 \begin{verbatim}
-    POINT(‘ICRS GEOCENTER’, t.ra, t.dec)
+    POINT(‘’, t.ra, t.dec)
 \end{verbatim}
     
 , where \textit{t} would be the table and \textit{ra}, \textit{dec} the
@@ -1012,6 +1344,10 @@ To see what this function would return when listed in the select clause,
 see Section 2.4.15.
 
 \subsubsection{POLYGON}
+\label{sec:geom.functions.polygon}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|name: POLYGON|}\\
 
 This function expresses a region on the sky with sides denoted by great
 circles passing through specified coordinates. It corresponds semantically
@@ -1024,12 +1360,11 @@ coordinate system and three or more sets of 2-D coordinates, where:
 \end{itemize}
 
 For example, a function expressing a triangle, whose vertices are (10.0,
--10.5), (20.0, 20.5) and (30.0,30.5) in degrees according to the ICRS
-coordinate system with GEOCENTER reference position, would be written
+-10.5), (20.0, 20.5) and (30.0,30.5) in degrees would be written
 as follows:
 
 \begin{verbatim}
-    POLYGON(‘ICRS GEOCENTER’, 10.0, -10.5, 20.0, 20.5, 30.0, 30.5)
+    POLYGON(‘’, 10.0, -10.5, 20.0, 20.5, 30.0, 30.5)
 \end{verbatim}
     
 , where all numeric values are in degrees,
@@ -1038,7 +1373,7 @@ As for other geometries like BOX, CIRCLE and POINT, one could also derive
 the coordinates from database column references instead:
 
 \begin{verbatim}
-    POLYGON(‘ICRS GEOCENTER’, t.ra, t.dec, 20.0, 20.5, 30.0, 30.5)
+    POLYGON(‘’, t.ra, t.dec, 20.0, 20.5, 30.0, 30.5)
 \end{verbatim}
 
 , where t would be the table and ra, dec the column references for one of
@@ -1049,6 +1384,10 @@ each vertex connected to the next along a great circle and the last vertex
 implicitly connected to the first vertex.
 
 \subsubsection{REGION}
+\label{sec:geom.functions.region}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|name: REGION|}\\
 
 This function provides a generic way of expressing a region represented by
 a single string input parameter. The format of the string MUST be specified
@@ -1067,31 +1406,45 @@ document [4]. Inappropriate geometries for this construct SHOULD throw an
 error message, to be defined by the service making use of ADQL.
 
 \subsubsection{Geometry in the SELECT clause}
+\label{sec:geom.select}
 
 Geometry values (literals or columns containing geometry values) may be
 listed in the select clause, in which case they must be converted into a
 text form. This text form will be identical to the way a literal value would
 be specified in a query, including the geometry type (POINT, CIRCLE, BOX,
-or POLYGON) and all arguments but excluding the required quotes around the
-coordinate system string. For example, the query
+or POLYGON), all the required numeric arguments, and, in this version,
+a blank coordinate system string. For example, the query
+
+This text form will be identical to the way a literal value would be
+specified in a query, including the geometry type (POINT, CIRCLE, BOX,
+or POLYGON) and all the required numeric arguments.
+
+Previous versions of this specification requred the text form to include the
+coordinate system string. However, as the coordinate system has been marked
+as deprecated in this version of the specification (2.1), the text form
+should contain an empty string \verb:'': in place of the coordinate
+system. Future versions of this specification may remove the coordinate
+system parameter from the text form.
 
 \begin{verbatim}
-    SELECT circle(‘ICRS GEOCENTER’, 1, 2, 0.5)
+    SELECT circle('', 1, 2, 0.5)
 \end{verbatim}
 
 could return
 
 \begin{verbatim}
-    CIRCLE(‘ICRS GEOCENTER ‘, 1.0, 2.0, 0.5)
+    CIRCLE('', 1.0, 2.0, 0.5)
 \end{verbatim}
 
-or equivalent. The case of the coordinate system string should be preserved;
-the geometry type string is case insensitive. The output may alter the
-numeric format by converting whole numbers to floating point (as in the
-example above) but should not gratuitously add digits. Otherwise, numeric
-output must conform to the rules for numeric expressions in the ADQL BNF.
+or equivalent.
+The output may alter the numeric format by converting whole numbers to
+floating point (as in the example above) but should not gratuitously add
+digits. Otherwise, numeric output must conform to the rules for numeric
+expressions in the ADQL BNF.
 
-\subsubsection{User Defined Functions}
+\subsection{User Defined Functions}
+\label{sec:user.functions}
+\subsubsection{Overview}
 
 ADQL also provides a placeholder to define user specific functions. Such
 construct supports a variable list of parameters as input in the following way:
@@ -1129,11 +1482,579 @@ If metadata on a user defined function is available, this should be used. For
 example function names and cardinality of arguments should be checked against
 metadata where available.
 
+\subsubsection{Metadata}
+\label{sec:user.metadata}
+
+The URI for identifying the language feature for a user defined function
+is defined as part of the \cite{std:TAPREGEXT} standard.
+
+\begin{verbatim}
+    ivo://ivoa.net/std/TAPRegExt#features-udf
+\end{verbatim}
+
+For user defined functions, the \verb:form: element of the language feature
+declaration must contain the signature of the function, written to match
+the signature nonterminal in the following grammar:
+
+\begin{verbatim}
+    signature ::= <funcname> <arglist> "->" <type_name>
+    funcname ::= <regular_identifier>
+    arglist ::= "(" <arg> { "," <arg> } ")"
+    arg ::= <regular_identifier> <type_name>
+\end{verbatim}
+
+For example, the following fragment declares a user defined function that
+takes two \verb:TEXT: parameters and returns an integer, zero or one,
+depending on the regular expression pattern matching.
+
+\begin{verbatim}
+    <languageFeatures type="ivo://ivoa.net/std/TAPRegExt#features-udf">
+        <feature>
+            <form>match(pattern TEXT, string TEXT) -> INTEGER</form>
+            <description>
+                match returns 1 if the POSIX regular expression pattern
+                matches anything in string, 0 otherwise.
+            </description>
+        </feature>
+    </languageFeatures>
+\end{verbatim}
+
+See the \citet{std:TAPREGEXT} standard for full details on how to use the
+XML schema to declare user defined functions.
+
+\subsection{String functions and operators}
+\label{sec:string.functions}
+
+An ADQL service implementation MAY include support for the following optional
+string manipulation and comparison operators.
+
+\begin{itemize}
+    \item \verb:LOWER(): Lower case conversion
+    \item \verb:ILIKE: Case insensitive comparison
+\end{itemize}
+
+The list of ADQL reserved keywords shown in Section \ref{sec:keywords}
+is therefore extended to include the following:
+
+\begin{verbatim}
+    LOWER,
+    ILIKE
+\end{verbatim}
+
+\subsubsection{LOWER}
+\label{sec:string.functions.lower}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-string|}\\
+{\footnotesize \verb|name: LOWER|}\\
+
+The LOWER function converts its string paremeter to lower case, using
+the standard mapping for ASCII characters, and algorithm R2 described in
+section 3.13, "Default Case Algorithms" of \citet{std:UNICODE} for characters
+outside ASCII.
+
+\begin{verbatim}
+    LOWER('Francis Albert Augustus Charles Emmanuel')
+    =>
+    'francis albert augustus charles emmanuel'
+\end{verbatim}
+
+\subsubsection{ILIKE}
+\label{sec:string.functions.ilike}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-string|}\\
+{\footnotesize \verb|name: ILIKE|}\\
+
+The ILIKE string comparison operator performs a case insensitive comparison
+of its string operands.
+
+\begin{verbatim}
+    'Francis'  LIKE 'francis' => FALSE
+
+    'Francis' ILIKE 'francis' => TRUE
+\end{verbatim}
+
+\subsection{Set operators}
+\label{sec:set.operators}
+
+An ADQL service implementation MAY include support for the following optional
+set operators:
+
+\begin{itemize}
+    \item \verb:UNION:
+    \item \verb:EXCEPT:
+    \item \verb:INTERSECT:
+\end{itemize}
+
+The list of ADQL reserved keywords shown in Section \ref{sec:keywords}
+is therefore extended to include the following:
+
+\begin{verbatim}
+    UNION, EXCEPT, INTERSECT
+\end{verbatim}
+
+\subsubsection{UNION}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-sets|}\\
+{\footnotesize \verb|name: UNION|}\\
+
+``The UNION clause combines the results of two SQL queries into a single
+table of all matching rows. Any duplicate records are automatically removed
+unless UNION ALL is used."\footnote{\url{https://en.wikipedia.org/wiki/Set\_operations\_\%28SQL\%29UNION\_operator}}
+
+For a UNION operation to be valid in ADQL, the following criteria MUST be met:
+
+\begin{itemize}
+    \item The two queries MUST result in the same number of columns
+    \item The corresponding columns in the operands MUST have the same data types
+    \item The corresponding columns in the operands SHOULD have the same metadata, e.g. units, UCD etc.
+    \item The metadata for the results SHOULD be generated from the left-hand operand
+\end{itemize}
+
+Note that the comparison used for removing duplicates is based purely on the
+column value only and does not take into account the units.
+This means that row with a numeric value of \verb:2: and units of \verb:m:
+and a row with a numeric value of \verb:2: and units of \verb:km: will be
+considered equal.
+
+\subsubsection{EXCEPT}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-sets|}\\
+{\footnotesize \verb|name: EXCEPT|}\\
+
+``The EXCEPT operator takes the distinct rows of one query and returns the
+rows that do not appear in a second result set. The EXCEPT ALL operator
+does not remove duplicates. For purposes of row elimination and duplicate
+removal, the EXCEPT operator does not distinguish between NULLs."\footnote{\url{https://en.wikipedia.org/wiki/Set\_operations\_\%28SQL\%29\#EXCEPT\_operator}}
+
+For an EXCEPT operation to be valid in ADQL, the following criteria MUST be met:
+
+\begin{itemize}
+    \item The two queries MUST result in the same number of columns
+    \item The corresponding columns in the operands MUST have the same data types
+    \item The corresponding columns in the operands SHOULD have the same metadata, e.g. units, UCD etc.
+    \item The metadata for the results MUST be generated from the left-hand operand
+\end{itemize}
+
+Note that the comparison used for identifying matching rows and for removing
+duplicates is based purely on the column value only and does not take into
+account any units declared in the metadata.
+
+This means that row with a numeric value of \verb:2: and units of \verb:m:
+and a row with a numeric value of \verb:2: and units of \verb:km: will be
+considered equal.
+
+\subsubsection{INTERSECT}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-sets|}\\
+{\footnotesize \verb|name: INTERSECT|}\\
+
+``The INTERSECT operator takes the results of two queries and returns only
+rows that appear in both result sets. For purposes of duplicate removal
+the INTERSECT operator does not distinguish between NULLs. The INTERSECT
+operator removes duplicate rows from the final result set. The INTERSECT
+ALL operator does not remove duplicate rows from the final result set."\footnote{\url{https://en.wikipedia.org/wiki/Set\_operations\_\%28SQL\%29\#INTERSECT\_operator}}
+
+For an INTERSECT operation to be valid in ADQL, the following criteria MUST be met:
+
+\begin{itemize}
+    \item The two queries MUST result in the same number of columns
+    \item The corresponding columns in the operands MUST have the same data types
+    \item The corresponding columns in the operands SHOULD have the same metadata, e.g. units, UCD etc.
+    \item The metadata for the results MUST be generated from the left-hand operand
+\end{itemize}
+
+Note that the comparison used for identifying matching rows and for removing
+duplicates is based purely on the column value only and does not take into
+account the units.
+
+This means that row with a numeric value of \verb:2: and units of \verb:m:
+and a row with a numeric value of \verb:2: and units of \verb:km: will be
+considered equal.
+
+\subsection{Hierarchical queries}
+\label{sec:hierarchical}
+
+An ADQL service implementation MAY include support for the following optional
+support for hierarchical or recursive queries :
+
+\begin{itemize}
+    \item \verb:WITH:
+\end{itemize}
+
+The list of ADQL reserved keywords shown in Section \ref{sec:keywords}
+is therefore extended to include the following:
+
+\begin{verbatim}
+    WITH
+\end{verbatim}
+
+\subsubsection{WITH}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-hierarchical|}\\
+{\footnotesize \verb|name: WITH|}\\
+
+``A Common Table Expression, or CTE, is a temporary named result set, derived
+from a simple query and defined within the execution scope of a SELECT
+statement."\footnote{\url{https://en.wikipedia.org/wiki/Hierarchical\_and\_recursive\_queries\_in\_SQL\#Common\_table\_expression}}
+
+The BNF sytntax for a recursive \verb:WITH: query is
+\begin{verbatim}
+    <recursive_query> :=
+        WITH <with_query> [, ...]
+        <select_query>
+
+    <with_query> :=
+        <query_name>
+        [ (column_name [,...]) ] AS (<select_query>)
+
+\end{verbatim}
+
+For a WITH expression to be valid in ADQL, the following criteria MUST be met:
+
+\begin{itemize}
+    \item 
+\end{itemize}
+
+\subsection{Type operations}
+\label{sec:type}
+
+An ADQL service implementation MAY include support for the following optional
+type conversion functions:
+
+\begin{itemize}
+    \item \verb:CAST():
+\end{itemize}
+
+The list of ADQL reserved keywords shown in Section \ref{sec:keywords}
+is therefore extended to include the following:
+
+\begin{verbatim}
+    CAST
+\end{verbatim}
+
+\subsubsection{CAST}
+\label{sec:type.cast}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-type|}\\
+{\footnotesize \verb|name: IN_UNIT|}\\
+
+The \verb:CAST(): function returns the value of the first argument converted
+to the data type specified by the second argument.
+
+The ADQL \verb:CAST(): function does not replicate the full functionality
+and range of types supported by common RDBMS implementations of CAST.
+
+The ADQL \verb:CAST(): function only supports type conversion between the
+standard numeric data types. The \verb:CAST(): function does not support
+casting to or from the character, binary, datetime or geometric data types.
+
+\begin{table}[thm]\footnotesize
+    \begin{tabular}{
+        |p{0.14\textwidth}
+        |p{0.14\textwidth}
+        |p{0.14\textwidth}
+        |p{0.14\textwidth}
+        |p{0.14\textwidth}
+        |p{0.14\textwidth}
+        |}
+
+        \hline
+        \textbf{Type} &
+        \textbf{Numeric} &
+        \textbf{Character} &
+        \textbf{Binary} &
+        \textbf{Datetime} &
+        \textbf{Geometric}
+        \tabularnewline
+
+        \hline
+        \textbf{Numeric} &
+        Y &
+        N &
+        N &
+        N &
+        N
+        \tabularnewline
+
+        \hline
+        \textbf{Character} &
+        N &
+        N &
+        N &
+        N &
+        N
+        \tabularnewline
+
+        \hline
+        \textbf{Binary} &
+        N &
+        N &
+        N &
+        N &
+        N
+        \tabularnewline
+
+        \hline
+        \textbf{Datetime} &
+        N &
+        N &
+        N &
+        N &
+        N
+        \tabularnewline
+
+        \hline
+        \textbf{Geometric} &
+        N &
+        N &
+        N &
+        N &
+        N
+        \tabularnewline
+
+        \hline
+    \end{tabular}
+    \caption{CAST type groups}
+    \label{table:adql.cast.type.group}
+\end{table}
+
+
+The ADQL \verb:CAST(): function supports type conversion between the numeric
+data types.
+
+\begin{table}[thm]\footnotesize
+    \begin{tabular}{
+        |p{0.14\textwidth}
+        |p{0.14\textwidth}
+        |p{0.14\textwidth}
+        |p{0.14\textwidth}
+        |p{0.14\textwidth}
+        |p{0.14\textwidth}
+        |}
+       
+        \hline
+        \textbf{Type} &
+        \textbf{SHORTINT} &
+        \textbf{INTEGER} &
+        \textbf{BIGINT} &
+        \textbf{REAL} &
+        \textbf{DOUBLE}
+        \tabularnewline
+
+        \hline
+        \textbf{SHORTINT} &
+        - &
+        Y &
+        Y &
+        Y &
+        Y
+        \tabularnewline
+
+        \hline
+        \textbf{INTEGER} &
+        Y &
+        - &
+        Y &
+        Y &
+        Y
+        \tabularnewline
+
+        \hline
+        \textbf{BIGINT} &
+        Y &
+        Y &
+        - &
+        Y &
+        Y
+        \tabularnewline
+
+        \hline
+        \textbf{REAL} &
+        Y &
+        Y &
+        Y &
+        - &
+        Y
+        \tabularnewline
+
+        \hline
+        \textbf{DOUBLE} &
+        Y &
+        Y &
+        Y &
+        Y &
+        -
+        \tabularnewline
+
+        \hline
+    \end{tabular}
+    \caption{CAST numeric types}
+    \label{table:adql.cast.numeric}
+\end{table}
+
+When converting from floating point value (REAL or DOUBLE) to an integer
+value (SHORTINT, INTEGER or BIGINT) the rounding mechanism used is
+implementation dependent.
+
+When converting a numeric value to a data type that is too small to represent
+the value, this SHOULD be treated as an error. However, the mechanism for
+reporiting the overflow condition is implementation dependent.
+
+\subsection{Unit operations}
+\label{sec:unit}
+
+An ADQL service implementation MAY include support for the following optional
+unit conversion functions:
+
+\begin{itemize}
+    \item \verb:IN_UNIT():
+\end{itemize}
+
+The list of ADQL reserved keywords shown in Section \ref{sec:keywords}
+is therefore extended to include the following:
+
+\begin{verbatim}
+    IN_UNIT
+\end{verbatim}
+
+\subsubsection{IN\_UNIT}
+\label{sec:unit.cast}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-unit|}\\
+{\footnotesize \verb|name: IN_UNIT|}\\
+
+The \verb:IN_UNIT(): function returns the value of the first argument
+transformed into the units defined by the second argument.
+
+The second argument MUST be a string literal containing a valid unit
+description using the formatting defined in \citet{std:VOUNIT}.
+
+\begin{itemize}
+    \item If the second argument is not a valid unit description, then the query is rejected as erroneous. 
+    \item If the translator does not know how to convert the value into the requested units, then the query is rejected as erroneous.
+\end{itemize}
+
+\subsection{Bitwise operators}
+\label{sec:bitwise}
+
+An ADQL service implementation MAY include support for the following optional
+bitwise comparison functions, and their corresponding operators:
+
+\begin{itemize}
+    \item \verb:BIT_AND(x,y)  x & y: 
+    \item \verb:BIT_OR(x,y)   x | y:
+    \item \verb:BIT_XOR(x,y)  x ^ y:
+    \item \verb:BIT_NOT(x)    ~ x:
+\end{itemize}
+
+The list of ADQL special characters shown in Section \ref{sec:characters}
+is therefore extended to include the following:
+
+\begin{itemize}
+    \item curcumflex (\verb:^:)
+    \item tilde (\verb:~:)
+\end{itemize}
+
+The list of ADQL reserved keywords shown in Section \ref{sec:keywords}
+is therefore extended to include the following:
+
+\begin{verbatim}
+    BIT_AND, BIT_OR, BIT_XOR, BIT_NOT
+\end{verbatim}
+
+The function and operator form of each bitwise operation are treated as a
+pair. If an ADQL implementation declares support for one of the bitwise
+operations, it MUST support both the function and operator form of the
+bitwise operation.
+
+\subsubsection{BIT AND}
+\label{sec:bitwise.and}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-bitwise|}\\
+{\footnotesize \verb|name: BIT_AND|}\\
+
+The \verb:BIT_AND(): function and the correspoding ampersand operator
+\verb:'&': perform a bit wise AND operation on two integer operands.
+
+\begin{verbatim}
+    BIT_AND(x, y)
+
+    x & y
+\end{verbatim}
+
+The the bitwise AND operation is only valid for integer numeric values,
+SMALLINT, INTEGER or BIGINT.
+If the operands are not integer values, then the result of the bitwise
+AND operation is undefined.
+
+\subsubsection{BIT OR}
+\label{sec:bitwise.or}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-bitwise|}\\
+{\footnotesize \verb|name: BIT_OR|}\\
+
+The \verb:BIT_OR(): function and the correspoding 'vertical bar' operator
+\verb:'|': perform a bit wise OR operation on two integer operands.
+
+\begin{verbatim}
+    BIT_OR(x, y)
+
+    x | y
+\end{verbatim}
+
+The the bitwise OR operation is only valid for integer numeric values, 
+SMALLINT, INTEGER or BIGINT.
+If the operands are not integer values, then the result of the bitwise OR
+operation is undefined.
+
+\subsubsection{BIT XOR}
+\label{sec:bitwise.xor}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-bitwise|}\\
+{\footnotesize \verb|name: BIT_XOR|}\\
+
+The \verb:BIT_XOR(): function and the correspoding curcumflex operator
+\verb:'^': perform a bit wise XOR (exclusive or) operation on two integer
+operands.
+
+\begin{verbatim}
+    BIT_XOR(x, y)
+
+    x ^ y
+\end{verbatim}
+
+The the bitwise XOR operation is only valid for integer numeric values, 
+SMALLINT, INTEGER or BIGINT.
+If the operands are not integer values, then the result of the bitwise
+XOR operation is undefined.
+
+\subsubsection{BIT NOT}
+\label{sec:bitwise.not}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-bitwise|}\\
+{\footnotesize \verb|name: BIT_NOT|}\\
+
+The \verb:BIT_NOT(): function and the correspoding tilde operator \verb:'~':
+perform a bit wise NOT operation on an integer operand.
+
+\begin{verbatim}
+    BIT_NOT(x)
+
+    ~ x
+\end{verbatim}
+
+The the bitwise NOT operation is only valid for integer numeric values, 
+SMALLINT, INTEGER or BIGINT.
+If the operand is not an integer value, then the result of the bitwise
+NOT operation is undefined.
+
+
 \appendix
-
 \section{BNF Grammar}
+\label{sec:grammar}
 
-An easier to navigate version of the BNF grammar can be found at \url{http://www.ivoa.net/internal/IVOA/IvoaVOQL/adql-bnf-v2.0.html}
+An easier to navigate version of the BNF grammar can be found at\\
+\url{http://www.ivoa.net/internal/IVOA/IvoaVOQL/adql-bnf-v2.0.html}
 
 \begin{verbatim}
 
@@ -1227,7 +2148,7 @@ An easier to navigate version of the BNF grammar can be found at \url{http://www
       | JOIN
       | KEY
       | LANGUAGE | LAST | LEADING | LEFT
-      | LEVEL | LIKE | LOCAL | LOWER
+      | LEVEL | LIKE | ILIKE | LOCAL | LOWER
       | MATCH | MAX | MIN | MINUTE | MODULE
       | MONTH
       | NAMES | NATIONAL | NATURAL | NCHAR | NEXT | NO
@@ -1301,9 +2222,8 @@ An easier to navigate version of the BNF grammar can be found at \url{http://www
     <boolean_factor> ::= [ NOT ] <boolean_primary>
 
     <boolean_primary> ::=
-      | <left_paren> <search_condition> <right_paren>
-        <predicate>
-ZRQ
+        <left_paren> <search_condition> <right_paren>
+      | <predicate>
 
     <boolean_term> ::=
         <boolean_factor>
@@ -1334,12 +2254,6 @@ ZRQ
 
     <character_string_literal> ::=
         <quote> [ <character_representation>... ] <quote>
-        [
-            {
-                <separator>...
-                <quote> [ <character_representation>... ] <quote>
-            }...
-        ]
 
     <character_value_expression> ::= <concatenation> | <character_factor>
 
@@ -1408,7 +2322,6 @@ ZRQ
     <correlation_specification> ::= [ AS ] <correlation_name>
 
     <default_function_prefix> ::=
-ZRQ
 
     <delimited_identifier> ::=
         <double_quote> <delimited_identifier_body> <double_quote>
@@ -1485,6 +2398,7 @@ ZRQ
       | <point>
       | <polygon>
       | <region>
+      | <user_defined_function>
 
     <greater_than_operator> ::= >
 
@@ -1540,6 +2454,7 @@ ZRQ
 
     <like_predicate> ::=
         <match_value> [ NOT ] LIKE <pattern>
+      | <match_value> [ NOT ] ILIKE <pattern>
 
     <mantissa> ::= <exact_numeric_literal>
 
@@ -1558,8 +2473,7 @@ ZRQ
         <right_paren>
       | PI <left_paren><right_paren>
       | POWER <left_paren>
-            <numeric_value_expression> <comma> <numeric_value_expression> >
-ZRQ
+            <numeric_value_expression> <comma> <numeric_value_expression>
         <right_paren>
       | RADIANS <left_paren> <numeric_value_expression> <right_paren>
       | RAND <left_paren> [ <unsigned_integer> ] <right_paren>
@@ -1593,16 +2507,27 @@ ZRQ
       | <unsigned_numeric_literal>
 
     <nondoublequote_character> ::=
-ZRQ
 
     <nonquote_character> ::=
-ZRQ
 
     <not_equals_operator> ::= <not_equals_operator1> | <not_equals_operator2>
 
     <not_equals_operator1> ::= <>
 
     <not_equals_operator2> ::= !=
+
+    <non_join_query_expression> ::=
+        <non_join_query_term>
+        | <query_expression> UNION [ ALL ] <query_term>
+        | <query_expression> EXCEPT [ ALL ] <query_term>
+
+    <non_join_query_primary> ::=
+        <query_specification>
+        | <left_paren> <non_join_query_expression> <right_paren>
+
+    <non_join_query_term> ::=
+        <non_join_query_primary>
+        | <query_term> INTERSECT [ ALL ] <query_expression>
 
     <null_predicate> ::= <column_reference> IS [ NOT ] NULL
 
@@ -1668,8 +2593,12 @@ ZRQ
     <qualifier> ::= <table_name> | <correlation_name>
 
     <query_expression> ::=
-        <query_specification>
-      | <joined_table>
+        <non_join_query_expression>
+        | <joined_table>
+
+    <query_term> ::=
+        <non_join_query_term>
+        | <joined_table>
 
     <query_specification> ::=
         SELECT
@@ -1711,12 +2640,9 @@ ZRQ
 
     <semicolon> ::= ;
 
-    <separator> ::= { <comment> | <space> | <newline> }...
-
     <set_function_specification> ::=
         COUNT <left_paren> <asterisk> <right_paren>
       | <general_set_function>
-ZRQ
 
     <set_function_type> ::= AVG | MAX | MIN | SUM | COUNT
 
@@ -1801,7 +2727,9 @@ ZRQ
 
     <unsigned_integer> ::= <digit>...
 
-    <unsigned_literal> ::= <unsigned_numeric_literal> | <general_literal>
+    <unsigned_literal> ::=
+        <unsigned_numeric_literal>
+      | <general_literal>
 
     <unsigned_numeric_literal> ::=
         <exact_numeric_literal> | <approximate_numeric_literal>
@@ -1842,12 +2770,76 @@ ZRQ
 
 \end{verbatim}
 
-\section{Changes from Previous Versions}
+\section{Language feature support}
+\label{sec:features}
 
+Within the \citet{std:TAPREGEXT} XML schema, each group of features is
+described by a \verb:languageFeatures: element, which has a \verb:type:
+URI that identifies the group, and contains a \verb:form: element for each
+individual feature from the group that the service supports.
+
+For example, the following XML fragment describes a service that supports the
+\verb:POINT: and \verb:CIRCLE: functions from the set of geometrical functions
+identified by the URI \verb|ivo://ivoa.net/std/TAPRegExt#features-adql-geo|.
+
+\begin{verbatim}
+<languageFeatures
+    type="ivo://ivoa.net/std/TAPRegExt#features-adql-geo"
+    >
+    <feature>
+        <form>POINT</form>
+    </feature>
+    <feature>
+        <form>CIRCLE</form>
+    </feature>
+</languageFeatures>    
+\end{verbatim}
+
+\section{Changes from Previous Versions}
+\label{sec:changes}
 \subsection{Changes from ADQL-2.0}
 
+\begin{itemize}
+    \item Typo fixes to the ADQL grammar.
 
+    \item Changes from \citet{note:TAPNotes}
+        \begin{itemize}
 
+            \item 2.1.1.  (done) The Separator Nonterminal
+            \begin{itemize}
+                \item Imported changes from \citet{note:ADQL2Err1}
+            \end{itemize}
+                
+            \item 2.1.2.  (done) Type System
+            \item 2.1.4.  (done) Empty Coordinate Systems
+            \item 2.1.5.  (done) Explanation of optional features
+            \item 2.2.2.  (done) No Type-based Decay of INTERSECTS
+            \item 2.2.3.  (done) Generalized User Defined Functions
+            \item 2.2.4.  (done) Case-Insensitive String Comparisons
+            \item 2.2.5.  (done) Set Operators
+            \item 2.2.6.  (TODO) Boolean Type
+            \item 2.2.7.  (done) Casting to Unit
+            \item 2.2.10. (done) Bitwise operators
+            \item 2.2.10. (TODO) Hexadecimal literals
+            \item 2.2.11. (done) CAST operator
+            \item 2.NN    (done) WITH
+
+            \item BFN udf (TODO)
+            \item BFN sets (TODO)
+            \item BFN boolean (TODO)
+            \item BFN cast (TODO)
+            \item BFN bitwise (TODO)
+            \item BFN hex (TODO)
+            \item BFN cast (TODO)
+            \item BFN with (TODO)
+
+        \end{itemize}
+
+    \item Created [Optional components] section.
+    \item Moved [Geometrical Functions] into [Optional components].
+    \item Added [Language feature] information.
+
+\end{itemize}
 
 \bibliography{ivoatex/ivoabib}
 
