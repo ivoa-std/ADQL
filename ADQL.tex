@@ -371,7 +371,7 @@ different types of reserved keywords or characters are used:
 \end{itemize}
 
 In addition, some service implementations may also support for the optional
-ILIKE case-insensitive string comparison operator.
+ILIKE case-insensitive string comparison operator, defined in section \ref{sec:string.functions.ilike}.
 
 \begin{itemize}
     \item \verb:ILIKE:
@@ -1564,10 +1564,12 @@ string manipulation and comparison operators.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-string|}\\
 {\footnotesize \verb|name: LOWER|}\\
 
-The LOWER function converts its string paremeter to lower case, using
-the standard mapping for ASCII characters, and algorithm R2 described in
-section 3.13, "Default Case Algorithms" of \citet{std:UNICODE} for characters
-outside ASCII.
+The LOWER function converts its string parameter to lower case.
+
+Since case folding is a nontrivial operation in a multi-encoding world,
+ADQL requires standard behaviour for the ASCII characters, and recommends
+following algorithm R2 described in section 3.13, "Default Case Algorithms"
+of \citet{std:UNICODE} for characters outside th ASCII set.
 
 \begin{verbatim}
     LOWER('Francis Albert Augustus Charles Emmanuel')
@@ -1589,6 +1591,11 @@ of its string operands.
 
     'Francis' ILIKE 'francis' => TRUE
 \end{verbatim}
+
+Since case folding is a nontrivial operation in a multi-encoding world,
+ADQL requires standard behaviour for the ASCII characters, and recommends
+following algorithm R2 described in section 3.13, "Default Case Algorithms"
+of \citet{std:UNICODE} for characters outside th ASCII set.
 
 \subsection{Set operators}
 \label{sec:set.operators}
