@@ -123,7 +123,7 @@ for ADQL. The following conventions are used through this document:
     \item Repetitive item (zero or more times) are followed by \verb:...:
     \item Terminal symbols are enclosed by \verb:<: and \verb:>:
     \item Terminals of meta-symbol characters (\verb:=,[,],(,),<,>,*:) are surrounded by quotes (\verb:“:) to distinguish them from meta-symbols
-    \item Case insensitiveness otherwise stated
+    \item Case insensitiveness unless otherwise stated
 \end{itemize}
 
 \clearpage
@@ -240,7 +240,7 @@ begin with a letter \verb:{aA-zZ}:. Subsequent characters shall be letters,
 underscores or digits \verb:{0-9}: as follows:
 
 \begin{verbatim}
-    <Latin_letter> [{ <underscore> | {<Latin_letter> | <digit>} }]
+    <Latin_letter>... [{ <digit> | <Latin_letter> | <underscore> | }...]
 \end{verbatim}
 
 For practical purposes the language specification should be able to address
@@ -248,7 +248,7 @@ reserved keyword and special character conflicts. To do so the language
 provides a way to escape a non-compliant identifier by using the double
 quote character as a delimiter.
 
-ADQL allows making use of the same quoting mechanism to handle the case
+ADQL allows making use of the same quoting mechanism to handle case
 sensitiveness if needed.
 
 \subsubsection{Literals}
@@ -370,7 +370,7 @@ different types of reserved keywords or characters are used:
     \item \verb:EXISTS:
 \end{itemize}
 
-In addition, some service implementations may also support for the optional
+In addition, some service implementations may also support the optional
 ILIKE case-insensitive string comparison operator, defined in section \ref{sec:string.functions.ilike}.
 
 \begin{itemize}
@@ -583,7 +583,7 @@ the underlying database's native language and type system.
 However, column metadata needs to give column types in order to allow the
 construction of queries that are both syntactically and semantically correct.
 Examples of such metadata includes VODataService's \verb:TAPType:
-(\citet{std:VODS11}) or TAP's \verb:TAP_SCHEMA: (\citet{std:TAP}).
+(VODataService-1.1, \citet{std:VODS11}) or TAP's \verb:TAP_SCHEMA: (TAP-1.0, \citet{std:TAP}).
 
 Services SHOULD, if at all possible, try express their column metadata in
 these terms even if the underlying database employs different types.
@@ -768,7 +768,7 @@ and SHOULD NOT make use of that feature in any ADQL queries that it sends.
 \subsection{Service capabilities}
 \label{sec:capabilities}
 
-The \citet{std:TAPREGEXT} standard defines an XML schema that a service SHOULD
+The TAPRegExt-1.0 standard \citep{std:TAPREGEXT} defines an XML schema that a service SHOULD
 use to declare which optional or additional features it supports.
 
 In general, each group of langauge features is identified by a \verb:type:
@@ -777,10 +777,10 @@ feature name.
 
 Appendix \ref{sec:features} contains examples of how to declare support
 for each of the langauge features defined in this document using the
-\citet{std:TAPREGEXT} XML schema.
+TAPRegExt XML schema.
 
 For full details on the XML schema and how it can be used, please refer to
-the \citet{std:TAPREGEXT} standard.
+the TAPRegExt \citep{std:TAPREGEXT} standard.
 
 \subsection{Geometrical Functions}
 \label{sec:geom.functions}
@@ -820,7 +820,7 @@ is used, the vector coordinates MUST be normalized.
 
 Regarding the legal ranges, for spherical coordinates, these SHOULD be [0, 360]
 and [-90, 90]. In a cartesian coordinate system, there are no inherent limits
-but the already mention constrain that vectors should be normalized. It remains
+but the already mentioned constraint that vectors should be normalized. It remains
 up to the service making use of ADQL to define the errors that should be raised
 when using values outside these ranges.
 
@@ -1166,7 +1166,7 @@ degrees would be obtained using the following expression:
     COORD1(POINT(‘’, 25.0,-19.5))
 \end{verbatim}
 
-, being the result a numeric value of 25.0 degrees. The fist coordinate
+, being the result a numeric value of 25.0 degrees. The first coordinate
 could also be derived directly from a column reference as follows:
 
 \begin{verbatim}
@@ -1435,10 +1435,7 @@ error message, to be defined by the service making use of ADQL.
 
 Geometry values (literals or columns containing geometry values) may be
 listed in the select clause, in which case they must be converted into a
-text form. This text form will be identical to the way a literal value would
-be specified in a query, including the geometry type (POINT, CIRCLE, BOX,
-or POLYGON), all the required numeric arguments, and, in this version,
-a blank coordinate system string. For example, the query
+text form.
 
 This text form will be identical to the way a literal value would be
 specified in a query, including the geometry type (POINT, CIRCLE, BOX,
@@ -1511,7 +1508,7 @@ metadata where available.
 \label{sec:user.metadata}
 
 The URI for identifying the language feature for a user defined function
-is defined as part of the \cite{std:TAPREGEXT} standard.
+is defined as part of the TAPRegExt-1.0 standard \citep{std:TAPREGEXT}.
 
 \begin{verbatim}
     ivo://ivoa.net/std/TAPRegExt#features-udf
@@ -1544,7 +1541,7 @@ depending on the regular expression pattern matching.
     </languageFeatures>
 \end{verbatim}
 
-See the \citet{std:TAPREGEXT} standard for full details on how to use the
+See the TAPRegExt standard for full details on how to use the
 XML schema to declare user defined functions.
 
 \subsection{String functions and operators}
@@ -1923,7 +1920,7 @@ The \verb:IN_UNIT(): function returns the value of the first argument
 transformed into the units defined by the second argument.
 
 The second argument MUST be a string literal containing a valid unit
-description using the formatting defined in \citet{std:VOUNIT}.
+description using the formatting defined in the VOUnits specification \citep{std:VOUNIT}.
 
 \begin{itemize}
     \item If the second argument is not a valid unit description, then the query is rejected as erroneous. 
@@ -1948,7 +1945,7 @@ pair. If an ADQL implementation declares support for one of the bitwise
 operations, it MUST support both the function and operator form of the
 bitwise operation.
 
-\subsubsection{BIT AND}
+\subsubsection{BIT\_AND}
 \label{sec:bitwise.and}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-bitwise|}\\
@@ -1968,7 +1965,7 @@ SMALLINT, INTEGER or BIGINT.
 If the operands are not integer values, then the result of the bitwise
 AND operation is undefined.
 
-\subsubsection{BIT OR}
+\subsubsection{BIT\_OR}
 \label{sec:bitwise.or}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-bitwise|}\\
@@ -1988,7 +1985,7 @@ SMALLINT, INTEGER or BIGINT.
 If the operands are not integer values, then the result of the bitwise OR
 operation is undefined.
 
-\subsubsection{BIT XOR}
+\subsubsection{BIT\_XOR}
 \label{sec:bitwise.xor}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-bitwise|}\\
@@ -2009,7 +2006,7 @@ SMALLINT, INTEGER or BIGINT.
 If the operands are not integer values, then the result of the bitwise
 XOR operation is undefined.
 
-\subsubsection{BIT NOT}
+\subsubsection{BIT\_NOT}
 \label{sec:bitwise.not}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-bitwise|}\\
@@ -2760,7 +2757,7 @@ An easier to navigate version of the BNF grammar can be found at\\
 \section{Language feature support}
 \label{sec:features}
 
-Within the \citet{std:TAPREGEXT} XML schema, each group of features is
+Within the TAPRegExt \citep{std:TAPREGEXT} XML schema, each group of features is
 described by a \verb:languageFeatures: element, which has a \verb:type:
 URI that identifies the group, and contains a \verb:form: element for each
 individual feature from the group that the service supports.
