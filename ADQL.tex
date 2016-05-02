@@ -155,7 +155,7 @@ The language allows simple Latin letters (lower and upper case, i.e.
     \item ampersand (\verb:&:)
     \item question mark (\verb:?:)
     \item vertical bar (\verb:|:)
-    \item curcumflex (\verb:^:)
+    \item circumflex (\verb:^:)
     \item tilde (\verb:~:)
 \end{itemize}
 
@@ -1949,32 +1949,25 @@ description using the formatting defined in the VOUnits specification \citep{std
 \label{sec:bitwise}
 
 An ADQL service implementation MAY include support for the following optional
-bitwise comparison functions, and their corresponding operators:
+bitwise operators:
 
 \begin{itemize}
-    \item \verb:BIT_AND(x,y)  x & y: 
-    \item \verb:BIT_OR(x,y)   x | y:
-    \item \verb:BIT_XOR(x,y)  x ^ y:
-    \item \verb:BIT_NOT(x)    ~ x:
+    \item not \verb:~ x:
+    \item and \verb:x & y: 
+    \item or  \verb:x | y:
+    \item xor \verb:x ^ y:
 \end{itemize}
 
-The function and operator form of each bitwise operation are treated as a
-pair. If an ADQL implementation declares support for one of the bitwise
-operations, it MUST support both the function and operator form of the
-bitwise operation.
-
-\subsubsection{BIT\_AND}
+\subsubsection{Bit AND}
 \label{sec:bitwise.and}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-bitwise|}\\
 {\footnotesize \verb|name: BIT_AND|}\\
 
-The \verb:BIT_AND(): function and the correspoding ampersand operator
-\verb:'&': perform a bit wise AND operation on two integer operands.
+The ampersand, \verb:&:, operator performs a bit wise AND operation
+on two integer operands.
 
 \begin{verbatim}
-    BIT_AND(x, y)
-
     x & y
 \end{verbatim}
 
@@ -1983,18 +1976,16 @@ SMALLINT, INTEGER or BIGINT.
 If the operands are not integer values, then the result of the bitwise
 AND operation is undefined.
 
-\subsubsection{BIT\_OR}
+\subsubsection{Bit OR}
 \label{sec:bitwise.or}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-bitwise|}\\
 {\footnotesize \verb|name: BIT_OR|}\\
 
-The \verb:BIT_OR(): function and the correspoding 'vertical bar' operator
-\verb:'|': perform a bit wise OR operation on two integer operands.
+The vertical bar, \verb:|:, operator performs a bit wise OR operation
+on two integer operands.
 
 \begin{verbatim}
-    BIT_OR(x, y)
-
     x | y
 \end{verbatim}
 
@@ -2003,19 +1994,16 @@ SMALLINT, INTEGER or BIGINT.
 If the operands are not integer values, then the result of the bitwise OR
 operation is undefined.
 
-\subsubsection{BIT\_XOR}
+\subsubsection{Bit XOR}
 \label{sec:bitwise.xor}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-bitwise|}\\
 {\footnotesize \verb|name: BIT_XOR|}\\
 
-The \verb:BIT_XOR(): function and the correspoding curcumflex operator
-\verb:'^': perform a bit wise XOR (exclusive or) operation on two integer
-operands.
+The circumflex, \verb:^:, operator performs a bit wise XOR (exclusive or)
+operation on two integer operands.
 
 \begin{verbatim}
-    BIT_XOR(x, y)
-
     x ^ y
 \end{verbatim}
 
@@ -2024,18 +2012,15 @@ SMALLINT, INTEGER or BIGINT.
 If the operands are not integer values, then the result of the bitwise
 XOR operation is undefined.
 
-\subsubsection{BIT\_NOT}
+\subsubsection{Bit NOT}
 \label{sec:bitwise.not}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-bitwise|}\\
 {\footnotesize \verb|name: BIT_NOT|}\\
 
-The \verb:BIT_NOT(): function and the correspoding tilde operator \verb:'~':
-perform a bit wise NOT operation on an integer operand.
+The tilde, \verb:~:, operator performs a bit wise NOT operation on an integer operand.
 
 \begin{verbatim}
-    BIT_NOT(x)
-
     ~ x
 \end{verbatim}
 
@@ -2043,7 +2028,6 @@ The the bitwise NOT operation is only valid for integer numeric values,
 SMALLINT, INTEGER or BIGINT.
 If the operand is not an integer value, then the result of the bitwise
 NOT operation is undefined.
-
 
 \appendix
 \section{BNF Grammar}
@@ -2221,6 +2205,17 @@ An easier to navigate version of the BNF grammar can be found at\\
         <value_expression> [ NOT ] BETWEEN
         <value_expression> AND <value_expression>
 
+    <bitwise_expression> ::=
+        <bitwise_not> <numeric_value_expression>
+        | <numeric_value_expression> <bitwise_and> <numeric_value_expression>
+        | <numeric_value_expression> <bitwise_or>  <numeric_value_expression>
+        | <numeric_value_expression> <bitwise_xor> <numeric_value_expression>
+
+    <bitwise_and> ::= <ampersand>
+    <bitwise_not> ::= <tilde>
+    <bitwise_or>  ::= <vertical_bar>
+    <bitwise_xor> ::= <circumflex>
+
     <boolean_factor> ::= [ NOT ] <boolean_primary>
 
     <boolean_function> ::=
@@ -2275,6 +2270,8 @@ An easier to navigate version of the BNF grammar can be found at\\
             <comma> <coordinates>
             <comma> <radius>
         <right_paren>
+
+    <circumflex> ::= ^
 
     <colon> ::= :
 
@@ -2552,6 +2549,7 @@ An easier to navigate version of the BNF grammar can be found at\\
 
     <numeric_value_expression> ::=
         <term>
+      | <bitwise_expression>
       | <numeric_value_expression> <plus_sign> <term>
       | <numeric_value_expression> <minus_sign> <term>
 
@@ -2717,6 +2715,8 @@ An easier to navigate version of the BNF grammar can be found at\\
         <factor>
       | <term> <asterisk> <factor>
       | <term> <solidus> <factor>
+
+    <tilde> ::= ~
 
     <token> ::=
         <nondelimiter_token> | <delimiter_token>
