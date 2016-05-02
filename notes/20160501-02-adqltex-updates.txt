@@ -215,21 +215,34 @@
         type: ivo://ivoa.net/std/TAPRegExt#features-adql-hierarchical
         name: WITH
 
-            Add informative example rather than the raw BNF.
+            Common table expressions define temporary views that exist only for the duration of the query.
 
+            Ordinary common table expressions help to make queries easier to understand by factoring
+            subqueries out of the main SQL statement.
 
-            alpha_source
-
-             
-        
-            Text incomplete
-            "For a WITH expression to be valid in ADQL, the following criteria MUST be met ...."
-
-            This isn't recursive, because it doesn't use the RECURSIVE keyword.
+                WITH alpha_subset AS
+                    (
+                    SELECT
+                        *
+                    FROM
+                        alpha_source
+                    WHERE
+                        id % 10 = 0
+                    )
+                SELECT
+                    *
+                FROM
+                    alpha_subset
+                WHERE
+                    ra BETWEEN 10 AND 20
+           
+            Recursive common table expressions provide the ability to iterate recursive queries of trees and graphs. 
 
             We have not accepted RECURSIVE as an option (yet).
 
-        Need to test plain WITH on the Cosmpoterix platforms.
+            Do we want to include RECURSIVE CTEs ?
+
+        Need to test WITH on Cosmpoterix.
 
     WITH BFN
 

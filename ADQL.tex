@@ -1703,11 +1703,11 @@ This means that row with a numeric value of \verb:2: and units of \verb:m:
 and a row with a numeric value of \verb:2: and units of \verb:km: will be
 considered equal.
 
-\subsection{Hierarchical queries}
-\label{sec:hierarchical}
+\subsection{Common table expressions}
+\label{sec:common-table}
 
 An ADQL service implementation MAY include support for the following optional
-support for hierarchical or recursive queries :
+support for common table expressions :
 
 \begin{itemize}
     \item \verb:WITH:
@@ -1715,30 +1715,34 @@ support for hierarchical or recursive queries :
 
 \subsubsection{WITH}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-hierarchical|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-common-table|}\\
 {\footnotesize \verb|name: WITH|}\\
 
 ``A Common Table Expression, or CTE, is a temporary named result set, derived
 from a simple query and defined within the execution scope of a SELECT
 statement."\footnote{\url{https://en.wikipedia.org/wiki/Hierarchical\_and\_recursive\_queries\_in\_SQL\#Common\_table\_expression}}
 
-The BNF sytntax for a recursive \verb:WITH: query is
+Using a common table expression can make queries easier to understand by factoring
+subqueries out of the main SQL statement.
+
+Example 
 \begin{verbatim}
-    <recursive_query> :=
-        WITH <with_query> [, ...]
-        <select_query>
-
-    <with_query> :=
-        <query_name>
-        [ (column_name [,...]) ] AS (<select_query>)
-
+    WITH alpha_subset AS
+        (
+        SELECT
+            *
+        FROM
+            alpha_source
+        WHERE
+            id % 10 = 0
+        )
+    SELECT
+        *
+    FROM
+        alpha_subset
+    WHERE
+        ra BETWEEN 10 AND 20
 \end{verbatim}
-
-For a WITH expression to be valid in ADQL, the following criteria MUST be met:
-
-\begin{itemize}
-    \item 
-\end{itemize}
 
 \subsection{Type operations}
 \label{sec:type}
@@ -2610,12 +2614,11 @@ An easier to navigate version of the BNF grammar can be found at\\
         <non_join_query_term>
         | <joined_table>
 
-    <query_specification> ::=
-        SELECT
-            [ <set_quantifier> ]
-            [ <set_limit> ]
-            <select_list>
-            <table_expression>
+    <query_name> ::= <identifier>
+
+    <query_specification> :=
+        WITH <with_query> [, ...]
+        <select_query>
 
     <question_mark> ::= ?
 
@@ -2645,6 +2648,13 @@ An easier to navigate version of the BNF grammar can be found at\\
     <select_list> ::=
         <asterisk>
       | <select_sublist> [ { <comma> <select_sublist> }... ]
+
+    <select_query> ::=
+        SELECT
+            [ <set_quantifier> ]
+            [ <set_limit> ]
+            <select_list>
+            <table_expression>
 
     <select_sublist> ::= <derived_column> | <qualifier> <period> <asterisk>
 
@@ -2780,6 +2790,10 @@ An easier to navigate version of the BNF grammar can be found at\\
     <vertical_bar> ::= |
 
     <where_clause> ::= WHERE <search_condition>
+
+    <with_query> :=
+        <query_name>
+        [ (<column_name> [,...]) ] AS (<query_specification>)
 
 \end{verbatim}
 
