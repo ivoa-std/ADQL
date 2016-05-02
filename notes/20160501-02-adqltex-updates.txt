@@ -379,6 +379,18 @@
           | <query_term> INTERSECT [ ALL ] <query_expression>
 
 # -----------------------------------------------------
+# Check BNF is done for all 
+
+    \item BFN udf (TODO)
+    \item BFN sets (TODO)
+    \item BFN boolean (TODO)
+    \item BFN cast (TODO)
+    \item BFN bitwise (TODO)
+    \item BFN hex (TODO)
+    \item BFN cast (TODO)
+    \item BFN with (TODO)
+
+# -----------------------------------------------------
 # Syntax checks
 
     http://mail.ivoa.net/pipermail/dal/2015-July/007172.html
@@ -411,6 +423,19 @@
 
     Because one day we might need #features-adql-geog.
     
+# -----------------------------------------------------
+# Overload all the geometry functions ?
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007435.html
+    Patrick Dowler
+
+        I think that we should redefine all the geometry functions
+        without coord sys now
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007437.html
+    Arnold Rots
+
+        agree - drop coord sys
 
 # -----------------------------------------------------
 # Commit diffs
@@ -427,7 +452,8 @@
     Added OFFSET clause.
     https://volute.g-vo.org/viewvc/volute/trunk/projects/dal/ADQL/ADQL.tex?r1=3366&r2=3367
 
-
+    Added four parameter DISTANCE.
+    https://volute.g-vo.org/viewvc/volute/trunk/projects/dal/ADQL/ADQL.tex?r1=3369&r2=3370
 
 
 
