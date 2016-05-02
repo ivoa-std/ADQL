@@ -1,0 +1,321 @@
+#
+# <meta:header>
+#   <meta:licence>
+#     Copyright (c) 2016, ROE (http://www.roe.ac.uk/)
+#
+#     This information is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+#
+#     This information is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+#  
+#     You should have received a copy of the GNU General Public License
+#     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#   </meta:licence>
+# </meta:header>
+#
+#
+
+# -----------------------------------------------------
+# Boolean Type
+
+    Boolean text
+
+        Table 3 - add BOOLEAN
+
+        Split literals section into three
+
+        2.1.3.1 String
+        2.1.3.2 Numeric
+        2.1.3.3 Boolean
+
+            A boolean literals are expressed using one or other of the boolean keywords,
+            TRUE, FALSE or true, false.
+
+            Boolean literals are defined in BNF as follows :
+
+                <boolean_literal>  ::= TRUE | FALSE | true | false
+
+            Boolean literals are NOT case sensitive.
+
+            Need to test boolean literals on the Cosmpoterix platforms.
+
+    Boolean BNF
+
+        <value_expression> ::=
+            <numeric_value_expression>
+          | <string_value_expression>
+    +     | <boolean_value_expression>
+          | <geometry_value_expression>
+
+    +   <boolean_value_expression> ::= 
+            <boolean_literal>
+          | <boolean_function>
+          | <boolean_geometry_function>
+          | <user_defined_function>
+
+    +   <boolean_literal> ::= TRUE | FALSE | true | false
+
+    +   <boolean_function> ::= # Placeholder
+        
+    +   <boolean_geometry_function> ::= # Placeholder
+
+# -----------------------------------------------------
+# Hexadecimal literals
+
+    Text needs work ..
+
+    Hexadecimal text
+
+        2.1.3.2.x Hexadecimal
+
+            Hexadecimal literals are only valid for integer data types, SMALLINT, INTEGER and BIGINT.
+
+            Hexadecimal literals are expressed using the 'C' style notation, e.g. 0xFF.
+
+            Hexadecimal literals are defined in BNF as follows :
+
+                <unsigned_hexadecimal> ::= 0x<hex_digit>...
+
+                hex_digit ::= <dec_digit> | a | b | c | d | e | f | A | B | C | D | E | F
+
+            Hexadecimal literals are NOT case sensitive.
+
+    Numeric BNF (updated)
+
+            <signed_numeric_literal> ::= [<sign>] <unsigned_numeric_literal>
+
+            <unsigned_numeric_literal> ::= 
+                <exact_numeric_literal>
+              | <approximate_numeric_literal>
+              
+            <exact_numeric_literal> ::=
+                <unsigned_decimal> [<period> [<unsigned_decimal>]]
+              | <period><unsigned_decimal>
+              | <unsigned_decimal>
+              | <unsigned_hexadecimal>
+
+            <approximate_numeric_literal> ::= <mantissa> E <exponent>
+
+            <mantissa> ::= <exact_numeric_literal>
+
+            <exponent> ::= <signed_decimal>
+
+            <signed_decimal> ::= [<sign>] <unsigned_decimal>
+
+            <unsigned_decimal> ::= <dec_digit>...
+
+            <dec_digit> ::= 0 | 1  | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+            
+            <sign> ::= <plus_sign> | <minus_sign>
+
+
+    Hexadecimal BNF
+
+            <unsigned_hexadecimal> ::= 0x<hex_digit>...
+
+            hex_digit ::= <dec_digit> | a | b | c | d | e | f | A | B | C | D | E | F
+
+# -----------------------------------------------------
+# Bitwise operators
+
+    BNF needs work
+
+    Bitwise operators
+    
+        Remove the functions
+
+            An ADQL service implementation MAY include support for the following
+            optional bitwise operators:
+
+            * BIT_NOT ~ x
+            * BIT_AND x & y
+            * BIT_OR  x | y
+            * BIT_XOR x ^ y <-- Note potential conflict with PostgreSQL exponentiation.
+
+        Add
+            "The the bitwise operations are only valid for integer numeric values,
+            SMALLINT, INTEGER or BIGINT. If the operands are not integer values,
+            then the result of the bitwise AND operation is undefined.
+            
+        Del
+            "The function and operator form of each bitwise operation are treated as
+            a pair. If an ADQL implementation declares support for one of the bitwise
+            operations, it MUST support both the function and operator form of the
+            bitwise operation."
+
+        Update the operators to match.
+
+            ....
+
+    Bitwise BNF
+
+        <bitwise_expression> ::=
+            <bitwise_not> <integer_expression>
+          | <integer_expression> <bitwise_and> <integer_expression>
+          | <integer_expression> <bitwise_or>  <integer_expression>
+          | <integer_expression> <bitwise_xor> <integer_expression>
+
+        <integer_expression> ::= <numeric_expression> # integer return type only
+
+        # is this the right place for it ?
+        <numeric_value_expression> ::=
+            <term>
+          | <bitwise_expression>
+          | <numeric_value_expression> <plus_sign> <term>
+          | <numeric_value_expression> <minus_sign> <term>
+
+# -----------------------------------------------------
+# Hierarchical queries
+
+    WITH feature
+
+        WITH
+        Language feature
+        type: ivo://ivoa.net/std/TAPRegExt#features-adql-hierarchical
+        name: WITH
+
+            Add informative example rather than the raw BNF.
+
+
+            alpha_source
+
+             
+        
+            Text incomplete
+            "For a WITH expression to be valid in ADQL, the following criteria MUST be met ...."
+
+            This isn't recursive, because it doesn't use the RECURSIVE keyword.
+
+            We have not accepted RECURSIVE as an option (yet).
+
+        Need to test plain WITH on the Cosmpoterix platforms.
+
+    WITH BFN
+
+            <query_expression> ::=
+        becomes
+            <select_query> ::=
+
+        add
+
+            <query_expression> :=
+                WITH <with_query> [, ...]
+                <select_query>
+
+            <with_query> :=
+                <query_name>
+                [ (<column_name> [,...]) ] AS (<select_query>)
+
+            <query_name> ::= <identifier>
+
+# -----------------------------------------------------
+# OFFSET
+
+    OFFSET text
+
+        OFFSET
+        Language feature
+        type: ivo://ivoa.net/std/TAPRegExt#features-adql-offset
+        name: OFFSET
+
+            Text based on SQL 2011
+
+    OFFSET BNF
+
+        <table_expression> ::=
+            <from_clause>
+          [ <where_clause> ]
+          [ <group_by_clause> ]
+          [ <having_clause> ]
+          [ <order_by_clause> ]
+    +     [ <offset_clause> ]
+
+    +   <offset_clause> ::= [OFFSET <unsigned_integer>]
+
+
+# -----------------------------------------------------
+# DISTANCE
+
+    DISTANCE text
+
+
+
+    DISTANCE BNF
+
+
+
+# -----------------------------------------------------
+# CAST
+
+    CAST feature
+
+        CAST
+        type: ivo://ivoa.net/std/TAPRegExt#features-adql-type
+        name: CAST
+
+            Feature name is wrong
+        -   name: IN_UNIT
+        +   name: CAST
+
+
+    CAST BNF
+
+        <numeric_value_function> ::=
+            <cast_function>
+          | <trig_function>
+          | <math_function>        
+          | ....
+          
+        <cast_function> ::= 
+          | CAST(<numeric_value_expression> AS <numeric_type>) 
+
+        <numeric_type> ::= SHORTINT | INTEGER | BIGINT | REAL | DOUBLE
+
+
+# -----------------------------------------------------
+# UNION
+
+    Check BNF is correct
+
+        <non_join_query_expression> ::=
+            <non_join_query_term>
+          | <query_expression> UNION [ ALL ] <query_term>
+          | <query_expression> EXCEPT [ ALL ] <query_term>
+
+# -----------------------------------------------------
+# INTERSECT
+
+    Check BNF is correct
+
+        <non_join_query_primary> ::=
+            <query_specification>
+          | <left_paren> <non_join_query_expression> <right_paren>
+
+        <non_join_query_term> ::=
+            <non_join_query_primary>
+          | <query_term> INTERSECT [ ALL ] <query_expression>
+
+# -----------------------------------------------------
+# Syntax checks
+
+    http://mail.ivoa.net/pipermail/dal/2015-July/007172.html
+
+        *Note*: The usage of {} in the EBNF in this specification follows the
+        usage in SQL92, i.e., it is used for grouping.  It is *not* used as
+        a zero-or-more operator as frequently done in other kinds of EBNF.
+
+# -----------------------------------------------------
+# Online BNF
+
+    Deprecate or update
+    http://wiki.ivoa.net/internal/IVOA/IvoaVOQL/adql-bnf-v2.0.html
+
+# -----------------------------------------------------
+# TapNotes 2014
+
+    http://wiki.ivoa.net/twiki/bin/view/IVOA/TapNotes20140718

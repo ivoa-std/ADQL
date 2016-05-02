@@ -1,0 +1,217 @@
+#
+# <meta:header>
+#   <meta:licence>
+#     Copyright (c) 2016, ROE (http://www.roe.ac.uk/)
+#
+#     This information is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+#
+#     This information is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+#  
+#     You should have received a copy of the GNU General Public License
+#     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#   </meta:licence>
+# </meta:header>
+#
+#
+
+
+
+
+    http://mail.ivoa.net/pipermail/dal/2016-February/007293.html
+    Marco Molinaro
+
+        question - XMATCH(POINT, POINT, radius)
+        question - XMATCH(FLOAT, FLOAT, FLOAT, FLOAT,radius)
+
+    http://mail.ivoa.net/pipermail/dal/2016-February/007295.html
+    Mark Taylor
+
+        no - XMATCH(POINT, POINT, radius)
+        yes - XMATCH(FLOAT, FLOAT, FLOAT, FLOAT,radius)
+        
+
+    http://mail.ivoa.net/pipermail/dal/2016-February/007296.html
+    Arnold Rots
+
+        I don't think I am the only one who is not enamored of these
+        brute-force unnuanced cross-matches, but I wonder whether
+        it would be helpful to improve them by allowing two radii.
+
+    http://mail.ivoa.net/pipermail/dal/2016-February/007297.html
+    Mark Taylor
+
+        .......
+        .......
+        .......
+        .......
+        .......
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007420.html
+    Marco Molinaro
+
+        summary
+
+        no - XMATCH(POINT, POINT, radius)
+        no - XMATCH(FLOAT, FLOAT, FLOAT, FLOAT,radius)
+
+        yes - DISTANCE(POINT, POINT)
+        yes - DISTANCE(FLOAT, FLOAT, FLOAT, FLOAT)
+
+        
+    http://mail.ivoa.net/pipermail/dal/2016-April/007421.html
+    Walter Landry
+    
+        new - POINT literal   {a,b} -> POINT('ICRS GEOCENTER',a,b)
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007422.html
+    Markus Demleitner
+
+        meh - POINT literal
+        new - DISTANCE(FLOAT, FLOAT, FLOAT, FLOAT)
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007423.html
+    Arnold Rots
+
+        yes - POINT literal
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007424.html
+    Tom McGlynn
+
+        yes - POINT literal
+        yes - DISTANCE(FLOAT, FLOAT, FLOAT, FLOAT)
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007427.html
+    Mark Taylor
+
+        maybe - POINT literal
+        maybe - DISTANCE(FLOAT, FLOAT, FLOAT, FLOAT)
+        new - SKYDISTANCE(FLOAT, FLOAT, FLOAT, FLOAT)
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007435.html
+    Patrick Dowler
+
+        keep - DISTANCE(POINT, POINT)
+        no - POINT literal
+        no - DISTANCE(FLOAT, FLOAT, FLOAT, FLOAT)
+
+        new - I think that we should redefine all the geometry functions
+        without coord sys now
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007437.html
+    Arnold Rots
+
+        agree - drop coord sys
+    
+        not - DISTANCE(POINT, POINT)
+
+        new - ANGULAR_DISTANCE(POINT, POINT)
+        new - SPHERICAL_DISTANCE(POINT, POINT)
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007438.html
+    Mark Taylor
+
+        not DISTANCE(POINT, POINT)
+        prefer DISTANCE(FLOAT, FLOAT, FLOAT, FLOAT)
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007439.html
+    Mark Taylor
+
+        ObsCore 1.1 specifies no POINT-valued columns
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007441.html
+    Patrick Dowler
+
+        DISTANCE (clear and simple xmatch) is generally
+        needed for catalogues and not ObsCore
+
+        ObsCore does have a point-valued CENTROID(s_region)
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007440.html
+    Markus Demleitner
+
+        both - DISTANCE(POINT, POINT) and DISTANCE(FLOAT, FLOAT, FLOAT, FLOAT)
+        new - BNF for both
+
+        nice, but no - ANGULAR_DISTANCE
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007442.html
+    Patrick Dowler
+
+        both - DISTANCE(POINT, POINT) and DISTANCE(FLOAT, FLOAT, FLOAT, FLOAT)
+
+        So we are talking about keeping the existing DISTANCE(point, point)
+        and overloading it with a 4-arg version? I can live with that.
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007443.html    
+    Walter Landry
+
+        nicer - DISTANCE(POINT, POINT)
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007450.html
+    Mark Taylor
+
+        keep DISTANCE(FLOAT, FLOAT, FLOAT, FLOAT)
+        new  ANGULAR_DISTANCE(POINT, POINT)
+
+        TAPRegExt - name needs to be distinct ?
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007451.html
+    Alex Szalay
+
+        new Distance2(POINT, POINT)
+        new Distance4(FLOAT, FLOAT, FLOAT, FLOAT)
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007453.html
+    Arnold Rots
+
+        new Distance2P(POINT, POINT)
+        new Distance4C(FLOAT, FLOAT, FLOAT, FLOAT)
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007458.html
+    Markus Demleitner
+    
+        TAPRegExt - both or none
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007459.html
+    Mark Taylor
+
+        TAPRegExt - need version
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007444.html
+    Walter Landry
+
+        add - POINT literal
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007461.html
+    Patrick Dowler        
+
+        yes - TAPRegExt, needs version
+
+    http://mail.ivoa.net/pipermail/dal/2016-April/007462.html
+    Mark Taylor
+
+        ok - TAPRegExt, needs version
+
+
+
+

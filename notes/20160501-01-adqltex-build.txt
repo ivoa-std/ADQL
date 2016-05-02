@@ -1,0 +1,69 @@
+#
+# <meta:header>
+#   <meta:licence>
+#     Copyright (c) 2016, ROE (http://www.roe.ac.uk/)
+#
+#     This information is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+#
+#     This information is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+#  
+#     You should have received a copy of the GNU General Public License
+#     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#   </meta:licence>
+# </meta:header>
+#
+#
+
+# -----------------------------------------------------
+# Create our settings for the ADQL document.
+#[user@desktop]
+
+    if [ ! -e "${HOME:?}/adqltex.settings" ]
+    then
+        cat > "${HOME:?}/adqltex.settings" << EOF
+EOF
+VOLUTE_HOME=/var/local/projects/edinburgh/volute/svn
+ADQLTEXT_CODE=\${VOLUTE_HOME:?}/ADQL
+    fi
+
+# -----------------------------------------------------
+# Update our ADQL document source.
+#[user@desktop]
+
+    source "${HOME:?}/adqltex.settings"
+    pushd "${ADQLTEXT_CODE:?}"
+
+        svn update
+
+    popd
+
+# -----------------------------------------------------
+# Run an ivoatext container and build the document.
+#[user@desktop]
+
+    source "${HOME:?}/adqltex.settings"
+    pushd "${ADQLTEXT_CODE:?}"
+
+        docker run -it \
+            -e "useruid=$(id -u)" \
+            -v "$(pwd):/var/local/texdata" \
+            'ivoa/ivoatex:1.1'
+
+            pushd /var/local/texdata
+
+                make clean
+                make biblio
+                make
+
+            popd
+        exit
+
+
+
+
