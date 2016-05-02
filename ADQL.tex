@@ -2033,6 +2033,35 @@ SMALLINT, INTEGER or BIGINT.
 If the operand is not an integer value, then the result of the bitwise
 NOT operation is undefined.
 
+\subsection{Cardinality}
+\label{sec:cardinality}
+
+An ADQL service implementation MAY include support for the following optional
+clauses to modify the cardinality of query results.
+
+\subsubsection{OFFSET}
+\label{sec:offset}
+
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-offset|}\\
+{\footnotesize \verb|name: OFFSET|}\\
+
+An ADQL service implementation MAY include support for the OFFSET clause
+which limits the number of rows returned by removing a specified number
+of rows from the beginning of the result set.
+
+If a query contains both an ORDER BY clause and an OFFSET clause,
+then the ORDER BY is applied before the specified number of 
+of rows are dropped by the OFFSET clause.
+
+If the total number of rows is less than is less than the value
+specified by the OFFSET clause, then the result set is empty.
+
+If a query contains both an OFFSET clause and a TOP clause,
+then the OFFSET clause is applied first, dropping the specified
+number of rows from the begining of the result set before the
+TOP clause is applied to limit the number of rows returned.
+
 \appendix
 \section{BNF Grammar}
 \label{sec:grammar}
@@ -2563,6 +2592,8 @@ An easier to navigate version of the BNF grammar can be found at\\
       | <numeric_geometry_function >
       | <user_defined_function>
 
+    <offset_clause> ::= OFFSET <unsigned_integer>
+
     <order_by_clause> ::= ORDER BY <sort_specification_list>
 
     <ordering_specification> ::= ASC | DESC
@@ -2711,6 +2742,7 @@ An easier to navigate version of the BNF grammar can be found at\\
         [ <group_by_clause> ]
         [ <having_clause> ]
         [ <order_by_clause> ]
+        [ <offset_clause> ]
 
     <table_name> ::= [ <schema_name> <period> ] <identifier>
 

@@ -274,6 +274,7 @@
 
             Text based on SQL 2011
 
+
     OFFSET BNF
 
         <table_expression> ::=
@@ -285,18 +286,6 @@
     +     [ <offset_clause> ]
 
     +   <offset_clause> ::= [OFFSET <unsigned_integer>]
-
-
-# -----------------------------------------------------
-# DISTANCE
-
-    DISTANCE text
-
-
-
-    DISTANCE BNF
-
-
 
 # -----------------------------------------------------
 # CAST
@@ -348,6 +337,15 @@
         <non_join_query_term> ::=
             <non_join_query_primary>
           | <query_term> INTERSECT [ ALL ] <query_expression>
+
+# -----------------------------------------------------
+# DISTANCE
+
+    DISTANCE text
+
+
+    DISTANCE BNF
+
 
 # -----------------------------------------------------
 # Syntax checks
