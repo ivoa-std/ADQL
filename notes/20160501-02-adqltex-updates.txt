@@ -455,6 +455,8 @@
     Added four parameter DISTANCE.
     https://volute.g-vo.org/viewvc/volute/trunk/projects/dal/ADQL/ADQL.tex?r1=3369&r2=3370
 
+    Added hexadecimal literals.
+    https://volute.g-vo.org/viewvc/volute/trunk/projects/dal/ADQL/ADQL.tex?r1=3373&r2=3374
 
 
 
