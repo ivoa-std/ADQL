@@ -7,7 +7,7 @@ DOCNAME = ADQL
 DOCVERSION = 2.1
 
 # Publication date, ISO format; update manually for "releases"
-DOCDATE = 2015-06-01
+DOCDATE = 2016-05-02
 
 # What is it you're writing: NOTE, WD, PR, or REC
 DOCTYPE = WD
