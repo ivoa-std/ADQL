@@ -157,6 +157,7 @@ The language allows simple Latin letters (lower and upper case, i.e.
     \item vertical bar (\verb:|:)
     \item circumflex (\verb:^:)
     \item tilde (\verb:~:)
+    \item vertical bar (\verb:|:)
 \end{itemize}
 
 \subsubsection{Keywords and Identifiers}
@@ -227,10 +228,9 @@ YEAR, ZONE
     IN_UNIT
 \end{verbatim}
 
-\begin{verbatim}
-    BIT_AND, BIT_NOT, BIT_OR, BIT_XOR
-\end{verbatim}
-
+%\begin{verbatim}
+%    BIT_AND, BIT_NOT, BIT_OR, BIT_XOR
+%\end{verbatim}
 
 The identifiers are used to express, for example, a table or a column
 reference name.
@@ -357,12 +357,17 @@ specification:
             { column_name | unsigned_decimal } [ ASC | DESC],
             ...
             ]
+        [ OFFSET offset ]            
 \end{verbatim}
 
 The SELECT statement defines a query to some derived table(s) specified
 in the FROM clause. As a result of this query, a subset of the table(s)
 is returned. The order of the rows MAY be arbitrary unless ORDER BY clause
-is specified. The order of the columns to return SHALL be the same as the
+is specified. An optional OFFSET MAY be specified to retrieve records from 
+a specified row on. If OFFSET is used in combination with a TOP clause
+then OFFSET is applied first, then the result set is limited by TOP 
+(see \ref{sec:offset}). 
+The order of the columns to return SHALL be the same as the
 order specified in the selection list, or the order defined in the original
 table if asterisk is specified. TOP n construct is used to return the first
 n-rows. The selection list MAY include any numeric, string or geometry value
@@ -1296,7 +1301,7 @@ The DISTANCE function computes the arc length along a great circle between two
 points and returns a numeric value expression in degrees.
 
 The specification defines two versions of the DISTANCE function, one that
-accepts accept two geometries, and one that accepts four separate numeric
+accepts two geometries, and one that accepts four separate numeric
 values.
 
 If an ADQL service implementation declares support for DISTANCE,
@@ -2050,7 +2055,7 @@ on two integer operands.
     x | y
 \end{verbatim}
 
-The the bitwise OR operation is only valid for integer numeric values, 
+The bitwise OR operation is only valid for integer numeric values, 
 SMALLINT, INTEGER or BIGINT.
 If the operands are not integer values, then the result of the bitwise OR
 operation is undefined.
