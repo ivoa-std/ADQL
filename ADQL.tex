@@ -254,8 +254,8 @@ sensitiveness if needed.
 \subsubsection{Literals}
 \label{sec:literals}
 
-Finally we define the syntax rules for the different data types: string
-and number.
+Finally we define the syntax rules for the different data types: string,
+numeric and boolean.
 
 A string literal is a character expression delimited by single quotes.
 
@@ -287,6 +287,14 @@ Literal numbers are expressed in BNF as follows:
 
     <sign> ::= <plus_sign> | <minus_sign>
 \end{verbatim}
+
+Boolean literals are expressed in BNF as follows:
+
+\begin{verbatim}
+    <boolean_literal> ::= True | False
+\end{verbatim}
+
+Boolean literals are not case sensitive.
 
 Regarding the usage of other data types like datetime and timestamp, ADQL
 can deal with them similarly to how SQL does: using the string literal
@@ -616,7 +624,7 @@ applicable to all columns resulting from VOTable char-typed columns.
         boolean &
         1 &
         - &
-        implementation defined
+        BOOLEAN
         \tabularnewline
 
         \hline
@@ -747,6 +755,15 @@ References to REGION-typed columns must be valid wherever the ADQL
 \textit{region} nonterminal is allowed. References to POINT-typed columns
 must be valid wherever the ADQL \textit{point} nonterminal is allowed.
 
+Comparing the equality of a boolean value or expression with another
+boolean returns a boolean result.
+
+When comparing the size of a boolean with another boolean, the value
+True is greater than the value False.
+
+Unless explicitly stated, the result of any other operation on boolean
+values is undefined.
+
 \clearpage
 \section{Optional components}
 \label{sec:optional}
@@ -852,6 +869,7 @@ Geometry data types are centered around the BNF construct
     <value_expression> ::=
         <numeric_value_expression>
       | <string_value_expression>
+      | <boolean_value_expression>
       | <geometry_value_expression>
 \end{verbatim}
 
@@ -1584,9 +1602,9 @@ The ILIKE string comparison operator performs a case insensitive comparison
 of its string operands.
 
 \begin{verbatim}
-    'Francis'  LIKE 'francis' => FALSE
+    'Francis'  LIKE 'francis' => False
 
-    'Francis' ILIKE 'francis' => TRUE
+    'Francis' ILIKE 'francis' => True
 \end{verbatim}
 
 Since case folding is a nontrivial operation in a multi-encoding world,
@@ -2205,13 +2223,23 @@ An easier to navigate version of the BNF grammar can be found at\\
 
     <boolean_factor> ::= [ NOT ] <boolean_primary>
 
+    <boolean_function> ::=
+
+    <boolean_literal> ::= True | False
+
     <boolean_primary> ::=
         <left_paren> <search_condition> <right_paren>
       | <predicate>
+      | <boolean_value_expression>
 
     <boolean_term> ::=
         <boolean_factor>
       | <boolean_term> AND <boolean_factor>
+
+    <boolean_value_expression> ::= 
+        <boolean_literal>
+      | <boolean_function>
+      | <user_defined_function>
 
     <box> ::=
         BOX <left_paren>
@@ -2740,6 +2768,7 @@ An easier to navigate version of the BNF grammar can be found at\\
     <value_expression> ::=
         <numeric_value_expression>
       | <string_value_expression>
+      | <boolean_value_expression>
       | <geometry_value_expression>
 
     <value_expression_primary> ::=
