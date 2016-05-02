@@ -293,15 +293,15 @@ Literal numbers are expressed in BNF as follows:
     <sign> ::= <plus_sign> | <minus_sign>
 \end{verbatim}
 
-Hexadecimal literals are expressed using the 'C' style notation, e.g. \verb:0xFF:.
-
-Hexadecimal literals are defined in BNF as follows :
-
+Hexadecimal literals are expressed using the 'C' style notation, e.g. \verb:0xFF:,
+defined in BNF as follows :
+\begin{verbatim}
     <unsigned_hexadecimal> ::= 0x<hex_digit>...
 
     hex_digit ::= <digit> | a | b | c | d | e | f | A | B | C | D | E | F
+\end{verbatim}
 
-Hexadecimal literals are NOT case sensitive.
+Hexadecimal literals are not case sensitive.
 
 Hexadecimal literals can only be used to create integer data types, SMALLINT, INTEGER and BIGINT.
 
