@@ -55,7 +55,7 @@ The words ``MUST'', ``SHALL'', ``SHOULD'', ``MAY'', ``RECOMMENDED'', and
 ``OPTIONAL'' (in upper or lower case) used in this document are to be
 interpreted as described in IETF standard, \citet{std:RFC2119}.
 
-The \emph{Virtual Observatory (VO)} is general term for a collection of
+The \emph{Virtual Observatory (VO)} is a general term for a collection of
 federated resources that can be used to conduct astronomical research,
 education, and outreach. The \href{http://www.ivoa.net}{International Virtual
 Observatory Alliance (IVOA)} is a global collaboration of separately funded
@@ -75,7 +75,7 @@ of query complexity and ADQL arises in this context.
 
 The ADQL specification makes no distinction between core and advanced or
 extended functionalities. Hence ADQL has been built according to a single
-language definition (BNF based [1]). Any service making use of ADQL would
+Backus Naur Form (BNF) based language definition. Any service making use of ADQL would
 then define the level of compliancy to the language. This would allow the
 notion of core and extension to be service-driven and it would decouple the
 language from the service specifications.
@@ -86,8 +86,9 @@ databases, making SQL a convenient access means. A subset of the SQL grammar
 has been extended to support queries that are specific to astronomy. Similarly
 to SQL, the ADQL language definition is not semantically safe by design and
 therefore this specification defines syntactical correctness only. Type safety
-has been achieved as far as it can be done in SQL. The exact meaning of key
-words indicating requirement levels can be found in the References section [2].
+has been achieved as far as it can be done in SQL. The exact meaning of keywords
+indicating requirement levels can be found in the References section.
+%Should this be 'Conformance-related definitions' not 'References' ?
 
 \clearpage
 \subsection{Role within the VO Architecture}
@@ -113,7 +114,7 @@ reserved words, identifiers and literals and then, finally, the syntax for
 the query expression.
 
 The formal notation for syntax of computing languages is often expressed
-in the “Backus Naur Form” BNF. This syntax is used by popular tools for
+in BNF. This syntax is used by popular tools for
 producing parsers. Appendix A to this document provides the full BNF grammar
 for ADQL. The following conventions are used through this document:
 
@@ -321,8 +322,8 @@ the service capability to understand such specific formats.
 \label{sec:syntax}
 
 A full and complete syntax of the select statement can be found in “Appendix
-A: BNF Grammar” at the \verb:<query_specification>: construct. Follows a simplified
-syntax for the \verb:SELECT: statement showing the main constructs for the query
+A: BNF Grammar” at the \verb:<query_specification>: construct. A simplified
+syntax for the \verb:SELECT: statement follows, showing the main constructs for the query
 specification:
 
 \begin{verbatim}
@@ -409,7 +410,7 @@ ILIKE case-insensitive string comparison operator, defined in section \ref{sec:s
 \subsection{Mathematical and Trigonometrical Functions}
 \label{sec:math.functions}
 
-ADQL declares a list of reserved keywords (section 2.1.2) which defines
+ADQL declares a list of reserved keywords (Section 2.1.2) which defines
 a set of mathematical and trigonometrical function names. Their syntax,
 usage and description are detailed in the following tables:
 
@@ -613,7 +614,7 @@ construction of queries that are both syntactically and semantically correct.
 Examples of such metadata includes VODataService's \verb:TAPType:
 (VODataService-1.1, \citet{std:VODS11}) or TAP's \verb:TAP_SCHEMA: (TAP-1.0, \citet{std:TAP}).
 
-Services SHOULD, if at all possible, try express their column metadata in
+Services SHOULD, if at all possible, try to express their column metadata in
 these terms even if the underlying database employs different types.
 Services SHOULD also use the following mapping when interfacing to user data,
 either by serializing result sets into VOTables or by ingesting user-provided
@@ -842,12 +843,13 @@ functions to enhance the astronomical usage of the language.
     \item REGION
 \end{itemize}
 
-A special attention has to be paid to the REGION function. As can be seen more
+Special attention has to be paid to the REGION function. As can be seen more
 in detail in Section 2.4.14, this construct is a general purpose function and
 it takes a string value expression as argument. The format of the string is
 to be specified by a service that accepts ADQL by referring to a standard
-format. Currently STC/s (See [3] and [4]) is the only standardized string
+format. Currently STC/s is the only standardized string
 representation a service can declare.
+% STC-reference 'Currently  STC/s (See [3] and [4])'
 
 As can also be seen in the following sections, all these functions
 have arguments being a geometrical, a string and/or a numerical value
@@ -857,7 +859,7 @@ is used, the vector coordinates MUST be normalized.
 
 Regarding the legal ranges, for spherical coordinates, these SHOULD be [0, 360]
 and [-90, 90]. In a cartesian coordinate system, there are no inherent limits
-but the already mentioned constraint that vectors should be normalized. It remains
+apart from the already mentioned constraint that vectors should be normalized. It remains
 up to the service making use of ADQL to define the errors that should be raised
 when using values outside these ranges.
 
@@ -880,7 +882,8 @@ Certain functions represent geometry data types. These data types are BOX,
 CENTROID, CIRCLE, POINT and POLYGON together with the generalized REGION data
 type. The functions are similarly named and return a variable length binary
 value. The semantics of these data types are based on the corresponding
-concepts from the STC data model (See [3]).
+concepts from the STC data model.
+% STC-reference 'STC data model (See [3])'
 
 Geometry data types are centered around the BNF construct
 \verb:<value_expression>: which is central to data types within SQL.
@@ -897,7 +900,7 @@ A \verb:<geometry_value_expression>: does not simply cover data type functions
 (POINT, CIRCLE etc) but must also allow for user defined functions and
 column values where a geometry data type is stored in a column.
 
-Therefore, \verb:<geometry_value_expression>: is expanded as
+Therefore, \verb:<geometry_value_expression>: is expanded as:
 
 \begin{verbatim}
     <geometry_value_expression> ::= 
@@ -948,7 +951,7 @@ geometry. To do so it accepts a geometry expression and returns a calculated
 string value.
 
 This function has been included as a string value function because it
-returns a simple string value. Hence
+returns a simple string value. Hence:
 
 \begin{verbatim}
     <string_value_function> :: =
@@ -972,7 +975,7 @@ one that accepts accept two geometries, and one that accepts four
 separate numeric values, both forms return a numeric value.
 
 The Predicate and most of the Utility functions have been included as numeric
-value functions because they return simple numeric values. Thus
+value functions because they return simple numeric values. Thus:
 
 \begin{verbatim}
     <numeric_value_function> ::=
@@ -982,7 +985,7 @@ value functions because they return simple numeric values. Thus
       | <user_defined_function>
 \end{verbatim}
 
-, where
+where
 
 \begin{verbatim}
     <numeric_geometry_function> ::=
@@ -1046,7 +1049,7 @@ either a POINT function (See 2.4.12) or the coordinate’s column references:
 \end{verbatim}
 
 , where \textit{t} would be the table and \textit{ra}, \textit{dec} the
-column references for the circle centre.
+column references for the circle center.
 
 Inappropriate geometries for this construct (e.g. POINT) SHOULD either return
 zero or throw an error message, the later to be defined by the service making
@@ -1060,7 +1063,8 @@ use of ADQL.
 
 This function expresses a box on the sky. A box is a special case of Polygon,
 defined purely for convenience, and it corresponds semantically to the STC Box
-region ([3], section 4.5.1.5). It is specified by a center position and size
+region. It is specified by a center position and size
+% STC-reference 'region ([3], Section 4.5.1.5)'
 (in both coordinates) defining a cross centered on the center position and
 with arms extending, parallel to the coordinate axes at the center position,
 for half the respective sizes on either side. The box’s sides are line
@@ -1068,7 +1072,7 @@ segments or great circles intersecting the arms of the cross in its end
 points at right angles with the arms.
 
 The function arguments specify the coordinate system, the center position
-and both the width and height (arms) values, where
+and both the width and height (arms) values, where:
 
 \begin{itemize}
     \item the coordinate system is a string value expression as defined in Section 2.4.1.
@@ -1120,9 +1124,10 @@ position of (25.4, -20.0) degrees would be written as follows :
 {\footnotesize \verb|name: CIRCLE|}\\
 
 This function expresses a circular region on the sky (a cone in space) and
-corresponds semantically to the STC Circle region ([3], section 4.5.1.2).. The
+corresponds semantically to the STC Circle region. The
 function arguments specify the coordinate system, the center position,
 and the radius, where:
+% STC-reference STC Circle region ([3], Section 4.5.1.2)
 
 \begin{itemize}
     \item the coordinate system is a string value expression as defined in Section 2.4.1.
@@ -1173,7 +1178,7 @@ same coordinate system, we would make use of the CONTAINS function as follows:
 
 , where the CONTAINS function returns 1 (true) if the first argument is in
 or on the boundary of the circle and 0 (false) otherwise. Thus, contains is
-not symmetric in the meaning of the arguments. When used in the where clause
+not symmetric in the meaning of the arguments. When used in the WHERE clause
 of a query, the value must be compared to 0 or 1 to form an SQL predicate:
 
 \begin{verbatim}
@@ -1266,9 +1271,10 @@ of this specification.
 This function extracts the coordinate system string value from a given
 geometry.
 
-As described in section 2.4.1, the allowed return values must be defined
+As described in Section 2.4.1, the allowed return values must be defined
 by any service making use of ADQL, and a list of standard coordinate system
-literals can be found in the STC specification [3].
+literals can be found in the STC specification.
+% STC-reference 'STC specification [3]'
 
 For example, a function extracting the coordinate system of a point with
 position (25, -19.5) in degrees according to the ICRS coordinate system with
@@ -1415,8 +1421,9 @@ behaviour will be dropped in the next major version of this specification.
 {\footnotesize \verb|name: POINT|}\\
 
 This function expresses a single location on the sky, and corresponds
-semantically to an STC SpatialCoord ([3], section 4.4.2). The arguments
+semantically to an STC SpatialCoord. The arguments
 specify the coordinate system and the position, where:
+% STC-reference 'STC SpatialCoord ([3], Section 4.4.2)'
 
 \begin{itemize}
     \item the coordinate system is a string value expression as defined in Section 2.4.1.
@@ -1454,8 +1461,9 @@ see Section 2.4.15.
 
 This function expresses a region on the sky with sides denoted by great
 circles passing through specified coordinates. It corresponds semantically
-to the STC Polygon region ([3], section 4.5.1.4). The arguments specify the
+to the STC Polygon region. The arguments specify the
 coordinate system and three or more sets of 2-D coordinates, where:
+% STC-reference 'STC Polygon region ([3], Section 4.5.1.4)'
 
 \begin{itemize}
     \item the coordinate system is a string value expression as defined in Section 2.4.1.
@@ -1505,21 +1513,22 @@ function just embeds such literal within parenthesis in the following way:
 \end{verbatim}
 
 A detailed description on how to use STC/s can be seen in the referenced
-document [4]. Inappropriate geometries for this construct SHOULD throw an
+document. Inappropriate geometries for this construct SHOULD throw an
 error message, to be defined by the service making use of ADQL.
+% STC-reference 'referenced document [4]'
 
 \subsubsection{Geometry in the SELECT clause}
 \label{sec:geom.select}
 
 Geometry values (literals or columns containing geometry values) may be
-listed in the select clause, in which case they must be converted into a
+listed in the SELECT clause, in which case they must be converted into a
 text form.
 
 This text form will be identical to the way a literal value would be
 specified in a query, including the geometry type (POINT, CIRCLE, BOX,
 or POLYGON) and all the required numeric arguments.
 
-Previous versions of this specification requred the text form to include the
+Previous versions of this specification required the text form to include the
 coordinate system string. However, as the coordinate system has been marked
 as deprecated in this version of the specification (2.1), the text form
 should contain an empty string \verb:'': in place of the coordinate
@@ -1564,7 +1573,7 @@ construct supports a variable list of parameters as input in the following way:
 \end{verbatim}
 
 The function names can be qualified with a prefix to ease parsing of the
-ADQL statement
+ADQL statement:
 
 \begin{verbatim}
     <user_defined_function_name> ::=
@@ -1572,7 +1581,7 @@ ADQL statement
 \end{verbatim}
 
 , while the function parameters are generic enough to support string,
-numeric and geometrical expressions
+numeric and geometrical expressions:
 
 \begin{verbatim}
     <user_defined_function_param> ::= <value_expression>
@@ -1626,7 +1635,7 @@ XML schema to declare user defined functions.
 \label{sec:string.functions}
 
 An ADQL service implementation MAY include support for the following optional
-string manipulation and comparison operators.
+string manipulation and comparison operators:
 
 \begin{itemize}
     \item \verb:LOWER(): Lower case conversion
@@ -1643,7 +1652,7 @@ The LOWER function converts its string parameter to lower case.
 
 Since case folding is a nontrivial operation in a multi-encoding world,
 ADQL requires standard behaviour for the ASCII characters, and recommends
-following algorithm R2 described in section 3.13, "Default Case Algorithms"
+following algorithm R2 described in Section 3.13, "Default Case Algorithms"
 of \citet{std:UNICODE} for characters outside th ASCII set.
 
 \begin{verbatim}
@@ -1669,7 +1678,7 @@ of its string operands.
 
 Since case folding is a nontrivial operation in a multi-encoding world,
 ADQL requires standard behaviour for the ASCII characters, and recommends
-following algorithm R2 described in section 3.13, "Default Case Algorithms"
+following algorithm R2 described in Section 3.13, "Default Case Algorithms"
 of \citet{std:UNICODE} for characters outside th ASCII set.
 
 \subsection{Set operators}
@@ -1696,10 +1705,10 @@ unless UNION ALL is used."\footnote{\url{https://en.wikipedia.org/wiki/Set\_oper
 For a UNION operation to be valid in ADQL, the following criteria MUST be met:
 
 \begin{itemize}
-    \item The two queries MUST result in the same number of columns
-    \item The corresponding columns in the operands MUST have the same data types
+    \item The two queries MUST result in the same number of columns.
+    \item The corresponding columns in the operands MUST have the same data types.
     \item The corresponding columns in the operands SHOULD have the same metadata, e.g. units, UCD etc.
-    \item The metadata for the results SHOULD be generated from the left-hand operand
+    \item The metadata for the results SHOULD be generated from the left-hand operand.
 \end{itemize}
 
 Note that the comparison used for removing duplicates is based purely on the
@@ -1721,10 +1730,10 @@ removal, the EXCEPT operator does not distinguish between NULLs."\footnote{\url{
 For an EXCEPT operation to be valid in ADQL, the following criteria MUST be met:
 
 \begin{itemize}
-    \item The two queries MUST result in the same number of columns
-    \item The corresponding columns in the operands MUST have the same data types
+    \item The two queries MUST result in the same number of columns.
+    \item The corresponding columns in the operands MUST have the same data types.
     \item The corresponding columns in the operands SHOULD have the same metadata, e.g. units, UCD etc.
-    \item The metadata for the results MUST be generated from the left-hand operand
+    \item The metadata for the results MUST be generated from the left-hand operand.
 \end{itemize}
 
 Note that the comparison used for identifying matching rows and for removing
@@ -1749,10 +1758,10 @@ ALL operator does not remove duplicate rows from the final result set."\footnote
 For an INTERSECT operation to be valid in ADQL, the following criteria MUST be met:
 
 \begin{itemize}
-    \item The two queries MUST result in the same number of columns
-    \item The corresponding columns in the operands MUST have the same data types
+    \item The two queries MUST result in the same number of columns.
+    \item The corresponding columns in the operands MUST have the same data types.
     \item The corresponding columns in the operands SHOULD have the same metadata, e.g. units, UCD etc.
-    \item The metadata for the results MUST be generated from the left-hand operand
+    \item The metadata for the results MUST be generated from the left-hand operand.
 \end{itemize}
 
 Note that the comparison used for identifying matching rows and for removing
@@ -1767,7 +1776,7 @@ considered equal.
 \label{sec:common-table}
 
 An ADQL service implementation MAY include support for the following optional
-support for common table expressions :
+support for common table expressions:
 
 \begin{itemize}
     \item \verb:WITH:
@@ -1783,9 +1792,8 @@ from a simple query and defined within the execution scope of a SELECT
 statement."\footnote{\url{https://en.wikipedia.org/wiki/Hierarchical\_and\_recursive\_queries\_in\_SQL\#Common\_table\_expression}}
 
 Using a common table expression can make queries easier to understand by factoring
-subqueries out of the main SQL statement.
+subqueries out of the main SQL statement. For example: 
 
-Example 
 \begin{verbatim}
     WITH alpha_subset AS
         (
@@ -1980,7 +1988,7 @@ implementation dependent.
 
 When converting a numeric value to a data type that is too small to represent
 the value, this SHOULD be treated as an error. However, the mechanism for
-reporiting the overflow condition is implementation dependent.
+reporting the overflow condition is implementation dependent.
 
 \subsection{Unit operations}
 \label{sec:unit}
@@ -2028,14 +2036,14 @@ bitwise operators:
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-bitwise|}\\
 {\footnotesize \verb|name: BIT_AND|}\\
 
-The ampersand, \verb:&:, operator performs a bit wise AND operation
+The ampersand (\verb:&:) operator performs a bitwise AND operation
 on two integer operands.
 
 \begin{verbatim}
     x & y
 \end{verbatim}
 
-The the bitwise AND operation is only valid for integer numeric values,
+The bitwise AND operation is only valid for integer numeric values,
 SMALLINT, INTEGER or BIGINT.
 If the operands are not integer values, then the result of the bitwise
 AND operation is undefined.
@@ -2046,7 +2054,7 @@ AND operation is undefined.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-bitwise|}\\
 {\footnotesize \verb|name: BIT_OR|}\\
 
-The vertical bar, \verb:|:, operator performs a bit wise OR operation
+The vertical bar (\verb:|:) operator performs a bitwise OR operation
 on two integer operands.
 
 \begin{verbatim}
@@ -2064,14 +2072,14 @@ operation is undefined.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-bitwise|}\\
 {\footnotesize \verb|name: BIT_XOR|}\\
 
-The circumflex, \verb:^:, operator performs a bit wise XOR (exclusive or)
+The circumflex (\verb:^:) operator performs a bitwise XOR (exclusive or)
 operation on two integer operands.
 
 \begin{verbatim}
     x ^ y
 \end{verbatim}
 
-The the bitwise XOR operation is only valid for integer numeric values, 
+The bitwise XOR operation is only valid for integer numeric values, 
 SMALLINT, INTEGER or BIGINT.
 If the operands are not integer values, then the result of the bitwise
 XOR operation is undefined.
@@ -2082,13 +2090,13 @@ XOR operation is undefined.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-bitwise|}\\
 {\footnotesize \verb|name: BIT_NOT|}\\
 
-The tilde, \verb:~:, operator performs a bit wise NOT operation on an integer operand.
+The tilde (\verb:~:) operator performs a bitwise NOT operation on an integer operand.
 
 \begin{verbatim}
     ~ x
 \end{verbatim}
 
-The the bitwise NOT operation is only valid for integer numeric values, 
+The bitwise NOT operation is only valid for integer numeric values, 
 SMALLINT, INTEGER or BIGINT.
 If the operand is not an integer value, then the result of the bitwise
 NOT operation is undefined.
@@ -2097,7 +2105,11 @@ NOT operation is undefined.
 \label{sec:cardinality}
 
 An ADQL service implementation MAY include support for the following optional
-clauses to modify the cardinality of query results.
+clauses to modify the cardinality of query results:
+
+\begin{itemize}
+    \item \verb:OFFSET:
+\end{itemize}
 
 \subsubsection{OFFSET}
 \label{sec:offset}
@@ -2114,7 +2126,7 @@ If a query contains both an ORDER BY clause and an OFFSET clause,
 then the ORDER BY is applied before the specified number of 
 of rows are dropped by the OFFSET clause.
 
-If the total number of rows is less than is less than the value
+If the total number of rows is less than the value
 specified by the OFFSET clause, then the result set is empty.
 
 If a query contains both an OFFSET clause and a TOP clause,
