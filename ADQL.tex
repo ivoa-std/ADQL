@@ -352,22 +352,25 @@ specification:
             { column_name | unsigned_decimal } [ ASC | DESC],
             ...
             ]
-        [ OFFSET offset ]            
+        [ OFFSET unsigned_decimal ]
 \end{verbatim}
 
 The SELECT statement defines a query to some derived table(s) specified
 in the FROM clause. As a result of this query, a subset of the table(s)
-is returned. The order of the rows MAY be arbitrary unless ORDER BY clause
-is specified. An optional OFFSET MAY be specified to retrieve records from 
-a specified row on. If OFFSET is used in combination with a TOP clause
-then OFFSET is applied first, then the result set is limited by TOP 
-(see \ref{sec:offset}). 
+is returned.
+The order of the rows MAY be arbitrary unless an ORDER BY clause is specified.
+A TOP clause MAY be specified to limit the number of rows returned. 
+An OFFSET clause MAY be specified to skip a number of rows at the start
+of the results.
+If OFFSET is used in combination with a TOP clause then OFFSET is applied
+first, then the result set is limited by TOP (see \ref{sec:offset}). 
+
 The order of the columns to return SHALL be the same as the
 order specified in the selection list, or the order defined in the original
-table if asterisk is specified. TOP n construct is used to return the first
-n-rows. The selection list MAY include any numeric, string or geometry value
-expression. In the following sections some constructs requiring further
-description are presented.
+table if asterisk is specified. The selection list MAY include any numeric,
+string or geometry value expression.
+In the following sections some constructs requiring further description
+are presented.
 
 \subsubsection{Table subqueries and Joins}
 \label{sec:subqueries}
