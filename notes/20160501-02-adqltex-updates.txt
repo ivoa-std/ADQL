@@ -314,6 +314,15 @@
 
         <numeric_type> ::= SHORTINT | INTEGER | BIGINT | REAL | DOUBLE
 
+# -----------------------------------------------------
+# DISTANCE
+
+    DISTANCE text
+
+
+    DISTANCE BNF
+
+
 
 # -----------------------------------------------------
 # UNION
@@ -339,15 +348,6 @@
           | <query_term> INTERSECT [ ALL ] <query_expression>
 
 # -----------------------------------------------------
-# DISTANCE
-
-    DISTANCE text
-
-
-    DISTANCE BNF
-
-
-# -----------------------------------------------------
 # Syntax checks
 
     http://mail.ivoa.net/pipermail/dal/2015-July/007172.html
@@ -366,3 +366,22 @@
 # TapNotes 2014
 
     http://wiki.ivoa.net/twiki/bin/view/IVOA/TapNotes20140718
+
+
+# -----------------------------------------------------
+# Commit diffs
+
+    Added boolean type.
+    https://volute.g-vo.org/viewvc/volute/trunk/projects/dal/ADQL/ADQL.tex?r1=3363&r2=3364
+
+    Removed bitwise functions and updated the operators.
+    https://volute.g-vo.org/viewvc/volute/trunk/projects/dal/ADQL/ADQL.tex?r1=3364&r2=3365
+
+    Changed 'hierarchical queries' to 'common table expressions'.
+    https://volute.g-vo.org/viewvc/volute/trunk/projects/dal/ADQL/ADQL.tex?r1=3365&r2=3366
+
+    Added OFFSET clause.
+    https://volute.g-vo.org/viewvc/volute/trunk/projects/dal/ADQL/ADQL.tex?r1=3366&r2=3367
+
+
+
