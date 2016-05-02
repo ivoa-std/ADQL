@@ -109,17 +109,17 @@
 
         2.1.3.2.x Hexadecimal
 
-            Hexadecimal literals are only valid for integer data types, SMALLINT, INTEGER and BIGINT.
+        Hexadecimal literals are only valid for integer data types, SMALLINT, INTEGER and BIGINT.
 
-            Hexadecimal literals are expressed using the 'C' style notation, e.g. 0xFF.
+        Hexadecimal literals are expressed using the 'C' style notation, e.g. 0xFF.
 
-            Hexadecimal literals are defined in BNF as follows :
+        Hexadecimal literals are defined in BNF as follows :
 
-                <unsigned_hexadecimal> ::= 0x<hex_digit>...
+            <unsigned_hexadecimal> ::= 0x<hex_digit>...
 
-                hex_digit ::= <dec_digit> | a | b | c | d | e | f | A | B | C | D | E | F
+            hex_digit ::= <dec_digit> | a | b | c | d | e | f | A | B | C | D | E | F
 
-            Hexadecimal literals are NOT case sensitive.
+        Hexadecimal literals are NOT case sensitive.
 
     Numeric BNF (updated)
 

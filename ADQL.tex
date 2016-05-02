@@ -267,26 +267,43 @@ A string literal is a character expression delimited by single quotes.
 Literal numbers are expressed in BNF as follows:
 
 \begin{verbatim}
-    <unsigned_numeric_literal> ::=
+    <signed_numeric_literal> ::= [<sign>] <unsigned_numeric_literal>
+
+    <unsigned_numeric_literal> ::= 
         <exact_numeric_literal>
       | <approximate_numeric_literal>
-
+      | <unsigned_hexadecimal>
+              
     <exact_numeric_literal> ::=
-        <unsigned_integer> [<period> [<unsigned_integer>]]
-      | <period><unsigned_integer>
-
-    <unsigned_integer> ::= <digit>...
+        <unsigned_decimal> [<period> [<unsigned_decimal>]]
+      | <period><unsigned_decimal>
 
     <approximate_numeric_literal> ::= <mantissa> E <exponent>
 
     <mantissa> ::= <exact_numeric_literal>
 
-    <exponent> ::= <signed_integer>
+    <exponent> ::= <signed_decimal>
 
-    <signed_integer> ::= [<sign>] <unsigned_integer>
+    <signed_decimal> ::= [<sign>] <unsigned_decimal>
 
+    <unsigned_decimal> ::= <digit>...
+
+    <digit> ::= 0 | 1  | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+    
     <sign> ::= <plus_sign> | <minus_sign>
 \end{verbatim}
+
+Hexadecimal literals are expressed using the 'C' style notation, e.g. \verb:0xFF:.
+
+Hexadecimal literals are defined in BNF as follows :
+
+    <unsigned_hexadecimal> ::= 0x<hex_digit>...
+
+    hex_digit ::= <digit> | a | b | c | d | e | f | A | B | C | D | E | F
+
+Hexadecimal literals are NOT case sensitive.
+
+Hexadecimal literals can only be used to create integer data types, SMALLINT, INTEGER and BIGINT.
 
 Boolean literals are expressed in BNF as follows:
 
@@ -316,7 +333,7 @@ specification:
 \begin{verbatim}
     SELECT
         [ ALL | DISTINCT ]
-        [ TOP unsigned_integer ]
+        [ TOP unsigned_decimal ]
         {
              * |
              { value_expression [ [AS] column_name ] }, ...
@@ -337,7 +354,7 @@ specification:
         [ GROUP BY column_name, ... ]
         [ HAVING search_condition ]
         [ ORDER BY
-            { column_name | unsigned_integer } [ ASC | DESC],
+            { column_name | unsigned_decimal } [ ASC | DESC],
             ...
             ]
 \end{verbatim}
@@ -2452,8 +2469,8 @@ An easier to navigate version of the BNF grammar can be found at\\
     <equals_operator> ::= =
 
     <exact_numeric_literal> ::=
-        <unsigned_integer> [ <period> [ <unsigned_integer> ] ]
-      | <period> <unsigned_integer>
+        <unsigned_decimal> [ <period> [ <unsigned_decimal> ] ]
+      | <period> <unsigned_decimal>
 
     <exists_predicate> ::= EXISTS <table_subquery>
 
@@ -2502,6 +2519,8 @@ An easier to navigate version of the BNF grammar can be found at\\
         [ { <comma> <grouping_column_reference> }... ]
 
     <having_clause> ::= HAVING <search_condition>
+
+    <hex_digit> ::= <digit> | a | b | c | d | e | f | A | B | C | D | E | F
 
     <identifier> ::= <regular_identifier> | <delimited_identifier>
 
@@ -2565,7 +2584,7 @@ An easier to navigate version of the BNF grammar can be found at\\
             <numeric_value_expression> <comma> <numeric_value_expression>
         <right_paren>
       | RADIANS <left_paren> <numeric_value_expression> <right_paren>
-      | RAND <left_paren> [ <unsigned_integer> ] <right_paren>
+      | RAND <left_paren> [ <unsigned_decimal> ] <right_paren>
       | ROUND <left_paren>
             <numeric_value_expression> [ <comma> <signed_integer>]
         <right_paren>
@@ -2639,7 +2658,7 @@ An easier to navigate version of the BNF grammar can be found at\\
       | <numeric_geometry_function >
       | <user_defined_function>
 
-    <offset_clause> ::= OFFSET <unsigned_integer>
+    <offset_clause> ::= OFFSET <unsigned_decimal>
 
     <order_by_clause> ::= ORDER BY <sort_specification_list>
 
@@ -2744,13 +2763,13 @@ An easier to navigate version of the BNF grammar can be found at\\
 
     <set_function_type> ::= AVG | MAX | MIN | SUM | COUNT
 
-    <set_limit> ::= TOP <unsigned_integer>
+    <set_limit> ::= TOP <unsigned_decimal>
 
     <set_quantifier> ::= DISTINCT | ALL
 
     <sign> ::= <plus_sign> | <minus_sign>
 
-    <signed_integer> ::= [ <sign> ] <unsigned_integer>
+    <signed_integer> ::= [ <sign> ] <unsigned_decimal>
 
     <simple_Latin_letter> ::=
         <simple_Latin_upper_case_letter>
@@ -2764,7 +2783,7 @@ An easier to navigate version of the BNF grammar can be found at\\
 
     <solidus> ::= /
 
-    <sort_key> ::= <column_name> | <unsigned_integer>
+    <sort_key> ::= <column_name> | <unsigned_decimal>
 
     <sort_specification> ::=
         <sort_key> [ <ordering_specification> ]
@@ -2826,14 +2845,18 @@ An easier to navigate version of the BNF grammar can be found at\\
 
     <unqualified_schema name> ::= <identifier>
 
-    <unsigned_integer> ::= <digit>...
+    <unsigned_decimal> ::= <digit>...
+
+    <unsigned_hexadecimal> ::= 0x<hex_digit>...
 
     <unsigned_literal> ::=
         <unsigned_numeric_literal>
       | <general_literal>
 
     <unsigned_numeric_literal> ::=
-        <exact_numeric_literal> | <approximate_numeric_literal>
+        <exact_numeric_literal>
+      | <approximate_numeric_literal>
+      | <unsigned_hexadecimal>
 
     <unsigned_value_specification> ::= <unsigned_literal>
 
