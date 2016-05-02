@@ -319,10 +319,41 @@
 
     DISTANCE text
 
+        The DISTANCE function computes the arc length along a great circle between two
+        points and returns a numeric value expression in degrees.
+
+        The specification defines two versions of the DISTANCE function, one that
+        accepts accept two geometries, and one that accepts four separate numeric
+        values.
+
+        If an ADQL service implementation declares support for DISTANCE,
+        then it must implement both the two parameter and four parameter
+        forms of the function.
+
+        ....
+
+        If the two arguments to the two parameter form are expressed in different
+        coordinate systems, the function is responsible for converting one (or both).
+        If it cannot do so, it SHOULD throw an error message, to be defined by
+        the service making use of ADQL.
+
+        It is assumed that the arguments for the four parameter form all use
+        the same coordinate system.
+        
 
     DISTANCE BNF
 
-
+        <distance_function> ::=
+            DISTANCE <left_paren>
+                <coord_value> <comma>
+                <coord_value>
+                <right_paren>
+          | DISTANCE <left_paren>
+                <numeric_value_expression> <comma>
+                <numeric_value_expression> <comma>
+                <numeric_value_expression> <comma>
+                <numeric_value_expression>
+                <right_paren>
 
 # -----------------------------------------------------
 # UNION
@@ -367,6 +398,19 @@
 
     http://wiki.ivoa.net/twiki/bin/view/IVOA/TapNotes20140718
 
+# -----------------------------------------------------
+# URI change ?
+
+    Change the URI fragment for the geometric features
+        ivo://ivoa.net/std/TAPRegExt#features-adql-geo
+
+    from
+        #features-adql-geo
+    to
+        #features-adql-geom
+
+    Because one day we might need #features-adql-geog.
+    
 
 # -----------------------------------------------------
 # Commit diffs
@@ -382,6 +426,9 @@
 
     Added OFFSET clause.
     https://volute.g-vo.org/viewvc/volute/trunk/projects/dal/ADQL/ADQL.tex?r1=3366&r2=3367
+
+
+
 
 
 

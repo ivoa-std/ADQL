@@ -944,8 +944,12 @@ Note - as of this version of the specification (2.1), the COORDSYS function has
 been marked as deprecated. This function may be removed in future versions
 of this specification.
 
-Other functions like AREA, COORD1, COORD2 and DISTANCE accept a geometry (or
-two geometries in the case of DISTANCE) and return a calculated numeric value.
+Functions like AREA, COORD1, COORD2 and DISTANCE accept a geometry and
+return a calculated numeric value.
+
+The specification defines two versions of the DISTANCE function,
+one that accepts accept two geometries, and one that accepts four
+separate numeric values, both forms return a numeric value.
 
 The Predicate and most of the Utility functions have been included as numeric
 value functions because they return simple numeric values. Thus
@@ -973,7 +977,16 @@ and
         AREA <left_paren> <geometry_value_expression> <right_paren>
       | COORD1 <left_paren> <coord_value> <right_paren>
       | COORD2 <left_paren> <coord_value> <right_paren>
-      | DISTANCE <left_paren> <coord_value> <comma> <coord_value> <right_paren>
+      | DISTANCE <left_paren>
+            <coord_value> <comma>
+            <coord_value>
+            <right_paren>
+      | DISTANCE <left_paren>
+            <numeric_value_expression> <comma>
+            <numeric_value_expression> <comma>
+            <numeric_value_expression> <comma>
+            <numeric_value_expression>
+            <right_paren>
 \end{verbatim}
 
 and
@@ -1262,33 +1275,60 @@ for the CIRCLE geometry stored in the database table.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: DISTANCE|}\\
 
-This function computes the arc length along a great circle between two points,
-and returns a numeric value expression in degrees.
+The DISTANCE function computes the arc length along a great circle between two
+points and returns a numeric value expression in degrees.
+
+The specification defines two versions of the DISTANCE function, one that
+accepts accept two geometries, and one that accepts four separate numeric
+values.
+
+If an ADQL service implementation declares support for DISTANCE,
+then it must implement both the two parameter and four parameter
+forms of the function.
 
 For example, a function computing the distance between two points of
 coordinates (25,-19.5) and (25.4,-20) would be written as follows:
 
 \begin{verbatim}
-    DISTANCE(POINT(‘’,25.0,-19.5),
-    POINT(‘’,25.4, -20.0))
+    DISTANCE(
+        POINT(‘’, 25.0, -19.5),
+        POINT(‘’, 25.4, -20.0)
+        )
 \end{verbatim}
 
 , where all numeric values and the returned arc-length are in degrees.
+
+The equivalent call to the four parameter form of the function would be:
+
+\begin{verbatim}
+    DISTANCE(
+        25.0,
+       -19.5,
+        25.4,
+       -20.0
+        )
+\end{verbatim}
 
 The distance between two points could also be derived from two columns
 referencing POINT geometries stored in the database tables as follows:
 
 \begin{verbatim}
-    DISTANCE(t.p1,t.p2)
+    DISTANCE(
+        t.p1,
+        t.p2
+        )
 \end{verbatim}
 
 , where \textit{t} would be the table and \textit{p1}, \textit{p2} the column
 references for the POINT geometries.
 
-Since the two argument points may be expressed in different coordinate systems,
-the function is responsible for converting one (or both). If it cannot do
-so, it SHOULD throw an error message, to be defined by the service making
-use of ADQL.
+If the two arguments to the two parameter form are expressed in different
+coordinate systems, the function is responsible for converting one (or both).
+If it cannot do so, it SHOULD throw an error message, to be defined by
+the service making use of ADQL.
+
+It is assumed that the arguments for the four parameter form all use
+the same coordinate system.
 
 \subsubsection{INTERSECTS}
 \label{sec:geom.functions.intersects}
@@ -2393,8 +2433,15 @@ An easier to navigate version of the BNF grammar can be found at\\
 
     <distance_function> ::=
         DISTANCE <left_paren>
-            <coord_value> <comma> <coord_value>
-        <right_paren>
+            <coord_value> <comma>
+            <coord_value>
+            <right_paren>
+      | DISTANCE <left_paren>
+            <numeric_value_expression> <comma>
+            <numeric_value_expression> <comma>
+            <numeric_value_expression> <comma>
+            <numeric_value_expression>
+            <right_paren>
 
     <double_period> ::= ..
 
