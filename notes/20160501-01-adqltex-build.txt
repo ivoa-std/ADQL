@@ -27,9 +27,9 @@
     if [ ! -e "${HOME:?}/adqltex.settings" ]
     then
         cat > "${HOME:?}/adqltex.settings" << EOF
-EOF
 VOLUTE_HOME=/var/local/projects/edinburgh/volute/svn
 ADQLTEXT_CODE=\${VOLUTE_HOME:?}/ADQL
+EOF
     fi
 
 # -----------------------------------------------------
