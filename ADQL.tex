@@ -410,8 +410,8 @@ ILIKE case-insensitive string comparison operator, defined in section \ref{sec:s
 \subsection{Mathematical and Trigonometrical Functions}
 \label{sec:math.functions}
 
-ADQL declares a list of reserved keywords (Section 2.1.2) which defines
-a set of mathematical and trigonometrical function names. Their syntax,
+ADQL declares a list of reserved keywords (Section \ref{sec:keywords}) which include
+the mathematical and trigonometrical function names. Their syntax,
 usage and description are detailed in the following tables:
 
 \begin{table}[thm]\footnotesize
@@ -823,6 +823,7 @@ the TAPRegExt \citep{std:TAPREGEXT} standard.
 \subsection{Geometrical Functions}
 \label{sec:geom.functions}
 \subsubsection{Overview}
+\label{sec:geom.functions.overview}
 
 In addition to the mathematical functions, ADQL provides a set of geometrical
 functions to enhance the astronomical usage of the language.
@@ -844,7 +845,7 @@ functions to enhance the astronomical usage of the language.
 \end{itemize}
 
 Special attention has to be paid to the REGION function. As can be seen more
-in detail in Section 2.4.14, this construct is a general purpose function and
+in detail in Section \ref{sec:geom.functions.region}, this construct is a general purpose function and
 it takes a string value expression as argument. The format of the string is
 to be specified by a service that accepts ADQL by referring to a standard
 format. Currently STC/s is the only standardized string
@@ -1041,7 +1042,8 @@ of (25.4, -20.0) degrees would be written as follows:
 \end{verbatim}
 
 The coordinates of the circle center could also be directly derived from
-either a POINT function (See 2.4.12) or the coordinate’s column references:
+either a POINT function (See \ref{sec:geom.functions.point}) or
+the coordinate’s column references:
 
 \begin{verbatim}
     AREA(CIRCLE(‘’, t.ra, t.dec, 1))
@@ -1074,8 +1076,8 @@ The function arguments specify the coordinate system, the center position
 and both the width and height (arms) values, where:
 
 \begin{itemize}
-    \item the coordinate system is a string value expression as defined in Section 2.4.1.
-    \item the center position is a comma separated numeric duple, with units and legal ranges as defined in Section 2.4.1.
+    \item the coordinate system is a string value expression as defined in Section \ref{sec:geom.functions.overview}.
+    \item the center position is a comma separated numeric duple, with units and legal ranges as defined in Section \ref{sec:geom.functions.overview}.
     \item and the arms are numeric value expressions in degrees.
 \end{itemize}
 
@@ -1087,8 +1089,8 @@ For example, a function expressing a box of ten degrees centered on a position
 \end{verbatim}
 
 As another example, the coordinates of the center position could also be
-extracted from either a POINT function (See 2.4.12) or the coordinate’s
-column references:
+extracted from either a POINT function (See \ref{sec:geom.functions.point})
+or the coordinate’s column references:
 
 \begin{verbatim}
     BOX(‘’, t.ra, t.dec, 10, 10)
@@ -1098,7 +1100,7 @@ column references:
 column references for the center position.
 
 To see what this function would return when listed in the select clause,
-see Section 2.4.15.
+see Section \ref{sec:geom.select}.
 
 \subsubsection{CENTROID}
 \label{sec:geom.functions.centroid}
@@ -1106,8 +1108,7 @@ see Section 2.4.15.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: CENTROID|}\\
 
-This function computes the centroid of a given geometry and returns a POINT
-(See 2.4.11).
+This function computes the centroid of a given geometry and returns a POINT.
 
 For example, the centroid of a circle of one degree radius centered in a
 position of (25.4, -20.0) degrees would be written as follows :
@@ -1129,8 +1130,8 @@ and the radius, where:
 % STC-reference STC Circle region ([3], Section 4.5.1.2)
 
 \begin{itemize}
-    \item the coordinate system is a string value expression as defined in Section 2.4.1.
-    \item the center position is a comma separated numeric duple, with units and legal ranges as defined in Section 2.4.1.
+    \item the coordinate system is a string value expression as defined in Section \ref{sec:geom.functions.overview}.
+    \item the center position is a comma separated numeric duple, with units and legal ranges as defined in Section \ref{sec:geom.functions.overview}.
     \item and the radius is a numeric value expression in degrees.
 \end{itemize}
 
@@ -1142,7 +1143,7 @@ position of (25.4, -20.0) degrees would be written as follows:
 \end{verbatim}
 
 The coordinates of the center position could also be derived from either a
-POINT function (See 2.4.12) or the coordinate’s column references:
+POINT function (See \ref{sec:geom.functions.point}) or the coordinate’s column references:
 
 \begin{verbatim}
     CIRCLE(‘’, t.ra, t.dec, 1)
@@ -1152,7 +1153,7 @@ POINT function (See 2.4.12) or the coordinate’s column references:
 column references for the center position.
 
 To see what this function would return when listed in the select clause, see
-Section 2.4.15.
+Section \ref{sec:geom.select}.
 
 \subsubsection{CONTAINS}
 \label{sec:geom.functions.contains}
@@ -1212,7 +1213,7 @@ message, to be defined by the service making use of ADQL.
 {\footnotesize \verb|name: COORD1|}\\
 
 This function extracts the first coordinate value, in degrees, of a given
-POINT (See 2.4.12) or column reference.
+POINT (See \ref{sec:geom.functions.point}) or column reference.
 
 For example, the right ascension of a point with position (25, -19.5) in
 degrees would be obtained using the following expression:
@@ -1238,7 +1239,7 @@ the POINT geometry stored in the database table.
 {\footnotesize \verb|name: COORD2|}\\
 
 This function extracts the second coordinate value, in degrees, of a given
-POINT (See 2.4.12) or column reference.
+POINT (See \ref{sec:geom.functions.point}) or column reference.
 
 For example, the declination of a point with position (25, -19.5) in degrees,
 would be obtained using the following expression:
@@ -1270,7 +1271,7 @@ of this specification.
 This function extracts the coordinate system string value from a given
 geometry.
 
-As described in Section 2.4.1, the allowed return values must be defined
+As described in Section \ref{sec:geom.functions.overview}, the allowed return values must be defined
 by any service making use of ADQL, and a list of standard coordinate system
 literals can be found in the STC specification.
 % STC-reference 'STC specification [3]'
@@ -1425,8 +1426,8 @@ specify the coordinate system and the position, where:
 % STC-reference 'STC SpatialCoord ([3], Section 4.4.2)'
 
 \begin{itemize}
-    \item the coordinate system is a string value expression as defined in Section 2.4.1.
-    \item the position is a comma separated numeric duple, with units and legal ranges as defined in Section 2.4.1.
+    \item the coordinate system is a string value expression as defined in Section \ref{sec:geom.functions.overview}.
+    \item the position is a comma separated numeric duple, with units and legal ranges as defined in Section \ref{sec:geom.functions.overview}.
 \end{itemize}
 
 For example, a function expressing a point with right ascension of 25 degrees
@@ -1447,10 +1448,11 @@ also be derived from the coordinate’s column references:
 column references for the position.
 
 The coordinates of a POINT could also be individually extracted using the
-COORD1 and COORD2 functions (See 2.4.7 and 2.4.8).
+COORD1 and COORD2 functions (See \ref{sec:geom.functions.coord1} and
+\ref{sec:geom.functions.coord2}).
 
 To see what this function would return when listed in the select clause,
-see Section 2.4.15.
+see Section \ref{sec:geom.select}.
 
 \subsubsection{POLYGON}
 \label{sec:geom.functions.polygon}
@@ -1465,8 +1467,8 @@ coordinate system and three or more sets of 2-D coordinates, where:
 % STC-reference 'STC Polygon region ([3], Section 4.5.1.4)'
 
 \begin{itemize}
-    \item the coordinate system is a string value expression as defined in Section 2.4.1.
-    \item the coordinate sets are comma separated numeric duples, with units and legal ranges as defined in Section 2.4.1.
+    \item the coordinate system is a string value expression as defined in Section \ref{sec:geom.functions.overview}.
+    \item the coordinate sets are comma separated numeric duples, with units and legal ranges as defined in Section \ref{sec:geom.functions.overview}.
 \end{itemize}
 
 For example, a function expressing a triangle, whose vertices are (10.0,
