@@ -53,15 +53,12 @@ EOF
         docker run -it \
             -e "useruid=$(id -u)" \
             -v "$(pwd):/var/local/texdata" \
-            'ivoa/ivoatex:1.1'
+            'ivoa/ivoatex'
 
-            pushd /var/local/texdata
+            make clean
+            make biblio
+            make
 
-                make clean
-                make biblio
-                make
-
-            popd
         exit
 
 
