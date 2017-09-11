@@ -167,85 +167,149 @@ Besides the character set, the language provides a list of reserved keywords
 plus the syntax description for regular identifiers.
 
 A reserved keyword has a special meaning in ADQL and cannot be used as
-an identifier. These keywords must be enforced and should be extensive as
-an escaping mechanism is already in place. We can extend the list of SQL92
-reserved keywords to accommodate those useful for astronomical purposes and/or
-present in a subset of vendor specific languages only (e.g. TOP). This leads
-to the following list:
+an identifier unless it is isolated using the ADQL escape syntax defined
+in section \ref{sec:adql.escape}.
+
+The AQDL specification extends the list of SQL92 reserved keywords to accommodate
+those useful for astronomical purposes and/or present in a subset of vendor
+specific languages only (e.g. \verb:TOP:).
+
+Although the following lists are all in UPPERCASE, the matching of keywords
+is case insensitive.
+
+\subsubsection{SQL reserved keywords}
+\label{sec:adql.keywords}
+
+\noindent
+\texttt{ABSOLUTE,} \texttt{ACTION,} \texttt{ADD,} \texttt{ALL,} 
+\texttt{ALLOCATE,} \texttt{ALTER,} \texttt{AND,} \texttt{ANY,} 
+\texttt{ARE,} \texttt{AS,} \texttt{ASC,} \texttt{ASSERTION,} 
+\texttt{AT,} \texttt{AUTHORIZATION,} \texttt{AVG,} \texttt{BEGIN,} 
+\texttt{BETWEEN,} \texttt{BIT,} \texttt{BIT\_LENGTH,} \texttt{BOTH,} 
+\texttt{BY,} \texttt{CASCADE,} \texttt{CASCADED,} \texttt{CASE,} 
+\texttt{CAST,} \texttt{CATALOG,} \texttt{CHAR,} \texttt{CHARACTER,} 
+\texttt{CHARACTER\_LENGTH,} \texttt{CHAR\_LENGTH,} \texttt{CHECK,} 
+\texttt{CLOSE,} \texttt{COALESCE,} \texttt{COLLATE,} 
+\texttt{COLLATION,} \texttt{COLUMN,} \texttt{COMMIT,} 
+\texttt{CONNECT,} \texttt{CONNECTION,} \texttt{CONSTRAINT,} 
+\texttt{CONSTRAINTS,} \texttt{CONTINUE,} \texttt{CONVERT,} 
+\texttt{CORRESPONDING,} \texttt{COUNT,} \texttt{CREATE,} 
+\texttt{CROSS,} \texttt{CURRENT,} \texttt{CURRENT\_DATE,} 
+\texttt{CURRENT\_TIME,} \texttt{CURRENT\_TIMESTAMP,} 
+\texttt{CURRENT\_USER,} \texttt{CURSOR,} \texttt{DATE,} \texttt{DAY,} 
+\texttt{DEALLOCATE,} \texttt{DECIMAL,} \texttt{DECLARE,} 
+\texttt{DEFAULT,} \texttt{DEFERRABLE,} \texttt{DEFERRED,} 
+\texttt{DELETE,} \texttt{DESC,} \texttt{DESCRIBE,} 
+\texttt{DESCRIPTOR,} \texttt{DIAGNOSTICS,} \texttt{DISCONNECT,} 
+\texttt{DISTINCT,} \texttt{DOMAIN,} \texttt{DOUBLE,} \texttt{DROP,} 
+\texttt{ELSE,} \texttt{END,} \texttt{END-EXEC,} \texttt{ESCAPE,} 
+\texttt{EXCEPT,} \texttt{EXCEPTION,} \texttt{EXEC,} \texttt{EXECUTE,} 
+\texttt{EXISTS,} \texttt{EXTERNAL,} \texttt{EXTRACT,} \texttt{FALSE,} 
+\texttt{FETCH,} \texttt{FIRST,} \texttt{FLOAT,} \texttt{FOR,} 
+\texttt{FOREIGN,} \texttt{FOUND,} \texttt{FROM,} \texttt{FULL,} 
+\texttt{GET,} \texttt{GLOBAL,} \texttt{GO,} \texttt{GOTO,} 
+\texttt{GRANT,} \texttt{GROUP,} \texttt{HAVING,} \texttt{HOUR,} 
+\texttt{IDENTITY,} \texttt{IMMEDIATE,} \texttt{IN,} 
+\texttt{INDICATOR,} \texttt{INITIALLY,} \texttt{INNER,} 
+\texttt{INPUT,} \texttt{INSENSITIVE,} \texttt{INSERT,} \texttt{INT,} 
+\texttt{INTEGER,} \texttt{INTERSECT,} \texttt{INTERVAL,} 
+\texttt{INTO,} \texttt{IS,} \texttt{ISOLATION,} \texttt{JOIN,} 
+\texttt{KEY,} \texttt{LANGUAGE,} \texttt{LAST,} \texttt{LEADING,} 
+\texttt{LEFT,} \texttt{LEVEL,} \texttt{LIKE,} \texttt{LOCAL,} 
+\texttt{LOWER,} \texttt{MATCH,} \texttt{MAX,} \texttt{MIN,} 
+\texttt{MINUTE,} \texttt{MODULE,} \texttt{MONTH,} \texttt{NAMES,} 
+\texttt{NATIONAL,} \texttt{NATURAL,} \texttt{NCHAR,} \texttt{NEXT,} 
+\texttt{NO,} \texttt{NOT,} \texttt{NULL,} \texttt{NULLIF,} 
+\texttt{NUMERIC,} \texttt{OCTET\_LENGTH,} \texttt{OF,} \texttt{ON,} 
+\texttt{ONLY,} \texttt{OPEN,} \texttt{OPTION,} \texttt{OR,} 
+\texttt{ORDER,} \texttt{OUTER,} \texttt{OUTPUT,} \texttt{OVERLAPS,} 
+\texttt{PAD,} \texttt{PARTIAL,} \texttt{POSITION,} 
+\texttt{PRECISION,} \texttt{PREPARE,} \texttt{PRESERVE,} 
+\texttt{PRIMARY,} \texttt{PRIOR,} \texttt{PRIVILEGES,} 
+\texttt{PROCEDURE,} \texttt{PUBLIC,} \texttt{READ,} \texttt{REAL,} 
+\texttt{REFERENCES,} \texttt{RELATIVE,} \texttt{RESTRICT,} 
+\texttt{REVOKE,} \texttt{RIGHT,} \texttt{ROLLBACK,} \texttt{ROWS,} 
+\texttt{SCHEMA,} \texttt{SCROLL,} \texttt{SECOND,} \texttt{SECTION,} 
+\texttt{SELECT,} \texttt{SESSION,} \texttt{SESSION\_USER,} 
+\texttt{SET,} \texttt{SIZE,} \texttt{SMALLINT,} \texttt{SOME,} 
+\texttt{SPACE,} \texttt{SQL,} \texttt{SQLCODE,} \texttt{SQLERROR,} 
+\texttt{SQLSTATE,} \texttt{SUBSTRING,} \texttt{SUM,} 
+\texttt{SYSTEM\_USER,} \texttt{TABLE,} \texttt{TEMPORARY,} 
+\texttt{THEN,} \texttt{TIME,} \texttt{TIMESTAMP,} 
+\texttt{TIMEZONE\_HOUR,} \texttt{TIMEZONE\_MINUTE,} \texttt{TO,} 
+\texttt{TRAILING,} \texttt{TRANSACTION,} \texttt{TRANSLATE,} 
+\texttt{TRANSLATION,} \texttt{TRIM,} \texttt{TRUE,} \texttt{UNION,} 
+\texttt{UNIQUE,} \texttt{UNKNOWN,} \texttt{UPDATE,} \texttt{UPPER,} 
+\texttt{USAGE,} \texttt{USER,} \texttt{USING,} \texttt{VALUE,} 
+\texttt{VALUES,} \texttt{VARCHAR,} \texttt{VARYING,} \texttt{VIEW,} 
+\texttt{WHEN,} \texttt{WHENEVER,} \texttt{WHERE,} \texttt{WITH,} 
+\texttt{WORK,} \texttt{WRITE,} \texttt{YEAR,} \texttt{ZONE} 
+
+\subsubsection{ADQL reserved keywords}
+\label{sec:adql.keywords}
+
+\noindent
+\texttt{ABS,} \texttt{ACOS,} \texttt{ASIN,} \texttt{ATAN,} 
+\texttt{ATAN2,} \texttt{CEILING,} \texttt{COS,} \texttt{DEGREES,} 
+\texttt{EXP,} \texttt{FLOOR,} \texttt{LOG,} \texttt{LOG10,} 
+\texttt{MOD,} \texttt{PI,} \texttt{POWER,} \texttt{RADIANS,} 
+\texttt{RAND,} \texttt{ROUND,} \texttt{SIN,} \texttt{SQRT,} 
+\texttt{TAN,} \texttt{TOP,} \texttt{TRUNCATE}
+\newline
+\newline
+\noindent
+\texttt{AREA,} \texttt{BOX,} \texttt{CENTROID,} \texttt{CIRCLE,} 
+\texttt{CONTAINS,} \texttt{COORD1,} \texttt{COORD2,} 
+\texttt{COORDSYS,} \texttt{DISTANCE,} \texttt{INTERSECTS,} 
+\texttt{POINT,} \texttt{POLYGON}
+
+\subsubsection{ADQL deprecated keywords}
+\label{sec:adql.depwords}
+
+\noindent
+\texttt{REGION}
+
+\subsubsection{Identifiers}
+\label{sec:adql.identifiers}
+
+Identifiers MUST begin with a letter
+\verb:{aA-zZ}:, subsequent characters MAY be letters, underscores or
+digits \verb:{0-9}: as follows:
+
+\begin{verbatim}
+<Latin_letter>... [{ <digit> | <Latin_letter> | <underscore> | }...]
+\end{verbatim}
+
+\subsubsection{Escape syntax}
+\label{sec:adql.escape}
+
+To address reserved keyword and special character conflicts the ADQL language
+provides a way to escape a non-compliant identifiers by using the double
+quote character \verb:": as a delimiter.
+
+For example, to use the reserved word \verb:size: as a column name
+it must be isolated using double quotes.
 
 \begin{itemize}
-    \item SQL reserved keywords:
+    \item \verb:size: -- Invalid column name
+    \item \verb:"size": -- Valid column name
 \end{itemize}
 
+\subsubsection{Case sensitivity}
+\label{sec:adql.case}
+
+In addition to isolating keyword conflicts and and special characters,
+the double quote escape syntax also denotes case sensitivity.
+
+Without double quotes, the following identifiers are all equivalent:
 \begin{verbatim}
-ABSOLUTE, ACTION, ADD, ALL, ALLOCATE, ALTER, AND, ANY, ARE, AS, ASC,
-ASSERTION, AT, AUTHORIZATION, AVG, BEGIN, BETWEEN, BIT, BIT_LENGTH, BOTH, BY,
-CASCADE, CASCADED, CASE, CAST, CATALOG, CHAR, CHARACTER, CHARACTER_LENGTH,
-CHAR_LENGTH, CHECK, CLOSE, COALESCE, COLLATE, COLLATION, COLUMN,
-COMMIT, CONNECT, CONNECTION, CONSTRAINT, CONSTRAINTS, CONTINUE, CONVERT,
-CORRESPONDING, COUNT, CREATE, CROSS, CURRENT, CURRENT_DATE, CURRENT_TIME,
-CURRENT_TIMESTAMP, CURRENT_USER, CURSOR, DATE, DAY, DEALLOCATE, DECIMAL,
-DECLARE, DEFAULT, DEFERRABLE, DEFERRED, DELETE, DESC, DESCRIBE, DESCRIPTOR,
-DIAGNOSTICS, DISCONNECT, DISTINCT, DOMAIN, DOUBLE, DROP, ELSE, END, END-EXEC,
-ESCAPE, EXCEPT, EXCEPTION, EXEC, EXECUTE, EXISTS, EXTERNAL, EXTRACT,
-FALSE, FETCH, FIRST, FLOAT, FOR, FOREIGN, FOUND, FROM, FULL, GET, GLOBAL,
-GO, GOTO, GRANT, GROUP, HAVING, HOUR, IDENTITY, IMMEDIATE, IN, INDICATOR,
-INITIALLY, INNER, INPUT, INSENSITIVE, INSERT, INT, INTEGER, INTERSECT,
-INTERVAL, INTO, IS, ISOLATION, JOIN, KEY, LANGUAGE, LAST, LEADING, LEFT,
-LEVEL, LIKE, LOCAL, LOWER, MATCH, MAX, MIN, MINUTE, MODULE, MONTH, NAMES,
-NATIONAL, NATURAL, NCHAR, NEXT, NO, NOT, NULL, NULLIF, NUMERIC, OCTET_LENGTH,
-OF, ON, ONLY, OPEN, OPTION, OR, ORDER, OUTER, OUTPUT, OVERLAPS, PAD, PARTIAL,
-POSITION, PRECISION, PREPARE, PRESERVE, PRIMARY, PRIOR, PRIVILEGES, PROCEDURE,
-PUBLIC, READ, REAL, REFERENCES, RELATIVE, RESTRICT, REVOKE, RIGHT, ROLLBACK,
-ROWS, SCHEMA, SCROLL, SECOND, SECTION, SELECT, SESSION, SESSION_USER, SET,
-SIZE, SMALLINT, SOME, SPACE, SQL, SQLCODE, SQLERROR, SQLSTATE, SUBSTRING,
-SUM, SYSTEM_USER, TABLE, TEMPORARY, THEN, TIME, TIMESTAMP, TIMEZONE_HOUR,
-TIMEZONE_MINUTE, TO, TRAILING, TRANSACTION, TRANSLATE, TRANSLATION, TRIM,
-TRUE, UNION, UNIQUE, UNKNOWN, UPDATE, UPPER, USAGE, USER, USING, VALUE,
-VALUES, VARCHAR, VARYING, VIEW, WHEN, WHENEVER, WHERE, WITH, WORK, WRITE,
-YEAR, ZONE
+    alpha == Alpha == ALPHA
 \end{verbatim}
 
-\begin{itemize}
-    \item ADQL reserved keywords:
-\end{itemize}
-
+When escaped using double quotes, the same set of identifiers are not equivalent:
 \begin{verbatim}
-    ABS, ACOS, ASIN, ATAN, ATAN2, CEILING, COS, DEGREES, EXP, FLOOR, LOG,
-    LOG10, MOD, PI, POWER, RADIANS, RAND, ROUND, SIN, SQRT, TAN, TOP, TRUNCATE
+    "alpha" != "Alpha" != "ALPHA"
 \end{verbatim}
-
-\begin{verbatim}
-    AREA, BOX, CENTROID, CIRCLE, CONTAINS, COORD1, COORD2, COORDSYS,
-    DISTANCE, INTERSECTS, POINT, POLYGON, REGION
-\end{verbatim}
-
-\begin{verbatim}
-    ILIKE
-\end{verbatim}
-
-\begin{verbatim}
-    IN_UNIT
-\end{verbatim}
-
-The identifiers are used to express, for example, a table or a column
-reference name.
-
-Both the identifiers and the keywords are case insensitive. They SHALL
-begin with a letter \verb:{aA-zZ}:. Subsequent characters shall be letters,
-underscores or digits \verb:{0-9}: as follows:
-
-\begin{verbatim}
-    <Latin_letter>... [{ <digit> | <Latin_letter> | <underscore> | }...]
-\end{verbatim}
-
-For practical purposes the language specification should be able to address
-reserved keyword and special character conflicts. To do so the language
-provides a way to escape a non-compliant identifier by using the double
-quote character as a delimiter.
-
-ADQL allows making use of the same quoting mechanism to handle case
-sensitiveness if needed.
 
 \subsubsection{Literals}
 \label{sec:literals}
@@ -2953,8 +3017,6 @@ identified by the URI \verb|ivo://ivoa.net/std/TAPRegExt#features-adql-geo|.
             \item Fixed section references (svn version 3637).
 
         \end{itemize}
-
-    \item Typo fixes to the ADQL grammar.
 
     \item Changes from ADQL-20150601
         \begin{itemize}
