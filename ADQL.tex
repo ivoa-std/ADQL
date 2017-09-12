@@ -246,7 +246,7 @@ is case insensitive.
 \texttt{WORK,} \texttt{WRITE,} \texttt{YEAR,} \texttt{ZONE} 
 
 \subsubsection{ADQL reserved keywords}
-\label{sec:adql.keywords}
+\label{sec:adql.reswords}
 
 \noindent
 \texttt{ABS,} \texttt{ACOS,} \texttt{ASIN,} \texttt{ATAN,} 
@@ -500,7 +500,7 @@ different types of reserved keywords or characters are used:
 \end{itemize}
 
 In addition, some service implementations may also support the optional
-ILIKE case-insensitive string comparison operator, defined in section \ref{sec:string.functions.ilike}.
+\verb:ILIKE: case-insensitive string comparison operator, defined in section \ref{sec:string.functions.ilike}.
 
 \begin{itemize}
     \item \verb:ILIKE:
@@ -711,170 +711,163 @@ the underlying database's native language and type system.
 
 However, column metadata needs to give column types in order to allow the
 construction of queries that are both syntactically and semantically correct.
-Examples of such metadata includes VODataService's \verb:TAPType:
-(VODataService-1.1, \citet{std:VODS11}) or TAP's \verb:TAP_SCHEMA: (TAP-1.0, \citet{std:TAP}).
+Examples of such metadata includes the \verb:TAP_SCHEMA: tables defined
+in the TAP specification (\citet{std:TAP}) and the \verb:\tables:
+webservice response defined in the VOSI specification (\citet{std:VOSI}).
 
 Services SHOULD, if at all possible, try to express their column metadata in
 these terms even if the underlying database employs different types.
-Services SHOULD also use the following mapping when interfacing to user data,
+Services SHOULD also use the following mappings when interfacing to user data,
 either by serializing result sets into VOTables or by ingesting user-provided
 VOTables into ADQL-visible tables.
-Where non-ADQL types are employed in the underlying database, implementors
-SHOULD make sure that all operations that are possible with the recommended
-ADQL type are also possible with the type used in the backend engine.
-For instance, the ADQL string concatenation operator \verb:||: should be
-applicable to all columns resulting from VOTable char-typed columns.
+%Where non-ADQL types are employed in the underlying database, implementors
+%SHOULD make sure that all operations that are possible with the recommended
+%ADQL type are also possible with the type used in the backend engine.
+%For instance, the ADQL string concatenation operator \verb:||: should be
+%applicable to all columns resulting from VOTable char-typed columns.
 
 \begin{table}[thm]\footnotesize
-    \begin{tabular}{|p{0.15\textwidth}|p{0.15\textwidth}|p{0.25\textwidth}|p{0.30\textwidth}|}
+    \begin{tabular}
+        {|p{0.30\textwidth}|p{0.20\textwidth}|p{0.10\textwidth}|p{0.25\textwidth}|}
         \hline
 
+
         \hline
-        \multicolumn{3}{|c|}{\textbf{VOTable}} &
-        \multicolumn{1}{|c|}{\textbf{ADQL}}
+        \multicolumn{1}{|c|}{\textbf{ADQL}} &
+        \multicolumn{3}{|c|}{\textbf{VOTable}}
         \tabularnewline
         
         \hline
+        \textbf{type} &
         \textbf{datatype} &
         \textbf{arraysize} &
-        \textbf{xtype} &
-        \textbf{type}
+        \textbf{xtype}
         \tabularnewline
 
         \hline
+        BOOLEAN &
         boolean &
         1 &
-        - &
-        BOOLEAN
+        -
         \tabularnewline
 
         \hline
+        SMALLINT &
         short &
         1 &
-        - &
-        SMALLINT
+        -
         \tabularnewline
 
         \hline
+        INTEGER &
         int &
         1 &
-        - &
-        INTEGER
+        -
         \tabularnewline
 
         \hline
+        BIGINT &
         long &
         1 &
-        - &
-        BIGINT
+        -
         \tabularnewline
 
         \hline
+        REAL &
         float &
         1 &
-        - &
-        REAL
+        -
         \tabularnewline
 
         \hline
+        DOUBLE &
         double &
         1 &
-        - &
-        DOUBLE
+        -
         \tabularnewline
 
         \hline
-        (numeric) &
-        > 1 &
-        - &
-        implementation defined
-        \tabularnewline
-
-        \hline
+        CHAR(1) &
         char &
         1 &
-        - &
-        CHAR(1)
+        -
         \tabularnewline
 
         \hline
+        CHAR(n) &
         char &
         n &
-        - &
-        CHAR(n)
+        -
         \tabularnewline
 
         \hline
+        VARCHAR(n) &
         char &
         n* &
-        - &
-        VARCHAR(n)
+        -
         \tabularnewline
 
         \hline
+        BINARY(n) &
         unsignedByte &
         n &
-        - &
-        BINARY(n)
+        -
         \tabularnewline
 
         \hline
+        VARBINARY(n) &
         unsignedByte &
         n* &
-        - &
-        VARBINARY(n)
+        -
         \tabularnewline
 
         \hline
+        BLOB &
         unsignedByte &
         n, *, n* &
-        adql:BLOB &
-        BLOB
+        blob
         \tabularnewline
 
         \hline
+        CLOB &
         char &
         n, *, n* &
-        adql:CLOB &
-        CLOB
+        clob
         \tabularnewline
 
         \hline
+        TIMESTAMP &
         char &
         n, *, n* &
-        adql:TIMESTAMP &
-        TIMESTAMP
+        timestamp
         \tabularnewline
 
         \hline
-        char &
-        n, *, n* &
-        adql:POINT &
-        POINT
+        POINT &
+        int &
+        2 &
+        point
         \tabularnewline
 
         \hline
-        char &
+        CIRCLE &
+        int &
+        3 &
+        circle
+        \tabularnewline
+
+        \hline
+        POLYGON &
+        int &
         n, *, n* &
-        adql:REGION &
-        REGION
+        polygon
         \tabularnewline
 
         \hline
     \end{tabular}
-    \caption{VOTable/ADQL type mapping}
+    \caption{ADQL/VOTable type mapping}
     \label{table:adql.votable.type.map}
 \end{table}
-
-\textit{"Implementation defined"} in the above table means that an
-implementation is free to reject attempts to (de-)serialize values in
-these types.
-They are to be considered unsupported by ADQL, and the language provides
-no means to manipulate \textit{"native"} representations of them.
-
-References to REGION-typed columns must be valid wherever the ADQL
-\textit{region} nonterminal is allowed. References to POINT-typed columns
-must be valid wherever the ADQL \textit{point} nonterminal is allowed.
 
 Comparing the equality of a boolean value or expression with another
 boolean returns a boolean result.
@@ -884,6 +877,9 @@ True is greater than the value False.
 
 Unless explicitly stated, the result of any other operation on boolean
 values is undefined.
+
+References to POINT-typed columns must be valid wherever the ADQL
+\textit{point} nonterminal is allowed.
 
 \clearpage
 \section{Optional components}
