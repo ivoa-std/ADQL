@@ -168,7 +168,7 @@ plus the syntax description for regular identifiers.
 
 A reserved keyword has a special meaning in ADQL and cannot be used as
 an identifier unless it is isolated using the ADQL escape syntax defined
-in section \ref{sec:adql.escape}.
+in section \ref{sec:adql.escape} \nameref{sec:adql.escape}.
 
 The AQDL specification extends the list of SQL92 reserved keywords to accommodate
 those useful for astronomical purposes and/or present in a subset of vendor
@@ -385,10 +385,10 @@ the service capability to understand such specific formats.
 \subsection{Query syntax}
 \label{sec:syntax}
 
-A full and complete syntax of the select statement can be found in “Appendix
-A: BNF Grammar” at the \verb:<query_specification>: construct. A simplified
-syntax for the \verb:SELECT: statement follows, showing the main constructs for the query
-specification:
+A more detailed description of the select statement can be found in Appendix \ref{sec:grammar}:
+\nameref{sec:grammar} at the \verb:<query_specification>: construct.
+A simplified syntax for the \verb:SELECT: statement follows, showing the main constructs for
+the query specification:
 
 \begin{verbatim}
     SELECT
@@ -420,39 +420,75 @@ specification:
         [ OFFSET unsigned_decimal ]
 \end{verbatim}
 
-The SELECT statement defines a query to some derived table(s) specified
-in the FROM clause. As a result of this query, a subset of the table(s)
+The \verb:SELECT: statement defines a query to apply to a set of tables specified
+in the \verb:FROM: clause. As a result of this query, a subset of the tables
 is returned.
-The order of the rows MAY be arbitrary unless an ORDER BY clause is specified.
-A TOP clause MAY be specified to limit the number of rows returned. 
-An OFFSET clause MAY be specified to skip a number of rows at the start
+The order of the rows MAY be arbitrary unless an \verb:ORDER BY: clause is specified.
+A \verb:TOP: clause MAY be specified to limit the number of rows returned. 
+An \verb:OFFSET: clause MAY be specified to skip a number of rows at the start
 of the results.
-If OFFSET is used in combination with a TOP clause then OFFSET is applied
-first, then the result set is limited by TOP (see \ref{sec:offset}). 
+If both \verb:TOP: and \verb:OFFSET: are used together then \verb:OFFSET: is applied
+first followed by \verb:TOP: (see \ref{sec:offset}). 
 
 The order of the columns to return SHALL be the same as the
 order specified in the selection list, or the order defined in the original
 table if asterisk is specified. The selection list MAY include any numeric,
 string or geometry value expression.
-In the following sections some constructs requiring further description
-are presented.
 
-\subsubsection{Table subqueries and Joins}
+\subsubsection{Table subqueries}
 \label{sec:subqueries}
+%TBD - cosmopterix tests for this
 
-Table subqueries are present and can be used by some existing predicates
-within the search condition (IN and BETWEEN most likely) or as an artifact
-of building derived tables. Among the different types of join, ADQL supports
-INNER and OUTER (LEFT, RIGHT and FULL) joins. If none is specified, the
-default is INNER. All of these can be NATURAL or not. The join condition
-does not support embedded sub joins.
+Table subqueries can be used by predicates such as \verb:IN: and \verb:EXISTS:
+in the \verb:WHERE: clause of a query:
+
+\begin{verbatim}
+    SELECT
+        alpha_source.id
+    FROM 
+        alpha_source
+    WHERE
+        alpha_sourceid >=5
+    AND
+        alpha_sourceid IN 
+            (
+            SELECT id FROM alpha_source WHERE id < 10
+            )
+\end{verbatim}
+
+Table subqueries can be used for declaring derived tables in the \verb:FROM: clause
+of a query:
+
+\begin{verbatim}
+    SELECT
+        alpha_source.id
+    FROM
+        alpha_source,
+        (
+        SELECT alpha_source.id FROM alpha_source WHERE id < 10
+        ) AS subsample
+    WHERE
+        alpha_source.id >=5
+    AND
+        alpha_source.id = subsample.id
+\end{verbatim}
+
+\subsubsection{Joins}
+\label{sec:joins}
+%TBD - cosmopterix tests for this
+
+Among the different types of join, ADQL supports \verb:INNER: and \verb:OUTER:
+(\verb:LEFT:, \verb:RIGHT: and \verb:FULL:) joins. If none is specified, the
+default is \verb:INNER:. All of these can be \verb:NATURAL: or not.
+
+The join condition does not support embedded sub joins.
 
 \subsubsection{Search condition}
 \label{sec:search}
 
-The search condition can be part of several other clauses: JOIN, HAVING and,
-obviously, WHERE. Standard logical operators are present in its description
-(AND, OR and NOT). Five different types of predicates are present in which
+The search condition can be part of several other clauses: \verb:JOIN:, \verb:HAVING: and,
+\verb:WHERE:. Standard logical operators are present in its description
+(\verb:AND:, \verb:OR: and \verb:NOT:). Five different types of predicates are present in which
 different types of reserved keywords or characters are used:
 
 \begin{itemize}
