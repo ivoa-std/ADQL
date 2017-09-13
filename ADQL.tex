@@ -439,11 +439,11 @@ order specified in the selection list, or the order defined in the original
 table if asterisk is specified. The selection list MAY include any numeric,
 string or geometry value expression.
 
-\subsubsection{Table subqueries}
+\subsubsection{Subqueries}
 \label{sec:subqueries}
 %TBD - cosmopterix tests for this
 
-Table subqueries can be used by predicates such as \verb:IN: and \verb:EXISTS:
+Table subqueries MAY be used by predicates such as \verb:IN: and \verb:EXISTS:
 in the \verb:WHERE: clause of a query:
 
 \begin{verbatim}
@@ -460,7 +460,7 @@ in the \verb:WHERE: clause of a query:
             )
 \end{verbatim}
 
-Table subqueries can be used for declaring derived tables in the \verb:FROM: clause
+Table subqueries MAY be used for declaring derived tables in the \verb:FROM: clause
 of a query:
 
 \begin{verbatim}
@@ -481,11 +481,12 @@ of a query:
 \label{sec:joins}
 %TBD - cosmopterix tests for this
 
-Among the different types of join, ADQL supports \verb:INNER: and \verb:OUTER:
-(\verb:LEFT:, \verb:RIGHT: and \verb:FULL:) joins. If none is specified, the
+ADQL supports \verb:INNER: and \verb:OUTER:
+(\verb:LEFT:, \verb:RIGHT: and \verb:FULL:) joins. If no type is specified, the
 default is \verb:INNER:. All of these can be \verb:NATURAL: or not.
 
-The join condition does not support embedded sub joins.
+%REMOVED: The join condition does not support embedded sub joins.
+%REASON: The BNF allows nested JOINs.
 
 \subsubsection{Search condition}
 \label{sec:search}
