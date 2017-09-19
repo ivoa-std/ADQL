@@ -15,7 +15,19 @@
 
 \usepackage{hyperref}
 
-%\newcommand{\hfoot}[1] {\footnote{See URL: \href{#1} {{\tt #1}}   }}
+% Preserve spaces after \newcommand{}
+% https://tex.stackexchange.com/a/17873
+\usepackage{xspace}
+
+%\newcommand{\VOTspec}  {TAP specification \citet{std:VOTable}\xspace}
+%\newcommand{\TAPspec}  {TAP specification \citet{std:TAP}\xspace}
+%\newcommand{\DALIspec} {TAP specification \citet{std:DALI}\xspace}
+%\newcommand{\VOSIspec} {TAP specification \citet{std:VOSI}\xspace}
+
+\newcommand{\VOTspec}  {VOTable specification\xspace}
+\newcommand{\TAPspec}  {TAP specification\xspace}
+\newcommand{\DALIspec} {DALI specification\xspace}
+\newcommand{\VOSIspec} {VOSI specification\xspace}
 
 \title{Astronomical Data Query Language}
 
@@ -637,7 +649,7 @@ usage and description are detailed in the following tables:
         \hline
     \end{tabular}
     \caption{Mathematical functions}
-    \label{table:math.functions.table}
+    \label{table:math.functions}
 \end{table}
 
 \begin{table}[thm]\footnotesize
@@ -703,7 +715,7 @@ usage and description are detailed in the following tables:
         \hline
     \end{tabular}
     \caption{Trigonometrical functions}
-    \label{table:trig.functions.table}
+    \label{table:trig.functions}
 \end{table}
 
 \clearpage
@@ -714,28 +726,30 @@ ADQL defines no data definition language (DDL).
 It is assumed that table definition and data ingestion are performed in
 the underlying database's native language and type system.
 
-However, column metadata needs to give column types in order to allow the
+However, service metadata needs to give column types in order to allow the
 construction of queries that are both syntactically and semantically correct.
 Examples of such metadata includes the \verb:TAP_SCHEMA: tables defined
-in the TAP specification (\citet{std:TAP}) and the \verb:\tables:
-webservice response defined in the VOSI specification (\citet{std:VOSI}).
+in the \TAPspec and the \verb:\tables:
+webservice response defined in the \VOSIspec.
 
 Services SHOULD, if at all possible, try to express their column metadata in
 these terms even if the underlying database employs different types.
 Services SHOULD also use the following mappings when interfacing to user data,
 either by serializing result sets into VOTables or by ingesting user-provided
 VOTables into ADQL-visible tables.
-%Where non-ADQL types are employed in the underlying database, implementors
-%SHOULD make sure that all operations that are possible with the recommended
-%ADQL type are also possible with the type used in the backend engine.
-%For instance, the ADQL string concatenation operator \verb:||: should be
-%applicable to all columns resulting from VOTable char-typed columns.
+
+\subsection{Logical types}
+\label{sec:types.logical}
+\subsubsection{BOOLEAN}
+\label{sec:types.logical.boolean}
+
+The BOOLEAN data type maps to the corresponding data type is defined in the \DALIspec.
+The serialization format is defined in the \VOTspec.
 
 \begin{table}[thm]\footnotesize
     \begin{tabular}
-        {|p{0.30\textwidth}|p{0.20\textwidth}|p{0.10\textwidth}|p{0.25\textwidth}|}
+        {|p{0.20\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
-
 
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
@@ -757,59 +771,357 @@ VOTables into ADQL-visible tables.
         \tabularnewline
 
         \hline
+    \end{tabular}
+    \caption{ADQL type mapping for BOOLEAN}
+    \label{table:types.logical.boolean}
+\end{table}
+
+The literal values 1 and \verb:TRUE: are equivalent,
+and the values 0 and \verb:FALSE: are equivalent.  
+
+\begin{verbatim}
+    foo = 1
+    foo = TRUE
+
+    bar = 0
+    bar = FALSE
+\end{verbatim}
+
+The literal values \verb:TRUE: and \verb:FALSE:
+are not case sensitive.  
+
+\begin{verbatim}
+    foo = true
+    foo = True
+    foo = TRUE
+
+    bar = 0
+    bar = false
+    bar = False
+    bar = FALSE
+\end{verbatim}
+
+Comparing the equality of a BOOLEAN value or expression with another
+BOOLEAN returns a BOOLEAN result.
+
+When comparing the size of a BOOLEAN with another BOOLEAN, the value
+\verb:TRUE: is greater than the value \verb:FALSE:.
+
+Unless explicitly stated, the result of any other operation on a BOOLEAN
+value is undefined.
+
+\subsection{Numeric types}
+\label{sec:types.numeric}
+
+\subsubsection{Numeric primitives}
+\label{sec:types.numeric.primitive}
+
+The numeric data types, BIT, SMALLINT, INTEGER, BIGINT, REAL
+and DOUBLE map to the corresponding data types defined
+in the \VOTspec.
+
+\begin{table}[thm]\footnotesize
+    \begin{tabular}
+        {|p{0.20\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        \hline
+
+        \hline
+        \multicolumn{1}{|c|}{\textbf{ADQL}} &
+        \multicolumn{3}{|c|}{\textbf{VOTable}}
+        \tabularnewline
+        
+        \hline
+        \textbf{type} &
+        \textbf{datatype} &
+        \textbf{arraysize} &
+        \textbf{xtype}
+        \tabularnewline
+
+        \hline
+        BIT &
+        bit &
+        - &
+        -
+        \tabularnewline
+
+        \hline
+        ?? &
+        unsignedByte &
+        - &
+        -
+        \tabularnewline
+
+        \hline
         SMALLINT &
         short &
-        1 &
+        - &
         -
         \tabularnewline
 
         \hline
         INTEGER &
         int &
-        1 &
+        - &
         -
         \tabularnewline
 
         \hline
         BIGINT &
         long &
-        1 &
+        - &
         -
         \tabularnewline
 
         \hline
         REAL &
         float &
-        1 &
+        - &
         -
         \tabularnewline
 
         \hline
         DOUBLE &
         double &
-        1 &
+        - &
         -
         \tabularnewline
 
         \hline
-        CHAR(1) &
+    \end{tabular}
+    \caption{ADQL type mapping for numeric values}
+    \label{table:types.numeric.primitive}
+\end{table}
+
+Where possible ADQL numeric values SHOULD be implemented using database types
+that correspond to the VOTable serialization types, e.g. SMALLINT should map to a
+16 bit integer, INTEGER should map to a 32 bit integer, etc. 
+
+\subsubsection{INTERVAL}
+\label{sec:types.numeric.interval}
+
+The \DALIspec defines INTERVAL as a pair of integer or floating-point
+numeric values which are serialized as an array of numbers.
+
+TBD - The details of how INTERVAL values behave in ADQL are not yet defined.
+
+\begin{table}[thm]\footnotesize
+    \begin{tabular}
+        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        \hline
+
+        \hline
+        \multicolumn{1}{|c|}{\textbf{ADQL}} &
+        \multicolumn{3}{|c|}{\textbf{VOTable}}
+        \tabularnewline
+        
+        \hline
+        \textbf{type} &
+        \textbf{datatype} &
+        \textbf{arraysize} &
+        \textbf{xtype}
+        \tabularnewline
+
+        \hline
+        INTERVAL &
+        short, int, float, double &
+        2 &
+        interval
+        \tabularnewline
+        \hline
+    \end{tabular}
+    \caption{ADQL type mapping for INTERVAL}
+    \label{table:types.numeric.interval}
+\end{table}
+
+\subsection{Date and time}
+\label{sec:types.datetime}
+
+Where possible, date and time values SHOULD be implemented as
+described in the \DALIspec.
+
+\subsubsection{TIMESTAMP}
+\label{sec:types.datetime.timestamp}
+
+The TIMESTAMP datatype maps to the corresponding type defined in the
+\DALIspec.
+
+\begin{table}[thm]\footnotesize
+    \begin{tabular}
+        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        \hline
+
+        \hline
+        \multicolumn{1}{|c|}{\textbf{ADQL}} &
+        \multicolumn{3}{|c|}{\textbf{VOTable}}
+        \tabularnewline
+        
+        \hline
+        \textbf{type} &
+        \textbf{datatype} &
+        \textbf{arraysize} &
+        \textbf{xtype}
+        \tabularnewline
+
+        \hline
+        TIMESTAMP &
         char &
-        1 &
-        -
+        n, n*, * &
+        timestamp
+        \tabularnewline
+        \hline
+    \end{tabular}
+    \caption{ADQL type mapping for TIMESTAMP}
+    \label{table:types.datetime.timestamp}
+\end{table}
+
+TIMESTAMP literals should be created using the \verb:TIMESTAMP():
+constructor, using the syntax defined in the \DALIspec.
+
+\begin{verbatim}
+    YYYY-MM-DD[’T’hh:mm:ss[.SSS][’Z’]]
+\end{verbatim}
+
+The basic comparison operators, \verb:=:, \verb:<:, \verb:>:, \verb:<=:, \verb:>=:,
+\verb:<>: and \verb:BETWEEN: can all be applied to TIMESTAMP values.
+
+\begin{verbatim}
+    SELECT
+        ..
+    WHERE
+        obstime > TIMESTAMP('2015-01-01')
+    OR
+        obstime
+            BETWEEN
+                TIMESTAMP('2014-01-01')
+            AND
+                TIMESTAMP('2014-01-02')
+\end{verbatim}
+
+Within the database, the details of how TIMESTAMP values are implemented
+is platform dependent. The primary requirement is that the results of the
+comparison operators on TIMESTAMP values are consitent with respect to
+chronological time.
+
+\subsection{Character types}
+\label{sec:types.character}
+
+\subsubsection{Character primitives}
+\label{sec:types.character.primitive}
+
+The CHAR and VARCHAR data types map to the \verb:char: or
+\verb:unicodeChar: type defined in the \VOTspec.
+
+The choice of whether CHAR and VARCHAR map to \verb:char: or
+\verb:unicodeChar: is implementation dependent and may depend
+on the data content.
+
+\begin{table}[thm]\footnotesize
+    \begin{tabular}
+        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        \hline
+
+        \hline
+        \multicolumn{1}{|c|}{\textbf{ADQL}} &
+        \multicolumn{3}{|c|}{\textbf{VOTable}}
+        \tabularnewline
+        
+        \hline
+        \textbf{type} &
+        \textbf{datatype} &
+        \textbf{arraysize} &
+        \textbf{xtype}
         \tabularnewline
 
         \hline
         CHAR(n) &
-        char &
+        char, unicodeChar &
         n &
         -
         \tabularnewline
 
         \hline
         VARCHAR(n) &
-        char &
+        char, unicodeChar &
         n* &
         -
+        \tabularnewline
+
+        \hline
+    \end{tabular}
+    \caption{ADQL type mapping for character strings}
+    \label{table:types.character.primitive}
+\end{table}
+
+\subsubsection{CLOB}
+\label{sec:types.character.clob}
+
+To support strings which are generated when a query is executed,
+ADQL includes the Character Large OBject (CLOB) data type,
+which behaves as an opaque immutable string of characters.
+
+None of the ADQL operators apply to CLOB values.
+However, specific database implementations MAY provide user
+defined functions that operate on some CLOB values.
+
+CLOB values are serialized as arrays of characters.
+
+\begin{table}[thm]\footnotesize
+    \begin{tabular}
+        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        \hline
+
+        \hline
+        \multicolumn{1}{|c|}{\textbf{ADQL}} &
+        \multicolumn{3}{|c|}{\textbf{VOTable}}
+        \tabularnewline
+        
+        \hline
+        \textbf{type} &
+        \textbf{datatype} &
+        \textbf{arraysize} &
+        \textbf{xtype}
+        \tabularnewline
+
+        \hline
+        CLOB &
+        char, unicodeChar &
+        n, n*, * &
+        -
+        \tabularnewline
+
+        \hline
+    \end{tabular}
+    \caption{ADQL type mapping for CLOB}
+    \label{table:types.character.clob}
+\end{table}
+
+The details of how CLOB values are handled within a
+database is implementation dependent.
+
+\subsection{Binary types}
+\label{sec:types.binary}
+
+\subsubsection{Binary primitives}
+\label{sec:types.binary.primitive}
+
+The BINARY and VARBINARY data types map to the \verb:unsignedByte: type defined
+in the \VOTspec.
+
+\begin{table}[thm]\footnotesize
+    \begin{tabular}
+        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        \hline
+
+        \hline
+        \multicolumn{1}{|c|}{\textbf{ADQL}} &
+        \multicolumn{3}{|c|}{\textbf{VOTable}}
+        \tabularnewline
+        
+        \hline
+        \textbf{type} &
+        \textbf{datatype} &
+        \textbf{arraysize} &
+        \textbf{xtype}
         \tabularnewline
 
         \hline
@@ -827,64 +1139,204 @@ VOTables into ADQL-visible tables.
         \tabularnewline
 
         \hline
+    \end{tabular}
+    \caption{ADQL type mapping for character strings}
+    \label{table:types.binary.primitive}
+\end{table}
+
+\subsubsection{BLOB}
+\label{sec:types.binary.blob}
+
+To support large blocks of binary data such as images,
+ADQL includes the Binary Large OBject (BLOB) data type,
+which behaves as an opaque immutable array of bytes.
+
+None of the ADQL operators apply to BLOB values.
+However, specific database implementations MAY provide user
+defined functions that operate on some BLOB values.
+
+BLOB values are serialized as arrays of \verb:unsignedByte: defined
+in the \VOTspec.
+
+\begin{table}[thm]\footnotesize
+    \begin{tabular}
+        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        \hline
+
+        \hline
+        \multicolumn{1}{|c|}{\textbf{ADQL}} &
+        \multicolumn{3}{|c|}{\textbf{VOTable}}
+        \tabularnewline
+        
+        \hline
+        \textbf{type} &
+        \textbf{datatype} &
+        \textbf{arraysize} &
+        \textbf{xtype}
+        \tabularnewline
+
+        \hline
         BLOB &
-        unsignedByte &
-        n, *, n* &
-        blob
+        unsignedByte  &
+        n, n*, * &
+        -
         \tabularnewline
 
         \hline
-        CLOB &
-        char &
-        n, *, n* &
-        clob
-        \tabularnewline
+    \end{tabular}
+    \caption{ADQL type mapping for BLOB}
+    \label{table:types.binary.blob}
+\end{table}
+
+The details of how BLOB values are handled within a
+database is implementation dependent.
+
+\subsection{Geometric types}
+\label{sec:types.geom}
+
+ADQL provides support for the POINT, CIRCLE and POLYGON geometric
+types defined in the \DALIspec.
+
+\subsubsection{POINT}
+\label{sec:types.geom.point}
+
+The POINT datatype maps to the corresponding type defined in the
+\DALIspec.
+
+POINT values are serialized as arrays of floating point numbers
+using the \verb:point: xtype defined in the \DALIspec.
+
+\begin{table}[thm]\footnotesize
+    \begin{tabular}
+        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        \hline
 
         \hline
-        TIMESTAMP &
-        char &
-        n, *, n* &
-        timestamp
+        \multicolumn{1}{|c|}{\textbf{ADQL}} &
+        \multicolumn{3}{|c|}{\textbf{VOTable}}
+        \tabularnewline
+        
+        \hline
+        \textbf{type} &
+        \textbf{datatype} &
+        \textbf{arraysize} &
+        \textbf{xtype}
         \tabularnewline
 
         \hline
         POINT &
-        int &
+        float, double &
         2 &
         point
         \tabularnewline
 
         \hline
+    \end{tabular}
+    \caption{ADQL type mapping for POINT}
+    \label{table:types.geom.point}
+\end{table}
+
+POINT literals should be created using the \verb:POINT():
+constructor defined in section \ref{sec:functions.geom.point}.
+
+\begin{verbatim}
+    POINT(12.3, 45.6)
+\end{verbatim}
+
+%References to POINT-typed columns must be valid wherever the ADQL
+%\textit{point} nonterminal is allowed.
+
+\subsubsection{CIRCLE}
+\label{sec:types.geom.circle}
+
+The CIRCLE datatype maps to the corresponding type defined in the
+\DALIspec.
+
+CIRCLE values are serialized as arrays of floating point numbers
+using the \verb:circle: xtype defined in the \DALIspec.
+
+\begin{table}[thm]\footnotesize
+    \begin{tabular}
+        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        \hline
+
+        \hline
+        \multicolumn{1}{|c|}{\textbf{ADQL}} &
+        \multicolumn{3}{|c|}{\textbf{VOTable}}
+        \tabularnewline
+        
+        \hline
+        \textbf{type} &
+        \textbf{datatype} &
+        \textbf{arraysize} &
+        \textbf{xtype}
+        \tabularnewline
+
+        \hline
         CIRCLE &
-        int &
+        float, double &
         3 &
         circle
         \tabularnewline
 
         \hline
+    \end{tabular}
+    \caption{ADQL type mapping for CIRCLE}
+    \label{table:types.geom.circle}
+\end{table}
+
+CIRCLE literals should be created using the \verb:CIRCLE():
+constructor defined in section \ref{sec:functions.geom.circle}.
+
+\begin{verbatim}
+    CIRCLE(12.3, 45.6, 0.5)
+\end{verbatim}
+
+\subsubsection{POLYGON}
+\label{sec:types.geom.polygon}
+
+The POLYGON datatype maps to the corresponding type defined in the
+\DALIspec.
+
+POLYGON values are serialized as arrays of floating point numbers
+using the \verb:polygon: xtype defined in the \DALIspec.
+
+\begin{table}[thm]\footnotesize
+    \begin{tabular}
+        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        \hline
+
+        \hline
+        \multicolumn{1}{|c|}{\textbf{ADQL}} &
+        \multicolumn{3}{|c|}{\textbf{VOTable}}
+        \tabularnewline
+        
+        \hline
+        \textbf{type} &
+        \textbf{datatype} &
+        \textbf{arraysize} &
+        \textbf{xtype}
+        \tabularnewline
+
+        \hline
         POLYGON &
-        int &
+        float, double &
         n, *, n* &
         polygon
         \tabularnewline
 
         \hline
     \end{tabular}
-    \caption{ADQL/VOTable type mapping}
-    \label{table:adql.votable.type.map}
+    \caption{ADQL type mapping for POLYGON}
+    \label{table:types.geom.polygon}
 \end{table}
 
-Comparing the equality of a boolean value or expression with another
-boolean returns a boolean result.
+POLYGON literals should be created using the \verb:POLYGON():
+constructor defined in section \ref{sec:functions.geom.polygon}.
 
-When comparing the size of a boolean with another boolean, the value
-True is greater than the value False.
-
-Unless explicitly stated, the result of any other operation on boolean
-values is undefined.
-
-References to POINT-typed columns must be valid wherever the ADQL
-\textit{point} nonterminal is allowed.
+\begin{verbatim}
+    POLYGON(10.0, 10.0, 10.2, 10.0, 10.2, 10.2, 10.0, 10.2)
+\end{verbatim}
 
 \clearpage
 \section{Optional components}
@@ -922,9 +1374,9 @@ For full details on the XML schema and how it can be used, please refer to
 the TAPRegExt \citep{std:TAPREGEXT} standard.
 
 \subsection{Geometrical Functions}
-\label{sec:geom.functions}
+\label{sec:functions.geom}
 \subsubsection{Overview}
-\label{sec:geom.functions.overview}
+\label{sec:functions.geom.overview}
 
 In addition to the mathematical functions, ADQL provides a set of geometrical
 functions to enhance the astronomical usage of the language.
@@ -946,7 +1398,7 @@ functions to enhance the astronomical usage of the language.
 \end{itemize}
 
 Special attention has to be paid to the REGION function. As can be seen more
-in detail in Section \ref{sec:geom.functions.region}, this construct is a general purpose function and
+in detail in Section \ref{sec:functions.geom.region}, this construct is a general purpose function and
 it takes a string value expression as argument. The format of the string is
 to be specified by a service that accepts ADQL by referring to a standard
 format. Currently STC/s is the only standardized string
@@ -978,7 +1430,7 @@ topics: data types, predicates and utility calculations. Each of these are
 covered below.
 
 \subsubsection{Data Type Functions}
-\label{sec:geom.functions.type}
+\label{sec:functions.geom.type}
 
 Certain functions represent geometry data types. These data types are BOX,
 CENTROID, CIRCLE, POINT and POLYGON together with the generalized REGION data
@@ -1026,7 +1478,7 @@ Therefore, \verb:<geometry_value_expression>: is expanded as:
 and \verb:<value_expression_primary>: makes possible to use a column reference.
 
 \subsubsection{Predicate Functions}
-\label{sec:geom.functions.predicate}
+\label{sec:functions.geom.predicate}
 
 Functions CONTAINS and INTERSECTS each accept two geometry data types
 and return 1 or 0 according to whether the relevant verb (e.g.: "contains") is
@@ -1045,7 +1497,7 @@ example: equals, disjoint, touches, crosses, within, overlaps and relate
 are possibilities.
 
 \subsubsection{Utility Functions}
-\label{sec:geom.functions.utility}
+\label{sec:functions.geom.utility}
 
 Function COORDSYS extracts the coordinate system string from a given
 geometry. To do so it accepts a geometry expression and returns a calculated
@@ -1121,14 +1573,14 @@ and
 
 %\subsubsection{Function definitions}
 \clearpage
-\label{sec:geom.functions.definitions}
+\label{sec:functions.geom.definitions}
 
 The following sections provide a detailed description for each geometrical
 function. In each case, the functionality and usage is described rather
 than going into the BNF grammar details as above.
 
 \subsubsection{AREA}
-\label{sec:geom.functions.area}
+\label{sec:functions.geom.area}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: AREA|}\\
@@ -1143,7 +1595,7 @@ of (25.4, -20.0) degrees would be written as follows:
 \end{verbatim}
 
 The coordinates of the circle center could also be directly derived from
-either a POINT function (See \ref{sec:geom.functions.point}) or
+either a POINT function (See \ref{sec:functions.geom.point}) or
 the coordinate’s column references:
 
 \begin{verbatim}
@@ -1158,7 +1610,7 @@ zero or throw an error message, the later to be defined by the service making
 use of ADQL.
 
 \subsubsection{BOX}
-\label{sec:geom.functions.box}
+\label{sec:functions.geom.box}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: BOX|}\\
@@ -1177,8 +1629,8 @@ The function arguments specify the coordinate system, the center position
 and both the width and height (arms) values, where:
 
 \begin{itemize}
-    \item the coordinate system is a string value expression as defined in Section \ref{sec:geom.functions.overview}.
-    \item the center position is a comma separated numeric duple, with units and legal ranges as defined in Section \ref{sec:geom.functions.overview}.
+    \item the coordinate system is a string value expression as defined in Section \ref{sec:functions.geom.overview}.
+    \item the center position is a comma separated numeric duple, with units and legal ranges as defined in Section \ref{sec:functions.geom.overview}.
     \item and the arms are numeric value expressions in degrees.
 \end{itemize}
 
@@ -1190,7 +1642,7 @@ For example, a function expressing a box of ten degrees centered on a position
 \end{verbatim}
 
 As another example, the coordinates of the center position could also be
-extracted from either a POINT function (See \ref{sec:geom.functions.point})
+extracted from either a POINT function (See \ref{sec:functions.geom.point})
 or the coordinate’s column references:
 
 \begin{verbatim}
@@ -1204,7 +1656,7 @@ To see what this function would return when listed in the select clause,
 see Section \ref{sec:geom.select}.
 
 \subsubsection{CENTROID}
-\label{sec:geom.functions.centroid}
+\label{sec:functions.geom.centroid}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: CENTROID|}\\
@@ -1219,7 +1671,7 @@ position of (25.4, -20.0) degrees would be written as follows :
 \end{verbatim}
 
 \subsubsection{CIRCLE}
-\label{sec:geom.functions.circle}
+\label{sec:functions.geom.circle}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: CIRCLE|}\\
@@ -1231,8 +1683,8 @@ and the radius, where:
 % STC-reference STC Circle region ([3], Section 4.5.1.2)
 
 \begin{itemize}
-    \item the coordinate system is a string value expression as defined in Section \ref{sec:geom.functions.overview}.
-    \item the center position is a comma separated numeric duple, with units and legal ranges as defined in Section \ref{sec:geom.functions.overview}.
+    \item the coordinate system is a string value expression as defined in Section \ref{sec:functions.geom.overview}.
+    \item the center position is a comma separated numeric duple, with units and legal ranges as defined in Section \ref{sec:functions.geom.overview}.
     \item and the radius is a numeric value expression in degrees.
 \end{itemize}
 
@@ -1244,7 +1696,7 @@ position of (25.4, -20.0) degrees would be written as follows:
 \end{verbatim}
 
 The coordinates of the center position could also be derived from either a
-POINT function (See \ref{sec:geom.functions.point}) or the coordinate’s column references:
+POINT function (See \ref{sec:functions.geom.point}) or the coordinate’s column references:
 
 \begin{verbatim}
     CIRCLE(‘’, t.ra, t.dec, 1)
@@ -1257,7 +1709,7 @@ To see what this function would return when listed in the select clause, see
 Section \ref{sec:geom.select}.
 
 \subsubsection{CONTAINS}
-\label{sec:geom.functions.contains}
+\label{sec:functions.geom.contains}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: CONTAINS|}\\
@@ -1308,13 +1760,13 @@ for converting one (or both). If it cannot do so, it SHOULD throw an error
 message, to be defined by the service making use of ADQL.
 
 \subsubsection{COORD1}
-\label{sec:geom.functions.coord1}
+\label{sec:functions.geom.coord1}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: COORD1|}\\
 
 This function extracts the first coordinate value, in degrees, of a given
-POINT (See \ref{sec:geom.functions.point}) or column reference.
+POINT (See \ref{sec:functions.geom.point}) or column reference.
 
 For example, the right ascension of a point with position (25, -19.5) in
 degrees would be obtained using the following expression:
@@ -1334,13 +1786,13 @@ could also be derived directly from a column reference as follows:
 the POINT geometry stored in the database table.
 
 \subsubsection{COORD2}
-\label{sec:geom.functions.coord2}
+\label{sec:functions.geom.coord2}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: COORD2|}\\
 
 This function extracts the second coordinate value, in degrees, of a given
-POINT (See \ref{sec:geom.functions.point}) or column reference.
+POINT (See \ref{sec:functions.geom.point}) or column reference.
 
 For example, the declination of a point with position (25, -19.5) in degrees,
 would be obtained using the following expression:
@@ -1360,7 +1812,7 @@ could also be derived directly from a column reference as follows:
 the POINT geometry stored in the database table.
 
 \subsubsection{COORDSYS}
-\label{sec:geom.functions.coordsys}
+\label{sec:functions.geom.coordsys}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: COORDSYS|}\\
@@ -1372,7 +1824,7 @@ of this specification.
 This function extracts the coordinate system string value from a given
 geometry.
 
-As described in Section \ref{sec:geom.functions.overview}, the allowed return values must be defined
+As described in Section \ref{sec:functions.geom.overview}, the allowed return values must be defined
 by any service making use of ADQL, and a list of standard coordinate system
 literals can be found in the STC specification.
 % STC-reference 'STC specification [3]'
@@ -1397,7 +1849,7 @@ other geometry data type:
 for the CIRCLE geometry stored in the database table.
 
 \subsubsection{DISTANCE}
-\label{sec:geom.functions.distance}
+\label{sec:functions.geom.distance}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: DISTANCE|}\\
@@ -1458,7 +1910,7 @@ It is assumed that the arguments for the four parameter form all use
 the same coordinate system.
 
 \subsubsection{INTERSECTS}
-\label{sec:geom.functions.intersects}
+\label{sec:functions.geom.intersects}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: INTERSECTS|}\\
@@ -1516,7 +1968,7 @@ SHOULD still implement that behaviour, but clients SHOULD NOT expect it. This
 behaviour will be dropped in the next major version of this specification.
 
 \subsubsection{POINT}
-\label{sec:geom.functions.point}
+\label{sec:functions.geom.point}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: POINT|}\\
@@ -1527,8 +1979,8 @@ specify the coordinate system and the position, where:
 % STC-reference 'STC SpatialCoord ([3], Section 4.4.2)'
 
 \begin{itemize}
-    \item the coordinate system is a string value expression as defined in Section \ref{sec:geom.functions.overview}.
-    \item the position is a comma separated numeric duple, with units and legal ranges as defined in Section \ref{sec:geom.functions.overview}.
+    \item the coordinate system is a string value expression as defined in Section \ref{sec:functions.geom.overview}.
+    \item the position is a comma separated numeric duple, with units and legal ranges as defined in Section \ref{sec:functions.geom.overview}.
 \end{itemize}
 
 For example, a function expressing a point with right ascension of 25 degrees
@@ -1549,14 +2001,14 @@ also be derived from the coordinate’s column references:
 column references for the position.
 
 The coordinates of a POINT could also be individually extracted using the
-COORD1 and COORD2 functions (See \ref{sec:geom.functions.coord1} and
-\ref{sec:geom.functions.coord2}).
+COORD1 and COORD2 functions (See \ref{sec:functions.geom.coord1} and
+\ref{sec:functions.geom.coord2}).
 
 To see what this function would return when listed in the select clause,
 see Section \ref{sec:geom.select}.
 
 \subsubsection{POLYGON}
-\label{sec:geom.functions.polygon}
+\label{sec:functions.geom.polygon}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: POLYGON|}\\
@@ -1568,8 +2020,8 @@ coordinate system and three or more sets of 2-D coordinates, where:
 % STC-reference 'STC Polygon region ([3], Section 4.5.1.4)'
 
 \begin{itemize}
-    \item the coordinate system is a string value expression as defined in Section \ref{sec:geom.functions.overview}.
-    \item the coordinate sets are comma separated numeric duples, with units and legal ranges as defined in Section \ref{sec:geom.functions.overview}.
+    \item the coordinate system is a string value expression as defined in Section \ref{sec:functions.geom.overview}.
+    \item the coordinate sets are comma separated numeric duples, with units and legal ranges as defined in Section \ref{sec:functions.geom.overview}.
 \end{itemize}
 
 For example, a function expressing a triangle, whose vertices are (10.0,
@@ -1597,7 +2049,7 @@ each vertex connected to the next along a great circle and the last vertex
 implicitly connected to the first vertex.
 
 \subsubsection{REGION}
-\label{sec:geom.functions.region}
+\label{sec:functions.geom.region}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: REGION|}\\
