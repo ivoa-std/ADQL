@@ -1575,23 +1575,14 @@ For example, the area of a circle of one degree radius centered on a position
 of (25.4, -20.0) degrees would be written as follows:
 
 \begin{verbatim}
-    AREA(CIRCLE(‘’, 25.4, -20.0, 1))
+    AREA(
+        CIRCLE(
+            25.4, -20.0, 1
+            )
+        )
 \end{verbatim}
 
-The coordinates of the circle center could also be directly derived from
-either a POINT function (See \ref{sec:functions.geom.point}) or
-the coordinate’s column references:
-
-\begin{verbatim}
-    AREA(CIRCLE(‘’, t.ra, t.dec, 1))
-\end{verbatim}
-
-, where \textit{t} would be the table and \textit{ra}, \textit{dec} the
-column references for the circle center.
-
-Inappropriate geometries for this construct (e.g. POINT) SHOULD either return
-zero or throw an error message, the later to be defined by the service making
-use of ADQL.
+The AREA of a single POINT is zero.
 
 \subsubsection{BOX}
 \label{sec:functions.geom.box}
