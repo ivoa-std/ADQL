@@ -1582,6 +1582,19 @@ of (25.4, -20.0) degrees would be written as follows:
         )
 \end{verbatim}
 
+Alternatively, the center position can be expressed as a POINT (See \ref{sec:functions.geom.point}):
+
+\begin{verbatim}
+    AREA(
+        CIRCLE(
+            POINT(
+                25.4, -20.0
+                ),
+            1
+            )
+        )
+\end{verbatim}
+
 The AREA of a single POINT is zero.
 
 \subsubsection{BOX}
@@ -1590,7 +1603,7 @@ The AREA of a single POINT is zero.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: BOX|}\\
 
-This function expresses a box on the sky. A box is a special case of Polygon,
+This function expresses a box on the sky. A box is a special case of POLYGON,
 defined purely for convenience, and it corresponds semantically to the STC Box.
 It is specified by a center position and size
 % STC-reference 'region ([3], Section 4.5.1.5)'
@@ -1600,32 +1613,39 @@ for half the respective sizes on either side. The box’s sides are line
 segments or great circles intersecting the arms of the cross in its end
 points at right angles with the arms.
 
-The function arguments specify the coordinate system, the center position
-and both the width and height (arms) values, where:
+The function arguments specify the center position
+and both the width and height values, where:
 
 \begin{itemize}
-    \item the coordinate system is a string value expression as defined in Section \ref{sec:functions.geom.overview}.
-    \item the center position is a comma separated numeric duple, with units and legal ranges as defined in Section \ref{sec:functions.geom.overview}.
-    \item and the arms are numeric value expressions in degrees.
+    \item the center position is given by a pair of numeric expressions, or a POINT object.
+    \item the the width and height numeric are given by numeric expressions in degrees.
 \end{itemize}
 
 For example, a function expressing a box of ten degrees centered on a position
 (25.4, -20.0) in degrees would be written as follows:
 
 \begin{verbatim}
-    BOX(‘’, 25.4, -20.0, 10, 10)
+    BOX(
+        25.4,
+       -20.0,
+        10,
+        10
+        )
 \end{verbatim}
 
-As another example, the coordinates of the center position could also be
-extracted from either a POINT function (See \ref{sec:functions.geom.point})
-or the coordinate’s column references:
+Alternatively, the center position can be expressed as a POINT (See \ref{sec:functions.geom.point}):
 
 \begin{verbatim}
-    BOX(‘’, t.ra, t.dec, 10, 10)
+    BOX(
+        POINT(
+            25.4,
+           -20.0
+           ),
+        10,
+        10
+       )
 \end{verbatim}
 
-, where \textit{t} would be the table and \textit{ra}, \textit{dec} the
-column references for the center position.
 
 To see what this function would return when listed in the select clause,
 see Section \ref{sec:geom.select}.
