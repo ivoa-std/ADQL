@@ -1646,10 +1646,6 @@ Alternatively, the center position can be expressed as a POINT (See \ref{sec:fun
        )
 \end{verbatim}
 
-
-To see what this function would return when listed in the select clause,
-see Section \ref{sec:geom.select}.
-
 \subsubsection{CENTROID}
 \label{sec:functions.geom.centroid}
 {\footnotesize Language feature :}\\
@@ -1699,9 +1695,6 @@ POINT function (See \ref{sec:functions.geom.point}) or the coordinate’s column
 
 , where \textit{t} would be the table and \textit{ra}, \textit{dec} the
 column references for the center position.
-
-To see what this function would return when listed in the select clause, see
-Section \ref{sec:geom.select}.
 
 \subsubsection{CONTAINS}
 \label{sec:functions.geom.contains}
@@ -2001,9 +1994,6 @@ The coordinates of a POINT could also be individually extracted using the
 COORD1 and COORD2 functions (See \ref{sec:functions.geom.coord1} and
 \ref{sec:functions.geom.coord2}).
 
-To see what this function would return when listed in the select clause,
-see Section \ref{sec:geom.select}.
-
 \subsubsection{POLYGON}
 \label{sec:functions.geom.polygon}
 {\footnotesize Language feature :}\\
@@ -2044,40 +2034,6 @@ the triangle’s corner position.
 Thus, the polygon is a list of vertices in a single coordinate system, with
 each vertex connected to the next along a great circle and the last vertex
 implicitly connected to the first vertex.
-
-\subsubsection{Geometry in the SELECT clause}
-\label{sec:geom.select}
-
-Geometry values (literals or columns containing geometry values) may be
-listed in the SELECT clause, in which case they must be converted into a
-text form.
-
-This text form will be identical to the way a literal value would be
-specified in a query, including the geometry type (POINT, CIRCLE, BOX,
-or POLYGON) and all the required numeric arguments.
-
-Previous versions of this specification required the text form to include the
-coordinate system string. However, as the coordinate system has been marked
-as deprecated in this version of the specification (2.1), the text form
-should contain an empty string \verb:'': in place of the coordinate
-system. Future versions of this specification may remove the coordinate
-system parameter from the text form.
-
-\begin{verbatim}
-    SELECT circle('', 1, 2, 0.5)
-\end{verbatim}
-
-could return
-
-\begin{verbatim}
-    CIRCLE('', 1.0, 2.0, 0.5)
-\end{verbatim}
-
-or equivalent.
-The output may alter the numeric format by converting whole numbers to
-floating point (as in the example above) but should not gratuitously add
-digits. Otherwise, numeric output must conform to the rules for numeric
-expressions in the ADQL BNF.
 
 \subsection{User Defined Functions}
 \label{sec:user.functions}
