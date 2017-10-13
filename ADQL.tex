@@ -1569,33 +1569,27 @@ than going into the BNF grammar details as above.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: AREA|}\\
 
-This function computes the area, in square degrees, of a given geometry.
+The AREA function computes the area, in square degrees, of a given geometry.
 
-For example, the area of a circle of one degree radius centered on a position
-of (25.4, -20.0) degrees would be written as follows:
-
-\begin{verbatim}
-    AREA(
-        CIRCLE(
-            25.4, -20.0, 1
-            )
-        )
-\end{verbatim}
-
-Alternatively, the center position can be expressed as a POINT (See \ref{sec:functions.geom.point}):
+For example, the area of a POLYGON would be written as follows:
 
 \begin{verbatim}
     AREA(
-        CIRCLE(
-            POINT(
-                25.4, -20.0
-                ),
-            1
+        POLYGON(
+            10.0,
+           -10.5,
+            20.0,
+            20.5,
+            30.0,
+            30.5
             )
         )
 \end{verbatim}
 
 The AREA of a single POINT is zero.
+
+The geometry argument may be a literal value, as above, or it may be a
+column reference, functon or expression that returns a geometric type.
 
 \subsubsection{BOX}
 \label{sec:functions.geom.box}
@@ -1603,11 +1597,11 @@ The AREA of a single POINT is zero.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: BOX|}\\
 
-This function expresses a box on the sky. A box is a special case of POLYGON,
+The BOX function expresses a box on the sky. A BOX is a special case of POLYGON,
 defined purely for convenience, and it corresponds semantically to the STC Box.
 It is specified by a center position and size
 % STC-reference 'region ([3], Section 4.5.1.5)'
-(in both coordinates) defining a cross centered on the center position and
+(in both axes) defining a cross centered on the center position and
 with arms extending, parallel to the coordinate axes at the center position,
 for half the respective sizes on either side. The box’s sides are line
 segments or great circles intersecting the arms of the cross in its end
@@ -1621,19 +1615,19 @@ and both the width and height values, where:
     \item the the width and height numeric are given by numeric expressions in degrees.
 \end{itemize}
 
-For example, a function expressing a box of ten degrees centered on a position
+For example, a function expressing a BOX of ten degrees centered on a position
 (25.4, -20.0) in degrees would be written as follows:
 
 \begin{verbatim}
     BOX(
         25.4,
        -20.0,
-        10,
-        10
+        10.0,
+        10.0
         )
 \end{verbatim}
 
-Alternatively, the center position can be expressed as a POINT (See \ref{sec:functions.geom.point}):
+Alternatively, the center position could be expressed as a POINT:
 
 \begin{verbatim}
     BOX(
@@ -1641,10 +1635,13 @@ Alternatively, the center position can be expressed as a POINT (See \ref{sec:fun
             25.4,
            -20.0
            ),
-        10,
-        10
+        10.0,
+        10.0
        )
 \end{verbatim}
+
+The position argument may be a literal value, as above, or it may be a
+column reference, functon or expression that returns a geometric type.
 
 \subsubsection{CENTROID}
 \label{sec:functions.geom.centroid}
@@ -1652,14 +1649,27 @@ Alternatively, the center position can be expressed as a POINT (See \ref{sec:fun
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: CENTROID|}\\
 
-This function computes the centroid of a given geometry and returns a POINT.
+The CENTROID function computes the centroid of a given geometry and returns a POINT.
 
-For example, the centroid of a circle of one degree radius centered in a
-position of (25.4, -20.0) degrees would be written as follows :
+For example, the centroid of a POLYGON would be written as follows :
 
 \begin{verbatim}
-    CENTROID(CIRCLE (‘’, 25.4, -20.0, 1))
+    CENTROID(
+        POLYGON(
+            10.0,
+           -10.5,
+            20.0,
+            20.5,
+            30.0,
+            30.5
+            )
+       )
 \end{verbatim}
+
+The CENTROID of a single POINT is the POINT.
+
+The geometry argument may be a literal value, as above, or it may be a
+column reference, functon or expression that returns a geometric type.
 
 \subsubsection{CIRCLE}
 \label{sec:functions.geom.circle}
@@ -1667,34 +1677,41 @@ position of (25.4, -20.0) degrees would be written as follows :
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: CIRCLE|}\\
 
-This function expresses a circular region on the sky (a cone in space) and
-corresponds semantically to the STC Circle. The
-function arguments specify the coordinate system, the center position,
-and the radius, where:
+The CIRCLE function expresses a circular region on the sky (a cone in space) and
+corresponds semantically to the STC Circle.
+The function arguments specify the center position and the radius, where:
 % STC-reference STC Circle region ([3], Section 4.5.1.2)
 
 \begin{itemize}
-    \item the coordinate system is a string value expression as defined in Section \ref{sec:functions.geom.overview}.
-    \item the center position is a comma separated numeric duple, with units and legal ranges as defined in Section \ref{sec:functions.geom.overview}.
+    \item the center position is given by a pair of numeric expressions, or a POINT object.
     \item and the radius is a numeric value expression in degrees.
 \end{itemize}
 
-For example, a function expressing a circle of one degree radius centered on a
-position of (25.4, -20.0) degrees would be written as follows:
+For example, a CIRCLE of ten degrees radius centered on position
+(25.4, -20.0) in degrees would be written as follows:
 
 \begin{verbatim}
-    CIRCLE(‘’, 25.4, -20.0, 1)
+    CIRCLE(
+        25.4,
+       -20.0,
+        10.0
+        )
 \end{verbatim}
 
-The coordinates of the center position could also be derived from either a
-POINT function (See \ref{sec:functions.geom.point}) or the coordinate’s column references:
+Alternatively, the center position could be expressed as a POINT:
 
 \begin{verbatim}
-    CIRCLE(‘’, t.ra, t.dec, 1)
+    CIRCLE(
+        POINT(
+            25.4,
+           -20.0,
+            ),
+       10.0
+       )
 \end{verbatim}
 
-, where \textit{t} would be the table and \textit{ra}, \textit{dec} the
-column references for the center position.
+The position argument may be a literal value, as above, or it may be a
+column reference, functon or expression that returns a geometric type.
 
 \subsubsection{CONTAINS}
 \label{sec:functions.geom.contains}
@@ -1702,50 +1719,78 @@ column references for the center position.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: CONTAINS|}\\
 
-This numeric function determines if a geometry is wholly contained within
+The CONTAINS function determines if a geometry is wholly contained within
 another. This is most commonly used to express the "point-in-shape" condition.
 
 For example, to determine if a point with right ascension of 25 degrees
-and declination of -19.5 degrees is within a circle of one degree radius
-centered in a position of (25.4, -20.0) degrees and defined according to the
-same coordinate system, we would make use of the CONTAINS function as follows:
+and declination of -19.5 degrees is within a circle of ten degrees radius
+centered in a position of (25.4, -20.0) degrees,
+we could use the CONTAINS function as follows:
 
 \begin{verbatim}
     CONTAINS(
-        POINT(‘’, 25.0,-19.5),
-        CIRCLE(‘’, 25.4, -20.0, 1)
+        POINT(
+            25.0,
+           -19.5
+           ),
+        CIRCLE(
+            25.4,
+           -20.0,
+            10.0
+           )
         )
 \end{verbatim}
 
-, where the CONTAINS function returns 1 (true) if the first argument is in
-or on the boundary of the circle and 0 (false) otherwise. Thus, contains is
-not symmetric in the meaning of the arguments. When used in the WHERE clause
-of a query, the value must be compared to 0 or 1 to form an SQL predicate:
+The CONTAINS function returns the numeric value 1 if the first argument
+is in, or on, the boundary of the second argument and the numeric value 0
+if it is not.
+
+The CONTAINS function is not symmetric in the meaning of the arguments.
+
+When used in the WHERE clause of a query, the return value must be compared
+to the numeric values 0 or 1 to form a SQL predicate:
 
 \begin{verbatim}
-    CONTAINS(
-        POINT(‘’, 25.0,-19.5),
-        CIRCLE(‘’, 25.4, -20.0, 1)
-        ) = 1
+    WHERE
+        1 = CONTAINS(
+            POINT(
+                25.0,
+               -19.5
+               ),
+            CIRCLE(
+                25.4,
+               -20.0,
+                10.0
+               )
+            )
 \end{verbatim}
-
 for "does contain" and
 
 \begin{verbatim}
-    CONTAINS(
-        POINT(‘’, 25.0,-19.5),
-        CIRCLE(‘’, 25.4, -20.0, 1)
-        ) = 0
+    WHERE
+        0 = CONTAINS(
+            POINT(
+                25.0,
+               -19.5
+               ),
+            CIRCLE(
+                25.4,
+               -20.0,
+                10.0
+               )
+            )
 \end{verbatim}
-
 for "does not contain".
 
-The arguments to the CONTAINS function can be (literal) values created
-from the geometry types or they can be single column names or aliases (for
-geometry stored in a database table). Since the two argument geometries may
-be expressed in different coordinate systems, the function is responsible
-for converting one (or both). If it cannot do so, it SHOULD throw an error
-message, to be defined by the service making use of ADQL.
+The geometric arguments may be a literal values, as above, or they may be
+column references, functons or expressions that return a geometric type.
+
+If the arguments are expressed in different coordinate systems, the
+CONTAINS function is responsible for converting one, or both, of the
+arguments into a different coordinate system.
+If it cannot perform the required conversion then it SHOULD throw an
+error. Details of the error message are defined by the service
+executing the query.
 
 \subsubsection{COORD1}
 \label{sec:functions.geom.coord1}
