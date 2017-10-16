@@ -1240,7 +1240,10 @@ POINT literals should be created using the \verb:POINT():
 constructor defined in section \ref{sec:functions.geom.point}.
 
 \begin{verbatim}
-    POINT(12.3, 45.6)
+    POINT(
+        12.3,
+        45.6
+        )
 \end{verbatim}
 
 %References to POINT-typed columns must be valid wherever the ADQL
@@ -1289,7 +1292,11 @@ CIRCLE literals should be created using the \verb:CIRCLE():
 constructor defined in section \ref{sec:functions.geom.circle}.
 
 \begin{verbatim}
-    CIRCLE(12.3, 45.6, 0.5)
+    CIRCLE(
+        12.3,
+        45.6,
+        0.5
+        )
 \end{verbatim}
 
 \subsubsection{POLYGON}
@@ -1335,7 +1342,16 @@ POLYGON literals should be created using the \verb:POLYGON():
 constructor defined in section \ref{sec:functions.geom.polygon}.
 
 \begin{verbatim}
-    POLYGON(10.0, 10.0, 10.2, 10.0, 10.2, 10.2, 10.0, 10.2)
+    POLYGON(
+        10.0,
+        10.0,
+        10.2,
+        10.0,
+        10.2,
+        10.2,
+        10.0,
+        10.2
+        )
 \end{verbatim}
 
 \clearpage
@@ -1408,8 +1424,8 @@ coordinate vectors MUST be normalized.
 It remains up to the service implementation to define the errors that
 should be raised when using values outside these constraints.
 
-For historical reasons, the geometry constructors (BOX, CIRCLE, POINT,
-POLYGON) require a string-valued first argument. It was intended to carry
+For historical reasons, the geometry constructors (BOX, CIRCLE, POINT
+and POLYGON) require a string-valued first argument. It was intended to carry
 information on a reference system or other coordinate system metadata.
 As of this version of the specification (2.1), this parameter has been
 marked as deprecated. Services are permitted to ignore this parameter and
@@ -1798,25 +1814,32 @@ executing the query.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: COORD1|}\\
 
-This function extracts the first coordinate value, in degrees, of a given
+The COORD1 function extracts the first coordinate value, in degrees, of a given
 POINT (See \ref{sec:functions.geom.point}) or column reference.
 
 For example, the right ascension of a point with position (25, -19.5) in
 degrees would be obtained using the following expression:
-
 \begin{verbatim}
-    COORD1(POINT(‘’, 25.0,-19.5))
+    COORD1(
+        POINT(
+            25.0,
+           -19.5
+            )
+        )
 \end{verbatim}
+\noindent
+which would return a numeric value of 25.0 degrees.
 
-, being the result a numeric value of 25.0 degrees. The first coordinate
-could also be derived directly from a column reference as follows:
-
+The POINT argument can also be derived directly from a column
+reference as follows:
 \begin{verbatim}
-    COORD1(t.point)
+    COORD1(
+        t.point
+        )
 \end{verbatim}
-    
-, where \textit{t} is the table and \textit{point} the column reference for
-the POINT geometry stored in the database table.
+\noindent
+where \textit{t.point} is a column reference for a POINT value
+stored in the database.
 
 \subsubsection{COORD2}
 \label{sec:functions.geom.coord2}
@@ -1824,25 +1847,32 @@ the POINT geometry stored in the database table.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: COORD2|}\\
 
-This function extracts the second coordinate value, in degrees, of a given
+The COORD2 function extracts the second coordinate value, in degrees, of a given
 POINT (See \ref{sec:functions.geom.point}) or column reference.
 
 For example, the declination of a point with position (25, -19.5) in degrees,
-would be obtained using the following expression:
-
+could be obtained using the following expression:
 \begin{verbatim}
-    COORD2(POINT(‘’, 25.0,-19.5))
+    COORD2(
+        POINT(
+            25.0,
+           -19.5
+            )
+        )
 \end{verbatim}
+\noindent
+which would return a numeric value of -19.5 degrees.
 
-, being the result a numeric value of -19.5 degrees. The second coordinate
-could also be derived directly from a column reference as follows:
-
+The POINT argument can also be derived directly from a column
+reference as follows:
 \begin{verbatim}
-    COORD2(t.point)
+    COORD2(
+        t.point
+        )
 \end{verbatim}
-
-, where \textit{t} is the table and \textit{point} the column reference for
-the POINT geometry stored in the database table.
+\noindent
+where \textit{t.point} is a column reference for a POINT value
+stored in the database.
 
 \subsubsection{COORDSYS}
 \label{sec:functions.geom.coordsys}
@@ -1853,33 +1883,41 @@ the POINT geometry stored in the database table.
 Note - as of this version of the specification (2.1), the COORDSYS function has
 been marked as deprecated. This function may be removed in future versions
 of this specification.
+Details of the coordinate system for a database column are available as part of
+the service metadata, available via the \verb:TAP_SCHEMA: tables defined in the
+\TAPspec and the \verb:\tables: webservice response defined in the \VOSIspec.
 
-This function extracts the coordinate system string value from a given
-geometry.
-
-As described in Section \ref{sec:functions.geom.overview}, the allowed return values must be defined
-by any service making use of ADQL, and a list of standard coordinate system
-literals can be found in the STC specification.
+%As described in Section \ref{sec:functions.geom.overview}, the allowed return values must be defined
+%by any service making use of ADQL, and a list of standard coordinate system
+%literals can be found in the STC specification.
 % STC-reference 'STC specification [3]'
 
-For example, a function extracting the coordinate system of a point with
-position (25, -19.5) in degrees according to the ICRS coordinate system with
-GEOCENTER reference position, would be written as follows:
+The COORDSYS function extracts the coordinate system string value from a given
+geometry.
 
+The following example would extract the coordinate system of a POINT literal:
 \begin{verbatim}
-    COORDSYS(POINT(‘ICRS GEOCENTER’, 25.0,-19.5))
+    COORDSYS(
+        POINT(
+            25.0,
+           -19.5
+           )
+       )
 \end{verbatim}
+\noindent
+which would return a string value representing the coordinate system used
+to create the POINT.
 
-, returning the ‘ICRS GEOCENTER’ string literal. As other samples above,
-the coordinate system could also be derived from a column referencing any
-other geometry data type:
-
+The coordinate system could also be extracted from a column containing a
+geometry data type:
 \begin{verbatim}
-    COORDSYS(t.circle)
+    COORDSYS(
+        t.circle
+        )
 \end{verbatim}
-
-, where \textit{t} is the table and \textit{circle} the column reference
-for the CIRCLE geometry stored in the database table.
+\noindent
+where \textit{t.circle} is a column reference for a geometric value
+stored in the database.
 
 \subsubsection{DISTANCE}
 \label{sec:functions.geom.distance}
