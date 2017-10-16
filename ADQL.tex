@@ -1424,13 +1424,13 @@ coordinate vectors MUST be normalized.
 It remains up to the service implementation to define the errors that
 should be raised when using values outside these constraints.
 
-For historical reasons, the geometry constructors (BOX, CIRCLE, POINT
-and POLYGON) require a string-valued first argument. It was intended to carry
-information on a reference system or other coordinate system metadata.
-As of this version of the specification (2.1), this parameter has been
-marked as deprecated. Services are permitted to ignore this parameter and
-clients are advised to pass an empty string here. Future versions of this
-specification may remove this parameter from the listed functions.
+%For historical reasons, the geometry constructors (BOX, CIRCLE, POINT
+%and POLYGON) require a string-valued first argument. It was intended to carry
+%information on a reference system or other coordinate system metadata.
+%As of this version of the specification (2.1), this parameter has been
+%marked as deprecated. Services are permitted to ignore this parameter and
+%clients are advised to pass an empty string here. Future versions of this
+%specification may remove this parameter from the listed functions.
 
 \subsubsection{Data Type Functions}
 \label{sec:functions.geom.type}
