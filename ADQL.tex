@@ -1892,10 +1892,10 @@ the service metadata, available via the \verb:TAP_SCHEMA: tables defined in the
 %literals can be found in the STC specification.
 % STC-reference 'STC specification [3]'
 
-The COORDSYS function extracts the coordinate system string value from a given
-geometry.
+The COORDSYS function returns the formal name of the coordinate system for
+a given geometry as a string.
 
-The following example would extract the coordinate system of a POINT literal:
+The following example would return the coordinate system of a POINT literal:
 \begin{verbatim}
     COORDSYS(
         POINT(
@@ -1905,11 +1905,11 @@ The following example would extract the coordinate system of a POINT literal:
        )
 \end{verbatim}
 \noindent
-which would return a string value representing the coordinate system used
+Which would return a string value representing the coordinate system used
 to create the POINT.
 
-The coordinate system could also be extracted from a column containing a
-geometry data type:
+The COORDSYS function may be applied to any expression that returns a
+geometric data type. For example:
 \begin{verbatim}
     COORDSYS(
         t.circle
