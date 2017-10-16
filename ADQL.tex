@@ -777,8 +777,7 @@ The serialization format is defined in the \VOTspec.
 \end{table}
 
 The literal values 1 and \verb:TRUE: are equivalent,
-and the values 0 and \verb:FALSE: are equivalent.  
-
+and the values 0 and \verb:FALSE: are equivalent:
 \begin{verbatim}
     foo = 1
     foo = TRUE
@@ -788,8 +787,7 @@ and the values 0 and \verb:FALSE: are equivalent.
 \end{verbatim}
 
 The literal values \verb:TRUE: and \verb:FALSE:
-are not case sensitive.  
-
+are not case sensitive:
 \begin{verbatim}
     foo = true
     foo = True
@@ -975,15 +973,13 @@ The TIMESTAMP datatype maps to the corresponding type defined in the
 \end{table}
 
 TIMESTAMP literals should be created using the \verb:TIMESTAMP():
-constructor, using the syntax defined in the \DALIspec.
-
+constructor, using the syntax defined in the \DALIspec:
 \begin{verbatim}
     YYYY-MM-DD[’T’hh:mm:ss[.SSS][’Z’]]
 \end{verbatim}
 
 The basic comparison operators, \verb:=:, \verb:<:, \verb:>:, \verb:<=:, \verb:>=:,
-\verb:<>: and \verb:BETWEEN: can all be applied to TIMESTAMP values.
-
+\verb:<>: and \verb:BETWEEN: can all be applied to TIMESTAMP values:
 \begin{verbatim}
     SELECT
         ..
@@ -1236,9 +1232,9 @@ using the \verb:point: xtype defined in the \DALIspec.
     \label{table:types.geom.point}
 \end{table}
 
-POINT literals should be created using the \verb:POINT():
+POINT values can be created using the \verb:POINT():
 constructor defined in section \ref{sec:functions.geom.point}.
-
+For example:
 \begin{verbatim}
     POINT(
         12.3,
@@ -1288,9 +1284,9 @@ using the \verb:circle: xtype defined in the \DALIspec.
     \label{table:types.geom.circle}
 \end{table}
 
-CIRCLE literals should be created using the \verb:CIRCLE():
+CIRCLE values can be created using the \verb:CIRCLE():
 constructor defined in section \ref{sec:functions.geom.circle}.
-
+For example:
 \begin{verbatim}
     CIRCLE(
         12.3,
@@ -1338,9 +1334,9 @@ using the \verb:polygon: xtype defined in the \DALIspec.
     \label{table:types.geom.polygon}
 \end{table}
 
-POLYGON literals should be created using the \verb:POLYGON():
+POLYGON values can be created using the \verb:POLYGON():
 constructor defined in section \ref{sec:functions.geom.polygon}.
-
+For example:
 \begin{verbatim}
     POLYGON(
         10.0,
@@ -1456,15 +1452,13 @@ A \verb:<geometry_value_expression>: does not simply cover data type functions
 column values where a geometry data type is stored in a column.
 
 Therefore, \verb:<geometry_value_expression>: is expanded as:
-
 \begin{verbatim}
     <geometry_value_expression> ::= 
         <value_expression_primary>
       | <geometry_value_function>
 \end{verbatim}
-
-, where
-
+\noindent
+where
 \begin{verbatim}
     <geometry_value_function> ::=
         <box>
@@ -1474,24 +1468,33 @@ Therefore, \verb:<geometry_value_expression>: is expanded as:
       | <polygon>
       | <user_defined_function>
 \end{verbatim}
-
-and \verb:<value_expression_primary>: makes possible to use a column reference.
+and \verb:<value_expression_primary>: enables the use of geometric functions
+and column references.
 
 \subsubsection{Predicate Functions}
 \label{sec:functions.geom.predicate}
 
 Functions CONTAINS and INTERSECTS each accept two geometry data types
-and return 1 or 0 according to whether the relevant verb (e.g.: "contains") is
-satisfied against the two input geometries; 1 represents true and 0 represents
-false. Each of these functions can be assembled into a predicate:
+and return a numeric value of 1 or 0 according to whether the relevant
+verb (e.g.: "contains") is satisfied against the two input geometries;
+1 if the condtion is met and 0 if it is not.
 
+Each of these functions can be used as a WHERE clause predicate by
+comparing the numeric result with zero or one.
+For example:
 \begin{verbatim}
-    SELECT * FROM SDSS as s WHERE CONTAINS(POINT(...), CIRCLE(...)) = 1
+    SELECT
+        *
+    FROM
+        table
+    WHERE
+        1 = CONTAINS(
+              POINT(...),
+              CIRCLE(...)
+              )
 \end{verbatim}
-
-, where the ... would represent the constituent parts of a CIRCLE and POINT
-geometry.
-
+\noindent
+%TODO - speculative, not definative.
 One would expect later additions to ADQL to add to this range of functions. For
 example: equals, disjoint, touches, crosses, within, overlaps and relate
 are possibilities.
@@ -1504,8 +1507,8 @@ geometry. To do so it accepts a geometry expression and returns a calculated
 string value.
 
 This function has been included as a string value function because it
-returns a simple string value. Hence:
-
+returns a simple string value.
+Hence:
 \begin{verbatim}
     <string_value_function> :: =
         <string_geometry_function> | <user_defined_function>
@@ -1528,8 +1531,8 @@ one that accepts accept two geometries, and one that accepts four
 separate numeric values, both forms return a numeric value.
 
 The Predicate and most of the Utility functions have been included as numeric
-value functions because they return simple numeric values. Thus:
-
+value functions because they return simple numeric values.
+Thus:
 \begin{verbatim}
     <numeric_value_function> ::=
         <trig_function>
@@ -1537,17 +1540,15 @@ value functions because they return simple numeric values. Thus:
       | <numeric_geometry_function>
       | <user_defined_function>
 \end{verbatim}
-
+\noindent
 where
-
 \begin{verbatim}
     <numeric_geometry_function> ::=
         <predicate_geometry_function>
       | <non_predicate_geometry_function>
 \end{verbatim}
-
+\noindent
 and
-
 \begin{verbatim}
     <non_predicate_geometry_function> ::=
         AREA <left_paren> <geometry_value_expression> <right_paren>
@@ -1564,9 +1565,8 @@ and
             <numeric_value_expression>
             <right_paren>
 \end{verbatim}
-
+\noindent
 and
-
 \begin{verbatim}
     <predicate_geometry_function> ::= <contains> | <intersects>
 \end{verbatim}
@@ -1587,8 +1587,8 @@ than going into the BNF grammar details as above.
 
 The AREA function computes the area, in square degrees, of a given geometry.
 
-For example, the area of a POLYGON would be written as follows:
-
+For example, an expression to calculate the area of a POLYGON could be
+written as follows:
 \begin{verbatim}
     AREA(
         POLYGON(
@@ -1605,7 +1605,7 @@ For example, the area of a POLYGON would be written as follows:
 The AREA of a single POINT is zero.
 
 The geometry argument may be a literal value, as above, or it may be a
-column reference, functon or expression that returns a geometric type.
+column reference, function or expression that returns a geometric type.
 
 \subsubsection{BOX}
 \label{sec:functions.geom.box}
@@ -1625,15 +1625,13 @@ points at right angles with the arms.
 
 The function arguments specify the center position
 and both the width and height values, where:
-
 \begin{itemize}
-    \item the center position is given by a pair of numeric expressions, or a POINT object.
+    \item the center position is given by a pair of numeric coordinates in degrees, or a POINT object.
     \item the the width and height numeric are given by numeric expressions in degrees.
 \end{itemize}
 
-For example, a function expressing a BOX of ten degrees centered on a position
-(25.4, -20.0) in degrees would be written as follows:
-
+For example, a BOX of ten degrees centered on a position
+(25.4, -20.0) in degrees could be written as follows:
 \begin{verbatim}
     BOX(
         25.4,
@@ -1644,7 +1642,6 @@ For example, a function expressing a BOX of ten degrees centered on a position
 \end{verbatim}
 
 Alternatively, the center position could be expressed as a POINT:
-
 \begin{verbatim}
     BOX(
         POINT(
@@ -1657,7 +1654,8 @@ Alternatively, the center position could be expressed as a POINT:
 \end{verbatim}
 
 The position argument may be a literal value, as above, or it may be a
-column reference, functon or expression that returns a geometric type.
+column reference, function or expression that returns a geometric type.
+%TODO - ObsCore example
 
 \subsubsection{CENTROID}
 \label{sec:functions.geom.centroid}
@@ -1667,8 +1665,8 @@ column reference, functon or expression that returns a geometric type.
 
 The CENTROID function computes the centroid of a given geometry and returns a POINT.
 
-For example, the centroid of a POLYGON would be written as follows :
-
+For example, an expression to calculate the centroid of a POLYGON could
+be written as follows :
 \begin{verbatim}
     CENTROID(
         POLYGON(
@@ -1685,7 +1683,8 @@ For example, the centroid of a POLYGON would be written as follows :
 The CENTROID of a single POINT is the POINT.
 
 The geometry argument may be a literal value, as above, or it may be a
-column reference, functon or expression that returns a geometric type.
+column reference, function or expression that returns a geometric type.
+%TODO - ObsCore example
 
 \subsubsection{CIRCLE}
 \label{sec:functions.geom.circle}
@@ -1699,13 +1698,12 @@ The function arguments specify the center position and the radius, where:
 % STC-reference STC Circle region ([3], Section 4.5.1.2)
 
 \begin{itemize}
-    \item the center position is given by a pair of numeric expressions, or a POINT object.
+    \item the center position is given by a pair of numeric coordinates in degrees, or a single POINT value.
     \item and the radius is a numeric value expression in degrees.
 \end{itemize}
 
 For example, a CIRCLE of ten degrees radius centered on position
-(25.4, -20.0) in degrees would be written as follows:
-
+(25.4, -20.0) in degrees could be written as follows:
 \begin{verbatim}
     CIRCLE(
         25.4,
@@ -1715,7 +1713,6 @@ For example, a CIRCLE of ten degrees radius centered on position
 \end{verbatim}
 
 Alternatively, the center position could be expressed as a POINT:
-
 \begin{verbatim}
     CIRCLE(
         POINT(
@@ -1727,7 +1724,8 @@ Alternatively, the center position could be expressed as a POINT:
 \end{verbatim}
 
 The position argument may be a literal value, as above, or it may be a
-column reference, functon or expression that returns a geometric type.
+column reference, function or expression that returns a geometric type.
+%TODO - ObsCore example
 
 \subsubsection{CONTAINS}
 \label{sec:functions.geom.contains}
@@ -1738,11 +1736,9 @@ column reference, functon or expression that returns a geometric type.
 The CONTAINS function determines if a geometry is wholly contained within
 another. This is most commonly used to express the "point-in-shape" condition.
 
-For example, to determine if a point with right ascension of 25 degrees
-and declination of -19.5 degrees is within a circle of ten degrees radius
-centered in a position of (25.4, -20.0) degrees,
-we could use the CONTAINS function as follows:
-
+For example, an expression to determine whether the point (25.0, -19.5) degrees
+is within a circle of ten degrees radius centered on position (25.4, -20.0) degrees,
+could be written as follows:
 \begin{verbatim}
     CONTAINS(
         POINT(
@@ -1757,15 +1753,14 @@ we could use the CONTAINS function as follows:
         )
 \end{verbatim}
 
+The CONTAINS function is not symmetric in the meaning of the arguments.
+
 The CONTAINS function returns the numeric value 1 if the first argument
 is in, or on, the boundary of the second argument and the numeric value 0
 if it is not.
 
-The CONTAINS function is not symmetric in the meaning of the arguments.
-
-When used in the WHERE clause of a query, the return value must be compared
-to the numeric values 0 or 1 to form a SQL predicate:
-
+When used as a predicate in the WHERE clause of a query, the numeric return
+value must be compared to the numeric values 0 or 1 to form a SQL predicate:
 \begin{verbatim}
     WHERE
         1 = CONTAINS(
@@ -1780,8 +1775,8 @@ to the numeric values 0 or 1 to form a SQL predicate:
                )
             )
 \end{verbatim}
+\noindent
 for "does contain" and
-
 \begin{verbatim}
     WHERE
         0 = CONTAINS(
@@ -1796,10 +1791,13 @@ for "does contain" and
                )
             )
 \end{verbatim}
+\noindent
 for "does not contain".
 
-The geometric arguments may be a literal values, as above, or they may be
-column references, functons or expressions that return a geometric type.
+The geometric arguments for CONTAINS may be a literal values, as above,
+or they may be column references, functons or expressions that return
+a geometric type.
+%TODO - ObsCore example
 
 If the arguments are expressed in different coordinate systems, the
 CONTAINS function is responsible for converting one, or both, of the
@@ -1830,8 +1828,9 @@ degrees would be obtained using the following expression:
 \noindent
 which would return a numeric value of 25.0 degrees.
 
-The POINT argument can also be derived directly from a column
-reference as follows:
+The COORD1 function may be applied to any expression that returns a
+geometric POINT value.
+For example:
 \begin{verbatim}
     COORD1(
         t.point
@@ -1863,8 +1862,9 @@ could be obtained using the following expression:
 \noindent
 which would return a numeric value of -19.5 degrees.
 
-The POINT argument can also be derived directly from a column
-reference as follows:
+The COORD2 function may be applied to any expression that returns a
+geometric POINT value.
+For example:
 \begin{verbatim}
     COORD2(
         t.point
@@ -1905,7 +1905,7 @@ The following example would return the coordinate system of a POINT literal:
        )
 \end{verbatim}
 \noindent
-Which would return a string value representing the coordinate system used
+which would return a string value representing the coordinate system used
 to create the POINT.
 
 The COORDSYS function may be applied to any expression that returns a
@@ -1929,27 +1929,31 @@ The DISTANCE function computes the arc length along a great circle between two
 points and returns a numeric value expression in degrees.
 
 The specification defines two versions of the DISTANCE function, one that
-accepts two geometries, and one that accepts four separate numeric
+accepts two POINT values, and a second that accepts four separate numeric
 values.
 
 If an ADQL service implementation declares support for DISTANCE,
 then it must implement both the two parameter and four parameter
 forms of the function.
 
-For example, a function computing the distance between two points of
-coordinates (25,-19.5) and (25.4,-20) would be written as follows:
-
+For example, an expresson calculating the distance between two points of
+coordinates (25,-19.5) and (25.4,-20) could be written as follows:
 \begin{verbatim}
     DISTANCE(
-        POINT(‘’, 25.0, -19.5),
-        POINT(‘’, 25.4, -20.0)
+        POINT(
+            25.0,
+           -19.5
+            ),
+        POINT(
+            25.4,
+           -20.0
+           )
         )
 \end{verbatim}
-
-, where all numeric values and the returned arc-length are in degrees.
+\noindent
+where all numeric values and the returned arc-length are in degrees.
 
 The equivalent call to the four parameter form of the function would be:
-
 \begin{verbatim}
     DISTANCE(
         25.0,
@@ -1959,26 +1963,27 @@ The equivalent call to the four parameter form of the function would be:
         )
 \end{verbatim}
 
-The distance between two points could also be derived from two columns
-referencing POINT geometries stored in the database tables as follows:
-
+The DISTANCE function may be applied to any expression that returns a
+geometric POINT value.
+For example, the distance between two points stored in the database could
+be calculated as follows:
 \begin{verbatim}
     DISTANCE(
         t.p1,
         t.p2
         )
 \end{verbatim}
+\noindent
+where \textit{t.p1} and \textit{t.p2} refer to POINT value columns in the
+database.
 
-, where \textit{t} would be the table and \textit{p1}, \textit{p2} the column
-references for the POINT geometries.
-
-If the two arguments to the two parameter form are expressed in different
-coordinate systems, the function is responsible for converting one (or both).
+If the two geometric arguments are expressed in different coordinate systems,
+the function is responsible for converting one (or both).
 If it cannot do so, it SHOULD throw an error message, to be defined by
 the service making use of ADQL.
 
-It is assumed that the arguments for the four parameter form all use
-the same coordinate system.
+It is assumed that the arguments for the four numeric parameter form all
+use the same coordinate system.
 
 \subsubsection{INTERSECTS}
 \label{sec:functions.geom.intersects}
@@ -1986,50 +1991,80 @@ the same coordinate system.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: INTERSECTS|}\\
 
-This numeric function determines if two geometry values overlap. This is
+The INTERSECTS function determines if if two geometry values overlap. This is
 most commonly used to express a "shape-vs-shape" intersection test.
 
-For example, to determine whether a circle of one degree radius centered
-in a position of (25.4, -20.0) degrees overlaps with a box of ten degrees
-centered in a position (20.0, -15.0) in degrees, we would make use of the
-INTERSECTS function as follows:
-
+For example, an expression to determine whether a circle of one degree radius
+centered on position (25.4, -20.0) degrees overlaps with a box of ten degrees
+centered on position (20.0, -15.0) degrees, could be written as  follows:
 \begin{verbatim}
     INTERSECTS(
-        CIRCLE(‘’, 25.4, -20.0, 1),
-        BOX(‘’, 20.0, -15.0, 10, 10)
+        CIRCLE(
+            25.4,
+           -20.0,
+            1
+            ),
+        BOX(
+            20.0,
+           -15.0,
+            10,
+            10
+            )
         )
 \end{verbatim}
+\noindent
+where the INTERSECTS function returns the numeric value 1 if the two arguments
+overlap and 0 if they do not.
 
-, where the INTERSECTS function returns 1 (true) if the two arguments overlap
-and 0 (false) otherwise. When used in the where clause of a query, the value
-must be compared to 0 or 1 to form an SQL predicate:
-
+When used as a predicate in the WHERE clause of a query, the numeric return
+value must be compared to the numeric values 0 or 1 to form a SQL predicate:
 \begin{verbatim}
-    INTERSECTS(CIRCLE(‘’, 25.4, -20.0, 1),
-    BOX(‘’, 20.0, -15.0, 10, 10)
-    ) = 1
+    WHERE
+        1 = INTERSECTS(
+            CIRCLE(
+                25.4,
+               -20.0,
+                1
+                ),
+            BOX(
+                20.0,
+               -15.0,
+                10,
+                10
+                )
+            )
 \end{verbatim}
-
+\noindent
 for "does intersect" and
-
 \begin{verbatim}
-    INTERSECTS(
-        CIRCLE(‘’, 25.4, -20.0, 1),
-        BOX(‘’, 20.0, -15.0, 10, 10)
-        ) = 0
+    WHERE
+        0 = INTERSECTS(
+            CIRCLE(
+                25.4,
+               -20.0,
+               1
+               ),
+            BOX(
+                20.0,
+               -15.0,
+               10,
+               10
+               )
+            )
 \end{verbatim}
-
+\noindent
 for "does not intersect".
 
-The arguments to the INTERSECTS function can be (literal) values created from
-the geometry types or they can be single column names or aliases (for geometry
-stored in a database table).
+The geometric arguments for INTERSECTS may be a literal values, as above,
+or they may be column references, functons or expressions that return
+a geometric type.
 
-Since the two argument points may be expressed in different coordinate
-systems, the function is responsible for converting one (or both). If it
-cannot do so, it SHOULD throw an error message, to be defined by the service
-making use of ADQL.
+If the arguments are expressed in different coordinate systems, the
+INTERSECTS function is responsible for converting one, or both, of the
+arguments into a different coordinate system.
+If it cannot perform the required conversion then it SHOULD throw an
+error. Details of the error message are defined by the service
+executing the query.
 
 %TODO
 The arguments to INTERSECTS SHOULD be geometric expressions evaluating to
@@ -2058,20 +2093,22 @@ specify the coordinate system and the position, where:
 
 For example, a function expressing a point with right ascension of 25 degrees
 and declination of -19.5 degrees would be written as follows:
-
 \begin{verbatim}
-    POINT(‘’, 25.0,-19.5)
+    POINT(
+        25.0,
+       -19.5
+       )
 \end{verbatim}
-
-, where numeric values are in degrees. The coordinates of the POINT could
+\noindent
+where numeric values are in degrees. The coordinates of the POINT could
 also be derived from the coordinate’s column references:
-
 \begin{verbatim}
     POINT(‘’, t.ra, t.dec)
 \end{verbatim}
-    
-, where \textit{t} would be the table and \textit{ra}, \textit{dec} the
+\noindent
+where \textit{t} would be the table and \textit{ra}, \textit{dec} the
 column references for the position.
+%TODO - ObsCore example
 
 The coordinates of a POINT could also be individually extracted using the
 COORD1 and COORD2 functions (See \ref{sec:functions.geom.coord1} and
@@ -2088,7 +2125,6 @@ circles passing through specified coordinates. It corresponds semantically
 to the STC Polygon. The arguments specify the
 coordinate system and three or more sets of 2-D coordinates, where:
 % STC-reference 'STC Polygon region ([3], Section 4.5.1.4)'
-
 \begin{itemize}
     \item the coordinate system is a string value expression as defined in Section \ref{sec:functions.geom.overview}.
     \item the coordinate sets are comma separated numeric duples, with units and legal ranges as defined in Section \ref{sec:functions.geom.overview}.
@@ -2097,21 +2133,19 @@ coordinate system and three or more sets of 2-D coordinates, where:
 For example, a function expressing a triangle, whose vertices are (10.0,
 -10.5), (20.0, 20.5) and (30.0,30.5) in degrees would be written
 as follows:
-
 \begin{verbatim}
     POLYGON(‘’, 10.0, -10.5, 20.0, 20.5, 30.0, 30.5)
 \end{verbatim}
-    
-, where all numeric values are in degrees,
+\noindent
+where all numeric values are in degrees,
 
 As for other geometries like BOX, CIRCLE and POINT, one could also derive
 the coordinates from database column references instead:
-
 \begin{verbatim}
     POLYGON(‘’, t.ra, t.dec, 20.0, 20.5, 30.0, 30.5)
 \end{verbatim}
-
-, where t would be the table and ra, dec the column references for one of
+\noindent
+where t would be the table and ra, dec the column references for one of
 the triangle’s corner position.
 
 Thus, the polygon is a list of vertices in a single coordinate system, with
@@ -2124,7 +2158,6 @@ implicitly connected to the first vertex.
 
 ADQL also provides a placeholder to define user specific functions. Such
 construct supports a variable list of parameters as input in the following way:
-
 \begin{verbatim}
     <user_defined_function> ::=
         <user_defined_function_name> <left_paren>
@@ -2141,15 +2174,13 @@ construct supports a variable list of parameters as input in the following way:
 
 The function names can be qualified with a prefix to ease parsing of the
 ADQL statement:
-
 \begin{verbatim}
     <user_defined_function_name> ::=
         [ <default_function_prefix> ] <regular_identifier>
 \end{verbatim}
-
-, while the function parameters are generic enough to support string,
+\noindent
+while the function parameters are generic enough to support string,
 numeric and geometrical expressions:
-
 \begin{verbatim}
     <user_defined_function_param> ::= <value_expression>
 \end{verbatim}
@@ -2171,7 +2202,6 @@ is defined as part of the TAPRegExt-1.0 standard \citep{std:TAPREGEXT}.
 For user defined functions, the \verb:form: element of the language feature
 declaration must contain the signature of the function, written to match
 the signature nonterminal in the following grammar:
-
 \begin{verbatim}
     signature ::= <funcname> <arglist> "->" <type_name>
     funcname ::= <regular_identifier>
@@ -2181,8 +2211,7 @@ the signature nonterminal in the following grammar:
 
 For example, the following fragment declares a user defined function that
 takes two \verb:TEXT: parameters and returns an integer, zero or one,
-depending on the regular expression pattern matching.
-
+depending on the regular expression pattern matching:
 \begin{verbatim}
     <languageFeatures type="ivo://ivoa.net/std/TAPRegExt#features-udf">
         <feature>
