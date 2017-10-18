@@ -28,6 +28,7 @@
 \newcommand{\TAPspec}  {TAP specification\xspace}
 \newcommand{\DALIspec} {DALI specification\xspace}
 \newcommand{\VOSIspec} {VOSI specification\xspace}
+\newcommand{\RegTAPspec} {RegTAP specification\xspace}
 
 \title{Astronomical Data Query Language}
 
@@ -2164,6 +2165,7 @@ a numeric values:
         30.5
         )
 \end{verbatim}
+\noindent
 where \textit{t.ra} and \textit{t.dec} are numeric columns in the database.
 %TODO - ObsCore example
 
@@ -2177,32 +2179,48 @@ construct supports a variable list of parameters as input in the following way:
     <user_defined_function> ::=
         <user_defined_function_name> <left_paren>
             [
-            <user_defined_function_param>
+            <value_expression>
                 [
                     {
-                        <comma> <user_defined_function_param>
+                    <comma> <value_expression>
                     }...
                 ]
             ]
         <right_paren>
 \end{verbatim}
 
-The function names can be qualified with a prefix to ease parsing of the
-ADQL statement:
+In order to avoid name conflicts, user defined function names SHOULD include
+a prefix which indicates the name of the institute or project which created
+the function.
+
+For example, the names of \verb:align: and \verb:convert: functions developed
+by the Wide Field Astronomy Unit (WFAU) could be prefixed as follows:
 \begin{verbatim}
-    <user_defined_function_name> ::=
-        [ <default_function_prefix> ] <regular_identifier>
-\end{verbatim}
-\noindent
-while the function parameters are generic enough to support string,
-numeric and geometrical expressions:
-\begin{verbatim}
-    <user_defined_function_param> ::= <value_expression>
+    wfau_align()
+    wfau_convert()
 \end{verbatim}
 
-If metadata on a user defined function is available, this should be used. For
-example function names and cardinality of arguments should be checked against
-metadata where available.
+This enables users to distinguish between function with similar names developed
+by a different service provider, e.g. the German Astrophysical Virtual
+Observatory (GAVO):
+\begin{verbatim}
+    gavo_align()
+    gavo_convert()
+\end{verbatim}
+
+The \verb:ivo: prefix is reserved for functions that have been defined
+in an IVOA specification. For example the \RegTAPspec defines the following
+functions:
+\begin{verbatim}
+    ivo_nocasematch()
+    ivo_hasword()
+    ivo_hashlist_has()
+    ivo_string_agg()
+\end{verbatim}
+
+%If metadata on a user defined function is available, this should be used. For
+%example function names and cardinality of arguments should be checked against
+%metadata where available.
 
 \subsubsection{Metadata}
 \label{sec:user.metadata}
