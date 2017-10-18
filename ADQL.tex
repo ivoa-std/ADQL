@@ -23,12 +23,15 @@
 %\newcommand{\TAPspec}  {TAP specification \citet{std:TAP}\xspace}
 %\newcommand{\DALIspec} {TAP specification \citet{std:DALI}\xspace}
 %\newcommand{\VOSIspec} {TAP specification \citet{std:VOSI}\xspace}
+%\newcommand{\RegTAPspec}{RegTAP specification \citep{std:REGTAP}\xspace}
+%\newcommand{\TAPRegExtSpec}{TAPRegExt specification \citep{std:TAPREGEXT}\xspace}
 
-\newcommand{\VOTspec}  {VOTable specification\xspace}
-\newcommand{\TAPspec}  {TAP specification\xspace}
-\newcommand{\DALIspec} {DALI specification\xspace}
-\newcommand{\VOSIspec} {VOSI specification\xspace}
-\newcommand{\RegTAPspec} {RegTAP specification\xspace}
+\newcommand{\VOTspec}{VOTable specification\xspace}
+\newcommand{\TAPspec}{TAP specification\xspace}
+\newcommand{\DALIspec}{DALI specification\xspace}
+\newcommand{\VOSIspec}{VOSI specification\xspace}
+\newcommand{\RegTAPspec}{RegTAP specification\xspace}
+\newcommand{\TAPRegExtSpec}{TAPRegExt specification\xspace}
 
 \title{Astronomical Data Query Language}
 
@@ -1373,7 +1376,7 @@ ADQL queries that it sends.
 \subsection{Service capabilities}
 \label{sec:capabilities}
 
-The TAPRegExt-1.0 standard \citep{std:TAPREGEXT} defines an XML schema that a service SHOULD
+The \TAPRegExtSpec defines an XML schema that a service SHOULD
 use to declare which optional features it supports.
 
 In general, each group of langauge features is identified by a \verb:type:
@@ -1382,10 +1385,10 @@ feature name.
 
 Appendix \ref{sec:features} contains examples of how to declare support
 for each of the langauge features defined in this document using the
-TAPRegExt XML schema.
+\TAPRegExtSpec XML schema.
 
 For full details on the XML schema and how it can be used, please refer to
-the TAPRegExt \citep{std:TAPREGEXT} standard.
+the \TAPRegExtSpec.
 
 \subsection{Geometrical Functions}
 \label{sec:functions.geom}
@@ -2226,7 +2229,7 @@ functions:
 \label{sec:user.metadata}
 
 The URI for identifying the language feature for a user defined function
-is defined as part of the TAPRegExt-1.0 standard \citep{std:TAPREGEXT}.
+is defined as part of the \TAPRegExtSpec.
 
 \begin{verbatim}
     ivo://ivoa.net/std/TAPRegExt#features-udf
@@ -2257,7 +2260,7 @@ depending on the regular expression pattern matching:
     </languageFeatures>
 \end{verbatim}
 
-See the TAPRegExt standard for full details on how to use the
+See the \TAPRegExtSpec for full details on how to use the
 XML schema to declare user defined functions.
 
 \subsection{String functions and operators}
@@ -2282,12 +2285,12 @@ The LOWER function converts its string parameter to lower case.
 Since case folding is a nontrivial operation in a multi-encoding world,
 ADQL requires standard behaviour for the ASCII characters, and recommends
 following algorithm R2 described in Section 3.13, "Default Case Algorithms"
-of \citet{std:UNICODE} for characters outside th ASCII set.
+of \citet{std:UNICODE} for characters outside the ASCII set.
 
 \begin{verbatim}
     LOWER('Francis Albert Augustus Charles Emmanuel')
     =>
-    'francis albert augustus charles emmanuel'
+    francis albert augustus charles emmanuel
 \end{verbatim}
 
 \subsubsection{ILIKE}
@@ -2327,79 +2330,92 @@ set operators:
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-sets|}\\
 {\footnotesize \verb|name: UNION|}\\
 
-``The UNION clause combines the results of two SQL queries into a single
-table of all matching rows. Any duplicate records are automatically removed
-unless UNION ALL is used."\footnote{\url{https://en.wikipedia.org/wiki/Set\_operations\_\%28SQL\%29UNION\_operator}}
+The UNION operator combines the results of two queries, accepting rows from
+both the first and second set of results,
+removing duplicate rows unless UNION ALL is used.
 
 For a UNION operation to be valid in ADQL, the following criteria MUST be met:
-
 \begin{itemize}
     \item The two queries MUST result in the same number of columns.
-    \item The corresponding columns in the operands MUST have the same data types.
-    \item The corresponding columns in the operands SHOULD have the same metadata, e.g. units, UCD etc.
+    \item The columns in the operands MUST have the same data types.
+\end{itemize}
+
+In addition, the following criteria SHOULD be met: 
+\begin{itemize}
+    \item The columns in the operands SHOULD have the same metadata, e.g. units, UCD etc.
     \item The metadata for the results SHOULD be generated from the left-hand operand.
 \end{itemize}
 
 Note that the comparison used for removing duplicates is based purely on the
-column value only and does not take into account the units.
+column value and does not take into account the units.
 This means that row with a numeric value of \verb:2: and units of \verb:m:
 and a row with a numeric value of \verb:2: and units of \verb:km: will be
-considered equal.
+considered equal, despite the difference in units.
+\begin{verbatim}
+    2m = 2km
+\end{verbatim}
 
 \subsubsection{EXCEPT}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-sets|}\\
 {\footnotesize \verb|name: EXCEPT|}\\
 
-``The EXCEPT operator takes the distinct rows of one query and returns the
-rows that do not appear in a second result set. The EXCEPT ALL operator
-does not remove duplicates. For purposes of row elimination and duplicate
-removal, the EXCEPT operator does not distinguish between NULLs."\footnote{\url{https://en.wikipedia.org/wiki/Set\_operations\_\%28SQL\%29\#EXCEPT\_operator}}
+The EXCEPT operator combines the results of two queries, accepting rows that are
+in the first set of results but are not in the second,
+removing duplicate rows unless EXCEPT ALL is used.
 
 For an EXCEPT operation to be valid in ADQL, the following criteria MUST be met:
 
 \begin{itemize}
     \item The two queries MUST result in the same number of columns.
-    \item The corresponding columns in the operands MUST have the same data types.
-    \item The corresponding columns in the operands SHOULD have the same metadata, e.g. units, UCD etc.
+    \item The columns in the operands MUST have the same data types.
+\end{itemize}
+
+In addition, the following criteria SHOULD be met: 
+\begin{itemize}
+    \item The columns in the operands SHOULD have the same metadata, e.g. units, UCD etc.
     \item The metadata for the results MUST be generated from the left-hand operand.
 \end{itemize}
 
-Note that the comparison used for identifying matching rows and for removing
-duplicates is based purely on the column value only and does not take into
-account any units declared in the metadata.
-
+Note that the comparison used for removing duplicates is based purely on the
+column value and does not take into account the units.
 This means that row with a numeric value of \verb:2: and units of \verb:m:
 and a row with a numeric value of \verb:2: and units of \verb:km: will be
-considered equal.
+considered equal, despite the difference in units.
+\begin{verbatim}
+    2m = 2km
+\end{verbatim}
 
 \subsubsection{INTERSECT}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-sets|}\\
 {\footnotesize \verb|name: INTERSECT|}\\
 
-``The INTERSECT operator takes the results of two queries and returns only
-rows that appear in both result sets. For purposes of duplicate removal
-the INTERSECT operator does not distinguish between NULLs. The INTERSECT
-operator removes duplicate rows from the final result set. The INTERSECT
-ALL operator does not remove duplicate rows from the final result set."\footnote{\url{https://en.wikipedia.org/wiki/Set\_operations\_\%28SQL\%29\#INTERSECT\_operator}}
+The EXCEPT operator combines the results of two queries, accepting rows that are
+in the first set of results but are not in the second,
+removing duplicate rows unless INTERSECT ALL is used.
 
 For an INTERSECT operation to be valid in ADQL, the following criteria MUST be met:
 
 \begin{itemize}
     \item The two queries MUST result in the same number of columns.
-    \item The corresponding columns in the operands MUST have the same data types.
-    \item The corresponding columns in the operands SHOULD have the same metadata, e.g. units, UCD etc.
+    \item The columns in the operands MUST have the same data types.
+\end{itemize}
+
+In addition, the following criteria SHOULD be met: 
+\begin{itemize}
+    \item The columns in the operands SHOULD have the same metadata, e.g. units, UCD etc.
     \item The metadata for the results MUST be generated from the left-hand operand.
 \end{itemize}
 
-Note that the comparison used for identifying matching rows and for removing
-duplicates is based purely on the column value only and does not take into
-account the units.
-
+Note that the comparison used for removing duplicates is based purely on the
+column value and does not take into account the units.
 This means that row with a numeric value of \verb:2: and units of \verb:m:
 and a row with a numeric value of \verb:2: and units of \verb:km: will be
-considered equal.
+considered equal, despite the difference in units.
+\begin{verbatim}
+    2m = 2km
+\end{verbatim}
 
 \subsection{Common table expressions}
 \label{sec:common-table}
@@ -2416,13 +2432,33 @@ support for common table expressions:
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-common-table|}\\
 {\footnotesize \verb|name: WITH|}\\
 
-``A Common Table Expression, or CTE, is a temporary named result set, derived
-from a simple query and defined within the execution scope of a SELECT
-statement."\footnote{\url{https://en.wikipedia.org/wiki/Hierarchical\_and\_recursive\_queries\_in\_SQL\#Common\_table\_expression}}
+The WITH operator creates a temporary named result set that can be referred
+to elsewhere in the main query.
 
-Using a common table expression can make queries easier to understand by factoring
-subqueries out of the main SQL statement. For example: 
+Using a common table expression can make complex queries easier to understand
+by factoring subqueries out of the main SQL statement.
 
+For example, the following query with a nested subquery: 
+\begin{verbatim}
+    SELECT
+        ra,
+        dec
+    FROM
+        (
+        SELECT
+            *
+        FROM
+            alpha_source
+        WHERE
+            id % 10 = 0
+        )
+    WHERE
+        ra > 10
+    AND 
+        ra < 20
+\end{verbatim}
+\noindent
+can be refactored as a named WITH query and a simpler main query:
 \begin{verbatim}
     WITH alpha_subset AS
         (
@@ -2433,12 +2469,16 @@ subqueries out of the main SQL statement. For example:
         WHERE
             id % 10 = 0
         )
+
     SELECT
-        *
+        ra,
+        dec
     FROM
         alpha_subset
     WHERE
-        ra BETWEEN 10 AND 20
+        ra > 10
+    AND 
+        ra < 20
 \end{verbatim}
 
 \subsection{Type operations}
@@ -3542,7 +3582,7 @@ An easier to navigate version of the BNF grammar can be found at\\
 \section{Language feature support}
 \label{sec:features}
 
-Within the TAPRegExt \citep{std:TAPREGEXT} XML schema, each group of features is
+In the \TAPRegExtSpec XML schema, each group of features is
 described by a \verb:languageFeatures: element, which has a \verb:type:
 URI that identifies the group, and contains a \verb:form: element for each
 individual feature from the group that the service supports.
