@@ -1965,7 +1965,7 @@ The equivalent call to the four parameter form of the function would be:
 
 The DISTANCE function may be applied to any expression that returns a
 geometric POINT value.
-For example, the distance between two points stored in the database could
+For example, the distance between points stored in the database could
 be calculated as follows:
 \begin{verbatim}
     DISTANCE(
@@ -1977,10 +1977,12 @@ be calculated as follows:
 where \textit{t.p1} and \textit{t.p2} refer to POINT value columns in the
 database.
 
-If the two geometric arguments are expressed in different coordinate systems,
-the function is responsible for converting one (or both).
-If it cannot do so, it SHOULD throw an error message, to be defined by
-the service making use of ADQL.
+If the  geometric arguments are expressed in different coordinate systems,
+the function is responsible for converting one, or both arguments into a
+different coordinate system.
+If it cannot perform the required conversion then it SHOULD throw an
+error. Details of the error message are defined by the service
+executing the query.
 
 It is assumed that the arguments for the four numeric parameter form all
 use the same coordinate system.
@@ -1996,7 +1998,7 @@ most commonly used to express a "shape-vs-shape" intersection test.
 
 For example, an expression to determine whether a circle of one degree radius
 centered on position (25.4, -20.0) degrees overlaps with a box of ten degrees
-centered on position (20.0, -15.0) degrees, could be written as  follows:
+centered on position (20.0, -15.0) degrees, could be written as follows:
 \begin{verbatim}
     INTERSECTS(
         CIRCLE(
@@ -2059,9 +2061,9 @@ The geometric arguments for INTERSECTS may be a literal values, as above,
 or they may be column references, functons or expressions that return
 a geometric type.
 
-If the arguments are expressed in different coordinate systems, the
-INTERSECTS function is responsible for converting one, or both, of the
-arguments into a different coordinate system.
+If the geometric arguments are expressed in different coordinate systems,
+the function is responsible for converting one, or both arguments into a
+different coordinate system.
 If it cannot perform the required conversion then it SHOULD throw an
 error. Details of the error message are defined by the service
 executing the query.
@@ -2081,14 +2083,13 @@ behaviour will be dropped in the next major version of this specification.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: POINT|}\\
 
-This function expresses a single location on the sky, and corresponds
+This POINT function expresses a single location on the sky, and corresponds
 semantically to an STC SpatialCoord. The arguments
-specify the coordinate system and the position, where:
+specify the position, where:
 % STC-reference 'STC SpatialCoord ([3], Section 4.4.2)'
 
 \begin{itemize}
-    \item the coordinate system is a string value expression as defined in Section \ref{sec:functions.geom.overview}.
-    \item the position is a comma separated numeric duple, with units and legal ranges as defined in Section \ref{sec:functions.geom.overview}.
+    \item the two numeric coordinates match the units and ranges defined in Section \ref{sec:functions.geom.overview}.
 \end{itemize}
 
 For example, a function expressing a point with right ascension of 25 degrees
@@ -2100,19 +2101,20 @@ and declination of -19.5 degrees would be written as follows:
        )
 \end{verbatim}
 \noindent
-where numeric values are in degrees. The coordinates of the POINT could
-also be derived from the coordinate’s column references:
+where numeric values are in degrees.
+
+The coordinates for POINT may be a literal values, as above,
+or they may be column references, functons or expressions that return
+a numeric types:
 \begin{verbatim}
-    POINT(‘’, t.ra, t.dec)
+    POINT(
+        t.ra,
+        t.dec
+        )
 \end{verbatim}
 \noindent
-where \textit{t} would be the table and \textit{ra}, \textit{dec} the
-column references for the position.
+where \textit{t.ra} and \textit{t.dec} are numeric columns in the database.
 %TODO - ObsCore example
-
-The coordinates of a POINT could also be individually extracted using the
-COORD1 and COORD2 functions (See \ref{sec:functions.geom.coord1} and
-\ref{sec:functions.geom.coord2}).
 
 \subsubsection{POLYGON}
 \label{sec:functions.geom.polygon}
@@ -2120,37 +2122,50 @@ COORD1 and COORD2 functions (See \ref{sec:functions.geom.coord1} and
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: POLYGON|}\\
 
-This function expresses a region on the sky with sides denoted by great
+The POLYGON function expresses a region on the sky with bondaries denoted by great
 circles passing through specified coordinates. It corresponds semantically
 to the STC Polygon. The arguments specify the
 coordinate system and three or more sets of 2-D coordinates, where:
 % STC-reference 'STC Polygon region ([3], Section 4.5.1.4)'
 \begin{itemize}
-    \item the coordinate system is a string value expression as defined in Section \ref{sec:functions.geom.overview}.
-    \item the coordinate sets are comma separated numeric duples, with units and legal ranges as defined in Section \ref{sec:functions.geom.overview}.
+    \item the coordinates are given as pairs of numeric values, with units and legal ranges as defined in Section \ref{sec:functions.geom.overview}.
 \end{itemize}
+
+Thus, the polygon is a list of vertices in a single coordinate system, with
+each vertex connected to the next along a great circle and the last vertex
+implicitly connected to the first vertex.
 
 For example, a function expressing a triangle, whose vertices are (10.0,
 -10.5), (20.0, 20.5) and (30.0,30.5) in degrees would be written
 as follows:
 \begin{verbatim}
-    POLYGON(‘’, 10.0, -10.5, 20.0, 20.5, 30.0, 30.5)
+    POLYGON(
+        10.0,
+       -10.5,
+        20.0,
+        20.5,
+        30.0,
+        30.5
+        )
 \end{verbatim}
 \noindent
-where all numeric values are in degrees,
+where all numeric values are in degrees.
 
-As for other geometries like BOX, CIRCLE and POINT, one could also derive
-the coordinates from database column references instead:
+The coordinates for POLYGON may be a literal values, as above,
+or they may be column references, functons or expressions that return
+a numeric values:
 \begin{verbatim}
-    POLYGON(‘’, t.ra, t.dec, 20.0, 20.5, 30.0, 30.5)
+    POLYGON(
+        t.ra,
+        t.dec,
+        20.0,
+        20.5,
+        30.0,
+        30.5
+        )
 \end{verbatim}
-\noindent
-where t would be the table and ra, dec the column references for one of
-the triangle’s corner position.
-
-Thus, the polygon is a list of vertices in a single coordinate system, with
-each vertex connected to the next along a great circle and the last vertex
-implicitly connected to the first vertex.
+where \textit{t.ra} and \textit{t.dec} are numeric columns in the database.
+%TODO - ObsCore example
 
 \subsection{User Defined Functions}
 \label{sec:user.functions}
