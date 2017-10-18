@@ -1421,8 +1421,8 @@ If the arguments for a geometric function represent cartesian coordinates
 then there are no inherent limits to the range of values, but
 coordinate vectors MUST be normalized.
 
-It remains up to the service implementation to define the errors that
-should be raised when using values outside these constraints.
+Details of the mechanism for reporting the out of range arguments are
+implementation dependent.
 
 %For historical reasons, the geometry constructors (BOX, CIRCLE, POINT
 %and POLYGON) require a string-valued first argument. It was intended to carry
@@ -1807,8 +1807,9 @@ If the arguments are expressed in different coordinate systems, the
 CONTAINS function is responsible for converting one, or both, of the
 arguments into a different coordinate system.
 If it cannot perform the required conversion then it SHOULD throw an
-error. Details of the error message are defined by the service
-executing the query.
+error.
+Details of the mechanism for reporting the error condition are
+implementation dependent.
 
 \subsubsection{COORD1}
 \label{sec:functions.geom.coord1}
@@ -1985,8 +1986,9 @@ If the  geometric arguments are expressed in different coordinate systems,
 the function is responsible for converting one, or both arguments into a
 different coordinate system.
 If it cannot perform the required conversion then it SHOULD throw an
-error. Details of the error message are defined by the service
-executing the query.
+error.
+Details of the mechanism for reporting the error condition are
+implementation dependent.
 
 It is assumed that the arguments for the four numeric parameter form all
 use the same coordinate system.
@@ -2069,8 +2071,9 @@ If the geometric arguments are expressed in different coordinate systems,
 the function is responsible for converting one, or both arguments into a
 different coordinate system.
 If it cannot perform the required conversion then it SHOULD throw an
-error. Details of the error message are defined by the service
-executing the query.
+error.
+Details of the mechanism for reporting the error condition are
+implementation dependent.
 
 %TODO
 The arguments to INTERSECTS SHOULD be geometric expressions evaluating to
@@ -2507,157 +2510,14 @@ The ADQL \verb:CAST(): function only supports type conversion between the
 standard numeric data types. The \verb:CAST(): function does not support
 casting to or from the character, binary, datetime or geometric data types.
 
-\begin{table}[thm]\footnotesize
-    \begin{tabular}{
-        |p{0.14\textwidth}
-        |p{0.14\textwidth}
-        |p{0.14\textwidth}
-        |p{0.14\textwidth}
-        |p{0.14\textwidth}
-        |p{0.14\textwidth}
-        |}
-
-        \hline
-        \textbf{Type} &
-        \textbf{Numeric} &
-        \textbf{Character} &
-        \textbf{Binary} &
-        \textbf{Datetime} &
-        \textbf{Geometric}
-        \tabularnewline
-
-        \hline
-        \textbf{Numeric} &
-        Y &
-        N &
-        N &
-        N &
-        N
-        \tabularnewline
-
-        \hline
-        \textbf{Character} &
-        N &
-        N &
-        N &
-        N &
-        N
-        \tabularnewline
-
-        \hline
-        \textbf{Binary} &
-        N &
-        N &
-        N &
-        N &
-        N
-        \tabularnewline
-
-        \hline
-        \textbf{Datetime} &
-        N &
-        N &
-        N &
-        N &
-        N
-        \tabularnewline
-
-        \hline
-        \textbf{Geometric} &
-        N &
-        N &
-        N &
-        N &
-        N
-        \tabularnewline
-
-        \hline
-    \end{tabular}
-    \caption{CAST type groups}
-    \label{table:adql.cast.type.group}
-\end{table}
-
-
-The ADQL \verb:CAST(): function supports type conversion between the numeric
-data types.
-
-\begin{table}[thm]\footnotesize
-    \begin{tabular}{
-        |p{0.14\textwidth}
-        |p{0.14\textwidth}
-        |p{0.14\textwidth}
-        |p{0.14\textwidth}
-        |p{0.14\textwidth}
-        |p{0.14\textwidth}
-        |}
-       
-        \hline
-        \textbf{Type} &
-        \textbf{SHORTINT} &
-        \textbf{INTEGER} &
-        \textbf{BIGINT} &
-        \textbf{REAL} &
-        \textbf{DOUBLE}
-        \tabularnewline
-
-        \hline
-        \textbf{SHORTINT} &
-        - &
-        Y &
-        Y &
-        Y &
-        Y
-        \tabularnewline
-
-        \hline
-        \textbf{INTEGER} &
-        Y &
-        - &
-        Y &
-        Y &
-        Y
-        \tabularnewline
-
-        \hline
-        \textbf{BIGINT} &
-        Y &
-        Y &
-        - &
-        Y &
-        Y
-        \tabularnewline
-
-        \hline
-        \textbf{REAL} &
-        Y &
-        Y &
-        Y &
-        - &
-        Y
-        \tabularnewline
-
-        \hline
-        \textbf{DOUBLE} &
-        Y &
-        Y &
-        Y &
-        Y &
-        -
-        \tabularnewline
-
-        \hline
-    \end{tabular}
-    \caption{CAST numeric types}
-    \label{table:adql.cast.numeric}
-\end{table}
-
-When converting from floating point value (REAL or DOUBLE) to an integer
-value (SHORTINT, INTEGER or BIGINT) the rounding mechanism used is
+The rounding mechanism used when converting from floating point values
+(REAL or DOUBLE) to integer values (SHORTINT, INTEGER or BIGINT) is
 implementation dependent.
 
 When converting a numeric value to a data type that is too small to represent
-the value, this SHOULD be treated as an error. However, the mechanism for
-reporting the overflow condition is implementation dependent.
+the value, this SHOULD be treated as an error.
+Details of the mechanism for reporting the error condition are
+implementation dependent.
 
 \subsection{Unit operations}
 \label{sec:unit}
@@ -2681,10 +2541,14 @@ transformed into the units defined by the second argument.
 The second argument MUST be a string literal containing a valid unit
 description using the formatting defined in the VOUnits specification \citep{std:VOUNIT}.
 
+The system SHOULD report an error in response to the following conditions:
 \begin{itemize}
-    \item If the second argument is not a valid unit description, then the query is rejected as erroneous. 
-    \item If the translator does not know how to convert the value into the requested units, then the query is rejected as erroneous.
+    \item If the second argument is not a valid unit description. 
+    \item If the system is not able to convert the value into the requested units.
 \end{itemize}
+
+Details of the mechanism for reporting the error condition are
+implementation dependent.
 
 \subsection{Bitwise operators}
 \label{sec:bitwise}
