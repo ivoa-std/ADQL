@@ -2915,8 +2915,8 @@ An easier to navigate version of the BNF grammar can be found at\\
 
     <box> ::=
         BOX <left_paren>
-            <coord_sys>
-            <comma> <coordinates>
+            [ <coord_sys> <comma> ]
+            <coordinates>
             <comma> <numeric_value_expression>
             <comma> <numeric_value_expression>
         <right_paren>
@@ -2943,8 +2943,8 @@ An easier to navigate version of the BNF grammar can be found at\\
 
     <circle> ::=
         CIRCLE <left_paren>
-            <coord_sys>
-            <comma> <coordinates>
+            [ <coord_sys> <comma> ]
+            <coordinates>
             <comma> <radius>
         <right_paren>
 
@@ -3262,13 +3262,14 @@ An easier to navigate version of the BNF grammar can be found at\\
 
     <point> ::=
         POINT <left_paren>
-            <coord_sys> <comma> <coordinates>
+            [ <coord_sys> <comma> ]
+            <coordinates>
         <right_paren>
 
     <polygon> ::=
         POLYGON <left_paren>
-            <coord_sys>
-            <comma> <coordinates>
+            [ <coord_sys> <comma> ]
+            <coordinates>
             <comma> <coordinates>
             { <comma> <coordinates> } ?
         <right_paren>
