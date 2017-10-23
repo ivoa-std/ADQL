@@ -1424,14 +1424,6 @@ coordinate vectors MUST be normalized.
 Details of the mechanism for reporting the out of range arguments are
 implementation dependent.
 
-%For historical reasons, the geometry constructors (BOX, CIRCLE, POINT
-%and POLYGON) require a string-valued first argument. It was intended to carry
-%information on a reference system or other coordinate system metadata.
-%As of this version of the specification (2.1), this parameter has been
-%marked as deprecated. Services are permitted to ignore this parameter and
-%clients are advised to pass an empty string here. Future versions of this
-%specification may remove this parameter from the listed functions.
-
 \subsubsection{Data Type Functions}
 \label{sec:functions.geom.type}
 
@@ -1474,6 +1466,18 @@ where
 \end{verbatim}
 and \verb:<value_expression_primary>: enables the use of geometric functions
 and column references.
+
+\subsubsection{Coordsys}
+\label{sec:functions.geom.coordsys}
+
+For historical reasons, the geometry constructors (BOX, CIRCLE, POINT
+and POLYGON) all accept an optional string value as the first argument.
+This was originally intended to carry
+information on a reference system or other coordinate system metadata.
+As of this version of the specification (2.1), this parameter has been
+marked as deprecated. Services are permitted to ignore this parameter and
+clients are advised to pass an empty string here. Future versions of this
+specification may remove this parameter from the listed functions.
 
 \subsubsection{Predicate Functions}
 \label{sec:functions.geom.predicate}
@@ -1661,6 +1665,14 @@ The position argument may be a literal value, as above, or it may be a
 column reference, function or expression that returns a geometric type.
 %TODO - ObsCore example
 
+%coordsys param
+For historical reasons, the BOX function accepts an optional string
+value as the first argument.
+As of this version of the specification (2.1), this parameter has been
+marked as deprecated.
+Future versions of this specification may remove this parameter
+(See \ref{sec:functions.geom.coordsys}).
+
 \subsubsection{CENTROID}
 \label{sec:functions.geom.centroid}
 {\footnotesize Language feature :}\\
@@ -1730,6 +1742,14 @@ Alternatively, the center position could be expressed as a POINT:
 The position argument may be a literal value, as above, or it may be a
 column reference, function or expression that returns a geometric type.
 %TODO - ObsCore example
+
+%coordsys param
+For historical reasons, the CIRCLE function accepts an optional string
+value as the first argument.
+As of this version of the specification (2.1), this parameter has been
+marked as deprecated.
+Future versions of this specification may remove this parameter
+(See \ref{sec:functions.geom.coordsys}).
 
 \subsubsection{CONTAINS}
 \label{sec:functions.geom.contains}
@@ -1803,6 +1823,7 @@ or they may be column references, functons or expressions that return
 a geometric type.
 %TODO - ObsCore example
 
+%coordsys trans
 If the arguments are expressed in different coordinate systems, the
 CONTAINS function is responsible for converting one, or both, of the
 arguments into a different coordinate system.
@@ -1982,6 +2003,7 @@ be calculated as follows:
 where \textit{t.p1} and \textit{t.p2} refer to POINT value columns in the
 database.
 
+%coordsys trans
 If the  geometric arguments are expressed in different coordinate systems,
 the function is responsible for converting one, or both arguments into a
 different coordinate system.
@@ -2067,14 +2089,6 @@ The geometric arguments for INTERSECTS may be a literal values, as above,
 or they may be column references, functons or expressions that return
 a geometric type.
 
-If the geometric arguments are expressed in different coordinate systems,
-the function is responsible for converting one, or both arguments into a
-different coordinate system.
-If it cannot perform the required conversion then it SHOULD throw an
-error.
-Details of the mechanism for reporting the error condition are
-implementation dependent.
-
 %TODO
 The arguments to INTERSECTS SHOULD be geometric expressions evaluating to
 either BOX, CIRCLE or POLYGON.
@@ -2083,6 +2097,15 @@ specification allow POINTs as well and require servers to interpret the
 expression as a CONTAINS with the POINT moved into the first position. Servers
 SHOULD still implement that behaviour, but clients SHOULD NOT expect it. This
 behaviour will be dropped in the next major version of this specification.
+
+%coordsys trans
+If the geometric arguments are expressed in different coordinate systems,
+the function is responsible for converting one, or both arguments into a
+different coordinate system.
+If it cannot perform the required conversion then it SHOULD throw an
+error.
+Details of the mechanism for reporting the error condition are
+implementation dependent.
 
 \subsubsection{POINT}
 \label{sec:functions.geom.point}
@@ -2122,6 +2145,14 @@ a numeric types:
 \noindent
 where \textit{t.ra} and \textit{t.dec} are numeric columns in the database.
 %TODO - ObsCore example
+
+%coordsys param
+For historical reasons, the POINT function accepts an optional string
+value as the first argument.
+As of this version of the specification (2.1), this parameter has been
+marked as deprecated.
+Future versions of this specification may remove this parameter
+(See \ref{sec:functions.geom.coordsys}).
 
 \subsubsection{POLYGON}
 \label{sec:functions.geom.polygon}
@@ -2174,6 +2205,14 @@ a numeric values:
 \noindent
 where \textit{t.ra} and \textit{t.dec} are numeric columns in the database.
 %TODO - ObsCore example
+
+%coordsys param
+For historical reasons, the POLYGON function accepts an optional string
+value as the first argument.
+As of this version of the specification (2.1), this parameter has been
+marked as deprecated.
+Future versions of this specification may remove this parameter
+(See \ref{sec:functions.geom.coordsys}).
 
 \subsection{User Defined Functions}
 \label{sec:user.functions}
