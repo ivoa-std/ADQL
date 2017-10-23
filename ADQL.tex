@@ -2706,6 +2706,7 @@ then the OFFSET clause is applied first, dropping the specified
 number of rows from the begining of the result set before the
 TOP clause is applied to limit the number of rows returned.
 
+\newpage
 \appendix
 \section{BNF Grammar}
 \label{sec:grammar}
@@ -3483,6 +3484,7 @@ An easier to navigate version of the BNF grammar can be found at\\
 
 \end{verbatim}
 
+\newpage
 \section{Language feature support}
 \label{sec:features}
 
@@ -3508,60 +3510,101 @@ identified by the URI \verb|ivo://ivoa.net/std/TAPRegExt#features-adql-geo|.
 </languageFeatures>    
 \end{verbatim}
 
+\newpage
 \section{Changes from Previous Versions}
 \label{sec:changes}
-\subsection{Changes from ADQL-2.0}
 
 \begin{itemize}
-
-    \item Changes from WD-ADQL-2.1-20160502-05
+    \item Changes from WD-ADQL-2.1-20160502
         \begin{itemize}
-
-            \item Fixed typo in definition of MOD (svn version 3456).
-            \item Fixed section references (svn version 3637).
-            \item Improved wording for keywords and identifiers (svn version 4242).
-
+            \item Removed hard coded version number\\
+            (svn version r4544, 23 Oct 2017)
+            \item Restored coordsys param for now\\
+            (svn version r4543, 23 Oct 2017)
+            \item Updates to CAST and IN\_UNIT\\
+            (svn version r4539, 18 Oct 2017)
+            \item Updates to UNION, EXCEPT, INTERSECT and WITH\\
+            (svn version r4538, 18 Oct 2017)
+            \item Updates to user defined functions\\
+            (svn version r4537, 18 Oct 2017)
+            \item Updates to DISTANCE, POINT and POLYGON\\
+            (svn version r4536, 18 Oct 2017)
+            \item Proof reading typos and readability fixes\\
+            (svn version r4527, 16 Oct 2017)
+            \item Updates to COORDSYS\\
+            (svn version r4522, 16 Oct 2017)
+            \item Removed (commented) text describing coordsys argument\\
+            (svn version r4521, 16 Oct 2017)
+            \item Updates to COORD1, COORD2 and COORDSYS\\
+            (svn version r4520, 16 Oct 2017)
+            \item Updates to AREA, BOX, CENTROID, CIRCLE and CONTAINS\\
+            (svn version r4519, 13 Oct 2017)
+            \item Removed old section about 'Geometry in the SELECT clause'\\
+            (svn version r4481, 10 Oct 2017)
+            \item Updated text for AREA and BOX\\
+            (svn version r4480, 10 Oct 2017)
+            \item Updated text for AREA\\
+            (svn version r4469, 09 Oct 2017)
+            \item Cleaned up text describing ranges for coordinates\\
+            (svn version r4467, 09 Oct 2017)
+            \item Removed REGION\\
+            (svn version r4466, 09 Oct 2017)
+            \item Removed reference to ADQL from section titles in the ADQL document\\
+            (svn version r4465, 09 Oct 2017)
+            \item Expanded the data types to add sub-section for each xtype\\
+            (svn version r4353, 19 Sep 2017)
+            \item Removed restriction on nested JOINs\\
+            (svn version r4283, 12 Sep 2017)
+            \item Added subversion properties\\
+            (svn version r4282, 12 Sep 2017)
+            \item Updated types and xtypes to match DALI\\
+            (svn version r4281, 12 Sep 2017)
+            \item Clarify text for SELECT and subqueries\\
+            (svn version r4256, 12 Sep 2017)
+            \item Improved wording for keywords and identifiers\\
+            (svn version r4242, 11 Sep 2017)
+            \item Fixed section references\\
+            (svn version r3637, 18 Oct 2016)
+            \item Fixed typo in definition of MOD\\
+            (svn version 3456)
+            \item Fixed section references\\
+            (svn version 3637)
+            \item Improved wording for keywords and identifiers\\
+            (svn version 4242)
         \end{itemize}
 
     \item Changes from ADQL-20150601
         \begin{itemize}
-
-            \item Added boolean type (svn version 3364).
-
-            \item Removed bitwise functions and updated the operators (svn version 3365).
-
-            \item Changed 'hierarchical queries' to 'common table expressions' (svn version 3366).
-
-            \item Added OFFSET clause (svn version 3367).
-
-            \item Added four parameter DISTANCE (svn version 3370).
-
-            \item Added hexadecimal literals (svn version 3374).
-
+            \item Added boolean type\\
+            (svn version 3364)
+            \item Removed bitwise functions and updated the operators\\
+            (svn version 3365)
+            \item Changed 'hierarchical queries' to 'common table expressions'\\
+            (svn version 3366)
+            \item Added OFFSET clause\\
+            (svn version 3367)
+            \item Added four parameter DISTANCE\\
+            (svn version 3370)
+            \item Added hexadecimal literals\\
+            (svn version 3374)
         \end{itemize}
 
     \item Changes from \citet{note:TAPNotes}
         \begin{itemize}
-
-            \item 2.1.1.  (done) The Separator Nonterminal
-            \begin{itemize}
-                \item Imported changes from \citet{note:ADQL2Err1}
-            \end{itemize}
-                
-            \item 2.1.2.  (done) Type System
-            \item 2.1.4.  (done) Empty Coordinate Systems
-            \item 2.1.5.  (done) Explanation of optional features
-            \item 2.2.2.  (done) No Type-based Decay of INTERSECTS
-            \item 2.2.3.  (done) Generalized User Defined Functions
-            \item 2.2.4.  (done) Case-Insensitive String Comparisons
-            \item 2.2.5.  (done) Set Operators
-            \item 2.2.6.  (TODO) Boolean Type
-            \item 2.2.7.  (done) Casting to Unit
-            \item 2.2.10. (done) Bitwise operators
-            \item 2.2.10. (TODO) Hexadecimal literals
-            \item 2.2.11. (done) CAST operator
-            \item 2.NN    (done) WITH
-
+            \item 2.1.1.  The Separator Nonterminal
+            \item 2.1.2.  Type System
+            \item 2.1.4.  Empty Coordinate Systems
+            \item 2.1.5.  Explanation of optional features
+            \item 2.2.2.  No Type-based Decay of INTERSECTS
+            \item 2.2.3.  Generalized User Defined Functions
+            \item 2.2.4.  Case-Insensitive String Comparisons
+            \item 2.2.5.  Set Operators
+            \item 2.2.6.  Boolean Type
+            \item 2.2.7.  Casting to Unit
+            \item 2.2.10. Bitwise operators
+            \item 2.2.10. Hexadecimal literals
+            \item 2.2.11. CAST operator
+            \item 2.NN    WITH
         \end{itemize}
 
     \item Created [Optional components] section.
