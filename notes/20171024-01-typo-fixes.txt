@@ -15,9 +15,9 @@
 #
 # Replace bad spellings
 
-    Acknowledgments|Acknowledgements
     compliancy ?
 
+    Acknowledgments|Acknowledgements
     th|the
     AQDL|ADQL
     consitent|consistent
