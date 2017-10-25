@@ -1,0 +1,44 @@
+
+
+
+#
+# List all the words in the document
+# https://stackoverflow.com/a/15400670
+
+    cat ADQL.tex | sed 's|[^a-zA-Z0-9]| |g' | sed 's|  *| |g' | tr ' ' '\n' | sort | uniq -c > words.txt
+
+
+#
+# Spellcheck the words in OpenOffice
+
+
+#
+# Replace bad spellings
+
+    Acknowledgments|Acknowledgements
+    compliancy ?
+
+    th|the
+    AQDL|ADQL
+    consitent|consistent
+    langauge|language
+    cartesian|cartesian
+    insensitiveness|insensitive
+    condtion|condition
+    definative|definitive
+    functons|functions
+    bondaries|boundaries
+    begining|beginning
+    expresson|expression
+    placeholder|place holder
+    insensitiveness|insensitive
+
+    nontrivial|non-trivial
+    nonterminal|non-terminal
+
+
+    subqueries
+    subquery
+
+
+
