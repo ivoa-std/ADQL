@@ -117,7 +117,7 @@ indicating requirement levels can be found in the References section.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.9\textwidth]{archdiag.png}
+\includegraphics[width=0.9\textwidth]{ADQL-archdiag.png}
 \caption{Architecture diagram for this document}
 \label{fig:archdiag}
 \end{figure}
@@ -145,7 +145,7 @@ for ADQL. The following conventions are used through this document:
     \item Repetitive item (zero or more times) are followed by \verb:...:
     \item Terminal symbols are enclosed by \verb:<: and \verb:>:
     \item Terminals of meta-symbol characters (\verb:=,[,],(,),<,>,*:) are surrounded by quotes (\verb:“:) to distinguish them from meta-symbols
-    \item Case insensitiveness unless otherwise stated
+    \item Case insensitive unless otherwise stated
 \end{itemize}
 
 \clearpage
@@ -452,8 +452,10 @@ If both \verb:TOP: and \verb:OFFSET: are used together then \verb:OFFSET: is app
 first followed by \verb:TOP: (see \ref{sec:offset}). 
 
 The order of the columns to return SHALL be the same as the
-order specified in the selection list, or the order defined in the original
-table if asterisk is specified. The selection list MAY include any numeric,
+order specified in the selection list,
+%or the order defined in the original table if
+unless asterisk is specified.
+The selection list MAY include any numeric,
 string or geometry value expression.
 
 \subsubsection{Subqueries}
@@ -734,7 +736,7 @@ the underlying database's native language and type system.
 However, service metadata needs to give column types in order to allow the
 construction of queries that are both syntactically and semantically correct.
 Examples of such metadata includes the \verb:TAP_SCHEMA: tables defined
-in the \TAPspec and the \verb:\tables:
+in the \TAPspec and the \verb:/tables:
 webservice response defined in the \VOSIspec.
 
 Services SHOULD, if at all possible, try to express their column metadata in
@@ -1345,15 +1347,16 @@ For example:
 \begin{verbatim}
     POLYGON(
         10.0,
-        10.0,
-        10.2,
-        10.0,
-        10.2,
-        10.2,
-        10.0,
-        10.2
+       -10.5,
+        20.0,
+        20.5,
+        30.0,
+        30.5
         )
 \end{verbatim}
+\noindent
+describes a triangle, whose vertices are (10.0, -10.5), (20.0, 20.5)
+and (30.0, 30.5) degrees.
 
 \clearpage
 \section{Optional components}
@@ -1912,7 +1915,7 @@ been marked as deprecated. This function may be removed in future versions
 of this specification.
 Details of the coordinate system for a database column are available as part of
 the service metadata, available via the \verb:TAP_SCHEMA: tables defined in the
-\TAPspec and the \verb:\tables: webservice response defined in the \VOSIspec.
+\TAPspec and the \verb:/tables: webservice response defined in the \VOSIspec.
 
 %As described in Section \ref{sec:functions.geom.overview}, the allowed return values must be defined
 %by any service making use of ADQL, and a list of standard coordinate system
@@ -2196,11 +2199,11 @@ a numeric values:
 \begin{verbatim}
     POLYGON(
         t.ra,
-        t.dec,
-        20.0,
-        20.5,
-        30.0,
-        30.5
+        t.dec + 5,
+        t.ra  - 5,
+        t.dec - 5,
+        t.ra  - 5,
+        t.dec + 5,
         )
 \end{verbatim}
 \noindent
@@ -2354,7 +2357,7 @@ of its string operands.
 Since case folding is a nontrivial operation in a multi-encoding world,
 ADQL requires standard behaviour for the ASCII characters, and recommends
 following algorithm R2 described in Section 3.13, "Default Case Algorithms"
-of \citet{std:UNICODE} for characters outside th ASCII set.
+of \citet{std:UNICODE} for characters outside the ASCII set.
 
 \subsection{Set operators}
 \label{sec:set.operators}
@@ -2434,7 +2437,7 @@ considered equal, despite the difference in units.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-sets|}\\
 {\footnotesize \verb|name: INTERSECT|}\\
 
-The EXCEPT operator combines the results of two queries, accepting rows that are
+The INTERSECT operator combines the results of two queries, accepting rows that are
 in the first set of results but are not in the second,
 removing duplicate rows unless INTERSECT ALL is used.
 
