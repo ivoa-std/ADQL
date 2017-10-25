@@ -30,6 +30,7 @@
 \newcommand{\TAPspec}{TAP specification\xspace}
 \newcommand{\DALIspec}{DALI specification\xspace}
 \newcommand{\VOSIspec}{VOSI specification\xspace}
+\newcommand{\VOUnitSpec}{VOUnits specification\xspace}
 \newcommand{\RegTAPspec}{RegTAP specification\xspace}
 \newcommand{\TAPRegExtSpec}{TAPRegExt specification\xspace}
 
@@ -54,7 +55,7 @@ Special restrictions and extensions to SQL92 have been defined in order
 to support generic and astronomy specific operations.
 \end{abstract}
 
-\section*{Acknowledgments}
+\section*{Acknowledgements}
 
 The authors would like to acknowledge all contributors to this and previous 
 versions of this standard, especially:
@@ -190,7 +191,7 @@ A reserved keyword has a special meaning in ADQL and cannot be used as
 an identifier unless it is isolated using the ADQL escape syntax defined
 in section \ref{sec:adql.escape} \nameref{sec:adql.escape}.
 
-The AQDL specification extends the list of SQL92 reserved keywords to accommodate
+The ADQL specification extends the list of SQL92 reserved keywords to accommodate
 those useful for astronomical purposes and/or present in a subset of vendor
 specific languages only (e.g. \verb:TOP:).
 
@@ -747,8 +748,8 @@ VOTables into ADQL-visible tables.
 \subsubsection{BOOLEAN}
 \label{sec:types.logical.boolean}
 
-The BOOLEAN data type maps to the corresponding data type is defined in the \DALIspec.
-The serialization format is defined in the \VOTspec.
+The BOOLEAN data type maps to the corresponding \verb:boolean: data type is defined in the \DALIspec.
+The serialization format for \verb:boolean: is defined in the \VOTspec.
 
 \begin{table}[thm]\footnotesize
     \begin{tabular}
@@ -999,7 +1000,7 @@ The basic comparison operators, \verb:=:, \verb:<:, \verb:>:, \verb:<=:, \verb:>
 
 Within the database, the details of how TIMESTAMP values are implemented
 is platform dependent. The primary requirement is that the results of the
-comparison operators on TIMESTAMP values are consitent with respect to
+comparison operators on TIMESTAMP values are consistent with respect to
 chronological time.
 
 \subsection{Character types}
@@ -1379,12 +1380,12 @@ ADQL queries that it sends.
 The \TAPRegExtSpec defines an XML schema that a service SHOULD
 use to declare which optional features it supports.
 
-In general, each group of langauge features is identified by a \verb:type:
+In general, each group of language features is identified by a \verb:type:
 URI, and each individual feature within the group is identified by the
 feature name.
 
 Appendix \ref{sec:features} contains examples of how to declare support
-for each of the langauge features defined in this document using the
+for each of the language features defined in this document using the
 \TAPRegExtSpec XML schema.
 
 For full details on the XML schema and how it can be used, please refer to
@@ -1444,7 +1445,7 @@ Geometry data types are centered around the BNF construct
 \end{verbatim}
 
 A \verb:<geometry_value_expression>: does not simply cover data type functions
-(POINT, CIRCLE etc) but must also allow for user defined functions and
+(POINT, CIRCLE etc.) but must also allow for user defined functions and
 column values where a geometry data type is stored in a column.
 
 Therefore, \verb:<geometry_value_expression>: is expanded as:
@@ -1485,7 +1486,7 @@ specification may remove this parameter from the listed functions.
 Functions CONTAINS and INTERSECTS each accept two geometry data types
 and return a numeric value of 1 or 0 according to whether the relevant
 verb (e.g.: "contains") is satisfied against the two input geometries;
-1 if the condtion is met and 0 if it is not.
+1 if the condition is met and 0 if it is not.
 
 Each of these functions can be used as a WHERE clause predicate by
 comparing the numeric result with zero or one.
@@ -1502,7 +1503,7 @@ For example:
               )
 \end{verbatim}
 \noindent
-%TODO - speculative, not definative.
+%TODO - speculative, not definitive.
 One would expect later additions to ADQL to add to this range of functions. For
 example: equals, disjoint, touches, crosses, within, overlaps and relate
 are possibilities.
@@ -1819,7 +1820,7 @@ for "does contain" and
 for "does not contain".
 
 The geometric arguments for CONTAINS may be a literal values, as above,
-or they may be column references, functons or expressions that return
+or they may be column references, functions or expressions that return
 a geometric type.
 %TODO - ObsCore example
 
@@ -1962,7 +1963,7 @@ If an ADQL service implementation declares support for DISTANCE,
 then it must implement both the two parameter and four parameter
 forms of the function.
 
-For example, an expresson calculating the distance between two points of
+For example, an expression calculating the distance between two points of
 coordinates (25,-19.5) and (25.4,-20) could be written as follows:
 \begin{verbatim}
     DISTANCE(
@@ -2086,7 +2087,7 @@ for "does intersect" and
 for "does not intersect".
 
 The geometric arguments for INTERSECTS may be a literal values, as above,
-or they may be column references, functons or expressions that return
+or they may be column references, functions or expressions that return
 a geometric type.
 
 %TODO
@@ -2134,7 +2135,7 @@ and declination of -19.5 degrees would be written as follows:
 where numeric values are in degrees.
 
 The coordinates for POINT may be a literal values, as above,
-or they may be column references, functons or expressions that return
+or they may be column references, functions or expressions that return
 a numeric types:
 \begin{verbatim}
     POINT(
@@ -2160,7 +2161,7 @@ Future versions of this specification may remove this parameter
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: POLYGON|}\\
 
-The POLYGON function expresses a region on the sky with bondaries denoted by great
+The POLYGON function expresses a region on the sky with boundaries denoted by great
 circles passing through specified coordinates. It corresponds semantically
 to the STC Polygon. The arguments specify the
 coordinate system and three or more sets of 2-D coordinates, where:
@@ -2190,7 +2191,7 @@ as follows:
 where all numeric values are in degrees.
 
 The coordinates for POLYGON may be a literal values, as above,
-or they may be column references, functons or expressions that return
+or they may be column references, functions or expressions that return
 a numeric values:
 \begin{verbatim}
     POLYGON(
@@ -2218,7 +2219,7 @@ Future versions of this specification may remove this parameter
 \label{sec:user.functions}
 \subsubsection{Overview}
 
-ADQL also provides a placeholder to define user specific functions. Such
+ADQL also provides a place holder to define user specific functions. Such
 construct supports a variable list of parameters as input in the following way:
 \begin{verbatim}
     <user_defined_function> ::=
@@ -2578,7 +2579,7 @@ The \verb:IN_UNIT(): function returns the value of the first argument
 transformed into the units defined by the second argument.
 
 The second argument MUST be a string literal containing a valid unit
-description using the formatting defined in the VOUnits specification \citep{std:VOUNIT}.
+description using the formatting defined in the \VOUnitSpec.
 
 The system SHOULD report an error in response to the following conditions:
 \begin{itemize}
@@ -2703,7 +2704,7 @@ specified by the OFFSET clause, then the result set is empty.
 
 If a query contains both an OFFSET clause and a TOP clause,
 then the OFFSET clause is applied first, dropping the specified
-number of rows from the begining of the result set before the
+number of rows from the beginning of the result set before the
 TOP clause is applied to limit the number of rows returned.
 
 \newpage
