@@ -34,6 +34,8 @@
 \newcommand{\VOUnitSpec}{VOUnits specification\xspace}
 \newcommand{\RegTAPspec}{RegTAP specification\xspace}
 \newcommand{\TAPRegExtSpec}{TAPRegExt specification\xspace}
+\newcommand{\SectionRef}[1]{Section \ref{#1}\xspace}
+\newcommand{\AppendixRef}[1]{Appendix \ref{#1}\xspace}
 
 \title{Astronomical Data Query Language}
 
@@ -67,20 +69,23 @@ W. O'Mullane,
 M. Ohishi,
 I. Ortiz,
 P. Osuna,
-Y Shirasaki,
+Y Shirasaki
 and
 A. Szalay.
 
 \section*{Conformance-related definitions}
 
-The words ``MUST'', ``SHALL'', ``SHOULD'', ``MAY'', ``RECOMMENDED'', and
+The words ``MUST'', ``SHALL'', ``SHOULD'', ``MAY'', ``RECOMMENDED'' and
 ``OPTIONAL'' (in upper or lower case) used in this document are to be
-interpreted as described in IETF standard, \citet{std:RFC2119}.
+interpreted as described in the
+\href{https://www.ietf.org/}{Internet Engineering Task Force (IETF)}
+standard, \citet{std:RFC2119}.
 
 The \emph{Virtual Observatory (VO)} is a general term for a collection of
 federated resources that can be used to conduct astronomical research,
-education, and outreach. The \href{http://www.ivoa.net}{International Virtual
-Observatory Alliance (IVOA)} is a global collaboration of separately funded
+education and outreach. The
+\href{http://www.ivoa.net}{International Virtual Observatory Alliance (IVOA)}
+is a global collaboration of separately funded
 projects to develop standards and infrastructure that enable VO applications.
 
 \clearpage
@@ -88,10 +93,11 @@ projects to develop standards and infrastructure that enable VO applications.
 \label{sec:introduction}
 
 The Astronomical Data Query Language (ADQL) is the language used by the
-International Virtual Observatory Alliance (IVOA) to represent astronomy
-queries posted to VO services. The IVOA has developed several standardized
-protocols to access astronomical data, e.g., SIAP and SSAP for image and
-spectral data respectively. These protocols might be satisfied using a single
+IVOA to represent astronomy queries posted to VO services.
+The IVOA has developed several standardized protocols to access astronomical
+data, e.g., Simple Image Access (SIA) protocol and Simple Spectral Access (SSA)
+protocol for image and spectral data respectively.
+These protocols might be satisfied using a single
 table query. However, different VO services have different needs in terms
 of query complexity and ADQL arises in this context.
 
@@ -113,7 +119,7 @@ indicating requirement levels can be found in the References section.
 %Should this be 'Conformance-related definitions' not 'References' ?
 
 \clearpage
-\subsection{Role within the VO Architecture}
+\subsection{Role within the VO architecture}
 \label{sec:role}
 
 \begin{figure}
@@ -123,7 +129,7 @@ indicating requirement levels can be found in the References section.
 \label{fig:archdiag}
 \end{figure}
 
-Fig.~\ref{fig:archdiag} shows the role this document plays within the
+Figure ~\ref{fig:archdiag} shows the role this document plays within the
 IVOA architecture \citep{note:VOARCH}.
 
 \clearpage
@@ -146,11 +152,11 @@ for ADQL. The following conventions are used through this document:
     \item Repetitive item (zero or more times) are followed by \verb:...:
     \item Terminal symbols are enclosed by \verb:<: and \verb:>:
     \item Terminals of meta-symbol characters (\verb:=,[,],(,),<,>,*:) are surrounded by quotes (\verb:“:) to distinguish them from meta-symbols
-    \item Case insensitive unless otherwise stated
+    \item Case-insensitive unless otherwise stated.
 \end{itemize}
 
 \clearpage
-\subsection{Characters, Keywords, Identifiers and Literals}
+\subsection{Characters, keywords, identifiers and literals}
 \subsubsection{Characters}
 \label{sec:characters}
 
@@ -159,30 +165,30 @@ The language allows simple Latin letters (lower and upper case, i.e.
 
 \begin{itemize}
     \item space
-    \item single quote (\verb:’:)
-    \item double quote (\verb:“:)
-    \item percent (\verb:%:)
-    \item left and right parenthesis
-    \item asterisk (\verb:*:)
-    \item plus sign (\verb:+:)
-    \item minus sign (\verb:-:)
-    \item comma (\verb:,:)
-    \item period (\verb:.:)
-    \item solidus (\verb:/:)
-    \item colon (\verb.:.)
-    \item semicolon (\verb:;:)
-    \item less than operator (\verb:<:)
-    \item equals operator (\verb:=:)
-    \item greater than operator (\verb:>:)
-    \item underscore (\verb:_:)
-    \item ampersand (\verb:&:)
-    \item question mark (\verb:?:)
-    \item circumflex (\verb:^:)
-    \item tilde (\verb:~:)
-    \item vertical bar (\verb:|:)
+    \item single quote \verb:’:
+    \item double quote \verb:“:
+    \item percent \verb:%:
+    \item left and right parenthesis \verb:():
+    \item asterisk \verb:*:
+    \item plus sign \verb:+:
+    \item minus sign \verb:-:
+    \item comma \verb:,:
+    \item period \verb:.:
+    \item solidus \verb:/:
+    \item colon \verb.:.
+    \item semicolon \verb:;:
+    \item less than operator \verb:<:
+    \item equals operator \verb:=:
+    \item greater than operator \verb:>:
+    \item underscore \verb:_:
+    \item ampersand \verb:&:
+    \item question mark \verb:?:
+    \item circumflex \verb:^:
+    \item tilde \verb:~:
+    \item vertical bar \verb:|:
 \end{itemize}
 
-\subsubsection{Keywords and Identifiers}
+\subsubsection{Keywords and identifiers}
 \label{sec:keywords}
 
 Besides the character set, the language provides a list of reserved keywords
@@ -190,14 +196,14 @@ plus the syntax description for regular identifiers.
 
 A reserved keyword has a special meaning in ADQL and cannot be used as
 an identifier unless it is isolated using the ADQL escape syntax defined
-in section \ref{sec:adql.escape} \nameref{sec:adql.escape}.
+in \SectionRef{sec:adql.escape}.
 
 The ADQL specification extends the list of SQL92 reserved keywords to accommodate
 those useful for astronomical purposes and/or present in a subset of vendor
 specific languages only (e.g. \verb:TOP:).
 
 Although the following lists are all in UPPERCASE, the matching of keywords
-is case insensitive.
+is case-insensitive.
 
 \subsubsection{SQL reserved keywords}
 \label{sec:adql.keywords}
@@ -270,6 +276,7 @@ is case insensitive.
 \subsubsection{ADQL reserved keywords}
 \label{sec:adql.reswords}
 
+Mathematical functions and operators:
 \noindent
 \texttt{ABS,} \texttt{ACOS,} \texttt{ASIN,} \texttt{ATAN,} 
 \texttt{ATAN2,} \texttt{CEILING,} \texttt{COS,} \texttt{DEGREES,} 
@@ -279,6 +286,8 @@ is case insensitive.
 \texttt{TAN,} \texttt{TOP,} \texttt{TRUNCATE}
 \newline
 \newline
+
+Geometric functions and operators:
 \noindent
 \texttt{AREA,} \texttt{BOX,} \texttt{CENTROID,} \texttt{CIRCLE,} 
 \texttt{CONTAINS,} \texttt{COORD1,} \texttt{COORD2,} 
@@ -287,6 +296,9 @@ is case insensitive.
 
 \subsubsection{ADQL deprecated keywords}
 \label{sec:adql.depwords}
+
+The following terms are ADQL keywords that are no longer used,
+but still remain reserved for backwards compatibility.
 
 \noindent
 \texttt{REGION}
@@ -306,7 +318,7 @@ digits \verb:{0-9}: as follows:
 \label{sec:adql.escape}
 
 To address reserved keyword and special character conflicts the ADQL language
-provides a way to escape a non-compliant identifiers by using the double
+provides a way to escape a non-compliant identifier by using the double
 quote character \verb:": as a delimiter.
 
 For example, to use the reserved word \verb:size: as a column name
@@ -320,7 +332,7 @@ it must be isolated using double quotes.
 \subsubsection{Case sensitivity}
 \label{sec:adql.case}
 
-In addition to isolating keyword conflicts and and special characters,
+In addition to isolating keyword conflicts and special characters,
 the double quote escape syntax also denotes case sensitivity.
 
 Without double quotes, the following identifiers are all equivalent:
@@ -336,17 +348,16 @@ When escaped using double quotes, the same set of identifiers are not equivalent
 \subsubsection{Literals}
 \label{sec:literals}
 
-Finally we define the syntax rules for the different data types: string,
-numeric and boolean.
-
-A string literal is a character expression delimited by single quotes.
+String literals are expressed as a character expression delimited by single quotes.
 
 \begin{verbatim}
     <character_string_literal> ::=
         <quote> [ <character_representation>... ] <quote>
 \end{verbatim}
 
-Literal numbers are expressed in BNF as follows:
+Numeric literals may be are expressed as an exact decimal value, e.g. \verb:12: or \verb:12.3:,
+a floating point number with an exponent, e.g. \verb:12.3E4:, or a unsigned hexadecimal
+value, e.g. \verb:0x2F:.
 
 \begin{verbatim}
     <signed_numeric_literal> ::= [<sign>] <unsigned_numeric_literal>
@@ -375,17 +386,16 @@ Literal numbers are expressed in BNF as follows:
     <sign> ::= <plus_sign> | <minus_sign>
 \end{verbatim}
 
-Hexadecimal literals are expressed using the 'C' style notation, e.g. \verb:0xFF:,
-defined in BNF as follows :
+Hexadecimal literals are expressed using the 'C' style notation, prefixed by a zero and 'x' e.g. \verb:0x2F:.
+
 \begin{verbatim}
     <unsigned_hexadecimal> ::= 0x<hex_digit>...
 
     hex_digit ::= <digit> | a | b | c | d | e | f | A | B | C | D | E | F
 \end{verbatim}
 
-Hexadecimal literals are not case sensitive.
-
-Hexadecimal literals can only be used to create integer data types, SMALLINT, INTEGER and BIGINT.
+Hexadecimal literals are not case-sensitive.
+Hexadecimal literals can only be used to create integer datatypes, SMALLINT, INTEGER and BIGINT.
 
 Boolean literals are expressed in BNF as follows:
 
@@ -393,22 +403,15 @@ Boolean literals are expressed in BNF as follows:
     <boolean_literal> ::= True | False
 \end{verbatim}
 
-Boolean literals are not case sensitive.
-
-Regarding the usage of other data types like datetime and timestamp, ADQL
-can deal with them similarly to how SQL does: using the string literal
-construct. As Relation Database Manager Systems (RDBMS) do, a service should
-be able to implicitly convert strings to internal (datetime or timestamp)
-form using a variety of techniques, where e.g. ISO 8601 is an acceptable
-format. Therefore, as with other string representations, it should be up to
-the service capability to understand such specific formats.
+Boolean literals are not case-sensitive.
 
 \clearpage
 \subsection{Query syntax}
 \label{sec:syntax}
 
-A more detailed description of the select statement can be found in Appendix \ref{sec:grammar}:
-\nameref{sec:grammar} at the \verb:<query_specification>: construct.
+A more detailed definition of the select statement is given by the \verb:<query_specification>:
+construct defined in \AppendixRef{sec:grammar}.
+
 A simplified syntax for the \verb:SELECT: statement follows, showing the main constructs for
 the query specification:
 
@@ -450,14 +453,14 @@ A \verb:TOP: clause MAY be specified to limit the number of rows returned.
 An \verb:OFFSET: clause MAY be specified to skip a number of rows at the start
 of the results.
 If both \verb:TOP: and \verb:OFFSET: are used together then \verb:OFFSET: is applied
-first followed by \verb:TOP: (see \ref{sec:offset}). 
+first followed by \verb:TOP: (see \SectionRef{sec:offset}). 
 
-The order of the columns to return SHALL be the same as the
+The order of the columns in the query results SHALL be the same as the
 order specified in the selection list,
 %or the order defined in the original table if
-unless asterisk is specified.
-The selection list MAY include any numeric,
-string or geometry value expression.
+unless an asterisk is specified.
+The selection list MAY include numeric,
+string or geometry value expressions.
 
 \subsubsection{Subqueries}
 \label{sec:subqueries}
@@ -511,21 +514,22 @@ default is \verb:INNER:. All of these can be \verb:NATURAL: or not.
 \subsubsection{Search condition}
 \label{sec:search}
 
-The search condition can be part of several other clauses: \verb:JOIN:, \verb:HAVING: and,
-\verb:WHERE:. Standard logical operators are present in its description
-(\verb:AND:, \verb:OR: and \verb:NOT:). Five different types of predicates are present in which
-different types of reserved keywords or characters are used:
+A search condition MAY be part of other clauses including \verb:JOIN:, \verb:HAVING: and \verb:WHERE:.
+
+A search condition MAY contain the standard logical operators, \verb:AND:, \verb:OR: and \verb:NOT:.
+
+A search condition MAY contain the following predicates:
 
 \begin{itemize}
     \item Standard comparison operators: \verb:=:, \verb:!=:, \verb:<>:, \verb:<:, \verb:>:, \verb:<=:, \verb:>=:
-    \item \verb:BETWEEN:
-    \item \verb:LIKE:
-    \item \verb:NULL:
-    \item \verb:EXISTS:
+    \item Range comparison, \verb:BETWEEN:
+    \item Case-sensitive string comparison, \verb:LIKE:
+    \item Null value checks, \verb:IS NULL: and \verb:IS NOT NULL:
+    \item Non-empty subquery check, \verb:EXISTS:
 \end{itemize}
 
-In addition, some service implementations may also support the optional
-\verb:ILIKE: case-insensitive string comparison operator, defined in section \ref{sec:string.functions.ilike}.
+In addition, some service implementations may also support the optional \verb:ILIKE:
+case-insensitive string comparison operator, defined in \SectionRef{sec:string.functions.ilike}.
 
 \begin{itemize}
     \item \verb:ILIKE:
@@ -535,7 +539,7 @@ In addition, some service implementations may also support the optional
 \subsection{Mathematical and Trigonometrical Functions}
 \label{sec:math.functions}
 
-ADQL declares a list of reserved keywords (Section \ref{sec:keywords}) which include
+ADQL declares a list of reserved keywords (see \SectionRef{sec:keywords}) which include
 the mathematical and trigonometrical function names. Their syntax,
 usage and description are detailed in the following tables:
 
@@ -545,113 +549,123 @@ usage and description are detailed in the following tables:
 
         \hline
         \textbf{Name} &
-        \textbf{Argument \newline data type} &
-        \textbf{Return \newline data type} &
+        \textbf{Argument \newline datatype} &
+        \textbf{Return \newline datatype} &
         \textbf{Description}
         \tabularnewline
 
         \hline
         abs(x) &
-        double&double &
-        Returns the absolute value of x.
+        \textit{x} double &
+        double &
+        Returns the absolute value of \textit{x}.
         \tabularnewline
 
         \hline
         ceiling(x) &
-        double&double &
-        Returns the smallest double value that is not less than the argument x and is equal to a mathematical integer.
+        \textit{x} double &
+        double &
+        Returns the smallest integer that is not less than \textit{x}.
         \tabularnewline
 
         \hline
         degrees(x) &
+        \textit{x} double &
         double &
-        double &
-        Converts an angle to degrees. Argument x must be in radians.
+        Converts the angle \textit{x} from radians to degrees.
         \tabularnewline
 
         \hline
         exp(x) &
+        \textit{x} double &
         double &
-        double &
-        Returns Euler’s number e raised to the power of x.
+        Returns Euler’s number \textit{e} raised to the power of \textit{x}.
         \tabularnewline
 
         \hline
         floor(x) &
+        \textit{x} double &
         double &
-        double &
-        Returns the largest double value that is not greater than the argument x and is equal to a mathematical integer.
+        Returns the largest integer that is not greater than \textit{x}.
         \tabularnewline
 
         \hline
         log(x) &
+        \textit{x} double &
         double &
-        double &
-        Returns the natural logarithm (base e) of a double value. Value x must be greater than zero.
+        Returns the natural logarithm (base \textit{e}) of \textit{x}. The value of \textit{x} must be greater than zero.
         \tabularnewline
 
         \hline
         log10(x) &
+        \textit{x} double &
         double &
-        double &
-        Returns the base 10 logarithm of a double value. Value x must be greater than zero.
+        Returns the base 10 logarithm of \textit{x}. The value of \textit{x} must be greater than zero.
         \tabularnewline
 
         \hline
-        mod(x, y) &
+        mod(x,y) &
+        \textit{x} double,
+        \newline
+        \textit{y} double &
         double &
-        double &
-        Returns the remainder of x/y.
+        Returns the remainder of \textit{x/y} as a double.
         \tabularnewline
         
         \hline
         pi() &
-        n/a &
+        &
         double &
-        The \(\pi\) constant.
+        The numeric constant \(\pi\).
         \tabularnewline
         
         \hline
-        power(x, y) &
-        x double \newline y double &
+        power(x,y) &
+        \textit{x} double,
+        \newline
+        \textit{y} double &
         double &
-        Returns the value of the first argument raised to the power of the second argument.
+        Returns the value of \textit{x} raised to the power of \textit{y}.
         \tabularnewline
 
         \hline
         radians(x) &
+        \textit{x} double &
         double &
-        double &
-        Converts an angle to radians. Argument x must be in degrees.
+        Converts the angle \textit{x} from degrees to radians.
         \tabularnewline
 
         \hline
         sqrt(x) &
+        \textit{x} double &
         double &
-        double &
-        Returns the positive square root of a double value.
+        Returns the positive square root of \textit{x}.
         \tabularnewline
 
         \hline
-        rand(x) &
-        integer &
+        rand() &
+        &
         double &
-        Returns a random value between 0.0 and 1.0, where x is a seed  value.
+        Returns a random value between 0.0 and 1.0.
         \tabularnewline
 
         \hline
-        round(x, n) &
-        x double \newline n integer &
+        round(x,n) &
+        \textit{x} double,
+        \newline
+        \textit{n} integer &
         double &
-        Rounds double value x to n number of decimal places, with the default being to round to the nearest integer.
-        To round to the left of the decimal point, a negative number should be provided.
+        Rounds \textit{x} to \textit{n} number of decimal places, with the default being to round to the nearest integer.
+        A negative value of \textit{n} will round to the left of the decimal point.
         \tabularnewline
 
         \hline
         truncate(x, n) &
-        x double \newline n integer &
+        \textit{x} double
+        \newline
+        \textit{n} integer &
         double &
-        Returns the result of truncating the argument x to n decimal places.
+        Truncates \textit{x} to \textit{n} decimal places.
         \tabularnewline
 
         \hline
@@ -666,58 +680,60 @@ usage and description are detailed in the following tables:
 
         \hline
         \textbf{Name} &
-        \textbf{Argument \newline data type} &
-        \textbf{Return \newline data type} &
+        \textbf{Argument \newline datatype} &
+        \textbf{Return \newline datatype} &
         \textbf{Description}
         \tabularnewline
 
         \hline
         acos(x) &
+        \textit{x} double &
         double &
-        double &
-        Returns the arc cosine of an angle, in the range of 0 through \(\pi\) radians. Absolute value of x must be lower or equal than 1.0.
+        Returns the arc cosine of \textit{x}, in the range of 0 through \(\pi\) radians. The absolute value of \textit{x} must be less than or equal to 1.0.
         \tabularnewline
 
         \hline
         asin(x) &
+        \textit{x} double &
         double &
-        double &
-        Returns the arc sine of an angle, in the range of -\(\pi\)/2 through \(\pi\)/2 radians. Absolute value of x must be and lower or equal than 1.0.
+        Returns the arc sine of \textit{x}, in the range of -\(\pi\)/2 through \(\pi\)/2 radians. The absolute value of \textit{x} must be less than or equal to 1.0.
         \tabularnewline
 
         \hline
         atan(x) &
+        \textit{x} double &
         double &
-        double &
-        Returns the arc tangent of an angle, in the range of -\(\pi\)/2 through \(\pi\)/2 radians.
+        Returns the arc tangent of \textit{x} , in the range of -\(\pi\)/2 through \(\pi\)/2 radians.
         \tabularnewline
         
         \hline
         atan2(y,x) &
+        \textit{x} double,
+        \newline
+        \textit{y} double &
         double &
-        double &
-        Converts rectangular coordinates x,y to polar angle. It computes the arc tangent of y/x in the range of –\(\pi\) through \(\pi\) radians.
+        Converts rectangular coordinates \textit{x,y} to polar angle. It computes the arc tangent of \textit{y/x} in the range of –\(\pi\) through \(\pi\) radians.
         \tabularnewline
 
         \hline
         cos(x) &
+        \textit{x} double &
         double &
-        double &
-        Returns the cosine of an angle, in the range of -1.0 through 1.0. Argument x must be in radians.
+        Returns the cosine of the angle \textit{x} in radians, in the range of -1.0 through 1.0.
         \tabularnewline
 
         \hline
         sin(x) &
+        \textit{x} double &
         double &
-        double &
-        Returns the sine of an angle, in the range of -1.0 through 1.0. Argument x must be in radians.
+        Returns the cosine of the angle \textit{x} in radians, in the range of -1.0 through 1.0.
         \tabularnewline
 
         \hline
         tan(x) &
+        \textit{x} double &
         double &
-        double &
-        Returns the tangent of an angle. Argument x must be in radians.
+        Returns the tangent of the angle \textit{x} in radians, in the range of -1.0 through 1.0.
         \tabularnewline
 
         \hline
@@ -727,7 +743,7 @@ usage and description are detailed in the following tables:
 \end{table}
 
 \clearpage
-\section{Type System}
+\section{Type system}
 \label{sec:types}
 
 ADQL defines no data definition language (DDL).
@@ -751,7 +767,7 @@ VOTables into ADQL-visible tables.
 \subsubsection{BOOLEAN}
 \label{sec:types.logical.boolean}
 
-The BOOLEAN data type maps to the corresponding \verb:boolean: data type is defined in the \DALIspec.
+The BOOLEAN datatype maps to the corresponding \verb:boolean: datatype is defined in the \DALIspec.
 The serialization format for \verb:boolean: is defined in the \VOTspec.
 
 \begin{table}[thm]\footnotesize
@@ -795,7 +811,7 @@ and the values 0 and \verb:FALSE: are equivalent:
 \end{verbatim}
 
 The literal values \verb:TRUE: and \verb:FALSE:
-are not case sensitive:
+are not case-sensitive:
 \begin{verbatim}
     foo = true
     foo = True
@@ -822,8 +838,8 @@ value is undefined.
 \subsubsection{Numeric primitives}
 \label{sec:types.numeric.primitive}
 
-The numeric data types, BIT, SMALLINT, INTEGER, BIGINT, REAL
-and DOUBLE map to the corresponding data types defined
+The numeric datatypes, BIT, SMALLINT, INTEGER, BIGINT, REAL
+and DOUBLE map to the corresponding datatypes defined
 in the \VOTspec.
 
 \begin{table}[thm]\footnotesize
@@ -986,7 +1002,7 @@ constructor, using the syntax defined in the \DALIspec:
     YYYY-MM-DD[’T’hh:mm:ss[.SSS][’Z’]]
 \end{verbatim}
 
-The basic comparison operators, \verb:=:, \verb:<:, \verb:>:, \verb:<=:, \verb:>=:,
+The basic comparison operators \verb:=:, \verb:<:, \verb:>:, \verb:<=:, \verb:>=:,
 \verb:<>: and \verb:BETWEEN: can all be applied to TIMESTAMP values:
 \begin{verbatim}
     SELECT
@@ -1012,7 +1028,7 @@ chronological time.
 \subsubsection{Character primitives}
 \label{sec:types.character.primitive}
 
-The CHAR and VARCHAR data types map to the \verb:char: or
+The CHAR and VARCHAR datatypes map to the \verb:char: or
 \verb:unicodeChar: type defined in the \VOTspec.
 
 The choice of whether CHAR and VARCHAR map to \verb:char: or
@@ -1060,7 +1076,7 @@ on the data content.
 \label{sec:types.character.clob}
 
 To support strings which are generated by the server when a query is executed
-ADQL includes the Character Large OBject (CLOB) data type,
+ADQL includes the Character Large OBject (CLOB) datatype,
 which behaves as an opaque immutable string of characters.
 
 None of the ADQL operators apply to CLOB values.
@@ -1108,7 +1124,7 @@ database is implementation dependent.
 \subsubsection{Binary primitives}
 \label{sec:types.binary.primitive}
 
-The BINARY and VARBINARY data types map to the \verb:unsignedByte: type defined
+The BINARY and VARBINARY datatypes map to the \verb:unsignedByte: type defined
 in the \VOTspec.
 
 \begin{table}[thm]\footnotesize
@@ -1152,7 +1168,7 @@ in the \VOTspec.
 \label{sec:types.binary.blob}
 
 To support large blocks of binary data such as images,
-ADQL includes the Binary Large OBject (BLOB) data type,
+ADQL includes the Binary Large OBject (BLOB) datatype,
 which behaves as an opaque immutable array of bytes.
 
 None of the ADQL operators apply to BLOB values.
@@ -1240,8 +1256,8 @@ using the \verb:point: xtype defined in the \DALIspec.
     \label{table:types.geom.point}
 \end{table}
 
-POINT values can be created using the \verb:POINT():
-constructor defined in section \ref{sec:functions.geom.point}.
+POINT literals can be expressed using the \verb:POINT():
+constructor defined in \SectionRef{sec:functions.geom.point}.
 For example:
 \begin{verbatim}
     POINT(
@@ -1292,8 +1308,8 @@ using the \verb:circle: xtype defined in the \DALIspec.
     \label{table:types.geom.circle}
 \end{table}
 
-CIRCLE values can be created using the \verb:CIRCLE():
-constructor defined in section \ref{sec:functions.geom.circle}.
+CIRCLE literals can be expressed using the \verb:CIRCLE():
+constructor defined in \SectionRef{sec:functions.geom.circle}.
 For example:
 \begin{verbatim}
     CIRCLE(
@@ -1342,8 +1358,8 @@ using the \verb:polygon: xtype defined in the \DALIspec.
     \label{table:types.geom.polygon}
 \end{table}
 
-POLYGON values can be created using the \verb:POLYGON():
-constructor defined in section \ref{sec:functions.geom.polygon}.
+POLYGON literals can be expressed using the \verb:POLYGON():
+constructor defined in \SectionRef{sec:functions.geom.polygon}.
 For example:
 \begin{verbatim}
     POLYGON(
@@ -1363,7 +1379,8 @@ and (30.0, 30.5) degrees.
 \label{sec:types.geom.region}
 
 The results of an ADQL query may return a complex region
-that cannot be expressed by one of the simple geometric types.
+that cannot be expressed by one of the simple geometric types
+defined in the preceding sections.
 
 In order to support complex geometric regions,
 the results of an ADQL query may use the xtype \verb:region:
@@ -1411,7 +1428,7 @@ In addition to the core components, the ADQL language also includes support
 for optional features and functions.
 
 The following sections define the optional features that are part of the
-the ADQL language, but are not required in order to meet the standard for
+the ADQL grammar, but are not required in order to meet the standard for
 a basic ADQL service.
 
 It is up to each service implementation to declare which optional or
@@ -1432,20 +1449,20 @@ In general, each group of language features is identified by a \verb:type:
 URI, and each individual feature within the group is identified by the
 feature name.
 
-Appendix \ref{sec:features} contains examples of how to declare support
+\AppendixRef{sec:features} contains examples of how to declare support
 for each of the language features defined in this document using the
-\TAPRegExtSpec XML schema.
+XML schema from the \TAPRegExtSpec.
 
 For full details on the XML schema and how it can be used, please refer to
 the \TAPRegExtSpec.
 
-\subsection{Geometrical Functions}
+\subsection{Geometrical functions}
 \label{sec:functions.geom}
 \subsubsection{Overview}
 \label{sec:functions.geom.overview}
 
-In addition to the mathematical functions, ADQL provides a set of geometrical
-functions to enhance the astronomical usage of the language.
+In addition to the mathematical functions, ADQL provides a the following geometrical
+functions to enhance the astronomical usage of the language:
 
 \begin{itemize}
     \item AREA
@@ -1473,16 +1490,15 @@ coordinate vectors MUST be normalized.
 Details of the mechanism for reporting the out of range arguments are
 implementation dependent.
 
-\subsubsection{Data Type Functions}
+\subsubsection{Datatype functions}
 \label{sec:functions.geom.type}
 
-The following functions provide constructors for each of the geometry data types.
-The semantics of these data types are based on the corresponding
-concepts from the STC data model.
-% STC-reference 'STC data model (See [3])'
+The following functions provide constructors for each of the geometry datatypes.
+The semantics of these datatypes are based on the corresponding
+concepts from the \STCSspec data model.
 
-Geometry data types are centered around the BNF construct
-\verb:<value_expression>: which is central to data types within SQL.
+The geometry datatypes and expressions are part of the core \verb:<value_expression>:
+in the ADQL grammar.
 
 \begin{verbatim}
     <value_expression> ::=
@@ -1492,9 +1508,9 @@ Geometry data types are centered around the BNF construct
       | <geometry_value_expression>
 \end{verbatim}
 
-A \verb:<geometry_value_expression>: does not simply cover data type functions
-(POINT, CIRCLE etc.) but must also allow for user defined functions and
-column values where a geometry data type is stored in a column.
+A \verb:<geometry_value_expression>: does not simply cover the geometry datatype
+constructors (POINT, CIRCLE, etc.) but also includes user defined functions and
+column values where a geometry datatype is stored in a column.
 
 Therefore, \verb:<geometry_value_expression>: is expanded as:
 \begin{verbatim}
@@ -1519,6 +1535,7 @@ and column references.
 \subsubsection{Coordsys}
 \label{sec:geom.coordsys.param}
 
+%TODO check on the list ...
 For historical reasons, the geometry constructors (BOX, CIRCLE, POINT
 and POLYGON) all accept an optional string value as the first argument.
 This was originally intended to carry
@@ -1528,12 +1545,12 @@ marked as deprecated. Services are permitted to ignore this parameter and
 clients are advised to pass an empty string here. Future versions of this
 specification may remove this parameter from the listed functions.
 
-\subsubsection{Predicate Functions}
+\subsubsection{Predicate functions}
 \label{sec:functions.geom.predicate}
 
-Functions CONTAINS and INTERSECTS each accept two geometry data types
+Functions CONTAINS and INTERSECTS each accept two geometry datatypes
 and return a numeric value of 1 or 0 according to whether the relevant
-verb (e.g.: "contains") is satisfied against the two input geometries;
+verb (e.g. contains) is satisfied against the two input geometries;
 1 if the condition is met and 0 if it is not.
 
 Each of these functions can be used as a WHERE clause predicate by
@@ -1550,13 +1567,14 @@ For example:
               CIRCLE(...)
               )
 \end{verbatim}
-\noindent
-%TODO - speculative, not definitive.
-One would expect later additions to ADQL to add to this range of functions. For
-example: equals, disjoint, touches, crosses, within, overlaps and relate
-are possibilities.
 
-\subsubsection{Utility Functions}
+%REMOVED - speculative, not definitive.
+%\noindent
+%One would expect later additions to ADQL to add to this range of functions. For
+%example, equals, disjoint, touches, crosses, within, overlaps and relate
+%are possibilities.
+
+\subsubsection{Utility functions}
 \label{sec:functions.geom.utility}
 
 Function COORDSYS extracts the coordinate system string from a given
@@ -1984,7 +2002,7 @@ which would return a string value representing the coordinate system used
 to create the POINT.
 
 The COORDSYS function may be applied to any expression that returns a
-geometric data type. For example:
+geometric datatype. For example:
 \begin{verbatim}
     COORDSYS(
         t.circle
@@ -2263,7 +2281,7 @@ marked as deprecated.
 Future versions of this specification may remove this parameter
 (See \ref{sec:geom.coordsys.param}).
 
-\subsection{User Defined Functions}
+\subsection{User defined functions}
 \label{sec:user.functions}
 \subsubsection{Overview}
 
@@ -2362,7 +2380,7 @@ string manipulation and comparison operators:
 
 \begin{itemize}
     \item \verb:LOWER(): Lower case conversion
-    \item \verb:ILIKE: Case insensitive comparison
+    \item \verb:ILIKE: Case-insensitive comparison
 \end{itemize}
 
 \subsubsection{LOWER}
@@ -2390,7 +2408,7 @@ of \citet{std:UNICODE} for characters outside the ASCII set.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-string|}\\
 {\footnotesize \verb|name: ILIKE|}\\
 
-The ILIKE string comparison operator performs a case insensitive comparison
+The ILIKE string comparison operator performs a case-insensitive comparison
 of its string operands.
 
 \begin{verbatim}
@@ -2428,7 +2446,7 @@ removing duplicate rows unless UNION ALL is used.
 For a UNION operation to be valid in ADQL, the following criteria MUST be met:
 \begin{itemize}
     \item The two queries MUST result in the same number of columns.
-    \item The columns in the operands MUST have the same data types.
+    \item The columns in the operands MUST have the same datatypes.
 \end{itemize}
 
 In addition, the following criteria SHOULD be met: 
@@ -2459,7 +2477,7 @@ For an EXCEPT operation to be valid in ADQL, the following criteria MUST be met:
 
 \begin{itemize}
     \item The two queries MUST result in the same number of columns.
-    \item The columns in the operands MUST have the same data types.
+    \item The columns in the operands MUST have the same datatypes.
 \end{itemize}
 
 In addition, the following criteria SHOULD be met: 
@@ -2490,7 +2508,7 @@ For an INTERSECT operation to be valid in ADQL, the following criteria MUST be m
 
 \begin{itemize}
     \item The two queries MUST result in the same number of columns.
-    \item The columns in the operands MUST have the same data types.
+    \item The columns in the operands MUST have the same datatypes.
 \end{itemize}
 
 In addition, the following criteria SHOULD be met: 
@@ -2591,20 +2609,20 @@ type conversion functions:
 {\footnotesize \verb|name: CAST|}\\
 
 The \verb:CAST(): function returns the value of the first argument converted
-to the data type specified by the second argument.
+to the datatype specified by the second argument.
 
 The ADQL \verb:CAST(): function does not replicate the full functionality
 and range of types supported by common RDBMS implementations of CAST.
 
 The ADQL \verb:CAST(): function only supports type conversion between the
-standard numeric data types. The \verb:CAST(): function does not support
-casting to or from the character, binary, datetime or geometric data types.
+standard numeric datatypes. The \verb:CAST(): function does not support
+casting to or from the character, binary, datetime or geometric datatypes.
 
 The rounding mechanism used when converting from floating point values
 (REAL or DOUBLE) to integer values (SHORTINT, INTEGER or BIGINT) is
 implementation dependent.
 
-When converting a numeric value to a data type that is too small to represent
+When converting a numeric value to a datatype that is too small to represent
 the value, this SHOULD be treated as an error.
 Details of the mechanism for reporting the error condition are
 implementation dependent.
@@ -2759,7 +2777,7 @@ TOP clause is applied to limit the number of rows returned.
 
 \newpage
 \appendix
-\section{BNF Grammar}
+\section{BNF grammar}
 \label{sec:grammar}
 
 \begin{verbatim}
@@ -3559,7 +3577,7 @@ identified by the URI \verb|ivo://ivoa.net/std/TAPRegExt#features-adql-geo|.
 \end{verbatim}
 
 \newpage
-\section{Changes from Previous Versions}
+\section{Changes from previous versions}
 \label{sec:changes}
 
 \begin{itemize}
@@ -3599,7 +3617,7 @@ identified by the URI \verb|ivo://ivoa.net/std/TAPRegExt#features-adql-geo|.
             (svn version r4466, 09 Oct 2017)
             \item Removed reference to ADQL from section titles in the ADQL document\\
             (svn version r4465, 09 Oct 2017)
-            \item Expanded the data types to add sub-section for each xtype\\
+            \item Expanded the datatypes to add sub-section for each xtype\\
             (svn version r4353, 19 Sep 2017)
             \item Removed restriction on nested JOINs\\
             (svn version r4283, 12 Sep 2017)
@@ -3645,7 +3663,7 @@ identified by the URI \verb|ivo://ivoa.net/std/TAPRegExt#features-adql-geo|.
             \item 2.1.5.  Explanation of optional features
             \item 2.2.2.  No Type-based Decay of INTERSECTS
             \item 2.2.3.  Generalized User Defined Functions
-            \item 2.2.4.  Case-Insensitive String Comparisons
+            \item 2.2.4.  Case-insensitive String Comparisons
             \item 2.2.5.  Set Operators
             \item 2.2.6.  Boolean Type
             \item 2.2.7.  Casting to Unit
