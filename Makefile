@@ -17,7 +17,7 @@ DOCTYPE = WD
 SOURCES = $(DOCNAME).tex
 
 # List of pixel image files to be included in submitted package 
-FIGURES = archdiag.png
+FIGURES = ADQL-archdiag.png
 
 # List of PDF figures (for vector graphics)
 VECTORFIGURES = 

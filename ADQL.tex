@@ -29,6 +29,7 @@
 \newcommand{\VOTspec}{VOTable specification\xspace}
 \newcommand{\TAPspec}{TAP specification\xspace}
 \newcommand{\DALIspec}{DALI specification\xspace}
+\newcommand{\STCSspec}{STC-S specification\xspace}
 \newcommand{\VOSIspec}{VOSI specification\xspace}
 \newcommand{\VOUnitSpec}{VOUnits specification\xspace}
 \newcommand{\RegTAPspec}{RegTAP specification\xspace}
@@ -1358,6 +1359,50 @@ For example:
 describes a triangle, whose vertices are (10.0, -10.5), (20.0, 20.5)
 and (30.0, 30.5) degrees.
 
+\subsubsection{REGION}
+\label{sec:types.geom.region}
+
+The results of an ADQL query may return a complex region
+that cannot be expressed by one of the simple geometric types.
+
+In order to support complex geometric regions,
+the results of an ADQL query may use the xtype \verb:region:
+to describe a column that contains a STC-S string
+serialization.
+
+The grammar for the content of the STC-S string is defined in the \STCSspec.
+
+\begin{table}[thm]\footnotesize
+    \begin{tabular}
+        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        \hline
+
+        \hline
+        \multicolumn{1}{|c|}{\textbf{ADQL}} &
+        \multicolumn{3}{|c|}{\textbf{VOTable}}
+        \tabularnewline
+        
+        \hline
+        \textbf{type} &
+        \textbf{datatype} &
+        \textbf{arraysize} &
+        \textbf{xtype}
+        \tabularnewline
+
+        \hline
+        - &
+        char &
+        * &
+        region
+        \tabularnewline
+
+        \hline
+    \end{tabular}
+    \caption{Type mapping for STC-S region}
+    \label{table:types.geom.region}
+\end{table}
+
+
 \clearpage
 \section{Optional components}
 \label{sec:optional}
@@ -1472,7 +1517,7 @@ and \verb:<value_expression_primary>: enables the use of geometric functions
 and column references.
 
 \subsubsection{Coordsys}
-\label{sec:functions.geom.coordsys}
+\label{sec:geom.coordsys.param}
 
 For historical reasons, the geometry constructors (BOX, CIRCLE, POINT
 and POLYGON) all accept an optional string value as the first argument.
@@ -1675,7 +1720,7 @@ value as the first argument.
 As of this version of the specification this parameter has been
 marked as deprecated.
 Future versions of this specification may remove this parameter
-(See \ref{sec:functions.geom.coordsys}).
+(See \ref{sec:geom.coordsys.param}).
 
 \subsubsection{CENTROID}
 \label{sec:functions.geom.centroid}
@@ -1753,7 +1798,7 @@ value as the first argument.
 As of this version of the specification this parameter has been
 marked as deprecated.
 Future versions of this specification may remove this parameter
-(See \ref{sec:functions.geom.coordsys}).
+(See \ref{sec:geom.coordsys.param}).
 
 \subsubsection{CONTAINS}
 \label{sec:functions.geom.contains}
@@ -2156,7 +2201,7 @@ value as the first argument.
 As of this version of the specification this parameter has been
 marked as deprecated.
 Future versions of this specification may remove this parameter
-(See \ref{sec:functions.geom.coordsys}).
+(See \ref{sec:geom.coordsys.param}).
 
 \subsubsection{POLYGON}
 \label{sec:functions.geom.polygon}
@@ -2216,7 +2261,7 @@ value as the first argument.
 As of this version of the specification this parameter has been
 marked as deprecated.
 Future versions of this specification may remove this parameter
-(See \ref{sec:functions.geom.coordsys}).
+(See \ref{sec:geom.coordsys.param}).
 
 \subsection{User Defined Functions}
 \label{sec:user.functions}
