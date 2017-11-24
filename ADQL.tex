@@ -29,13 +29,18 @@
 \newcommand{\VOTspec}{VOTable specification\xspace}
 \newcommand{\TAPspec}{TAP specification\xspace}
 \newcommand{\DALIspec}{DALI specification\xspace}
-\newcommand{\STCSspec}{STC-S specification\xspace}
 \newcommand{\VOSIspec}{VOSI specification\xspace}
 \newcommand{\VOUnitSpec}{VOUnits specification\xspace}
 \newcommand{\RegTAPspec}{RegTAP specification\xspace}
 \newcommand{\TAPRegExtSpec}{TAPRegExt specification\xspace}
+
+\newcommand{\STCspec}{STC specification\xspace}
+\newcommand{\STCSspec}{STC-S specification\xspace}
+
 \newcommand{\SectionRef}[1]{Section \ref{#1}\xspace}
+\newcommand{\SectionSee}[1]{(see Section\ref{#1})\xspace}
 \newcommand{\AppendixRef}[1]{Appendix \ref{#1}\xspace}
+
 
 \title{Astronomical Data Query Language}
 
@@ -453,7 +458,7 @@ A \verb:TOP: clause MAY be specified to limit the number of rows returned.
 An \verb:OFFSET: clause MAY be specified to skip a number of rows at the start
 of the results.
 If both \verb:TOP: and \verb:OFFSET: are used together then \verb:OFFSET: is applied
-first followed by \verb:TOP: (see \SectionRef{sec:offset}). 
+first followed by \verb:TOP: \SectionSee{sec:offset}. 
 
 The order of the columns in the query results SHALL be the same as the
 order specified in the selection list,
@@ -539,7 +544,7 @@ case-insensitive string comparison operator, defined in \SectionRef{sec:string.f
 \subsection{Mathematical and Trigonometrical Functions}
 \label{sec:math.functions}
 
-ADQL declares a list of reserved keywords (see \SectionRef{sec:keywords}) which include
+ADQL declares a list of reserved keywords \SectionSee{sec:keywords} which include
 the mathematical and trigonometrical function names. Their syntax,
 usage and description are detailed in the following tables:
 
@@ -1495,7 +1500,7 @@ implementation dependent.
 
 The following functions provide constructors for each of the geometry datatypes.
 The semantics of these datatypes are based on the corresponding
-concepts from the \STCSspec data model.
+concepts from the \STCspec data model.
 
 The geometry datatypes and expressions are part of the core \verb:<value_expression>:
 in the ADQL grammar.
@@ -1583,9 +1588,9 @@ string value.
 
 This function has been included as a string value function because it
 returns a simple string value.
-Hence:
+
 \begin{verbatim}
-    <string_value_function> :: =
+    <string_value_function> ::=
         <string_geometry_function> | <user_defined_function>
 
     <string_geometry_function> ::= <extract_coordsys>
@@ -1594,7 +1599,7 @@ Hence:
         COORDSYS <left_paren> <geometry_value_expression> <right_paren>
 \end{verbatim}
 
-Note - as of this version of the specification the COORDSYS function has
+As of this version of the specification the COORDSYS function has
 been marked as deprecated. This function may be removed in future versions
 of this specification.
 
@@ -1602,10 +1607,10 @@ Functions like AREA, COORD1, COORD2 and DISTANCE accept a geometry and
 return a calculated numeric value.
 
 The specification defines two versions of the DISTANCE function,
-one that accepts accept two geometries, and one that accepts four
+one that accepts two geometries, and one that accepts four
 separate numeric values, both forms return a numeric value.
 
-The Predicate and most of the Utility functions have been included as numeric
+The predicate and most of the utility functions are included as numeric
 value functions because they return simple numeric values.
 Thus:
 \begin{verbatim}
@@ -1681,6 +1686,14 @@ The AREA of a single POINT is zero.
 
 The geometry argument may be a literal value, as above, or it may be a
 column reference, function or expression that returns a geometric type.
+For example:
+\begin{verbatim}
+    AREA(
+        t1.footprint
+       )
+\end{verbatim}
+where \textit{t1.footprint} is a reference to a database column that
+contains geometric (POINT, BOX, CIRCLE or POLYGON) values.
 
 \subsubsection{BOX}
 \label{sec:functions.geom.box}
@@ -1689,9 +1702,12 @@ column reference, function or expression that returns a geometric type.
 {\footnotesize \verb|name: BOX|}\\
 
 The BOX function expresses a box on the sky. A BOX is a special case of POLYGON,
-defined purely for convenience, and it corresponds semantically to the STC Box.
+defined purely for convenience,
+and it corresponds semantically to the equivalent term, Box, defined in
+the \STCspec.
+%(STC Box, Section 4.5.1.5)
+
 It is specified by a center position and size
-% STC-reference 'region ([3], Section 4.5.1.5)'
 (in both axes) defining a cross centered on the center position and
 with arms extending, parallel to the coordinate axes at the center position,
 for half the respective sizes on either side. The box’s sides are line
@@ -1728,8 +1744,20 @@ Alternatively, the center position could be expressed as a POINT:
        )
 \end{verbatim}
 
-The position argument may be a literal value, as above, or it may be a
-column reference, function or expression that returns a geometric type.
+The function arguments may be literal values, as above, or they may be
+column references, functions or expressions that returns the appropriate
+datatypes.
+For example:
+\begin{verbatim}
+    BOX(
+        t1.center,
+        t1.width,
+        t1.height
+       )
+\end{verbatim}
+where \textit{t1.center}, \textit{t1.width} and \textit{t1.height}
+are references to database columns that contain POINT, DOUBLE
+and DOUBLE values respectively.
 %TODO - ObsCore example
 
 %coordsys param
@@ -1738,7 +1766,7 @@ value as the first argument.
 As of this version of the specification this parameter has been
 marked as deprecated.
 Future versions of this specification may remove this parameter
-(See \ref{sec:geom.coordsys.param}).
+\SectionSee{sec:geom.coordsys.param}.
 
 \subsubsection{CENTROID}
 \label{sec:functions.geom.centroid}
@@ -1760,13 +1788,21 @@ be written as follows :
             30.0,
             30.5
             )
-       )
+        )
 \end{verbatim}
 
-The CENTROID of a single POINT is the POINT.
+The CENTROID of a single POINT is that POINT.
 
 The geometry argument may be a literal value, as above, or it may be a
 column reference, function or expression that returns a geometric type.
+For example:
+\begin{verbatim}
+    CENTROID(
+        t1.footprint
+        )
+\end{verbatim}
+where \textit{t1.footprint} is a reference to a database column that
+contains geometric (POINT, BOX, CIRCLE or POLYGON) values.
 %TODO - ObsCore example
 
 \subsubsection{CIRCLE}
@@ -1775,13 +1811,14 @@ column reference, function or expression that returns a geometric type.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: CIRCLE|}\\
 
-The CIRCLE function expresses a circular region on the sky (a cone in space) and
-corresponds semantically to the STC Circle.
-The function arguments specify the center position and the radius, where:
-% STC-reference STC Circle region ([3], Section 4.5.1.2)
+The CIRCLE function expresses a circular region on the sky (a cone in space),
+and it corresponds semantically to the equivalent term, Circle, defined in
+the \STCspec.
+%(STC Circle, Section 4.5.1.2)
 
+The function arguments specify the center position and the radius, where:
 \begin{itemize}
-    \item the center position is given by a pair of numeric coordinates in degrees, or a single POINT value.
+    \item the center position is given by a pair of numeric coordinates in degrees, or a single POINT value
     \item and the radius is a numeric value expression in degrees.
 \end{itemize}
 
@@ -1795,7 +1832,7 @@ For example, a CIRCLE of ten degrees radius centered on position
         )
 \end{verbatim}
 
-Alternatively, the center position could be expressed as a POINT:
+Alternatively, the center position may be expressed as a POINT:
 \begin{verbatim}
     CIRCLE(
         POINT(
@@ -1808,6 +1845,15 @@ Alternatively, the center position could be expressed as a POINT:
 
 The position argument may be a literal value, as above, or it may be a
 column reference, function or expression that returns a geometric type.
+For example:
+\begin{verbatim}
+    CIRCLE(
+        t1.center,
+        t1.radius
+       )
+\end{verbatim}
+where \textit{t1.center} and \textit{t1.radius} are references to
+database columns that contain POINT and DOUBLE values respectively.
 %TODO - ObsCore example
 
 %coordsys param
@@ -1816,7 +1862,7 @@ value as the first argument.
 As of this version of the specification this parameter has been
 marked as deprecated.
 Future versions of this specification may remove this parameter
-(See \ref{sec:geom.coordsys.param}).
+\SectionSee{sec:geom.coordsys.param}.
 
 \subsubsection{CONTAINS}
 \label{sec:functions.geom.contains}
@@ -1825,7 +1871,7 @@ Future versions of this specification may remove this parameter
 {\footnotesize \verb|name: CONTAINS|}\\
 
 The CONTAINS function determines if a geometry is wholly contained within
-another. This is most commonly used to express the "point-in-shape" condition.
+another. This is most commonly used to express a "point-in-shape" condition.
 
 For example, an expression to determine whether the point (25.0, -19.5) degrees
 is within a circle of ten degrees radius centered on position (25.4, -20.0) degrees,
@@ -1885,17 +1931,30 @@ for "does contain" and
 \noindent
 for "does not contain".
 
-The geometric arguments for CONTAINS may be a literal values, as above,
+%TODO - CONTAINS(thing, POINT) ?
+
+The geometric arguments for CONTAINS may be literal values, as above,
 or they may be column references, functions or expressions that return
-a geometric type.
+geometric values.
+For example:
+\begin{verbatim}
+    WHERE
+        0 = CONTAINS(
+            t1.center,
+            t2.footprint
+            )
+\end{verbatim}
+where \textit{t1.center} and \textit{t2.footprint} are references to
+database columns that contain POINT and geometric (BOX, CIRCLE or POLYGON)
+values respectively.
 %TODO - ObsCore example
 
 %coordsys trans
-If the arguments are expressed in different coordinate systems, the
-CONTAINS function is responsible for converting one, or both, of the
+If the geometric arguments are expressed in different coordinate systems,
+the CONTAINS function is responsible for converting one, or both, of the
 arguments into a different coordinate system.
-If it cannot perform the required conversion then it SHOULD throw an
-error.
+If the CONTAINS function cannot perform the required conversion then
+it SHOULD throw an error.
 Details of the mechanism for reporting the error condition are
 implementation dependent.
 
@@ -1906,7 +1965,7 @@ implementation dependent.
 {\footnotesize \verb|name: COORD1|}\\
 
 The COORD1 function extracts the first coordinate value, in degrees, of a given
-POINT (See \ref{sec:functions.geom.point}) or column reference.
+POINT \SectionSee{sec:functions.geom.point} or column reference.
 
 For example, the right ascension of a point with position (25, -19.5) in
 degrees would be obtained using the following expression:
@@ -1921,17 +1980,14 @@ degrees would be obtained using the following expression:
 \noindent
 which would return a numeric value of 25.0 degrees.
 
-The COORD1 function may be applied to any expression that returns a
-geometric POINT value.
 For example:
 \begin{verbatim}
     COORD1(
-        t.point
+        t.center
         )
 \end{verbatim}
 \noindent
-where \textit{t.point} is a column reference for a POINT value
-stored in the database.
+where \textit{t.center} is a reference to a column that contans POINT values.
 
 \subsubsection{COORD2}
 \label{sec:functions.geom.coord2}
@@ -1940,7 +1996,7 @@ stored in the database.
 {\footnotesize \verb|name: COORD2|}\\
 
 The COORD2 function extracts the second coordinate value, in degrees, of a given
-POINT (See \ref{sec:functions.geom.point}) or column reference.
+POINT \SectionSee{sec:functions.geom.point} or column reference.
 
 For example, the declination of a point with position (25, -19.5) in degrees,
 could be obtained using the following expression:
@@ -1960,12 +2016,11 @@ geometric POINT value.
 For example:
 \begin{verbatim}
     COORD2(
-        t.point
+        t.center
         )
 \end{verbatim}
 \noindent
-where \textit{t.point} is a column reference for a POINT value
-stored in the database.
+where \textit{t.center} is a reference to a column that contans POINT values.
 
 \subsubsection{COORDSYS}
 \label{sec:functions.geom.coordsys}
@@ -1973,14 +2028,14 @@ stored in the database.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: COORDSYS|}\\
 
-Note - as of this version of the specification the COORDSYS function has
+As of this version of the specification the COORDSYS function has
 been marked as deprecated. This function may be removed in future versions
 of this specification.
 Details of the coordinate system for a database column are available as part of
 the service metadata, available via the \verb:TAP_SCHEMA: tables defined in the
 \TAPspec and the \verb:/tables: webservice response defined in the \VOSIspec.
 
-%As described in Section \ref{sec:functions.geom.overview}, the allowed return values must be defined
+%As described in \SectionRef{sec:functions.geom.overview}, the allowed return values must be defined
 %by any service making use of ADQL, and a list of standard coordinate system
 %literals can be found in the STC specification.
 % STC-reference 'STC specification [3]'
@@ -2005,12 +2060,12 @@ The COORDSYS function may be applied to any expression that returns a
 geometric datatype. For example:
 \begin{verbatim}
     COORDSYS(
-        t.circle
+        t.footprint
         )
 \end{verbatim}
 \noindent
-where \textit{t.circle} is a column reference for a geometric value
-stored in the database.
+where \textit{t.footprint} is a reference to a database column that
+contains geometric (POINT, BOX, CIRCLE or POLYGON) values.
 
 \subsubsection{DISTANCE}
 \label{sec:functions.geom.distance}
@@ -2044,7 +2099,7 @@ coordinates (25,-19.5) and (25.4,-20) could be written as follows:
         )
 \end{verbatim}
 \noindent
-where all numeric values and the returned arc-length are in degrees.
+where all numeric values and the returned arc length are in degrees.
 
 The equivalent call to the four parameter form of the function would be:
 \begin{verbatim}
@@ -2058,24 +2113,24 @@ The equivalent call to the four parameter form of the function would be:
 
 The DISTANCE function may be applied to any expression that returns a
 geometric POINT value.
-For example, the distance between points stored in the database could
+For example, the distance between to points stored in the database could
 be calculated as follows:
 \begin{verbatim}
     DISTANCE(
-        t.p1,
-        t.p2
+        t1.target,
+        t2.reference
         )
 \end{verbatim}
 \noindent
-where \textit{t.p1} and \textit{t.p2} refer to POINT value columns in the
-database.
+where \textit{t1.target} and \textit{t2.reference} are references to
+database columns that contain POINT values.
 
 %coordsys trans
-If the  geometric arguments are expressed in different coordinate systems,
-the function is responsible for converting one, or both arguments into a
-different coordinate system.
-If it cannot perform the required conversion then it SHOULD throw an
-error.
+If the geometric arguments are expressed in different coordinate systems,
+the DISTANCE function is responsible for converting one, or both, of the
+arguments into a different coordinate system.
+If the DISTANCE function cannot perform the required conversion then
+it SHOULD throw an error.
 Details of the mechanism for reporting the error condition are
 implementation dependent.
 
@@ -2088,7 +2143,7 @@ use the same coordinate system.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: INTERSECTS|}\\
 
-The INTERSECTS function determines if if two geometry values overlap. This is
+The INTERSECTS function determines if two geometry values overlap. This is
 most commonly used to express a "shape-vs-shape" intersection test.
 
 For example, an expression to determine whether a circle of one degree radius
@@ -2152,25 +2207,36 @@ for "does intersect" and
 \noindent
 for "does not intersect".
 
-The geometric arguments for INTERSECTS may be a literal values, as above,
+The geometric arguments for INTERSECTS may be literal values, as above,
 or they may be column references, functions or expressions that return
-a geometric type.
+geometric values.
+For example:
+\begin{verbatim}
+    WHERE
+        0 = INTERSECTS(
+            t1.target,
+            t2.footprint
+            )
+\end{verbatim}
+where \textit{t1.target} and \textit{t2.footprint} are references to
+database columns that contain geometric (BOX, CIRCLE or POLYGON) values.
 
 %TODO
 The arguments to INTERSECTS SHOULD be geometric expressions evaluating to
 either BOX, CIRCLE or POLYGON.
 Previous versions of this
-specification allow POINTs as well and require servers to interpret the
-expression as a CONTAINS with the POINT moved into the first position. Servers
-SHOULD still implement that behaviour, but clients SHOULD NOT expect it. This
-behaviour will be dropped in the next major version of this specification.
+specification also allowed POINT values and required server implementations to
+interpret the expression as a CONTAINS with the POINT moved into the first position.
+Server implementations SHOULD still implement that behaviour, but clients
+SHOULD NOT expect it.
+This behaviour will be dropped in the next major version of this specification.
 
 %coordsys trans
 If the geometric arguments are expressed in different coordinate systems,
-the function is responsible for converting one, or both arguments into a
-different coordinate system.
-If it cannot perform the required conversion then it SHOULD throw an
-error.
+the INTERSECTS function is responsible for converting one, or both, of the
+arguments into a different coordinate system.
+If the INTERSECTS function cannot perform the required conversion then
+it SHOULD throw an error.
 Details of the mechanism for reporting the error condition are
 implementation dependent.
 
@@ -2180,13 +2246,14 @@ implementation dependent.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: POINT|}\\
 
-This POINT function expresses a single location on the sky, and corresponds
-semantically to an STC SpatialCoord. The arguments
-specify the position, where:
-% STC-reference 'STC SpatialCoord ([3], Section 4.4.2)'
+The POINT function expresses a single location on the sky,
+and it corresponds semantically to the equivalent term, SpatialCoord, defined in
+the \STCspec.
+%(STC SpatialCoord, Section 4.4.2.2)
 
+The arguments specify the position, where:
 \begin{itemize}
-    \item the two numeric coordinates match the units and ranges defined in Section \ref{sec:functions.geom.overview}.
+    \item the two numeric coordinates match the units and ranges defined in \SectionRef{sec:functions.geom.overview}.
 \end{itemize}
 
 For example, a function expressing a point with right ascension of 25 degrees
@@ -2200,9 +2267,10 @@ and declination of -19.5 degrees would be written as follows:
 \noindent
 where numeric values are in degrees.
 
-The coordinates for POINT may be a literal values, as above,
+The coordinates for POINT may be literal values, as above,
 or they may be column references, functions or expressions that return
-a numeric types:
+numeric values.
+For example:
 \begin{verbatim}
     POINT(
         t.ra,
@@ -2210,7 +2278,8 @@ a numeric types:
         )
 \end{verbatim}
 \noindent
-where \textit{t.ra} and \textit{t.dec} are numeric columns in the database.
+where \textit{t.ra} and \textit{t.dec} are references to database
+columns that contain numeric values.
 %TODO - ObsCore example
 
 %coordsys param
@@ -2219,7 +2288,7 @@ value as the first argument.
 As of this version of the specification this parameter has been
 marked as deprecated.
 Future versions of this specification may remove this parameter
-(See \ref{sec:geom.coordsys.param}).
+\SectionSee{sec:geom.coordsys.param}.
 
 \subsubsection{POLYGON}
 \label{sec:functions.geom.polygon}
@@ -2231,9 +2300,12 @@ The POLYGON function expresses a region on the sky with boundaries denoted by gr
 circles passing through specified coordinates. It corresponds semantically
 to the STC Polygon. The arguments specify the
 coordinate system and three or more sets of 2-D coordinates, where:
-% STC-reference 'STC Polygon region ([3], Section 4.5.1.4)'
+%(STC Polygon, Section 4.5.1.4)
+
 \begin{itemize}
-    \item the coordinates are given as pairs of numeric values, with units and legal ranges as defined in Section \ref{sec:functions.geom.overview}.
+    \item the coordinates are given as pairs of numeric values,
+    with units and legal ranges as defined in
+    \SectionRef{sec:functions.geom.overview}.
 \end{itemize}
 
 Thus, the polygon is a list of vertices in a single coordinate system, with
@@ -2256,9 +2328,10 @@ as follows:
 \noindent
 where all numeric values are in degrees.
 
-The coordinates for POLYGON may be a literal values, as above,
+The coordinates for the POLYGON may be literal values, as above,
 or they may be column references, functions or expressions that return
-a numeric values:
+numeric values.
+For example:
 \begin{verbatim}
     POLYGON(
         t.ra,
@@ -2270,8 +2343,12 @@ a numeric values:
         )
 \end{verbatim}
 \noindent
-where \textit{t.ra} and \textit{t.dec} are numeric columns in the database.
+where \textit{t.ra} and \textit{t.dec} are references to database columns
+that contain numeric values.
 %TODO - ObsCore example
+
+An alternative form of the POLYGON function accepts a series of POINT values
+%TBD ..
 
 %coordsys param
 For historical reasons, the POLYGON function accepts an optional string
@@ -2279,14 +2356,15 @@ value as the first argument.
 As of this version of the specification this parameter has been
 marked as deprecated.
 Future versions of this specification may remove this parameter
-(See \ref{sec:geom.coordsys.param}).
+\SectionSee{sec:geom.coordsys.param}.
 
 \subsection{User defined functions}
 \label{sec:user.functions}
 \subsubsection{Overview}
 
-ADQL also provides a place holder to define user specific functions. Such
-construct supports a variable list of parameters as input in the following way:
+ADQL also provides a place holder to define user specific functions. The grammar
+definition for user defined functions includes a variable list of parameters.
+
 \begin{verbatim}
     <user_defined_function> ::=
         <user_defined_function_name> <left_paren>
@@ -2312,7 +2390,7 @@ by the Wide Field Astronomy Unit (WFAU) could be prefixed as follows:
     wfau_convert()
 \end{verbatim}
 
-This enables users to distinguish between function with similar names developed
+This enables users to distinguish between functions with similar names developed
 by a different service provider, e.g. the German Astrophysical Virtual
 Observatory (GAVO):
 \begin{verbatim}
@@ -2380,7 +2458,7 @@ string manipulation and comparison operators:
 
 \begin{itemize}
     \item \verb:LOWER(): Lower case conversion
-    \item \verb:ILIKE: Case-insensitive comparison
+    \item \verb:ILIKE: Case-insensitive comparison.
 \end{itemize}
 
 \subsubsection{LOWER}
@@ -2445,19 +2523,19 @@ removing duplicate rows unless UNION ALL is used.
 
 For a UNION operation to be valid in ADQL, the following criteria MUST be met:
 \begin{itemize}
-    \item The two queries MUST result in the same number of columns.
-    \item The columns in the operands MUST have the same datatypes.
+    \item the two queries MUST result in the same number of columns
+    \item the columns in the operands MUST have the same datatypes.
 \end{itemize}
 
 In addition, the following criteria SHOULD be met: 
 \begin{itemize}
-    \item The columns in the operands SHOULD have the same metadata, e.g. units, UCD etc.
-    \item The metadata for the results SHOULD be generated from the left-hand operand.
+    \item the columns in the operands SHOULD have the same metadata, e.g. units, UCD, etc.
+    \item the metadata for the results SHOULD be generated from the left-hand operand.
 \end{itemize}
 
 Note that the comparison used for removing duplicates is based purely on the
 column value and does not take into account the units.
-This means that row with a numeric value of \verb:2: and units of \verb:m:
+This means that a row with a numeric value of \verb:2: and units of \verb:m:
 and a row with a numeric value of \verb:2: and units of \verb:km: will be
 considered equal, despite the difference in units.
 \begin{verbatim}
@@ -2476,19 +2554,19 @@ removing duplicate rows unless EXCEPT ALL is used.
 For an EXCEPT operation to be valid in ADQL, the following criteria MUST be met:
 
 \begin{itemize}
-    \item The two queries MUST result in the same number of columns.
-    \item The columns in the operands MUST have the same datatypes.
+    \item the two queries MUST result in the same number of columns
+    \item the columns in the operands MUST have the same datatypes.
 \end{itemize}
 
 In addition, the following criteria SHOULD be met: 
 \begin{itemize}
-    \item The columns in the operands SHOULD have the same metadata, e.g. units, UCD etc.
-    \item The metadata for the results MUST be generated from the left-hand operand.
+    \item the columns in the operands SHOULD have the same metadata, e.g. units, UCD, etc.
+    \item the metadata for the results MUST be generated from the left-hand operand.
 \end{itemize}
 
 Note that the comparison used for removing duplicates is based purely on the
 column value and does not take into account the units.
-This means that row with a numeric value of \verb:2: and units of \verb:m:
+This means that a row with a numeric value of \verb:2: and units of \verb:m:
 and a row with a numeric value of \verb:2: and units of \verb:km: will be
 considered equal, despite the difference in units.
 \begin{verbatim}
@@ -2507,19 +2585,19 @@ removing duplicate rows unless INTERSECT ALL is used.
 For an INTERSECT operation to be valid in ADQL, the following criteria MUST be met:
 
 \begin{itemize}
-    \item The two queries MUST result in the same number of columns.
-    \item The columns in the operands MUST have the same datatypes.
+    \item the two queries MUST result in the same number of columns
+    \item the columns in the operands MUST have the same datatypes.
 \end{itemize}
 
 In addition, the following criteria SHOULD be met: 
 \begin{itemize}
-    \item The columns in the operands SHOULD have the same metadata, e.g. units, UCD etc.
-    \item The metadata for the results MUST be generated from the left-hand operand.
+    \item the columns in the operands SHOULD have the same metadata, e.g. units, UCD, etc.
+    \item the metadata for the results MUST be generated from the left-hand operand.
 \end{itemize}
 
 Note that the comparison used for removing duplicates is based purely on the
 column value and does not take into account the units.
-This means that row with a numeric value of \verb:2: and units of \verb:m:
+This means that a row with a numeric value of \verb:2: and units of \verb:m:
 and a row with a numeric value of \verb:2: and units of \verb:km: will be
 considered equal, despite the difference in units.
 \begin{verbatim}
@@ -2651,8 +2729,8 @@ description using the formatting defined in the \VOUnitSpec.
 
 The system SHOULD report an error in response to the following conditions:
 \begin{itemize}
-    \item If the second argument is not a valid unit description. 
-    \item If the system is not able to convert the value into the requested units.
+    \item if the second argument is not a valid unit description
+    \item if the system is not able to convert the value into the requested units.
 \end{itemize}
 
 Details of the mechanism for reporting the error condition are
@@ -2765,7 +2843,7 @@ of rows from the beginning of the result set.
 
 If a query contains both an ORDER BY clause and an OFFSET clause,
 then the ORDER BY is applied before the specified number of 
-of rows are dropped by the OFFSET clause.
+rows are dropped by the OFFSET clause.
 
 If the total number of rows is less than the value
 specified by the OFFSET clause, then the result set is empty.
@@ -3560,8 +3638,11 @@ URI that identifies the group, and contains a \verb:form: element for each
 individual feature from the group that the service supports.
 
 For example, the following XML fragment describes a service that supports the
-\verb:POINT: and \verb:CIRCLE: functions from the set of geometrical functions
-identified by the URI \verb|ivo://ivoa.net/std/TAPRegExt#features-adql-geo|.
+\verb:POINT: and \verb:CIRCLE: functions from the set of geometrical functions,
+
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|name: POINT, CIRCLE|}\\
 
 \begin{verbatim}
 <languageFeatures
