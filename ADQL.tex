@@ -1424,7 +1424,6 @@ The grammar for the content of the STC-S string is defined in the \STCSspec.
     \label{table:types.geom.region}
 \end{table}
 
-
 \clearpage
 \section{Optional components}
 \label{sec:optional}
@@ -1483,6 +1482,9 @@ functions to enhance the astronomical usage of the language:
     \item POINT
     \item POLYGON
 \end{itemize}
+
+\subsubsection{Coordinate limits}
+\label{sec:functions.geom.limits}
 
 If the arguments for a geometric function represent spherical coordinates
 then the values SHOULD be limited to [0, 360] and [-90, 90],
@@ -1714,11 +1716,14 @@ for half the respective sizes on either side. The box’s sides are line
 segments or great circles intersecting the arms of the cross in its end
 points at right angles with the arms.
 
-The function arguments specify the center position
-and both the width and height values, where:
+The function arguments specify the center position and the width and height,
+where:
 \begin{itemize}
-    \item the center position is given by a pair of numeric coordinates in degrees, or a POINT object.
-    \item the the width and height numeric are given by numeric expressions in degrees.
+    \item the center position is given by a pair of numeric coordinates
+    in degrees, or a single geometric POINT
+    \item the width and height are given by numeric values in degrees
+    \item the center position and the width and height MUST be within the ranges defined in
+    \SectionRef{sec:functions.geom.limits}.
 \end{itemize}
 
 For example, a BOX of ten degrees centered on a position
@@ -1818,8 +1823,11 @@ the \STCspec.
 
 The function arguments specify the center position and the radius, where:
 \begin{itemize}
-    \item the center position is given by a pair of numeric coordinates in degrees, or a single POINT value
-    \item and the radius is a numeric value expression in degrees.
+    \item the center position is given by a pair of numeric coordinates
+    in degrees, or a single geometric POINT
+    \item the radius is a numeric value in degrees
+    \item the center position and the radius MUST be within the ranges defined in
+    \SectionRef{sec:functions.geom.limits}.
 \end{itemize}
 
 For example, a CIRCLE of ten degrees radius centered on position
@@ -2251,9 +2259,11 @@ and it corresponds semantically to the equivalent term, SpatialCoord, defined in
 the \STCspec.
 %(STC SpatialCoord, Section 4.4.2.2)
 
-The arguments specify the position, where:
+The function arguments specify the position, where:
 \begin{itemize}
-    \item the two numeric coordinates match the units and ranges defined in \SectionRef{sec:functions.geom.overview}.
+    \item the position is given by a pair of numeric coordinates in degrees
+    \item the numeric coordinates MUST be within the ranges defined in
+    \SectionRef{sec:functions.geom.limits}.
 \end{itemize}
 
 For example, a function expressing a point with right ascension of 25 degrees
@@ -2298,19 +2308,20 @@ Future versions of this specification may remove this parameter
 
 The POLYGON function expresses a region on the sky with boundaries denoted by great
 circles passing through specified coordinates. It corresponds semantically
-to the STC Polygon. The arguments specify the
-coordinate system and three or more sets of 2-D coordinates, where:
+to the STC Polygon.
 %(STC Polygon, Section 4.5.1.4)
 
-\begin{itemize}
-    \item the coordinates are given as pairs of numeric values,
-    with units and legal ranges as defined in
-    \SectionRef{sec:functions.geom.overview}.
-\end{itemize}
-
-Thus, the polygon is a list of vertices in a single coordinate system, with
+A polygon is described by a list of vertices in a single coordinate system, with
 each vertex connected to the next along a great circle and the last vertex
 implicitly connected to the first vertex.
+
+The function arguments specify three or more vertices, where:
+\begin{itemize}
+    \item the position of the vertices are given as a sequence of
+    numeric coordinates in degrees, or as a sequence of geometric POINTs
+    \item the numeric coordinates MUST be within the ranges defined in
+    \SectionRef{sec:functions.geom.limits}
+\end{itemize}
 
 For example, a function expressing a triangle, whose vertices are (10.0,
 -10.5), (20.0, 20.5) and (30.0,30.5) in degrees would be written
@@ -2328,27 +2339,43 @@ as follows:
 \noindent
 where all numeric values are in degrees.
 
-The coordinates for the POLYGON may be literal values, as above,
+The coordinates for the POLYGON vertices may be literal values, as above,
 or they may be column references, functions or expressions that return
 numeric values.
 For example:
 \begin{verbatim}
     POLYGON(
-        t.ra,
-        t.dec + 5,
-        t.ra  - 5,
-        t.dec - 5,
-        t.ra  - 5,
-        t.dec + 5,
+        t1.ra,
+        t1.dec + 5,
+        t1.ra  - 5,
+        t1.dec - 5,
+        t1.ra  - 5,
+        t1.dec + 5,
         )
 \end{verbatim}
 \noindent
-where \textit{t.ra} and \textit{t.dec} are references to database columns
+where \textit{t1.ra} and \textit{t1.dec} are references to database columns
 that contain numeric values.
 %TODO - ObsCore example
 
-An alternative form of the POLYGON function accepts a series of POINT values
-%TBD ..
+Alternatively, the coordinates for the POLYGON vertices may be column references,
+functions or expressions that return POINT values.
+For example:
+\begin{verbatim}
+    POLYGON(
+        t2.toppoint,
+        t2.bottomleft,
+        t2.bottomright
+        )
+\end{verbatim}
+\noindent
+where \textit{t2.toppoint}, \textit{t2.bottomleft} and \textit{t2.bottomright}
+are references to database columns that contain POINT values.
+%TODO - ObsCore example
+
+The coordinates for the vertices MUST all be expressed in the same datatype.
+The POLYGON function does not support a mixture of numeric and POINT
+arguments.
 
 %coordsys param
 For historical reasons, the POLYGON function accepts an optional string
