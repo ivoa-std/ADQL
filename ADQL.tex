@@ -614,7 +614,7 @@ usage and description are detailed in the following tables:
         \newline
         \textit{y} double &
         double &
-        Returns the remainder of \textit{x/y} as a double.
+        Returns the remainder \textit{r} of \textit{x/y} as a double.
         \tabularnewline
         
         \hline
@@ -1711,10 +1711,9 @@ the \STCspec.
 
 It is specified by a center position and size
 (in both axes) defining a cross centered on the center position and
-with arms extending, parallel to the coordinate axes at the center position,
-for half the respective sizes on either side. The box’s sides are line
-segments or great circles intersecting the arms of the cross in its end
-points at right angles with the arms.
+with arms extending half the respective sizes on either side.
+The box’s sides and the arms of the cross are great circles.
+The sides intersect the ends of the arms at right angles.
 
 The function arguments specify the center position and the width and height,
 where:
