@@ -1136,6 +1136,16 @@ CLOB values are serialized as arrays of characters.
 The details of how CLOB values are handled within a
 database is implementation dependent.
 
+An example use case for CLOB is a URL field that is generated on the fly
+using one or more fields stored the database.
+Although some of the components are stored in the database, the final URL
+that appears in the results is not stored in the database.
+Hence it would not be possible to apply ADQL functions or operators to the
+URL field without special knowledge of the internal database structure.
+However, a service implementation could provide user defined functions
+that used knowledge of the internal database structure to perform
+specific operations on the generated URL field.
+
 \subsection{Binary types}
 \label{sec:types.binary}
 
@@ -1228,6 +1238,14 @@ in the \VOTspec.
 
 The details of how BLOB values are handled within a
 database is implementation dependent.
+
+An example use case for BLOB is for storing thumbnail images
+in the database alongside the tabular data.
+ADQL does not provide functions or operations that operate on
+images.
+However, a service implementation could provide user defined
+functions that use implemetation specific features to perform
+operations on the image data.
 
 \subsection{Geometric types}
 \label{sec:types.geom}
