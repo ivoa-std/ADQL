@@ -454,10 +454,10 @@ the query specification:
             }
 
         [ WHERE search_condition ]
-        [ GROUP BY column_name, ... ]
+        [ GROUP BY group_by_term, ... ]
         [ HAVING search_condition ]
         [ ORDER BY
-            { column_name | unsigned_decimal } [ ASC | DESC],
+            { order_by_expression } [ ASC | DESC],
             ...
             ]
         [ OFFSET unsigned_decimal ]
@@ -3298,13 +3298,15 @@ TOP clause is applied to limit the number of rows returned.
 
     <greater_than_or_equals_operator> ::= >=
 
-    <group_by_clause> ::= GROUP BY <grouping_column_reference_list>
+    <group_by_clause> ::= GROUP BY <group_by_term_list>
 
-    <grouping_column_reference> ::= <column_reference>
+    <group_by_term> ::=
+          <column_reference>
+        | <value_expression>
 
-    <grouping_column_reference_list> ::=
-        <grouping_column_reference>
-        [ { <comma> <grouping_column_reference> }... ]
+    <group_by_term_list> ::=
+        <group_by_term>
+        [ { <comma> <group_by_term> }... ]
 
     <having_clause> ::= HAVING <search_condition>
 
@@ -3448,9 +3450,20 @@ TOP clause is applied to limit the number of rows returned.
 
     <offset_clause> ::= OFFSET <unsigned_decimal>
 
-    <order_by_clause> ::= ORDER BY <sort_specification_list>
+    <order_by_clause> ::= ORDER BY <order_by_term_list>
 
-    <ordering_specification> ::= ASC | DESC
+    <order_by_direction> ::= ASC | DESC
+
+    <order_by_expression> ::=
+          <unsigned_decimal>
+        | <column_reference>
+        | <value_expression>
+
+    <order_by_term> ::=
+        <order_by_expression> [ <order_by_direction> ]
+
+    <order_by_term_list> ::=
+        <order_by_term> [ { <comma> <order_by_term> }... ]
 
     <outer_join_type> ::= LEFT | RIGHT | FULL
 
@@ -3568,14 +3581,6 @@ TOP clause is applied to limit the number of rows returned.
         A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z
 
     <solidus> ::= /
-
-    <sort_key> ::= <column_name> | <unsigned_decimal>
-
-    <sort_specification> ::=
-        <sort_key> [ <ordering_specification> ]
-
-    <sort_specification_list> ::=
-        <sort_specification> [ { <comma> <sort_specification> }... ]
 
     <space> ::=
 
