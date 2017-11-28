@@ -37,10 +37,11 @@
 \newcommand{\STCspec}{STC specification\xspace}
 \newcommand{\STCSspec}{STC-S specification\xspace}
 
+\newcommand{\ObsCoreSpec}{ObsCore specification\xspace}
+
 \newcommand{\SectionRef}[1]{Section \ref{#1}\xspace}
 \newcommand{\SectionSee}[1]{(see Section\ref{#1})\xspace}
 \newcommand{\AppendixRef}[1]{Appendix \ref{#1}\xspace}
-
 
 \title{Astronomical Data Query Language}
 
@@ -310,13 +311,7 @@ Geometric functions and operators:
 \texttt{AREA,} \texttt{BOX,} \texttt{CENTROID,} \texttt{CIRCLE,} 
 \texttt{CONTAINS,} \texttt{COORD1,} \texttt{COORD2,} 
 \texttt{COORDSYS,} \texttt{DISTANCE,} \texttt{INTERSECTS,} 
-\texttt{POINT,} \texttt{POLYGON}
-
-\subsubsection{ADQL deprecated keywords}
-\label{sec:adql.depwords}
-
-The following terms are ADQL keywords that are no longer used,
-but still remain reserved for backwards compatibility.
+\texttt{POINT,} \texttt{POLYGON,} \texttt{REGION}
 
 \noindent
 \texttt{REGION}
@@ -1253,6 +1248,9 @@ operations on the image data.
 ADQL provides support for the POINT, CIRCLE and POLYGON geometric
 types defined in the \DALIspec.
 
+ADQL also provides support for a text based description of a
+geomertic region using the REGION datatype. 
+
 \subsubsection{POINT}
 \label{sec:types.geom.point}
 
@@ -1414,16 +1412,20 @@ and (30.0, 30.5) degrees.
 \subsubsection{REGION}
 \label{sec:types.geom.region}
 
-The results of an ADQL query may return a complex region
-that cannot be expressed by one of the simple geometric types
-defined in the preceding sections.
+The REGION datatype provides support for complex geometric regions that
+cannot be expressed by one of the simple geometric types described in
+the previous sections.
 
-In order to support complex geometric regions,
-the results of an ADQL query may use the xtype \verb:region:
-to describe a column that contains a STC-S string
-serialization.
+REGION values are serialized as character arrays with the xtype of
+\verb:region: that contain a STC-S string serialization describing the
+geometric region.
+The grammar for the content of the STC-S string is defined in the
+\STCSspec.
 
-The grammar for the content of the STC-S string is defined in the \STCSspec.
+If a service implementation supports the REGION datatype, then it SHOULD
+provide implementations of the INTERSECTS and CONTAINS operators that
+support combinations of the REGION datatype with the other geometric
+types, POINT, BOX, CIRCLE and POLYGON.
 
 \begin{table}[thm]\footnotesize
     \begin{tabular}
@@ -1443,7 +1445,7 @@ The grammar for the content of the STC-S string is defined in the \STCSspec.
         \tabularnewline
 
         \hline
-        - &
+        REGION &
         char &
         * &
         region
@@ -1454,6 +1456,9 @@ The grammar for the content of the STC-S string is defined in the \STCSspec.
     \caption{Type mapping for STC-S region}
     \label{table:types.geom.region}
 \end{table}
+
+A key use case for the REGION datatype is to implement the \textit{s\_region}
+column described in the \ObsCoreSpec.
 
 \clearpage
 \section{Optional components}
@@ -1726,7 +1731,7 @@ For example:
        )
 \end{verbatim}
 where \textit{t1.footprint} is a reference to a database column that
-contains geometric (POINT, BOX, CIRCLE or POLYGON) values.
+contains geometric (POINT, BOX, CIRCLE, POLYGON or REGION) values.
 
 \subsubsection{BOX}
 \label{sec:functions.geom.box}
@@ -1855,7 +1860,7 @@ For example:
         )
 \end{verbatim}
 where \textit{t1.footprint} is a reference to a database column that
-contains geometric (POINT, BOX, CIRCLE or POLYGON) values.
+contains geometric (POINT, BOX, CIRCLE, POLYGON or REGION) values.
 %TODO - ObsCore example
 
 \subsubsection{CIRCLE}
@@ -2001,7 +2006,7 @@ For example:
             )
 \end{verbatim}
 where \textit{t1.center} and \textit{t2.footprint} are references to
-database columns that contain POINT and geometric (BOX, CIRCLE or POLYGON)
+database columns that contain POINT and geometric (BOX, CIRCLE, POLYGON or REGION)
 values respectively.
 %TODO - ObsCore example
 
@@ -2121,7 +2126,7 @@ geometric datatype. For example:
 \end{verbatim}
 \noindent
 where \textit{t.footprint} is a reference to a database column that
-contains geometric (POINT, BOX, CIRCLE or POLYGON) values.
+contains geometric (POINT, BOX, CIRCLE, POLYGON or REGION) values.
 
 \subsubsection{DISTANCE}
 \label{sec:functions.geom.distance}
@@ -2275,17 +2280,17 @@ For example:
             )
 \end{verbatim}
 where \textit{t1.target} and \textit{t2.footprint} are references to
-database columns that contain geometric (BOX, CIRCLE or POLYGON) values.
+database columns that contain geometric (BOX, CIRCLE, POLYGON or REGION) values.
 
 %TODO
 The arguments to INTERSECTS SHOULD be geometric expressions evaluating to
-either BOX, CIRCLE or POLYGON.
+either BOX, CIRCLE, POLYGON or REGION.
 Previous versions of this
 specification also allowed POINT values and required server implementations to
 interpret the expression as a CONTAINS with the POINT moved into the first position.
 Server implementations SHOULD still implement that behaviour, but clients
 SHOULD NOT expect it.
-This behaviour will be dropped in the next major version of this specification.
+This behaviour MAY be dropped in the next major version of this specification.
 
 %coordsys trans
 If the geometric arguments are expressed in different coordinate systems,
@@ -2432,6 +2437,10 @@ As of this version of the specification this parameter has been
 marked as deprecated.
 Future versions of this specification may remove this parameter
 \SectionSee{sec:geom.coordsys.param}.
+
+
+
+
 
 \subsection{User defined functions}
 \label{sec:user.functions}
