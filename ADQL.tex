@@ -1703,6 +1703,64 @@ and
     <predicate_geometry_function> ::= <contains> | <intersects>
 \end{verbatim}
 
+\subsubsection{Preferred crossmatch syntax}
+\label{sec:functions.geom.crossmatch}
+
+An especially common operation that astronomers require when working
+with source catalogues is the positional sky crossmatch.
+In its simplest form this is a join between two tables with the
+requirement that the distance along a great circle between the
+sky positions of the two associated rows is less than or equal to
+a given threshold.
+
+The geometrical functions provided by ADQL offer a number of
+semantically equivalent ways to specify such a condition in
+in either the JOIN or the WHERE clause, using various 
+combinations of POINT, CIRCLE and DISTANCE.
+While a correct implementation MUST generate the same result for
+any of these alternatives, the performance characteristics may
+differ dramatically depending on implementation.
+Given this, it is difficult for (human or machine) ADQL authors
+to know how to phrase a crossmatch with the expectation that it
+will be executed efficiently, and difficult for services to know
+which forms of query to optimise.  The result can be the 
+unnecessarily slow operation of the common sky crossmatch operation.
+
+The purpose of this section is to recommend a preferred form of ADQL
+to use for sky crossmatches.  Clients posing crossmatch-like
+queries are advised to phrase them this way rather than semantically
+equivalent alternatives, and services are encouraged to ensure that
+this form of join is executed efficiently; this might involve 
+identifying such ADQL input clauses and rewriting them appropriately 
+for efficient processing on the database backend.
+
+The preferred way to specify a sky position-only crossmatch is:
+\begin{verbatim}
+    JOIN ... ON DISTANCE(
+        t1.lon,
+        t1.lat,
+        t2.lon,
+        t2.lat
+        ) < r_max_deg
+\end{verbatim}
+where \textit{t1.lon}, \textit{t1.lat}, and \textit{t2.lon}, \textit{t2.lat}
+are references to numeric columns for the latitude and longitude
+in the respective tables, \textit{t1}, and \textit{t2}.
+
+Alternatively, using geometric POINT values,
+\begin{verbatim}
+    JOIN ... ON DISTANCE(
+        t1.point,
+        t2.point
+        ) < r_max_deg
+\end{verbatim}
+where \textit{t1.point} and \textit{t2.point}
+are references to columns containing geometric POINT values
+for the sky positions in the two tables, \textit{t1}, and \textit{t2}.
+
+Alternative semantically equivalent forms however MAY still be
+used by clients, and MUST still be handled correctly by services.
+
 %\subsubsection{Function definitions}
 \clearpage
 \label{sec:functions.geom.definitions}
@@ -2192,12 +2250,12 @@ For example, the distance between to points stored in the database could
 be calculated as follows:
 \begin{verbatim}
     DISTANCE(
-        t1.target,
-        t2.reference
+        t1.base,
+        t2.target
         )
 \end{verbatim}
 \noindent
-where \textit{t1.target} and \textit{t2.reference} are references to
+where \textit{t1.base} and \textit{t2.target} are references to
 database columns that contain POINT values.
 
 %coordsys trans
@@ -2451,10 +2509,6 @@ As of this version of the specification this parameter has been
 marked as deprecated.
 Future versions of this specification may remove this parameter
 \SectionSee{sec:geom.coordsys.param}.
-
-
-
-
 
 \subsection{User defined functions}
 \label{sec:user.functions}
@@ -3769,12 +3823,10 @@ issues that are still to be resolved.
 
 \begin{itemize}
 
-    \item 20171129-002 Add text to describe 'preferred crossmatch method'
-
-    \item 20171129-003 Now that we allow polymorphism, do we need to deprecate
+    \item 20171129-003 Now that we allow polymorphism, do we still need to deprecate
     the coordsys param for BOX, CIRCLE AND POLYGON? \SectionSee{sec:geom.coordsys.param}
 
-    \item 20171129-004 Should support for REGION be optional? \SectionSee{sec:types.geom.region}
+    \item 20171129-004 Should support for REGION be optional (if so, how) ? \SectionSee{sec:types.geom.region}
     \item 20171129-005 Should we add a literal constructor for REGION? \SectionSee{sec:types.geom.region}
 
     \item 20171129-006 The description of BOX has known issues, particularly its
@@ -3782,6 +3834,8 @@ issues that are still to be resolved.
 
     \item 20171129-007 Should we add prefixes to the xytpe names to indicate
     which standard they are defined in?
+
+    \item 20171129-008 INTERVAL is define in DALI but not in ADQL. \SectionSee{sec:types.numeric.interval}
 
 \end{itemize}
 
@@ -3793,8 +3847,11 @@ issues that are still to be resolved.
 
     \item Changes from WD-ADQL-2.1-20171024
         \begin{itemize}
-            \item Imported changes for MOD, RAND, ROUND and TRUNCATE from ADQL-2.0 Erratum 2\\
+
+            \item Fixed issue 20171129-002 : Added text to describe 'preferred crossmatch method'\\
             (svn version xxxx, 29 Nov 2017)
+            \item Fixed issue 20171129-001 : Imported changes for MOD, RAND, ROUND and TRUNCATE from ADQL-2.0 Erratum 2\\
+            (svn version 4593, 29 Nov 2017)
             \item Added section for outstanding issues\\
             (svn version 4592, 29 Nov 2017)
             \item Updated STC-S description for REGION\\
