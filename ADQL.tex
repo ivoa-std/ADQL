@@ -622,7 +622,13 @@ usage and description are detailed in the following tables:
         \newline
         \textit{y} double &
         double &
-        Returns the remainder \textit{r} of \textit{x/y} as a double.
+        Returns the remainder \textit{r} of \textit{x/y} as a double,
+        where:
+        \begin{itemize}
+            \item \textit{r} has the same sign as \textit{x}
+            \item |\textit{r}| is less than |\textit{y}|
+            \item \textit{x} = (\textit{f} * \textit{y}) + \textit{r} for a given integer \textit{f}
+        \end{itemize}
         \tabularnewline
         
         \hline
@@ -656,10 +662,12 @@ usage and description are detailed in the following tables:
         \tabularnewline
 
         \hline
-        rand() &
-        &
+        rand(x) &
+        \textit{x} double &
         double &
         Returns a random value between 0.0 and 1.0.
+        The optional argument, \textit{x}, originally intended to provide a random seed,
+        has undefined semantics. Query writers are advised to omit this argument.
         \tabularnewline
 
         \hline
@@ -668,7 +676,8 @@ usage and description are detailed in the following tables:
         \newline
         \textit{n} integer &
         double &
-        Rounds \textit{x} to \textit{n} number of decimal places, with the default being to round to the nearest integer.
+        Rounds \textit{x} to \textit{n} decimal places.
+        The integer \textit{n} is optinal and defaults to 0 if not specified. 
         A negative value of \textit{n} will round to the left of the decimal point.
         \tabularnewline
 
@@ -679,6 +688,7 @@ usage and description are detailed in the following tables:
         \textit{n} integer &
         double &
         Truncates \textit{x} to \textit{n} decimal places.
+        The integer \textit{n} is optinal and defaults to 0 if not specified. 
         \tabularnewline
 
         \hline
@@ -3759,8 +3769,6 @@ issues that are still to be resolved.
 
 \begin{itemize}
 
-    \item 20171129-001 Update text for MOD to cover -ve values
-
     \item 20171129-002 Add text to describe 'preferred crossmatch method'
 
     \item 20171129-003 Now that we allow polymorphism, do we need to deprecate
@@ -3785,6 +3793,8 @@ issues that are still to be resolved.
 
     \item Changes from WD-ADQL-2.1-20171024
         \begin{itemize}
+            \item Imported changes for MOD, RAND, ROUND and TRUNCATE from ADQL-2.0 Erratum 2\\
+            (svn version xxxx, 29 Nov 2017)
             \item Added section for outstanding issues\\
             (svn version 4592, 29 Nov 2017)
             \item Updated STC-S description for REGION\\
