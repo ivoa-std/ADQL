@@ -1248,8 +1248,8 @@ operations on the image data.
 ADQL provides support for the POINT, CIRCLE and POLYGON geometric
 types defined in the \DALIspec.
 
-ADQL also provides support for a text based description of a
-geomertic region using the REGION datatype. 
+ADQL also provides support for STC-S based geomertic regions,
+as define in the \STCSspec, using the REGION datatype.
 
 \subsubsection{POINT}
 \label{sec:types.geom.point}
@@ -1413,18 +1413,20 @@ and (30.0, 30.5) degrees.
 \label{sec:types.geom.region}
 
 The REGION datatype provides support for complex geometric regions that
-cannot be expressed by one of the simple geometric types described in
-the previous sections.
+cannot be expressed by one of the simple geometric types described above.
 
-REGION values are serialized as character arrays with the xtype of
-\verb:region: that contain a STC-S string serialization describing the
-geometric region.
-The grammar for the content of the STC-S string is defined in the
-\STCSspec.
+REGION values are serialized as character arrays with a xtype of
+\verb:region: containing a STC-S string describing the geometric region.
 
-If a service implementation supports the REGION datatype, then it SHOULD
+The text of a REGION value SHOULD contain a simple or complex spatial
+region as defined in the \STCSspec.
+% http://ivoa.net/documents/STC-S/20130917/WD-STC-S-1.0-20130917.pdf
+% STC-S 1.1 - Section 5.2
+% STC-S 1.1 - Appendix B.2
+
+To fully support the the REGION datatype, a service implementation SHOULD
 provide implementations of the INTERSECTS and CONTAINS operators that
-support combinations of the REGION datatype with the other geometric
+support the REGION datatype in combination with with the other geometric
 types, POINT, BOX, CIRCLE and POLYGON.
 
 \begin{table}[thm]\footnotesize
@@ -1459,6 +1461,8 @@ types, POINT, BOX, CIRCLE and POLYGON.
 
 A key use case for the REGION datatype is to implement the \textit{s\_region}
 column described in the \ObsCoreSpec.
+% ObsCore 1.1 Section 4.12
+% http://ivoa.net/documents/ObsCore/20170509/REC-ObsCore-v1.1-20170509.pdf#26
 
 \clearpage
 \section{Optional components}
@@ -2230,7 +2234,7 @@ where the INTERSECTS function returns the numeric value 1 if the two arguments
 overlap and 0 if they do not.
 
 When used as a predicate in the WHERE clause of a query, the numeric return
-value must be compared to the numeric values 0 or 1 to form a SQL predicate:
+value should be compared to the numeric values 0 or 1 to form a SQL predicate:
 \begin{verbatim}
     WHERE
         1 = INTERSECTS(
