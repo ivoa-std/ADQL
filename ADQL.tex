@@ -40,7 +40,7 @@
 \newcommand{\ObsCoreSpec}{ObsCore specification\xspace}
 
 \newcommand{\SectionRef}[1]{Section \ref{#1}\xspace}
-\newcommand{\SectionSee}[1]{(see Section\ref{#1})\xspace}
+\newcommand{\SectionSee}[1]{(see Section \ref{#1})\xspace}
 \newcommand{\AppendixRef}[1]{Appendix \ref{#1}\xspace}
 
 \title{Astronomical Data Query Language}
@@ -3755,8 +3755,35 @@ For example, the following XML fragment describes a service that supports the
 \label{sec:changes}
 
 \begin{itemize}
+
+    \item Changes from WD-ADQL-2.1-20171024
+        \begin{itemize}
+            \item Updated STC-S description for REGION\\
+            (svn version 4590, 29 Nov 2017)
+            \item Restoring STC-S REGION\\
+            (svn version 4588, 28 Nov 2017)
+            \item Added use case for BLOB and CLOB\\
+            (svn version 4587, 28 Nov 2017)
+            \item Added expressions in ORDER BY and GROUP BY clauses\\
+            (svn version 4586, 28 Nov 2017)
+            \item Added explicit permission for providing extensions\\
+            (svn version 4585, 28 Nov 2017)
+            \item Clarification of geometric function arguments\\
+            (svn version 4581, 24 Nov 2017)
+            \item Added support for STC-S REGION in results\\
+            (svn version 4575, 21 Nov 2017)
+            \item Exclude recursive WITH statements\\
+            (svn version 4558, 25 Oct 2017)
+            \item Updated architecture diagram\\
+            (svn version 4555, 25 Oct 2017)
+            \item Removed duplicate description for unsignedByte\\
+            (svn version 4554, 25 Oct 2017)
+        \end{itemize}
+
     \item Changes from WD-ADQL-2.1-20160502
         \begin{itemize}
+            \item Changed coordsys to be optional in BNF\\
+            (svn version 4545, 23 Oct 2017)
             \item Removed hard coded version number\\
             (svn version r4544, 23 Oct 2017)
             \item Restored coordsys param for now\\
