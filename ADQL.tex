@@ -1126,7 +1126,7 @@ CLOB values are serialized as arrays of characters.
         CLOB &
         char, unicodeChar &
         n, n*, * &
-        -
+        adql:clob
         \tabularnewline
 
         \hline
@@ -1190,7 +1190,7 @@ in the \VOTspec.
 
         \hline
     \end{tabular}
-    \caption{ADQL type mapping for character strings}
+    \caption{ADQL type mapping for binary arrays}
     \label{table:types.binary.primitive}
 \end{table}
 
@@ -1229,7 +1229,7 @@ in the \VOTspec.
         BLOB &
         unsignedByte  &
         n, n*, * &
-        -
+        adql:blob
         \tabularnewline
 
         \hline
@@ -3848,6 +3848,8 @@ issues that are still to be resolved.
 
     \item Changes from WD-ADQL-2.1-20171129
         \begin{itemize}
+            \item Added blob and clob xtypes\\
+            (svn version xxxx, 08 Dec 2017)
             \item Added xtype prefixes\\
             (svn version 4613, 08 Dec 2017)
         \end{itemize}
