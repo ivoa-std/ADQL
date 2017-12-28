@@ -19,25 +19,26 @@
 % https://tex.stackexchange.com/a/17873
 \usepackage{xspace}
 
-%\newcommand{\VOTspec}  {TAP specification \citet{std:VOTable}\xspace}
-%\newcommand{\TAPspec}  {TAP specification \citet{std:TAP}\xspace}
-%\newcommand{\DALIspec} {TAP specification \citet{std:DALI}\xspace}
-%\newcommand{\VOSIspec} {TAP specification \citet{std:VOSI}\xspace}
-%\newcommand{\RegTAPspec}{RegTAP specification \citep{std:REGTAP}\xspace}
-%\newcommand{\TAPRegExtSpec}{TAPRegExt specification \citep{std:TAPREGEXT}\xspace}
+%\newcommand{\VOTableSpec}  {TAP specification \citet{std:VOTable}\xspace}
+%\newcommand{\TAPSpec}  {TAP specification \citet{std:TAP}\xspace}
+%\newcommand{\DALISpec} {TAP specification \citet{std:DALI}\xspace}
+%\newcommand{\VOSISpec} {TAP specification \citet{std:VOSI}\xspace}
+%\newcommand{\RegTAPSpec}{RegTAP specification \citep{std:REGTAP}\xspace}
+%\newcommand{\TAPRegSpec}{TAPRegExt specification \citep{std:TAPREGEXT}\xspace}
 
-\newcommand{\VOTspec}{VOTable specification\xspace}
-\newcommand{\TAPspec}{TAP specification\xspace}
-\newcommand{\DALIspec}{DALI specification\xspace}
-\newcommand{\VOSIspec}{VOSI specification\xspace}
-\newcommand{\VOUnitSpec}{VOUnits specification\xspace}
-\newcommand{\RegTAPspec}{RegTAP specification\xspace}
-\newcommand{\TAPRegExtSpec}{TAPRegExt specification\xspace}
+\usepackage{etoolbox}
+\newcommand{\IvoaCite}[3]{\providebool{#1}\ifbool{#1}{#3\xspace}{#3\xspace(\citet{#2})\booltrue{#1}}\xspace}
 
-\newcommand{\STCspec}{STC specification\xspace}
-\newcommand{\STCSspec}{STC-S specification\xspace}
-
-\newcommand{\ObsCoreSpec}{ObsCore specification\xspace}
+\newcommand{\VOTableSpec}   {\IvoaCite{votspec}     {2013ivoa.spec.0920O}   {VOTable specification}}
+\newcommand{\TAPSpec}       {\IvoaCite{tapspec}     {2010ivoa.spec.0327D}   {TAP specification}}
+\newcommand{\DALISpec}      {\IvoaCite{dalispec}    {2017ivoa.spec.0517D}   {DALI specification}}
+\newcommand{\VOSISpec}      {\IvoaCite{vosispec}    {2017ivoa.spec.0524G}   {VOSI specification}}
+\newcommand{\VOUnitSpec}    {\IvoaCite{unitspec}    {2014ivoa.spec.0523D}   {VOUnits specification}}
+\newcommand{\RegTAPSpec}    {\IvoaCite{regtapspec}  {2014ivoa.spec.1208D}   {RegTAP specification}}
+\newcommand{\TAPRegSpec}    {\IvoaCite{tapregspec}  {2012ivoa.spec.0827D}   {TAPRegExt specification}}
+\newcommand{\STCSpec}       {\IvoaCite{stcspec}     {2007ivoa.spec.1030R}   {STC specification}}
+\newcommand{\STCSSpec}      {\IvoaCite{stcsspec}    {std:STCS}              {STC-S specification}}
+\newcommand{\ObsCoreSpec}   {\IvoaCite{obscorespec} {2017ivoa.spec.0509L}   {ObsCore specification}}
 
 \newcommand{\SectionRef}[1]{Section \ref{#1}\xspace}
 \newcommand{\SectionSee}[1]{(see Section \ref{#1})\xspace}
@@ -114,8 +115,12 @@ then define the level of compliancy to the language. This would allow the
 notion of core and extension to be service-driven and it would decouple the
 language from the service specifications.
 
-ADQL is based on the Structured Query Language (SQL), especially on SQL 92. The
-VO has a number of tabular data sets and many of them are stored in relational
+ADQL is based on the Structured Query Language (SQL), especially on SQL 92
+\footnote{\url{https://en.wikipedia.org/wiki/SQL-92}}
+\footnote{\url{https://www.iso.org/standard/16663.html}}
+\footnote{\url{http://www.contrib.andrew.cmu.edu/~shadow/sql/sql1992.txt}}.
+.
+The VO has a number of tabular data sets and many of them are stored in relational
 databases, making SQL a convenient access means. A subset of the SQL grammar
 has been extended to support queries that are specific to astronomy. Similarly
 to SQL, the ADQL language definition is not semantically safe by design and
@@ -123,6 +128,7 @@ therefore this specification defines syntactical correctness only. Type safety
 has been achieved as far as it can be done in SQL. The exact meaning of keywords
 indicating requirement levels can be found in the References section.
 %Should this be 'Conformance-related definitions' not 'References' ?
+
 
 \clearpage
 \subsection{Role within the VO architecture}
@@ -774,8 +780,8 @@ the underlying database's native language and type system.
 However, service metadata needs to give column types in order to allow the
 construction of queries that are both syntactically and semantically correct.
 Examples of such metadata includes the \verb:TAP_SCHEMA: tables defined
-in the \TAPspec and the \verb:/tables:
-webservice response defined in the \VOSIspec.
+in the \TAPSpec and the \verb:/tables:
+webservice response defined in the \VOSISpec.
 
 Services SHOULD, if at all possible, try to express their column metadata in
 these terms even if the underlying database employs different types.
@@ -788,8 +794,8 @@ VOTables into ADQL-visible tables.
 \subsubsection{BOOLEAN}
 \label{sec:types.logical.boolean}
 
-The BOOLEAN datatype maps to the corresponding \verb:boolean: datatype is defined in the \DALIspec.
-The serialization format for \verb:boolean: is defined in the \VOTspec.
+The BOOLEAN datatype maps to the corresponding \verb:boolean: datatype is defined in the \DALISpec.
+The serialization format for \verb:boolean: is defined in the \VOTableSpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
@@ -861,7 +867,7 @@ value is undefined.
 
 The numeric datatypes, BIT, SMALLINT, INTEGER, BIGINT, REAL
 and DOUBLE map to the corresponding datatypes defined
-in the \VOTspec.
+in the \VOTableSpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
@@ -942,7 +948,7 @@ that correspond to the VOTable serialization types, e.g. SMALLINT should map to 
 \subsubsection{INTERVAL}
 \label{sec:types.numeric.interval}
 
-The \DALIspec defines INTERVAL as a pair of integer or floating-point
+The \DALISpec defines INTERVAL as a pair of integer or floating-point
 numeric values which are serialized as an array of numbers.
 
 TBD - The details of how INTERVAL values behave in ADQL are not yet defined.
@@ -980,13 +986,13 @@ TBD - The details of how INTERVAL values behave in ADQL are not yet defined.
 \label{sec:types.datetime}
 
 Where possible, date and time values SHOULD be implemented as
-described in the \DALIspec.
+described in the \DALISpec.
 
 \subsubsection{TIMESTAMP}
 \label{sec:types.datetime.timestamp}
 
 The TIMESTAMP datatype maps to the corresponding type defined in the
-\DALIspec.
+\DALISpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
@@ -1018,7 +1024,7 @@ The TIMESTAMP datatype maps to the corresponding type defined in the
 \end{table}
 
 TIMESTAMP literals should be created using the \verb:TIMESTAMP():
-constructor, using the syntax defined in the \DALIspec:
+constructor, using the syntax defined in the \DALISpec:
 \begin{verbatim}
     YYYY-MM-DD[’T’hh:mm:ss[.SSS][’Z’]]
 \end{verbatim}
@@ -1050,7 +1056,7 @@ chronological time.
 \label{sec:types.character.primitive}
 
 The CHAR and VARCHAR datatypes map to the \verb:char: or
-\verb:unicodeChar: type defined in the \VOTspec.
+\verb:unicodeChar: type defined in the \VOTableSpec.
 
 The choice of whether CHAR and VARCHAR map to \verb:char: or
 \verb:unicodeChar: is implementation dependent and may depend
@@ -1156,7 +1162,7 @@ specific operations on the generated URL field.
 \label{sec:types.binary.primitive}
 
 The BINARY and VARBINARY datatypes map to the \verb:unsignedByte: type defined
-in the \VOTspec.
+in the \VOTableSpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
@@ -1207,7 +1213,7 @@ However, specific database implementations MAY provide user
 defined functions that operate on some BLOB values.
 
 BLOB values are serialized as arrays of \verb:unsignedByte: defined
-in the \VOTspec.
+in the \VOTableSpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
@@ -1254,19 +1260,19 @@ operations on the image data.
 \label{sec:types.geom}
 
 ADQL provides support for the POINT, CIRCLE and POLYGON geometric
-types defined in the \DALIspec.
+types defined in the \DALISpec.
 
 ADQL also provides support for STC-S based geomertic regions,
-as define in the \STCSspec, using the REGION datatype.
+as define in the \STCSSpec, using the REGION datatype.
 
 \subsubsection{POINT}
 \label{sec:types.geom.point}
 
 The POINT datatype maps to the corresponding type defined in the
-\DALIspec.
+\DALISpec.
 
 POINT values are serialized as arrays of floating point numbers
-using the \verb:point: xtype defined in the \DALIspec.
+using the \verb:point: xtype defined in the \DALISpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
@@ -1315,10 +1321,10 @@ For example:
 \label{sec:types.geom.circle}
 
 The CIRCLE datatype maps to the corresponding type defined in the
-\DALIspec.
+\DALISpec.
 
 CIRCLE values are serialized as arrays of floating point numbers
-using the \verb:circle: xtype defined in the \DALIspec.
+using the \verb:circle: xtype defined in the \DALISpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
@@ -1365,10 +1371,10 @@ For example:
 \label{sec:types.geom.polygon}
 
 The POLYGON datatype maps to the corresponding type defined in the
-\DALIspec.
+\DALISpec.
 
 POLYGON values are serialized as arrays of floating point numbers
-using the \verb:polygon: xtype defined in the \DALIspec.
+using the \verb:polygon: xtype defined in the \DALISpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
@@ -1427,7 +1433,7 @@ REGION values are serialized as character arrays with a xtype of
 \verb:region: containing a STC-S string describing the geometric region.
 
 The text of a REGION value SHOULD contain a simple or complex spatial
-region as defined in the \STCSspec.
+region as defined in the \STCSSpec.
 % http://ivoa.net/documents/STC-S/20130917/WD-STC-S-1.0-20130917.pdf
 % STC-S 1.1 - Section 5.2
 % STC-S 1.1 - Appendix B.2
@@ -1494,7 +1500,7 @@ ADQL queries that it sends.
 \subsection{Service capabilities}
 \label{sec:capabilities}
 
-The \TAPRegExtSpec defines an XML schema that a service SHOULD
+The \TAPRegSpec defines an XML schema that a service SHOULD
 use to declare which optional features it supports.
 
 In general, each group of language features is identified by a \verb:type:
@@ -1503,10 +1509,10 @@ feature name.
 
 \AppendixRef{sec:features} contains examples of how to declare support
 for each of the language features defined in this document using the
-XML schema from the \TAPRegExtSpec.
+XML schema from the \TAPRegSpec.
 
 For full details on the XML schema and how it can be used, please refer to
-the \TAPRegExtSpec.
+the \TAPRegSpec.
 
 \subsection{Geometrical functions}
 \label{sec:functions.geom}
@@ -1550,7 +1556,7 @@ implementation dependent.
 
 The following functions provide constructors for each of the geometry datatypes.
 The semantics of these datatypes are based on the corresponding
-concepts from the \STCspec data model.
+concepts from the \STCSpec data model.
 
 The geometry datatypes and expressions are part of the core \verb:<value_expression>:
 in the ADQL grammar.
@@ -1812,7 +1818,7 @@ contains geometric (POINT, BOX, CIRCLE, POLYGON or REGION) values.
 The BOX function expresses a box on the sky. A BOX is a special case of POLYGON,
 defined purely for convenience,
 and it corresponds semantically to the equivalent term, Box, defined in
-the \STCspec.
+the \STCSpec.
 %(STC Box, Section 4.5.1.5)
 
 It is specified by a center position and size
@@ -1941,7 +1947,7 @@ contains geometric (POINT, BOX, CIRCLE, POLYGON or REGION) values.
 
 The CIRCLE function expresses a circular region on the sky (a cone in space),
 and it corresponds semantically to the equivalent term, Circle, defined in
-the \STCspec.
+the \STCSpec.
 %(STC Circle, Section 4.5.1.2)
 
 The function arguments specify the center position and the radius, where:
@@ -2164,7 +2170,7 @@ been marked as deprecated. This function may be removed in future versions
 of this specification.
 Details of the coordinate system for a database column are available as part of
 the service metadata, available via the \verb:TAP_SCHEMA: tables defined in the
-\TAPspec and the \verb:/tables: webservice response defined in the \VOSIspec.
+\TAPSpec and the \verb:/tables: webservice response defined in the \VOSISpec.
 
 %As described in \SectionRef{sec:functions.geom.overview}, the allowed return values must be defined
 %by any service making use of ADQL, and a list of standard coordinate system
@@ -2379,7 +2385,7 @@ implementation dependent.
 
 The POINT function expresses a single location on the sky,
 and it corresponds semantically to the equivalent term, SpatialCoord, defined in
-the \STCspec.
+the \STCSpec.
 %(STC SpatialCoord, Section 4.4.2.2)
 
 The function arguments specify the position, where:
@@ -2549,7 +2555,7 @@ Observatory (GAVO):
 \end{verbatim}
 
 The \verb:ivo: prefix is reserved for functions that have been defined
-in an IVOA specification. For example the \RegTAPspec defines the following
+in an IVOA specification. For example the \RegTAPSpec defines the following
 functions:
 \begin{verbatim}
     ivo_nocasematch()
@@ -2566,7 +2572,7 @@ functions:
 \label{sec:user.metadata}
 
 The URI for identifying the language feature for a user defined function
-is defined as part of the \TAPRegExtSpec.
+is defined as part of the \TAPRegSpec.
 
 \begin{verbatim}
     ivo://ivoa.net/std/TAPRegExt#features-udf
@@ -2597,7 +2603,7 @@ depending on the regular expression pattern matching:
     </languageFeatures>
 \end{verbatim}
 
-See the \TAPRegExtSpec for full details on how to use the
+See the \TAPRegSpec for full details on how to use the
 XML schema to declare user defined functions.
 
 \subsection{String functions and operators}
@@ -3787,7 +3793,7 @@ TOP clause is applied to limit the number of rows returned.
 \section{Language feature support}
 \label{sec:features}
 
-In the \TAPRegExtSpec XML schema, each group of features is
+In the \TAPRegSpec XML schema, each group of features is
 described by a \verb:languageFeatures: element, which has a \verb:type:
 URI that identifies the group, and contains a \verb:form: element for each
 individual feature from the group that the service supports.
@@ -3985,7 +3991,7 @@ issues that are still to be resolved.
 
 \end{itemize}
 
-\bibliography{ivoatex/ivoabib}
+\bibliography{ivoatex/ivoabib,ivoatex/docrepo}
 
 \end{document}
 

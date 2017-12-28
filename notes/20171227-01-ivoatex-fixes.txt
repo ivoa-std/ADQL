@@ -50,11 +50,23 @@
 
         First citation references for other standards.
 
+            VOTable     2013ivoa.spec.0920O 2009ivoa.spec.1130O 2004ivoa.spec.0811O
+            TAP         2010ivoa.spec.0327D
+            DALI        2017ivoa.spec.0517D
+            VOSI        2017ivoa.spec.0524G
+            VOUnits     2014ivoa.spec.0523D
+            ObsCore     2017ivoa.spec.0509L 2011ivoa.spec.1028T
+            Registry    2009ivoa.spec.1104B
+            RegTAP      2014ivoa.spec.1208D
+            TAPRegExt   2012ivoa.spec.0827D
+            VOResource  2008ivoa.spec.0222P
+            STC         2007ivoa.spec.1030R
+            STC-S       WD only
+
         Use existing ivoatex macros
             xmlel
             vorent
             code
-
 
 
 
