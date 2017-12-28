@@ -1,0 +1,60 @@
+#
+# <meta:header>
+#   <meta:licence>
+#     Copyright (c) 2017, ROE (http://www.roe.ac.uk/)
+#
+#     This information is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+#
+#     This information is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+#  
+#     You should have received a copy of the GNU General Public License
+#     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#   </meta:licence>
+# </meta:header>
+#
+#
+
+
+    #
+    # Updating ADQL document based on recommendations in the IvoatexDoc note.
+    # http://ivoa.net/documents/Notes/IVOATex/20160430/NOTE-ivoatexDoc-1.1-20160430.pdf
+
+        make biblio          # update the bibliography
+        make forcetex        # make a PDF ignoring timestamps
+        make ivoatexDoc.html # make an html document
+        make package         # make a zipfile for IVOA submission
+
+    #
+    # Generating the archdiag using the ivoatex tools.
+    # (produces a very bland image, no clipart)
+    
+    docker run \
+        -it --rm \
+        -e "useruid=$(id -u)" \
+        -v "$(pwd):/var/local/texdata" \
+        ivoa/ivoatex
+
+        make clean
+        make archdiag.pdf
+
+    #
+    # ADQL TODO
+
+        Revert the author list to support publishing in ADS.
+
+        First citation references for other standards.
+
+        Use existing ivoatex macros
+            xmlel
+            vorent
+            code
+
+
+
+

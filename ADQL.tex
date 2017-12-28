@@ -553,7 +553,7 @@ ADQL declares a list of reserved keywords \SectionSee{sec:keywords} which includ
 the mathematical and trigonometrical function names. Their syntax,
 usage and description are detailed in the following tables:
 
-\begin{table}[thm]\footnotesize
+\begin{table}[th]\footnotesize
     \begin{tabular}{|p{0.20\textwidth}|p{0.125\textwidth}|p{0.125\textwidth}|p{0.55\textwidth}|}
         \hline
 
@@ -694,7 +694,7 @@ usage and description are detailed in the following tables:
     \label{table:math.functions}
 \end{table}
 
-\begin{table}[thm]\footnotesize
+\begin{table}[th]\footnotesize
     \begin{tabular}{|p{0.20\textwidth}|p{0.125\textwidth}|p{0.125\textwidth}|p{0.55\textwidth}|}
         \hline
 
@@ -790,7 +790,7 @@ VOTables into ADQL-visible tables.
 The BOOLEAN datatype maps to the corresponding \verb:boolean: datatype is defined in the \DALIspec.
 The serialization format for \verb:boolean: is defined in the \VOTspec.
 
-\begin{table}[thm]\footnotesize
+\begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.20\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
@@ -862,7 +862,7 @@ The numeric datatypes, BIT, SMALLINT, INTEGER, BIGINT, REAL
 and DOUBLE map to the corresponding datatypes defined
 in the \VOTspec.
 
-\begin{table}[thm]\footnotesize
+\begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.20\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
@@ -946,7 +946,7 @@ numeric values which are serialized as an array of numbers.
 
 TBD - The details of how INTERVAL values behave in ADQL are not yet defined.
 
-\begin{table}[thm]\footnotesize
+\begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
@@ -987,7 +987,7 @@ described in the \DALIspec.
 The TIMESTAMP datatype maps to the corresponding type defined in the
 \DALIspec.
 
-\begin{table}[thm]\footnotesize
+\begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
@@ -1055,7 +1055,7 @@ The choice of whether CHAR and VARCHAR map to \verb:char: or
 \verb:unicodeChar: is implementation dependent and may depend
 on the data content.
 
-\begin{table}[thm]\footnotesize
+\begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
@@ -1105,7 +1105,7 @@ defined functions that operate on some CLOB values.
 
 CLOB values are serialized as arrays of characters.
 
-\begin{table}[thm]\footnotesize
+\begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
@@ -1157,7 +1157,7 @@ specific operations on the generated URL field.
 The BINARY and VARBINARY datatypes map to the \verb:unsignedByte: type defined
 in the \VOTspec.
 
-\begin{table}[thm]\footnotesize
+\begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
@@ -1208,7 +1208,7 @@ defined functions that operate on some BLOB values.
 BLOB values are serialized as arrays of \verb:unsignedByte: defined
 in the \VOTspec.
 
-\begin{table}[thm]\footnotesize
+\begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
@@ -1267,7 +1267,7 @@ The POINT datatype maps to the corresponding type defined in the
 POINT values are serialized as arrays of floating point numbers
 using the \verb:point: xtype defined in the \DALIspec.
 
-\begin{table}[thm]\footnotesize
+\begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
@@ -1319,7 +1319,7 @@ The CIRCLE datatype maps to the corresponding type defined in the
 CIRCLE values are serialized as arrays of floating point numbers
 using the \verb:circle: xtype defined in the \DALIspec.
 
-\begin{table}[thm]\footnotesize
+\begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
@@ -1369,7 +1369,7 @@ The POLYGON datatype maps to the corresponding type defined in the
 POLYGON values are serialized as arrays of floating point numbers
 using the \verb:polygon: xtype defined in the \DALIspec.
 
-\begin{table}[thm]\footnotesize
+\begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
@@ -1436,7 +1436,7 @@ provide implementations of the INTERSECTS and CONTAINS operators that
 support the REGION datatype in combination with with the other geometric
 types, POINT, BOX, CIRCLE and POLYGON.
 
-\begin{table}[thm]\footnotesize
+\begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
@@ -3849,7 +3849,7 @@ issues that are still to be resolved.
     \item Changes from WD-ADQL-2.1-20171129
         \begin{itemize}
             \item Added blob and clob xtypes\\
-            (svn version xxxx, 08 Dec 2017)
+            (svn version 4616, 08 Dec 2017)
             \item Added xtype prefixes\\
             (svn version 4613, 08 Dec 2017)
         \end{itemize}

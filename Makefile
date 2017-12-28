@@ -23,3 +23,12 @@ FIGURES = ADQL-archdiag.png
 VECTORFIGURES = 
 
 include ivoatex/Makefile
+
+# Shortcut aliases
+pdf: $(DOCNAME).pdf
+
+html: $(DOCNAME).html
+
+zip: package
+
+
