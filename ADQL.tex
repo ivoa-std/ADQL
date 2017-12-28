@@ -19,26 +19,19 @@
 % https://tex.stackexchange.com/a/17873
 \usepackage{xspace}
 
-%\newcommand{\VOTableSpec}  {TAP specification \citet{std:VOTable}\xspace}
-%\newcommand{\TAPSpec}  {TAP specification \citet{std:TAP}\xspace}
-%\newcommand{\DALISpec} {TAP specification \citet{std:DALI}\xspace}
-%\newcommand{\VOSISpec} {TAP specification \citet{std:VOSI}\xspace}
-%\newcommand{\RegTAPSpec}{RegTAP specification \citep{std:REGTAP}\xspace}
-%\newcommand{\TAPRegSpec}{TAPRegExt specification \citep{std:TAPREGEXT}\xspace}
-
 \usepackage{etoolbox}
-\newcommand{\IvoaCite}[3]{\providebool{#1}\ifbool{#1}{#3\xspace}{#3\xspace(\citet{#2})\booltrue{#1}}\xspace}
+\newcommand{\IvoaCite}[3]{\providebool{#1}\ifbool{#1}{#3}{#3\xspace(\citet{#2})\booltrue{#1}}\xspace}
 
-\newcommand{\VOTableSpec}   {\IvoaCite{votspec}     {2013ivoa.spec.0920O}   {VOTable specification}}
-\newcommand{\TAPSpec}       {\IvoaCite{tapspec}     {2010ivoa.spec.0327D}   {TAP specification}}
-\newcommand{\DALISpec}      {\IvoaCite{dalispec}    {2017ivoa.spec.0517D}   {DALI specification}}
-\newcommand{\VOSISpec}      {\IvoaCite{vosispec}    {2017ivoa.spec.0524G}   {VOSI specification}}
-\newcommand{\VOUnitSpec}    {\IvoaCite{unitspec}    {2014ivoa.spec.0523D}   {VOUnits specification}}
-\newcommand{\RegTAPSpec}    {\IvoaCite{regtapspec}  {2014ivoa.spec.1208D}   {RegTAP specification}}
-\newcommand{\TAPRegSpec}    {\IvoaCite{tapregspec}  {2012ivoa.spec.0827D}   {TAPRegExt specification}}
-\newcommand{\STCSpec}       {\IvoaCite{stcspec}     {2007ivoa.spec.1030R}   {STC specification}}
-\newcommand{\STCSSpec}      {\IvoaCite{stcsspec}    {std:STCS}              {STC-S specification}}
-\newcommand{\ObsCoreSpec}   {\IvoaCite{obscorespec} {2017ivoa.spec.0509L}   {ObsCore specification}}
+\newcommand{\VOTableSpec} {\IvoaCite{votspec}     {2013ivoa.spec.0920O} {VOTable specification}}
+\newcommand{\TAPSpec}     {\IvoaCite{tapspec}     {2010ivoa.spec.0327D} {TAP specification}}
+\newcommand{\DALISpec}    {\IvoaCite{dalispec}    {2017ivoa.spec.0517D} {DALI specification}}
+\newcommand{\VOSISpec}    {\IvoaCite{vosispec}    {2017ivoa.spec.0524G} {VOSI specification}}
+\newcommand{\VOUnitSpec}  {\IvoaCite{unitspec}    {2014ivoa.spec.0523D} {VOUnits specification}}
+\newcommand{\RegTAPSpec}  {\IvoaCite{regtapspec}  {2014ivoa.spec.1208D} {RegTAP specification}}
+\newcommand{\TAPRegSpec}  {\IvoaCite{tapregspec}  {2012ivoa.spec.0827D} {TAPRegExt specification}}
+\newcommand{\STCSpec}     {\IvoaCite{stcspec}     {2007ivoa.spec.1030R} {STC specification}}
+\newcommand{\STCSSpec}    {\IvoaCite{stcsspec}    {std:STCS}            {STC-S specification}}
+\newcommand{\ObsCoreSpec} {\IvoaCite{obscorespec} {2017ivoa.spec.0509L} {ObsCore specification}}
 
 \newcommand{\SectionRef}[1]{Section \ref{#1}\xspace}
 \newcommand{\SectionSee}[1]{(see Section \ref{#1})\xspace}
@@ -1263,7 +1256,7 @@ ADQL provides support for the POINT, CIRCLE and POLYGON geometric
 types defined in the \DALISpec.
 
 ADQL also provides support for STC-S based geomertic regions,
-as define in the \STCSSpec, using the REGION datatype.
+as defined in the \STCSSpec, using the REGION datatype.
 
 \subsubsection{POINT}
 \label{sec:types.geom.point}
@@ -1432,7 +1425,7 @@ cannot be expressed by one of the simple geometric types described above.
 REGION values are serialized as character arrays with a xtype of
 \verb:region: containing a STC-S string describing the geometric region.
 
-The text of a REGION value SHOULD contain a simple or complex spatial
+The text of a REGION value may contain either a simple or a complex spatial
 region as defined in the \STCSSpec.
 % http://ivoa.net/documents/STC-S/20130917/WD-STC-S-1.0-20130917.pdf
 % STC-S 1.1 - Section 5.2
@@ -3828,22 +3821,25 @@ issues that are still to be resolved.
 \begin{itemize}
 
     \item 20171129-003 Now that we allow polymorphism, do we still need to deprecate
-    the coordsys param for BOX, CIRCLE AND POLYGON? \SectionSee{sec:geom.coordsys.param}
+    the coordsys param for BOX, CIRCLE AND POLYGON? \SectionSee{sec:geom.coordsys.param}.
 
     \item 20171129-004 Should support for REGION be optional (if so, how) ? \SectionSee{sec:types.geom.region}
-    \item 20171129-005 Should we add a literal constructor for REGION? \SectionSee{sec:types.geom.region}
+    \item 20171129-005 Should we add a literal constructor for REGION? \SectionSee{sec:types.geom.region}.
 
     \item 20171129-006 The description of BOX has known issues, particularly its
-    behaviour close to the poles. \SectionSee{sec:functions.geom.box}
+    behaviour close to the poles. \SectionSee{sec:functions.geom.box}.
 
     \item 20171129-007 Should we add prefixes to the xytpe names to indicate
-    which standard they are defined in?
+    which standard they are defined in?.
 
-    \item 20171129-008 INTERVAL is define in DALI but not in ADQL. \SectionSee{sec:types.numeric.interval}
+    \item 20171129-008 INTERVAL is defined in DALI but not in ADQL. \SectionSee{sec:types.numeric.interval}.
 
     \item 20170608-009 Can we add in ADQL an INTERSECTION function
-    which returns the polygon intersection of two regions?
+    which returns the polygon intersection of two regions?.
     http://mail.ivoa.net/pipermail/dal/2017-June/007721.html
+
+    \item 20171228-010 Table inserted between text and example (POINT).
+
 
 \end{itemize}
 
