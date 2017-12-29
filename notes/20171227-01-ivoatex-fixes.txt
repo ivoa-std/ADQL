@@ -35,10 +35,12 @@
     # (produces a very bland image, no clipart)
     
     docker run \
-        -it --rm \
-        -e "useruid=$(id -u)" \
-        -v "$(pwd):/var/local/texdata" \
-        ivoa/ivoatex
+        --rm \
+        --tty \
+        --interactive \
+        --user   "$(id -u):$(id -g)" \
+        --volume "$(pwd):/texdata" \
+        ivoa/ivoatex:1.2
 
         make clean
         make archdiag.pdf
