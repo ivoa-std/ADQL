@@ -52,7 +52,7 @@ EOF
 
         docker run -it \
             -e "useruid=$(id -u)" \
-            -v "$(pwd):/var/local/texdata" \
+            -v "$(pwd):/texdata" \
             'ivoa/ivoatex'
 
             make clean
