@@ -15,10 +15,6 @@
 
 \usepackage{hyperref}
 
-% Preserve spaces after \newcommand{}
-% https://tex.stackexchange.com/a/17873
-\usepackage{xspace}
-
 % Macros for referring to IVOA standards and notes.
 \input{ivoa-cite.tex}
 
@@ -758,7 +754,7 @@ the underlying database's native language and type system.
 However, service metadata needs to give column types in order to allow the
 construction of queries that are both syntactically and semantically correct.
 Examples of such metadata includes the \verb:TAP_SCHEMA: tables defined
-in the \TAPSpec and the \verb:/tables:
+in the \TAPSpec{} and the \verb:/tables:
 webservice response defined in the \VOSISpec.
 
 Services SHOULD, if at all possible, try to express their column metadata in
@@ -926,7 +922,7 @@ that correspond to the VOTable serialization types, e.g. SMALLINT should map to 
 \subsubsection{INTERVAL}
 \label{sec:types.numeric.interval}
 
-The \DALISpec defines INTERVAL as a pair of integer or floating-point
+The \DALISpec{} defines INTERVAL as a pair of integer or floating-point
 numeric values which are serialized as an array of numbers.
 
 TBD - The details of how INTERVAL values behave in ADQL are not yet defined.
@@ -1478,7 +1474,7 @@ ADQL queries that it sends.
 \subsection{Service capabilities}
 \label{sec:capabilities}
 
-The \TAPRegSpec defines an XML schema that a service SHOULD
+The \TAPRegSpec{} defines an XML schema that a service SHOULD
 use to declare which optional features it supports.
 
 In general, each group of language features is identified by a \verb:type:
@@ -1534,7 +1530,7 @@ implementation dependent.
 
 The following functions provide constructors for each of the geometry datatypes.
 The semantics of these datatypes are based on the corresponding
-concepts from the \STCSpec data model.
+concepts from the \STCSpec{} data model.
 
 The geometry datatypes and expressions are part of the core \verb:<value_expression>:
 in the ADQL grammar.
@@ -2148,7 +2144,7 @@ been marked as deprecated. This function may be removed in future versions
 of this specification.
 Details of the coordinate system for a database column are available as part of
 the service metadata, available via the \verb:TAP_SCHEMA: tables defined in the
-\TAPSpec and the \verb:/tables: webservice response defined in the \VOSISpec.
+\TAPSpec{} and the \verb:/tables: webservice response defined in the \VOSISpec.
 
 %As described in \SectionRef{sec:functions.geom.overview}, the allowed return values must be defined
 %by any service making use of ADQL, and a list of standard coordinate system
@@ -2533,7 +2529,7 @@ Observatory (GAVO):
 \end{verbatim}
 
 The \verb:ivo: prefix is reserved for functions that have been defined
-in an IVOA specification. For example the \RegTAPSpec defines the following
+in an IVOA specification. For example the \RegTAPSpec{} defines the following
 functions:
 \begin{verbatim}
     ivo_nocasematch()
@@ -2581,7 +2577,7 @@ depending on the regular expression pattern matching:
     </languageFeatures>
 \end{verbatim}
 
-See the \TAPRegSpec for full details on how to use the
+See the \TAPRegSpec{} for full details on how to use the
 XML schema to declare user defined functions.
 
 \subsection{String functions and operators}
@@ -3771,7 +3767,7 @@ TOP clause is applied to limit the number of rows returned.
 \section{Language feature support}
 \label{sec:features}
 
-In the \TAPRegSpec XML schema, each group of features is
+In the \TAPRegSpec{} XML schema, each group of features is
 described by a \verb:languageFeatures: element, which has a \verb:type:
 URI that identifies the group, and contains a \verb:form: element for each
 individual feature from the group that the service supports.
