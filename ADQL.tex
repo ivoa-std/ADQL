@@ -400,6 +400,12 @@ Boolean literals are expressed in BNF as follows:
 
 Boolean literals are not case-sensitive.
 
+\subsubsection{Whitespace}
+\label{sec:whitespace}
+
+The rules on where whitespace is allowed and required are as in SQL-92;
+essentially, any \verb:<token>: may be followed by a \verb:<separator>:.
+
 \clearpage
 \subsection{Query syntax}
 \label{sec:syntax}
@@ -3805,8 +3811,6 @@ issues that are still to be resolved.
 
 \begin{itemize}
 
-    \item 20180222-001 Add section on spaces and comments from ADQL-2.0 Erratum 1
-
     \item 20171129-003 Now that we allow polymorphism, do we still need to deprecate
     the coordsys param for BOX, CIRCLE AND POLYGON? \SectionSee{sec:geom.coordsys.param}.
 
@@ -3838,6 +3842,8 @@ issues that are still to be resolved.
 
     \item Changes from PR-ADQL-2.1-20180112
         \begin{itemize}
+            \item Added section on whitespace from ADQL-2.0 Erratum 1\\
+            (svn version 5217, 07 Nov 2018)
         \end{itemize}
 
     \item Changes from WD-ADQL-2.1-20171129
