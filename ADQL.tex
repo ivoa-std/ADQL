@@ -2810,41 +2810,6 @@ can be refactored as a named WITH query and a simpler main query:
 
 The current version of ADQL does not support recursive common table expressions.
 
-\subsection{Type operations}
-\label{sec:type}
-
-An ADQL service implementation MAY include support for the following optional
-type conversion functions:
-
-\begin{itemize}
-    \item \verb:CAST():
-\end{itemize}
-
-\subsubsection{CAST}
-\label{sec:type.cast}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-type|}\\
-{\footnotesize \verb|name: CAST|}\\
-
-The \verb:CAST(): function returns the value of the first argument converted
-to the datatype specified by the second argument.
-
-The ADQL \verb:CAST(): function does not replicate the full functionality
-and range of types supported by common RDBMS implementations of CAST.
-
-The ADQL \verb:CAST(): function only supports type conversion between the
-standard numeric datatypes. The \verb:CAST(): function does not support
-casting to or from the character, binary, datetime or geometric datatypes.
-
-The rounding mechanism used when converting from floating point values
-(REAL or DOUBLE) to integer values (SHORTINT, INTEGER or BIGINT) is
-implementation dependent.
-
-When converting a numeric value to a datatype that is too small to represent
-the value, this SHOULD be treated as an error.
-Details of the mechanism for reporting the error condition are
-implementation dependent.
-
 \subsection{Unit operations}
 \label{sec:unit}
 
@@ -2856,7 +2821,7 @@ unit conversion functions:
 \end{itemize}
 
 \subsubsection{IN\_UNIT}
-\label{sec:unit.cast}
+\label{sec:unit.in_unit}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-unit|}\\
 {\footnotesize \verb|name: IN_UNIT|}\\
@@ -3842,6 +3807,8 @@ issues that are still to be resolved.
 
     \item Changes from PR-ADQL-2.1-20180112
         \begin{itemize}
+            \item Removed support for CAST\\
+            (svn version 5218, 08 Nov 2018)
             \item Added section on whitespace from ADQL-2.0 Erratum 1\\
             (svn version 5217, 07 Nov 2018)
         \end{itemize}
