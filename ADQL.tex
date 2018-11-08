@@ -1799,6 +1799,9 @@ contains geometric (POINT, BOX, CIRCLE, POLYGON or REGION) values.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
 {\footnotesize \verb|name: BOX|}\\
 
+Note - the \verb|BOX| function has been deprecated in this version of the standard,
+and will be removed from future versions of the specification.
+
 The BOX function expresses a box on the sky. A BOX is a special case of POLYGON,
 defined purely for convenience,
 and it corresponds semantically to the equivalent term, Box, defined in
@@ -2268,8 +2271,8 @@ The INTERSECTS function determines if two geometry values overlap. This is
 most commonly used to express a "shape-vs-shape" intersection test.
 
 For example, an expression to determine whether a circle of one degree radius
-centered on position (25.4, -20.0) degrees overlaps with a box of ten degrees
-centered on position (20.0, -15.0) degrees, could be written as follows:
+centered on position (25.4, -20.0) degrees overlaps with a POLYGON, could be
+written as follows:
 \begin{verbatim}
     INTERSECTS(
         CIRCLE(
@@ -2277,11 +2280,11 @@ centered on position (20.0, -15.0) degrees, could be written as follows:
            -20.0,
             1
             ),
-        BOX(
-            20.0,
-           -15.0,
-            10,
-            10
+        POLYGON(
+            20.0, -15.0,
+            20.0, -5.0,
+            10.0, -5.0,
+            10.0, -15.0
             )
         )
 \end{verbatim}
@@ -2299,11 +2302,11 @@ value should be compared to the numeric values 0 or 1 to form a SQL predicate:
                -20.0,
                 1
                 ),
-            BOX(
-                20.0,
-               -15.0,
-                10,
-                10
+            POLYGON(
+                20.0, -15.0,
+                20.0, -5.0,
+                10.0, -5.0,
+                10.0, -15.0
                 )
             )
 \end{verbatim}
@@ -2315,14 +2318,14 @@ for "does intersect" and
             CIRCLE(
                 25.4,
                -20.0,
-               1
-               ),
-            BOX(
-                20.0,
-               -15.0,
-               10,
-               10
-               )
+                1
+                ),
+            POLYGON(
+                20.0, -15.0,
+                20.0, -5.0,
+                10.0, -5.0,
+                10.0, -15.0
+                )
             )
 \end{verbatim}
 \noindent
@@ -3782,9 +3785,6 @@ issues that are still to be resolved.
     \item 20171129-004 Should support for REGION be optional (if so, how) ? \SectionSee{sec:types.geom.region}
     \item 20171129-005 Should we add a literal constructor for REGION? \SectionSee{sec:types.geom.region}.
 
-    \item 20171129-006 The description of BOX has known issues, particularly its
-    behaviour close to the poles. \SectionSee{sec:functions.geom.box}.
-
     \item 20171129-007 Should we add prefixes to the xytpe names to indicate
     which standard they are defined in?.
 
@@ -3807,6 +3807,8 @@ issues that are still to be resolved.
 
     \item Changes from PR-ADQL-2.1-20180112
         \begin{itemize}
+            \item Issue 20171129-006 deprecated BOX, will be removed in 3.0
+            (svn version 5219, 08 Nov 2018)
             \item Removed support for CAST\\
             (svn version 5218, 08 Nov 2018)
             \item Added section on whitespace from ADQL-2.0 Erratum 1\\
