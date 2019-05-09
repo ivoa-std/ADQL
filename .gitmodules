@@ -1,0 +1,3 @@
+[submodule "ivoatex"]
+	path = ivoatex
+	url = https://github.com/ivoa-std/ivoatex.git
