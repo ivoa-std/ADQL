@@ -39,16 +39,20 @@ DOC) should be stored in this repository.
 
 ## Want to contribute?
 
-1. [Create a GitHub Issue](https://github.com/ivoa-std/ADQL/issues/new) on this
+1. [Raise a GitHub Issue](https://github.com/ivoa-std/ADQL/issues/new) on this
    repository
 
-2. Fork this repository
+2. Fork this repository _(eventually clone it on your machine if you want to)_
 
-3. Commit suggested changes inside your forked repository
+3. Create a branch in your forked repository ; this branch should be named after the issue(s) to fix (for instance: `issue-7-add-license`)
 
-4. Create a Pull Request on the official repository
+4. Commit suggested changes inside this branch
 
-5. Wait for someone to review your Pull Request and accept it
+5. Create a Pull Request on the official repository _(note: a `git push` is needed first, if you are working on a clone)_
+
+6. Wait for someone to review your Pull Request and accept it
+
+_This process has been described and demonstrated during the IVOA Interoperability Meeting of Oct. 2019 in Groningen ; see [slides](https://wiki.ivoa.net/internal/IVOA/InterOpOct2019GitHub/IVOA_Github.pdf))_
 
 ## License
 
