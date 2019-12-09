@@ -1,0 +1,32 @@
+name: CI build of the ADQL standard
+
+on: 
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        submodules: true
+    - name: Setup dependencies
+      run: |
+        sudo apt update
+        sudo apt install texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended xsltproc
+      
+    - name: Build the document
+      run: make biblio forcetex
+      
+    - name: Check the output
+      run: |
+        test -f ADQL.pdf
+        test -f ADQL.bbl
+        
+    - uses: actions/upload-artifact@v1
+      with:
+        name: PDF Preview
+        path: ADQL.pdf
