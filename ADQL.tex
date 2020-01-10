@@ -348,9 +348,8 @@ String literals are expressed as a character expression delimited by single quot
         <quote> [ <character_representation>... ] <quote>
 \end{verbatim}
 
-Numeric literals may be are expressed as an exact decimal value, e.g. \verb:12: or \verb:12.3:,
-a floating point number with an exponent, e.g. \verb:12.3E4:, or a unsigned hexadecimal
-value, e.g. \verb:0x2F:.
+Numeric literals are expressed as an exact decimal value, e.g. \verb:12: or
+\verb:12.3:, or a floating point number with an exponent, e.g. \verb:12.3E4:.
 
 \begin{verbatim}
     <signed_numeric_literal> ::= [<sign>] <unsigned_numeric_literal>
@@ -358,7 +357,6 @@ value, e.g. \verb:0x2F:.
     <unsigned_numeric_literal> ::= 
         <exact_numeric_literal>
       | <approximate_numeric_literal>
-      | <unsigned_hexadecimal>
               
     <exact_numeric_literal> ::=
         <unsigned_decimal> [<period> [<unsigned_decimal>]]
@@ -378,17 +376,6 @@ value, e.g. \verb:0x2F:.
     
     <sign> ::= <plus_sign> | <minus_sign>
 \end{verbatim}
-
-Hexadecimal literals are expressed using the 'C' style notation, prefixed by a zero and 'x' e.g. \verb:0x2F:.
-
-\begin{verbatim}
-    <unsigned_hexadecimal> ::= 0x<hex_digit>...
-
-    hex_digit ::= <digit> | a | b | c | d | e | f | A | B | C | D | E | F
-\end{verbatim}
-
-Hexadecimal literals are not case-sensitive.
-Hexadecimal literals can only be used to create integer datatypes, SMALLINT, INTEGER and BIGINT.
 
 Boolean literals are expressed in BNF as follows:
 
@@ -2842,90 +2829,6 @@ The system SHOULD report an error in response to the following conditions:
 Details of the mechanism for reporting the error condition are
 implementation dependent.
 
-\subsection{Bitwise operators}
-\label{sec:bitwise}
-
-An ADQL service implementation MAY include support for the following optional
-bitwise operators:
-
-\begin{itemize}
-    \item not \verb:~ x:
-    \item and \verb:x & y: 
-    \item or  \verb:x | y:
-    \item xor \verb:x ^ y:
-\end{itemize}
-
-\subsubsection{Bit AND}
-\label{sec:bitwise.and}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-bitwise|}\\
-{\footnotesize \verb|name: BIT_AND|}\\
-
-The ampersand (\verb:&:) operator performs a bitwise AND operation
-on two integer operands.
-
-\begin{verbatim}
-    x & y
-\end{verbatim}
-
-The bitwise AND operation is only valid for integer numeric values,
-SMALLINT, INTEGER or BIGINT.
-If the operands are not integer values, then the result of the bitwise
-AND operation is undefined.
-
-\subsubsection{Bit OR}
-\label{sec:bitwise.or}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-bitwise|}\\
-{\footnotesize \verb|name: BIT_OR|}\\
-
-The vertical bar (\verb:|:) operator performs a bitwise OR operation
-on two integer operands.
-
-\begin{verbatim}
-    x | y
-\end{verbatim}
-
-The bitwise OR operation is only valid for integer numeric values, 
-SMALLINT, INTEGER or BIGINT.
-If the operands are not integer values, then the result of the bitwise OR
-operation is undefined.
-
-\subsubsection{Bit XOR}
-\label{sec:bitwise.xor}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-bitwise|}\\
-{\footnotesize \verb|name: BIT_XOR|}\\
-
-The circumflex (\verb:^:) operator performs a bitwise XOR (exclusive or)
-operation on two integer operands.
-
-\begin{verbatim}
-    x ^ y
-\end{verbatim}
-
-The bitwise XOR operation is only valid for integer numeric values, 
-SMALLINT, INTEGER or BIGINT.
-If the operands are not integer values, then the result of the bitwise
-XOR operation is undefined.
-
-\subsubsection{Bit NOT}
-\label{sec:bitwise.not}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-bitwise|}\\
-{\footnotesize \verb|name: BIT_NOT|}\\
-
-The tilde (\verb:~:) operator performs a bitwise NOT operation on an integer operand.
-
-\begin{verbatim}
-    ~ x
-\end{verbatim}
-
-The bitwise NOT operation is only valid for integer numeric values, 
-SMALLINT, INTEGER or BIGINT.
-If the operand is not an integer value, then the result of the bitwise
-NOT operation is undefined.
-
 \subsection{Cardinality}
 \label{sec:cardinality}
 
@@ -2978,10 +2881,6 @@ TOP clause is applied to limit the number of rows returned.
       | ASIN
       | ATAN
       | ATAN2
-      | BIT_AND
-      | BIT_NOT
-      | BIT_OR
-      | BIT_XOR
       | BOX
       | CEILING
       | CENTROID
@@ -3132,17 +3031,6 @@ TOP clause is applied to limit the number of rows returned.
     <between_predicate> ::=
         <value_expression> [ NOT ] BETWEEN
         <value_expression> AND <value_expression>
-
-    <bitwise_expression> ::=
-        <bitwise_not> <numeric_value_expression>
-        | <numeric_value_expression> <bitwise_and> <numeric_value_expression>
-        | <numeric_value_expression> <bitwise_or>  <numeric_value_expression>
-        | <numeric_value_expression> <bitwise_xor> <numeric_value_expression>
-
-    <bitwise_and> ::= <ampersand>
-    <bitwise_not> ::= <tilde>
-    <bitwise_or>  ::= <vertical_bar>
-    <bitwise_xor> ::= <circumflex>
 
     <boolean_factor> ::= [ NOT ] <boolean_primary>
 
@@ -3359,8 +3247,6 @@ TOP clause is applied to limit the number of rows returned.
 
     <having_clause> ::= HAVING <search_condition>
 
-    <hex_digit> ::= <digit> | a | b | c | d | e | f | A | B | C | D | E | F
-
     <identifier> ::= <regular_identifier> | <delimited_identifier>
 
     <in_predicate> ::=
@@ -3487,7 +3373,6 @@ TOP clause is applied to limit the number of rows returned.
 
     <numeric_value_expression> ::=
         <term>
-      | <bitwise_expression>
       | <numeric_value_expression> <plus_sign> <term>
       | <numeric_value_expression> <minus_sign> <term>
 
@@ -3687,8 +3572,6 @@ TOP clause is applied to limit the number of rows returned.
 
     <unsigned_decimal> ::= <digit>...
 
-    <unsigned_hexadecimal> ::= 0x<hex_digit>...
-
     <unsigned_literal> ::=
         <unsigned_numeric_literal>
       | <general_literal>
@@ -3696,7 +3579,6 @@ TOP clause is applied to limit the number of rows returned.
     <unsigned_numeric_literal> ::=
         <exact_numeric_literal>
       | <approximate_numeric_literal>
-      | <unsigned_hexadecimal>
 
     <unsigned_value_specification> ::= <unsigned_literal>
 
@@ -3801,6 +3683,12 @@ issues that are still to be resolved.
 \label{sec:changes}
 
 \begin{itemize}
+
+    \item Changes from PR-ADQL-2.1-20191105
+        \begin{itemize}
+            \item Removed support of hexadecimal values
+            \item Removed bitwise operators
+        \end{itemize}
 
     \item Changes from PR-ADQL-2.1-20180112
         \begin{itemize}
