@@ -1231,7 +1231,7 @@ operations on the image data.
 ADQL provides support for the POINT, CIRCLE and POLYGON geometric
 types defined in the \DALISpec.
 
-ADQL also provides support for STC-S based geomertic regions,
+ADQL also provides support for STC-S based geometic regions,
 as defined in the \STCSSpec, using the REGION datatype.
 
 \subsubsection{POINT}
@@ -1407,9 +1407,9 @@ region as defined in the \STCSSpec.
 % STC-S 1.1 - Section 5.2
 % STC-S 1.1 - Appendix B.2
 
-To fully support the the REGION datatype, a service implementation SHOULD
+To fully support the REGION datatype, a service implementation SHOULD
 provide implementations of the INTERSECTS and CONTAINS operators that
-support the REGION datatype in combination with with the other geometric
+support the REGION datatype in combination with the other STC geometric
 types, POINT, BOX, CIRCLE and POLYGON.
 
 \begin{table}[th]\footnotesize
@@ -1504,6 +1504,7 @@ functions to enhance the astronomical usage of the language:
     \item INTERSECTS
     \item POINT
     \item POLYGON
+    \item REGION
 \end{itemize}
 
 \subsubsection{Coordinate limits}
@@ -1557,6 +1558,7 @@ where
       | <circle>
       | <point>
       | <polygon>
+      | <region>
       | <user_defined_function>
 \end{verbatim}
 and \verb:<value_expression_primary>: enables the use of geometric functions
@@ -2486,6 +2488,30 @@ marked as deprecated.
 Future versions of this specification may remove this parameter
 \SectionSee{sec:geom.coordsys.param}.
 
+
+\subsubsection{REGION}
+ \label{sec:functions.geom.region}
+ 
+ {\footnotesize Language feature :}\\
+ {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+ {\footnotesize \verb|name: REGION|}\\
+
+ This function is a literal constructor for the datatype REGION. It provides a
+ way of expressing a complex region represented by a single string input
+ parameter. It MUST return a value with the datatype REGION as introduced in
+ \SectionRef{sec:types.geom.region}. Consequently, the format of its string
+ parameter MUST follow the \STCSSpec.
+
+ For example:
+
+ \begin{verbatim}
+ -- STC-s - Complex region
+ REGION('Union ICRS TOPOCENTER
+        (Polygon 147.8 69.2 147.4 69.2 147.3 69.4 147.9 69.4
+         Polygon 147.9 69.7 147.6 69.7 147.5 69.9 148.0 69.9)')
+\end{verbatim}
+
+
 \subsection{User defined functions}
 \label{sec:user.functions}
 \subsubsection{Overview}
@@ -3229,6 +3255,7 @@ TOP clause is applied to limit the number of rows returned.
       | <circle>
       | <point>
       | <polygon>
+      | <region>
       | <user_defined_function>
 
     <greater_than_operator> ::= >
@@ -3460,6 +3487,9 @@ TOP clause is applied to limit the number of rows returned.
     <quote_symbol> ::= <quote> <quote>
 
     <radius> ::= <numeric_value_expression>
+
+    <region> ::=
+        REGION <left_paren> <string_value_expression> <right_paren>
 
     <regular_identifier> ::=
         <simple_Latin_letter>...
