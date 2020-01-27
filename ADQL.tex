@@ -1395,57 +1395,19 @@ and (30.0, 30.5) degrees.
 \subsubsection{REGION}
 \label{sec:types.geom.region}
 
-The REGION datatype provides support for complex geometric regions that
-cannot be expressed by one of the simple geometric types described above.
+REGION is introduced as the type of the result of intersections and
+unions of other geometries (although ADQL at this point does not support
+these operations).
 
-REGION values are serialized as character arrays with a xtype of
-\verb:region: containing a STC-S string describing the geometric region.
-
-The text of a REGION value may contain either a simple or a complex spatial
-region as defined in the \STCSSpec.
-% http://ivoa.net/documents/STC-S/20130917/WD-STC-S-1.0-20130917.pdf
-% STC-S 1.1 - Section 5.2
-% STC-S 1.1 - Appendix B.2
-
-To fully support the the REGION datatype, a service implementation SHOULD
-provide implementations of the INTERSECTS and CONTAINS operators that
-support the REGION datatype in combination with with the other geometric
-types, POINT, BOX, CIRCLE and POLYGON.
-
-\begin{table}[th]\footnotesize
-    \begin{tabular}
-        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
-        \hline
-        \multicolumn{1}{|c|}{\textbf{ADQL}} &
-        \multicolumn{3}{|c|}{\textbf{VOTable}}
-        \tabularnewline
-        
-        \hline
-        \textbf{type} &
-        \textbf{datatype} &
-        \textbf{arraysize} &
-        \textbf{xtype}
-        \tabularnewline
-
-        \hline
-        REGION &
-        char &
-        * &
-        adql:region
-        \tabularnewline
-
-        \hline
-    \end{tabular}
-    \caption{Type mapping for STC-S region}
-    \label{table:types.geom.region}
-\end{table}
-
-A key use case for the REGION datatype is to implement the \textit{s\_region}
-column described in the \ObsCoreSpec.
+We do not specify the serialisation of REGION-typed values in result
+sets.  It is expected that next version of DALI will provide normative
+guidance on this.  However, at least for the \textit{s\_region}
+column described in the \ObsCoreSpec,
 % ObsCore 1.1 Section 4.12
 % http://ivoa.net/documents/ObsCore/20170509/REC-ObsCore-v1.1-20170509.pdf#26
+informal practice is to produce strings conforming to section 6
+of TAP 1.0 \citep{2010ivoa.spec.0327D} with an xtype of
+\texttt{adql:region}.
 
 \clearpage
 \section{Optional components}
@@ -1504,6 +1466,7 @@ functions to enhance the astronomical usage of the language:
     \item INTERSECTS
     \item POINT
     \item POLYGON
+    \item REGION
 \end{itemize}
 
 \subsubsection{Coordinate limits}
@@ -1557,6 +1520,7 @@ where
       | <circle>
       | <point>
       | <polygon>
+      | <region>
       | <user_defined_function>
 \end{verbatim}
 and \verb:<value_expression_primary>: enables the use of geometric functions
@@ -2486,6 +2450,26 @@ marked as deprecated.
 Future versions of this specification may remove this parameter
 \SectionSee{sec:geom.coordsys.param}.
 
+\subsubsection{REGION}
+\label{sec:functions.geom.region}
+
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|name: REGION|}\\
+
+
+The REGION function provides a way of expressing a complex region
+represented by a single string literal.  The standard expressly only
+requires literals as arguments rather than string expressions or column
+references.  The latter would require parsing these representations
+within the database, which is not intended.
+
+This document does not specify possible syntaxes for REGION
+literals.  A de-facto standard that many services understanding ADQL 2.0
+implemented at least partially is given by the (non-normative) section 6
+of TAP 1.0 \citep{2010ivoa.spec.0327D}, and implementations of ADQL 2.1 are
+encouraged to support as much of that as reasonable for them.
+
 \subsection{User defined functions}
 \label{sec:user.functions}
 \subsubsection{Overview}
@@ -3229,6 +3213,7 @@ TOP clause is applied to limit the number of rows returned.
       | <circle>
       | <point>
       | <polygon>
+      | <region>
       | <user_defined_function>
 
     <greater_than_operator> ::= >
@@ -3461,6 +3446,9 @@ TOP clause is applied to limit the number of rows returned.
 
     <radius> ::= <numeric_value_expression>
 
+    <region> ::=
+      REGION <left_paren> <character_string_literal> <right_paren>
+
     <regular_identifier> ::=
         <simple_Latin_letter>...
         [ { <digit> | <simple_Latin_letter> | <underscore> }... ]
@@ -3688,6 +3676,8 @@ issues that are still to be resolved.
         \begin{itemize}
             \item Removed support of hexadecimal values
             \item Removed bitwise operators
+            \item Re-added REGION, but only defined for literal
+            arguments.
         \end{itemize}
 
     \item Changes from PR-ADQL-2.1-20180112
