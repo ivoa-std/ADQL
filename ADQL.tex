@@ -1592,11 +1592,8 @@ As of this version of the specification the COORDSYS function has
 been marked as deprecated. This function may be removed in future versions
 of this specification.
 
-Functions like AREA, COORD1, COORD2 and DISTANCE accept a geometry and
-return a calculated numeric value.
-
 The specification defines two versions of the DISTANCE function,
-one that accepts two geometries, and one that accepts four
+one that accepts two POINTs, and one that accepts four
 separate numeric values, both forms return a numeric value.
 
 The predicate and most of the utility functions are included as numeric
@@ -1651,7 +1648,7 @@ sky positions of the two associated rows is less than or equal to
 a given threshold.
 
 The geometrical functions provided by ADQL offer a number of
-semantically equivalent ways to specify such a condition in
+semantically equivalent ways to specify such a condition
 in either the JOIN or the WHERE clause, using various 
 combinations of POINT, CIRCLE and DISTANCE.
 While a correct implementation MUST generate the same result for
@@ -2185,8 +2182,10 @@ The equivalent call to the four parameter form of the function would be:
 \end{verbatim}
 
 The DISTANCE function may be applied to any expression that returns a
-geometric POINT value.
-For example, the distance between to points stored in the database could
+geometric POINT value. Behaviour for expressions returning a geometry different
+from a POINT is undefined at this point (but may be defined later).
+
+For example, the distance between two points stored in the database could
 be calculated as follows:
 \begin{verbatim}
     DISTANCE(
@@ -3186,7 +3185,7 @@ TOP clause is applied to limit the number of rows returned.
 
     <coord_sys> ::= <string_value_expression>
 
-    <coord_value> ::= <point> | <column_reference>
+    <coord_value> ::= <point_value> | <column_reference>
 
     <coordinate1> ::= <numeric_value_expression>
 
@@ -3311,7 +3310,7 @@ TOP clause is applied to limit the number of rows returned.
     <in_value_list> ::=
         <value_expression> { <comma> <value_expression> } ...
 
-    <intersects > ::=
+    <intersects> ::=
         INTERSECTS <left_paren>
             <geometry_value_expression> <comma> <geometry_value_expression>
         <right_paren>
@@ -3467,6 +3466,8 @@ TOP clause is applied to limit the number of rows returned.
             [ <coord_sys> <comma> ]
             <coordinates>
         <right_paren>
+
+    <point_value> ::= <point> | <centroid> | <user_defined_function>
 
     <polygon> ::=
         POLYGON <left_paren>
@@ -3747,6 +3748,7 @@ issues that are still to be resolved.
             \item Re-added REGION, but only defined for literal
             arguments.
             \item Updated \verb:IN_UNIT(): description
+            \item Updated \verb:DISTANCE(): description and BNF grammar
         \end{itemize}
 
     \item Changes from PR-ADQL-2.1-20180112
