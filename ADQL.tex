@@ -3503,7 +3503,7 @@ TOP clause is applied to limit the number of rows returned.
     <query_name> ::= <identifier>
 
     <query_specification> :=
-        WITH <with_query> [, ...]
+        WITH <with_query> {, <with_query>} ...
         <select_query>
 
     <question_mark> ::= ?
