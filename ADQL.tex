@@ -152,7 +152,7 @@ for ADQL. The following conventions are used through this document:
     \item A group of items is enclosed in meta symbols \verb:{: and \verb:}:
     \item Repetitive item (zero or more times) are followed by \verb:...:
     \item Terminal symbols are enclosed by \verb:<: and \verb:>:
-    \item Terminals of meta-symbol characters (\verb:=,[,],(,),<,>,*:) are surrounded by quotes (\verb:“:) to distinguish them from meta-symbols
+    \item Terminals of meta-symbol characters (\verb!:=[]{}<>."!) are surrounded by quotes (\verb:“:) to distinguish them from meta-symbols
     \item Case-insensitive unless otherwise stated.
 \end{itemize}
 
@@ -3141,7 +3141,7 @@ TOP clause is applied to limit the number of rows returned.
 
     <circumflex> ::= ^
 
-    <colon> ::= :
+    <colon> ::= ":"
 
     <column_name> ::= <identifier>
 
@@ -3173,7 +3173,7 @@ TOP clause is applied to limit the number of rows returned.
         <concatenation_operator>
         <character_factor>
 
-    <concatenation_operator> ::= ||
+    <concatenation_operator> ::= "||"
 
     <contains> ::=
         CONTAINS <left_paren>
@@ -3198,7 +3198,7 @@ TOP clause is applied to limit the number of rows returned.
 
     <correlation_specification> ::= [ AS ] <correlation_name>
 
-    <default_function_prefix> ::=
+    <default_function_prefix> ::= (see text)
 
     <delimited_identifier> ::=
         <double_quote> <delimited_identifier_body> <double_quote>
@@ -3238,13 +3238,13 @@ TOP clause is applied to limit the number of rows returned.
             <numeric_value_expression>
             <right_paren>
 
-    <double_period> ::= ..
+    <double_period> ::= ".."
 
-    <double_quote> ::= "
+    <double_quote> ::= """
 
     <double_quote_symbol> ::= <double_quote><double_quote>
 
-    <equals_operator> ::= =
+    <equals_operator> ::= "="
 
     <exact_numeric_literal> ::=
         <unsigned_decimal> [ <period> [ <unsigned_decimal> ] ]
@@ -3284,9 +3284,9 @@ TOP clause is applied to limit the number of rows returned.
       | <region>
       | <user_defined_function>
 
-    <greater_than_operator> ::= >
+    <greater_than_operator> ::= ">"
 
-    <greater_than_or_equals_operator> ::= >=
+    <greater_than_or_equals_operator> ::= ">="
 
     <group_by_clause> ::= GROUP BY <group_by_term_list>
 
@@ -3330,13 +3330,13 @@ TOP clause is applied to limit the number of rows returned.
 
     <keyword> ::= <SQL_reserved_word> | <ADQL_reserved_word>
 
-    <left_bracket> ::= [
+    <left_bracket> ::= "["
 
     <left_paren> ::= (
 
-    <less_than_operator> ::= <
+    <less_than_operator> ::= "<"
 
-    <less_than_or_equals_operator> ::= <=
+    <less_than_or_equals_operator> ::= "<="
 
     <like_predicate> ::=
         <match_value> [ NOT ] LIKE <pattern>
@@ -3392,15 +3392,15 @@ TOP clause is applied to limit the number of rows returned.
       | <keyword>
       | <unsigned_numeric_literal>
 
-    <nondoublequote_character> ::=
+    <nondoublequote_character> ::= any character except "
 
-    <nonquote_character> ::=
+    <nonquote_character> ::= any character except '
 
     <not_equals_operator> ::= <not_equals_operator1> | <not_equals_operator2>
 
-    <not_equals_operator1> ::= <>
+    <not_equals_operator1> ::= "<>"
 
-    <not_equals_operator2> ::= !=
+    <not_equals_operator2> ::= "!="
 
     <non_join_query_expression> ::=
         <non_join_query_term>
@@ -3458,7 +3458,7 @@ TOP clause is applied to limit the number of rows returned.
 
     <percent> ::= %
 
-    <period> ::= .
+    <period> ::= "."
 
     <plus_sign> ::= +
 
@@ -3521,7 +3521,7 @@ TOP clause is applied to limit the number of rows returned.
         <simple_Latin_letter>...
         [ { <digit> | <simple_Latin_letter> | <underscore> }... ]
 
-    <right_bracket> ::= ]
+    <right_bracket> ::= "]"
 
     <right_paren> ::= )
 
@@ -3667,7 +3667,7 @@ TOP clause is applied to limit the number of rows returned.
         | <set_function_specification>
         | <left_paren> <value_expression> <right_paren>
 
-    <vertical_bar> ::= |
+    <vertical_bar> ::= "|"
 
     <where_clause> ::= WHERE <search_condition>
 
