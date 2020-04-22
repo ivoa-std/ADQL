@@ -2874,8 +2874,6 @@ Examples, with an \emph{advanced} unit inference mechanism:
     IN_UNIT(ra+10, 'rad')                                   -- OK
 
     IN_UNIT(sqrt(power(pm_ra,2)+power(pm_dec,2)), 'rad/yr') -- OK
-
-    IN_UNIT(ra + IN_UNIT(10, 'deg'), 'rad')                 -- OK
 \end{verbatim}
 
 Note that the complexity and the behavior of a unit inference mechanism is
