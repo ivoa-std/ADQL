@@ -1,4 +1,4 @@
-name: CI build of the ADQL standard
+name: Build, Check and PDF Preview
 
 env:
   doc_name: ADQL
