@@ -1,0 +1,47 @@
+name: Build Release's PDF
+
+env:
+  doc_name: ADQL
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    
+    - name: Checkout the repository
+      uses: actions/checkout@v1
+      with:
+        submodules: true
+    
+    - name: Setup dependencies
+      run: |
+        sudo apt update
+        sudo apt install texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended xsltproc
+      
+    - name: Build the document
+      run: make biblio forcetex
+      
+    - name: Check the output
+      run: |
+        test -f ${{ env.doc_name }}.pdf
+        test -f ${{ env.doc_name }}.bbl
+
+    - name: Get the version
+      id: get_version
+      run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+
+    - name: Update the PDF
+      uses: Xotl/cool-github-releases@v1
+      with:
+        mode: update
+        tag_name: ${{ steps.get_version.outputs.VERSION }}
+        assets: ${{ env.doc_name }}.pdf
+        replace_assets: true
+        github_token: ${{ secrets.GITHUB_TOKEN }}
