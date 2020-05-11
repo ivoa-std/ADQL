@@ -1,6 +1,9 @@
 name: CI build of the ADQL standard
 
-on: 
+env:
+  doc_name: ADQL
+
+on:
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -10,9 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v1
+    
+    - name: Checkout the repository
+      uses: actions/checkout@v1
       with:
         submodules: true
+    
     - name: Setup dependencies
       run: |
         sudo apt update
@@ -23,10 +29,35 @@ jobs:
       
     - name: Check the output
       run: |
-        test -f ADQL.pdf
-        test -f ADQL.bbl
+        test -f ${{ env.doc_name }}.pdf
+        test -f ${{ env.doc_name }}.bbl
         
-    - uses: actions/upload-artifact@v1
+    - name: Keep the PDF artefact 
+      uses: actions/upload-artifact@v1
       with:
         name: PDF Preview
-        path: ADQL.pdf
+        path: ${{ env.doc_name }}.pdf
+    
+    - name: Move the auto-pdf-preview tag
+      uses: weareyipyip/walking-tag-action@v1
+      with:
+        TAG_NAME: auto-pdf-preview
+        TAG_MESSAGE: |
+          Last commit taken into account for the automatically updated PDF preview of this IVOA document.
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Update the PDF preview
+      uses: Xotl/cool-github-releases@v1
+      with:
+        mode: update
+        isPrerelease: true
+        tag_name: auto-pdf-preview
+        release_name: "Auto PDF Preview"
+        body_mrkdwn: |
+          This release aims to provide a PDF preview of the last commit applied on this repository.
+          It will be updated automatically after each merge of a PullRequest.
+          **DO NOT PUBLISH THIS PRE-RELEASE!**"
+        assets: ${{ env.doc_name }}.pdf
+        replace_assets: true
+        github_token: ${{ secrets.GITHUB_TOKEN }}
