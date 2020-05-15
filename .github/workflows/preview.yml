@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-
+    
     runs-on: ubuntu-latest
     
     steps:
@@ -25,10 +25,10 @@ jobs:
         sudo apt update
         sudo apt install texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended xsltproc
         sudo snap install pdftk
-      
+    
     - name: Build the document
       run: make biblio ${{ env.doc_name }}-draft.pdf
-      
+    
     - name: Check the output
       run: |
         test -f ${{ env.doc_name }}-draft.pdf
@@ -42,7 +42,7 @@ jobs:
           Last commit taken into account for the automatically updated PDF preview of this IVOA document.
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+    
     - name: Update the PDF preview
       uses: Xotl/cool-github-releases@v1
       with:
