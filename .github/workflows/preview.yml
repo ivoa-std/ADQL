@@ -24,13 +24,14 @@ jobs:
       run: |
         sudo apt update
         sudo apt install texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended xsltproc
+        sudo snap install pdftk
       
     - name: Build the document
-      run: make biblio forcetex
+      run: make biblio ${{ env.doc_name }}-draft.pdf
       
     - name: Check the output
       run: |
-        test -f ${{ env.doc_name }}.pdf
+        test -f ${{ env.doc_name }}-draft.pdf
         test -f ${{ env.doc_name }}.bbl
     
     - name: Move the auto-pdf-preview tag
@@ -53,6 +54,6 @@ jobs:
           This release aims to provide a PDF preview of the last commit applied on this repository.
           It will be updated automatically after each merge of a PullRequest.
           **DO NOT PUBLISH THIS PRE-RELEASE!**"
-        assets: ${{ env.doc_name }}.pdf
+        assets: ${{ env.doc_name }}-draft.pdf
         replace_assets: true
         github_token: ${{ secrets.GITHUB_TOKEN }}
