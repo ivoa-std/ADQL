@@ -54,6 +54,7 @@ jobs:
           This release aims to provide a PDF preview of the last commit applied on this repository.
           It will be updated automatically after each merge of a PullRequest.
           **DO NOT PUBLISH THIS PRE-RELEASE!**"
+          _Corresponding commit: ${{ github.sha }}_
         assets: ${{ env.doc_name }}-draft.pdf
         replace_assets: true
         github_token: ${{ secrets.GITHUB_TOKEN }}
