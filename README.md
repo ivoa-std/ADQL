@@ -1,6 +1,6 @@
 ![ADQL version](https://img.shields.io/badge/ADQL-PR--2.1-yellow.svg)
 [![CI build of the ADQL standard](../../workflows/CI%20build%20of%20the%20ADQL%20standard/badge.svg)](../../actions)
-[![PDF-Preview](https://img.shields.io/badge/Preview-PDF-blue)](../../releases/download/auto-pdf-preview/ADQL-draft.pdf
+[![PDF-Preview](https://img.shields.io/badge/Preview-PDF-blue)](../../releases/download/auto-pdf-preview/ADQL-draft.pdf)
 
 # ADQL
 
