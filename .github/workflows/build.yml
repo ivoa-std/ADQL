@@ -1,6 +1,9 @@
-name: CI build of the ADQL standard
+name: Check the IVOA document
 
-on: 
+env:
+  doc_name: ADQL
+
+on:
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -10,9 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v1
+    
+    - name: Checkout the repository
+      uses: actions/checkout@v1
       with:
         submodules: true
+    
     - name: Setup dependencies
       run: |
         sudo apt update
@@ -23,10 +29,11 @@ jobs:
       
     - name: Check the output
       run: |
-        test -f ADQL.pdf
-        test -f ADQL.bbl
+        test -f ${{ env.doc_name }}.pdf
+        test -f ${{ env.doc_name }}.bbl
         
-    - uses: actions/upload-artifact@v1
+    - name: Keep the PDF artefact 
+      uses: actions/upload-artifact@v1
       with:
         name: PDF Preview
-        path: ADQL.pdf
+        path: ${{ env.doc_name }}.pdf

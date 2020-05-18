@@ -27,6 +27,8 @@ include ivoatex/Makefile
 # Shortcut aliases
 pdf: $(DOCNAME).pdf
 
+draft: $(DOCNAME)-draft.pdf
+
 html: $(DOCNAME).html
 
 zip: package
