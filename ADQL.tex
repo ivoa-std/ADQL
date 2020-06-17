@@ -3106,10 +3106,14 @@ TOP clause is applied to limit the number of rows returned.
     <box> ::=
         BOX <left_paren>
             [ <coord_sys> <comma> ]
-            <coordinates>
+            <box_center>
             <comma> <numeric_value_expression>
             <comma> <numeric_value_expression>
         <right_paren>
+    
+    <box_center> ::=
+        <coordinates>
+        | <coord_value>
 
     <catalog_name> ::= <identifier>
 
@@ -3134,9 +3138,13 @@ TOP clause is applied to limit the number of rows returned.
     <circle> ::=
         CIRCLE <left_paren>
             [ <coord_sys> <comma> ]
-            <coordinates>
+            <circle_center>
             <comma> <radius>
         <right_paren>
+    
+    <circle_center> ::=
+        <coordinates>
+        | <coord_value>
 
     <circumflex> ::= ^
 
@@ -3472,10 +3480,19 @@ TOP clause is applied to limit the number of rows returned.
     <polygon> ::=
         POLYGON <left_paren>
             [ <coord_sys> <comma> ]
-            <coordinates>
-            <comma> <coordinates>
-            { <comma> <coordinates> } ?
+            <polygon_vertices>
         <right_paren>
+    
+    <polygon_vertices> ::=
+        <coordinates>
+        <comma> <coordinates>
+        <comma> <coordinates>
+        { <comma> <coordinates> }...
+        |
+        <coord_value>
+        <comma> <coord_value>
+        <comma> <coord_value>
+        { <comma> <coord_value> }...
 
     <predicate> ::=
         <comparison_predicate>
@@ -3749,6 +3766,8 @@ issues that are still to be resolved.
             arguments.
             \item Updated \verb:IN_UNIT(): description
             \item Updated \verb:DISTANCE(): description and BNF grammar
+            \item Fix BNF grammar of BOX, CIRCLE and POLYGON (optional coord.
+            sys. argument, and coordinates VS points)
         \end{itemize}
 
     \item Changes from PR-ADQL-2.1-20180112
