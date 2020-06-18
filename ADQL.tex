@@ -1533,7 +1533,7 @@ and column references.
 
 %TODO check on the list ...
 For historical reasons, the geometry constructors (BOX, CIRCLE, POINT
-and POLYGON) all accept an optional string value as the first argument.
+and POLYGON) all accept an optional string literal as the first argument.
 This was originally intended to carry
 information on a reference system or other coordinate system metadata.
 As of this version of the specification this parameter has been
@@ -1830,8 +1830,8 @@ and DOUBLE values respectively.
 %TODO - ObsCore example
 
 %coordsys param
-For historical reasons, the BOX function accepts an optional string
-value as the first argument.
+For historical reasons, the BOX function accepts an optional string literal as
+the first argument.
 As of this version of the specification this parameter has been
 marked as deprecated.
 Future versions of this specification may remove this parameter
@@ -1929,8 +1929,8 @@ database columns that contain POINT and DOUBLE values respectively.
 %TODO - ObsCore example
 
 %coordsys param
-For historical reasons, the CIRCLE function accepts an optional string
-value as the first argument.
+For historical reasons, the CIRCLE function accepts an optional string literal
+as the first argument.
 As of this version of the specification this parameter has been
 marked as deprecated.
 Future versions of this specification may remove this parameter
@@ -2359,8 +2359,8 @@ columns that contain numeric values.
 %TODO - ObsCore example
 
 %coordsys param
-For historical reasons, the POINT function accepts an optional string
-value as the first argument.
+For historical reasons, the POINT function accepts an optional string literal
+as the first argument.
 As of this version of the specification this parameter has been
 marked as deprecated.
 Future versions of this specification may remove this parameter
@@ -2444,8 +2444,8 @@ The POLYGON function does not support a mixture of numeric and POINT
 arguments.
 
 %coordsys param
-For historical reasons, the POLYGON function accepts an optional string
-value as the first argument.
+For historical reasons, the POLYGON function accepts an optional string literal
+as the first argument.
 As of this version of the specification this parameter has been
 marked as deprecated.
 Future versions of this specification may remove this parameter
@@ -3191,7 +3191,7 @@ TOP clause is applied to limit the number of rows returned.
 
     <coord2> ::= COORD2 <left_paren> <coord_value> <right_paren>
 
-    <coord_sys> ::= <string_value_expression>
+    <coord_sys> ::= <character_string_literal>
 
     <coord_value> ::= <point_value> | <column_reference>
 
@@ -3768,6 +3768,8 @@ issues that are still to be resolved.
             \item Updated \verb:DISTANCE(): description and BNF grammar
             \item Fix BNF grammar of BOX, CIRCLE and POLYGON (optional coord.
             sys. argument, and coordinates VS points)
+            \item Apply "ADQL-2.0 Erratum-3" (i.e. the coordinate system
+            argument must be string literal)
         \end{itemize}
 
     \item Changes from PR-ADQL-2.1-20180112
