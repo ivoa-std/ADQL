@@ -2636,7 +2636,7 @@ removing duplicate rows unless UNION ALL is used.
 
 For a UNION operation to be valid in ADQL, the following criteria MUST be met:
 \begin{itemize}
-    \item the two queries MUST result in the same number of columns
+    \item the two queries MUST result in the same number of columns.
     \item the columns in the operands MUST have the same datatypes.
 \end{itemize}
 
@@ -2667,14 +2667,14 @@ removing duplicate rows unless EXCEPT ALL is used.
 For an EXCEPT operation to be valid in ADQL, the following criteria MUST be met:
 
 \begin{itemize}
-    \item the two queries MUST result in the same number of columns
+    \item the two queries MUST result in the same number of columns.
     \item the columns in the operands MUST have the same datatypes.
+    \item the metadata for the results MUST be generated from the left-hand operand.
 \end{itemize}
 
 In addition, the following criteria SHOULD be met: 
 \begin{itemize}
     \item the columns in the operands SHOULD have the same metadata, e.g. units, UCD, etc.
-    \item the metadata for the results MUST be generated from the left-hand operand.
 \end{itemize}
 
 Note that the comparison used for removing duplicates is based purely on the
@@ -2691,21 +2691,21 @@ considered equal, despite the difference in units.
 {\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-sets|}\\
 {\footnotesize \verb|name: INTERSECT|}\\
 
-The INTERSECT operator combines the results of two queries, accepting rows that are
-in the first set of results but are not in the second,
+The INTERSECT operator combines the results of two queries, accepting rows
+that are strictly in both the first and second set of results,
 removing duplicate rows unless INTERSECT ALL is used.
 
 For an INTERSECT operation to be valid in ADQL, the following criteria MUST be met:
 
 \begin{itemize}
-    \item the two queries MUST result in the same number of columns
+    \item the two queries MUST result in the same number of columns.
     \item the columns in the operands MUST have the same datatypes.
 \end{itemize}
 
 In addition, the following criteria SHOULD be met: 
 \begin{itemize}
     \item the columns in the operands SHOULD have the same metadata, e.g. units, UCD, etc.
-    \item the metadata for the results MUST be generated from the left-hand operand.
+    \item the metadata for the results SHOULD be generated from the left-hand operand.
 \end{itemize}
 
 Note that the comparison used for removing duplicates is based purely on the
@@ -2715,6 +2715,64 @@ and a row with a numeric value of \verb:2: and units of \verb:km: will be
 considered equal, despite the difference in units.
 \begin{verbatim}
     2m = 2km
+\end{verbatim}
+
+\subsubsection{Operands}
+
+Operands of any of the set operators can only be \verb:SELECT: queries.
+Unless if within parentheses, such query can not use any
+\verb:WITH:, \verb:ORDER BY: or \verb:OFFSET: clause.
+
+Example: sorting result of a \verb:UNION: operation:
+
+\begin{verbatim}
+        SELECT id, ra, dec FROM table1
+    UNION
+        SELECT id, ra, dec FROM table2
+    ORDER BY id -- sort the UNION result
+\end{verbatim}
+
+Example: sorting result of the \verb:UNION: operands:
+
+\begin{verbatim}
+        -- take the 10 first
+        ( SELECT TOP 10 id, ra, dec FROM atable ORDER BY id ASC)
+    UNION
+        -- take the 10 last
+        ( SELECT TOP 10 id, ra, dec FROM atable ORDER BY id DESC)
+\end{verbatim}
+
+\subsubsection{Precedence}
+
+When set operators are used together, the resulting expression is
+evaluated in the context of the following precedence:
+
+\begin{enumerate}
+    \item Expressions within parentheses
+    \item The \verb:INTERSECT: operator
+    \item The \verb:UNION: and \verb:EXCEPT: operators evaluated from left to right
+\end{enumerate}
+
+Example:
+
+\begin{verbatim}
+        SELECT id, ra, dec FROM table1
+    UNION
+        SELECT id, ra, dec FROM table2
+    INTERSECT
+        SELECT id, ra, dec FROM table3
+\end{verbatim}
+
+is equivalent to:
+
+\begin{verbatim}
+        SELECT id, ra, dec FROM table1
+    UNION
+        (
+            SELECT id, ra, dec FROM table2
+        INTERSECT
+            SELECT id, ra, dec FROM table3
+        )
 \end{verbatim}
 
 \subsection{Common table expressions}
@@ -3764,6 +3822,8 @@ issues that are still to be resolved.
             \item Apply "ADQL-2.0 Erratum-3" (i.e. the coordinate system
             argument must be string literal)
             \item Fixed syntax of set operators: UNION, EXCEPT and INTERSECT
+            \item Fixed description of INTERSECT
+            \item Added clarifications on operands and precedence of UNION, EXCEPT and INTERSECT
         \end{itemize}
 
     \item Changes from PR-ADQL-2.1-20180112
