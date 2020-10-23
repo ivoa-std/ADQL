@@ -3409,19 +3409,6 @@ TOP clause is applied to limit the number of rows returned.
 
     <not_equals_operator2> ::= "!="
 
-    <non_join_query_expression> ::=
-        <non_join_query_term>
-        | <query_expression> UNION [ ALL ] <query_term>
-        | <query_expression> EXCEPT [ ALL ] <query_term>
-
-    <non_join_query_primary> ::=
-        <query_specification>
-        | <left_paren> <non_join_query_expression> <right_paren>
-
-    <non_join_query_term> ::=
-        <non_join_query_primary>
-        | <query_term> INTERSECT [ ALL ] <query_expression>
-
     <null_predicate> ::= <column_reference> IS [ NOT ] NULL
 
     <numeric_geometry_function> ::=
@@ -3511,18 +3498,29 @@ TOP clause is applied to limit the number of rows returned.
     <qualifier> ::= <table_name> | <correlation_name>
 
     <query_expression> ::=
-        <non_join_query_expression>
-        | <joined_table>
-
-    <query_term> ::=
-        <non_join_query_term>
+        <query_specification>
         | <joined_table>
 
     <query_name> ::= <identifier>
 
-    <query_specification> :=
-        WITH <with_query> {, <with_query>} ...
+    <query_set_expression> ::=
+        <query_set_term>
+        | <query_set_expression> UNION [ ALL ] <query_set_term>
+        | <query_set_expression> EXCEPT [ ALL ] <query_set_term>
+
+    <query_set_primary> ::=
         <select_query>
+        | <left_paren> <query_specification> <right_parent>
+
+    <query_set_term> ::=
+        <query_set_primary>
+        | <query_set_term> INTERSECT [ ALL ] <query_set_expression>
+
+    <query_specification> ::=
+        WITH <with_query> {, <with_query>} ...
+        <query_set_expression>
+        [ <order_by_clause> ]
+        [ <offset_clause> ]
 
     <question_mark> ::= ?
 
@@ -3558,7 +3556,10 @@ TOP clause is applied to limit the number of rows returned.
             [ <set_quantifier> ]
             [ <set_limit> ]
             <select_list>
-            <table_expression>
+            <from_clause>
+            [ <where_clause> ]
+            [ <group_by_clause> ]
+            [ <having_clause> ]
 
     <select_sublist> ::= <derived_column> | <qualifier> <period> <asterisk>
 
@@ -3600,14 +3601,6 @@ TOP clause is applied to limit the number of rows returned.
         <string_geometry_function> | <user_defined_function>
 
     <subquery> ::= <left_paren> <query_expression> <right_paren>
-
-    <table_expression> ::=
-        <from_clause>
-        [ <where_clause> ]
-        [ <group_by_clause> ]
-        [ <having_clause> ]
-        [ <order_by_clause> ]
-        [ <offset_clause> ]
 
     <table_name> ::= [ <schema_name> <period> ] <identifier>
 
@@ -3770,6 +3763,7 @@ issues that are still to be resolved.
             sys. argument, and coordinates VS points)
             \item Apply "ADQL-2.0 Erratum-3" (i.e. the coordinate system
             argument must be string literal)
+            \item Fixed syntax of set operators: UNION, EXCEPT and INTERSECT
         \end{itemize}
 
     \item Changes from PR-ADQL-2.1-20180112
