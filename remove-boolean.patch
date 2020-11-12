@@ -1,0 +1,145 @@
+diff --git a/ADQL.tex b/ADQL.tex
+index 327e0bc..15e29ed 100644
+--- a/ADQL.tex
++++ b/ADQL.tex
+@@ -379,14 +379,6 @@ Numeric literals are expressed as an exact decimal value, e.g. \verb:12: or
+     <sign> ::= <plus_sign> | <minus_sign>
+ \end{verbatim}
+ 
+-Boolean literals are expressed in BNF as follows:
+-
+-\begin{verbatim}
+-    <boolean_literal> ::= True | False
+-\end{verbatim}
+-
+-Boolean literals are not case-sensitive.
+-
+ \subsubsection{Whitespace}
+ \label{sec:whitespace}
+ 
+@@ -760,76 +752,6 @@ Services SHOULD also use the following mappings when interfacing to user data,
+ either by serializing result sets into VOTables or by ingesting user-provided
+ VOTables into ADQL-visible tables.
+ 
+-\subsection{Logical types}
+-\label{sec:types.logical}
+-\subsubsection{BOOLEAN}
+-\label{sec:types.logical.boolean}
+-
+-The BOOLEAN datatype maps to the corresponding \verb:boolean: datatype is defined in the \DALISpec.
+-The serialization format for \verb:boolean: is defined in the \VOTableSpec.
+-
+-\begin{table}[th]\footnotesize
+-    \begin{tabular}
+-        {|p{0.20\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+-        \hline
+-
+-        \hline
+-        \multicolumn{1}{|c|}{\textbf{ADQL}} &
+-        \multicolumn{3}{|c|}{\textbf{VOTable}}
+-        \tabularnewline
+-        
+-        \hline
+-        \textbf{type} &
+-        \textbf{datatype} &
+-        \textbf{arraysize} &
+-        \textbf{xtype}
+-        \tabularnewline
+-
+-        \hline
+-        BOOLEAN &
+-        boolean &
+-        1 &
+-        -
+-        \tabularnewline
+-
+-        \hline
+-    \end{tabular}
+-    \caption{ADQL type mapping for BOOLEAN}
+-    \label{table:types.logical.boolean}
+-\end{table}
+-
+-The literal values 1 and \verb:TRUE: are equivalent,
+-and the values 0 and \verb:FALSE: are equivalent:
+-\begin{verbatim}
+-    foo = 1
+-    foo = TRUE
+-
+-    bar = 0
+-    bar = FALSE
+-\end{verbatim}
+-
+-The literal values \verb:TRUE: and \verb:FALSE:
+-are not case-sensitive:
+-\begin{verbatim}
+-    foo = true
+-    foo = True
+-    foo = TRUE
+-
+-    bar = 0
+-    bar = false
+-    bar = False
+-    bar = FALSE
+-\end{verbatim}
+-
+-Comparing the equality of a BOOLEAN value or expression with another
+-BOOLEAN returns a BOOLEAN result.
+-
+-When comparing the size of a BOOLEAN with another BOOLEAN, the value
+-\verb:TRUE: is greater than the value \verb:FALSE:.
+-
+-Unless explicitly stated, the result of any other operation on a BOOLEAN
+-value is undefined.
+-
+ \subsection{Numeric types}
+ \label{sec:types.numeric}
+ 
+@@ -1499,7 +1421,6 @@ in the ADQL grammar.
+     <value_expression> ::=
+         <numeric_value_expression>
+       | <string_value_expression>
+-      | <boolean_value_expression>
+       | <geometry_value_expression>
+ \end{verbatim}
+ 
+@@ -3085,24 +3006,14 @@ TOP clause is applied to limit the number of rows returned.
+ 
+     <boolean_factor> ::= [ NOT ] <boolean_primary>
+ 
+-    <boolean_function> ::=
+-
+-    <boolean_literal> ::= True | False
+-
+     <boolean_primary> ::=
+         <left_paren> <search_condition> <right_paren>
+       | <predicate>
+-      | <boolean_value_expression>
+ 
+     <boolean_term> ::=
+         <boolean_factor>
+       | <boolean_term> AND <boolean_factor>
+ 
+-    <boolean_value_expression> ::= 
+-        <boolean_literal>
+-      | <boolean_function>
+-      | <user_defined_function>
+-
+     <box> ::=
+         BOX <left_paren>
+             [ <coord_sys> <comma> ]
+@@ -3676,7 +3587,6 @@ TOP clause is applied to limit the number of rows returned.
+     <value_expression> ::=
+         <numeric_value_expression>
+       | <string_value_expression>
+-      | <boolean_value_expression>
+       | <geometry_value_expression>
+ 
+     <value_expression_primary> ::=
+@@ -3762,6 +3672,7 @@ issues that are still to be resolved.
+         \begin{itemize}
+             \item Removed support of hexadecimal values
+             \item Removed bitwise operators
++            \item Removed boolean type
+             \item Re-added REGION, but only defined for literal
+             arguments.
+             \item Updated \verb:IN_UNIT(): description
