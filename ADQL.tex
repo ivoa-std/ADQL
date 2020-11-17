@@ -2613,6 +2613,75 @@ ADQL requires standard behaviour for the ASCII characters, and recommends
 following algorithm R2 described in Section 3.13, "Default Case Algorithms"
 of \citet{std:UNICODE} for characters outside the ASCII set.
 
+\subsection{Common table expressions}
+\label{sec:common-table}
+
+An ADQL service implementation MAY include support for the following optional
+support for common table expressions:
+
+\begin{itemize}
+    \item \verb:WITH:
+\end{itemize}
+
+\subsubsection{WITH}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-common-table|}\\
+{\footnotesize \verb|name: WITH|}\\
+
+The WITH operator creates a temporary named result set that can be referred
+to elsewhere in the main query.
+
+Using a common table expression can make complex queries easier to understand
+by factoring subqueries out of the main SQL statement.
+
+For example, the following query with a nested subquery: 
+\begin{verbatim}
+    SELECT
+        ra,
+        dec
+    FROM
+        (
+        SELECT
+            *
+        FROM
+            alpha_source
+        WHERE
+            id % 10 = 0
+        )
+    WHERE
+        ra > 10
+    AND 
+        ra < 20
+\end{verbatim}
+\noindent
+can be refactored as a named WITH query and a simpler main query:
+\begin{verbatim}
+    WITH alpha_subset AS
+        (
+        SELECT
+            *
+        FROM
+            alpha_source
+        WHERE
+            id % 10 = 0
+        )
+
+    SELECT
+        ra,
+        dec
+    FROM
+        alpha_subset
+    WHERE
+        ra > 10
+    AND 
+        ra < 20
+\end{verbatim}
+
+The current version of ADQL does not support recursive common table expressions.
+
+For clarity reason, common table expressions can be defined only in the main
+query. They are not allowed in sub-queries.
+
 \subsection{Set operators}
 \label{sec:set.operators}
 
@@ -2720,8 +2789,8 @@ considered equal, despite the difference in units.
 \subsubsection{Operands}
 
 Operands of any of the set operators can only be \verb:SELECT: queries.
-Unless if within parentheses, such query can not use any
-\verb:WITH:, \verb:ORDER BY: or \verb:OFFSET: clause.
+Unless if within parentheses, such query can not use any \verb:ORDER BY: or
+\verb:OFFSET: clause.
 
 Example: sorting result of a \verb:UNION: operation:
 
@@ -2740,6 +2809,20 @@ Example: sorting result of the \verb:UNION: operands:
     UNION
         -- take the 10 last
         ( SELECT TOP 10 id, ra, dec FROM atable ORDER BY id DESC)
+\end{verbatim}
+
+Common table expressions are not allowed in any set operator operand. They must
+always be declared at the main level.
+
+Example: sorting result of the \verb:UNION: operands: with common table
+expressions
+
+\begin{verbatim}
+WITH tenFirst AS ( SELECT TOP 10 id, ra, dec FROM atable ORDER BY id ASC),
+     tenLast  AS ( SELECT TOP 10 id, ra, dec FROM atable ORDER BY id DESC)
+  SELECT * FROM tenFirst
+UNION
+  SELECT * FROM tenLast
 \end{verbatim}
 
 \subsubsection{Precedence}
@@ -2774,72 +2857,6 @@ is equivalent to:
             SELECT id, ra, dec FROM table3
         )
 \end{verbatim}
-
-\subsection{Common table expressions}
-\label{sec:common-table}
-
-An ADQL service implementation MAY include support for the following optional
-support for common table expressions:
-
-\begin{itemize}
-    \item \verb:WITH:
-\end{itemize}
-
-\subsubsection{WITH}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-common-table|}\\
-{\footnotesize \verb|name: WITH|}\\
-
-The WITH operator creates a temporary named result set that can be referred
-to elsewhere in the main query.
-
-Using a common table expression can make complex queries easier to understand
-by factoring subqueries out of the main SQL statement.
-
-For example, the following query with a nested subquery: 
-\begin{verbatim}
-    SELECT
-        ra,
-        dec
-    FROM
-        (
-        SELECT
-            *
-        FROM
-            alpha_source
-        WHERE
-            id % 10 = 0
-        )
-    WHERE
-        ra > 10
-    AND 
-        ra < 20
-\end{verbatim}
-\noindent
-can be refactored as a named WITH query and a simpler main query:
-\begin{verbatim}
-    WITH alpha_subset AS
-        (
-        SELECT
-            *
-        FROM
-            alpha_source
-        WHERE
-            id % 10 = 0
-        )
-
-    SELECT
-        ra,
-        dec
-    FROM
-        alpha_subset
-    WHERE
-        ra > 10
-    AND 
-        ra < 20
-\end{verbatim}
-
-The current version of ADQL does not support recursive common table expressions.
 
 \subsection{Unit operations}
 \label{sec:unit}
