@@ -404,33 +404,36 @@ A simplified syntax for the \verb:SELECT: statement follows, showing the main co
 the query specification:
 
 \begin{verbatim}
+    [ WITH { cte_name AS ( SELECT ... ) }, ... ]
     SELECT
         [ ALL | DISTINCT ]
         [ TOP unsigned_decimal ]
         {
-             * |
-             { value_expression [ [AS] column_name ] }, ...
-         }
-        FROM {
-                {
-                table_name [ [AS] identifier ] |
-                ( SELECT ....) [ [AS] identifier ] |
-                table_name [NATURAL]
-                    [ INNER | { LEFT | RIGHT | FULL [OUTER] } ]
-                    JOIN table_name
-                    [ON search_condition | USING ( column_name,...) ]
-                },
-            ...
-            }
-
-        [ WHERE search_condition ]
-        [ GROUP BY group_by_term, ... ]
-        [ HAVING search_condition ]
-        [ ORDER BY
-            { order_by_expression } [ ASC | DESC],
-            ...
-            ]
-        [ OFFSET unsigned_decimal ]
+            *
+            | { value_expression [ [AS] column_name ] }, ...
+        }
+    FROM {
+        {
+              table_name [ [AS] identifier ]
+            | ( SELECT ....) [ [AS] identifier ]
+            | table_name [NATURAL]
+                  [ INNER | { LEFT | RIGHT | FULL [OUTER] } ]
+                  JOIN table_name
+                  [ON search_condition | USING ( column_name,...) ]
+        },
+        ...
+    }
+    [ WHERE search_condition ]
+    [ GROUP BY group_by_term, ... ]
+    [ HAVING search_condition ]
+    [ {
+        { UNION | INTERSECT | EXCEPT } [ALL]
+        SELECT ...
+      }
+      ...
+    ]
+    [ ORDER BY { order_by_expression } [ ASC | DESC ], ... ]
+    [ OFFSET unsigned_decimal ]
 \end{verbatim}
 
 The \verb:SELECT: statement defines a query to apply to a set of tables specified
