@@ -3556,7 +3556,7 @@ TOP clause is applied to limit the number of rows returned.
     <qualifier> ::= <table_name> | <correlation_name>
 
     <query_expression> ::=
-        <query_specification>
+        <select_expression>
         | <joined_table>
 
     <query_name> ::= <identifier>
@@ -3568,17 +3568,15 @@ TOP clause is applied to limit the number of rows returned.
 
     <query_set_primary> ::=
         <select_query>
-        | <left_paren> <query_specification> <right_parent>
+        | <left_paren> <select_expression> <right_parent>
 
     <query_set_term> ::=
         <query_set_primary>
         | <query_set_term> INTERSECT [ ALL ] <query_set_expression>
 
     <query_specification> ::=
-        WITH <with_query> {, <with_query>} ...
-        <query_set_expression>
-        [ <order_by_clause> ]
-        [ <offset_clause> ]
+        [ <with_clause> ]
+        <select_expression>
 
     <question_mark> ::= ?
 
@@ -3605,19 +3603,24 @@ TOP clause is applied to limit the number of rows returned.
         <boolean_term>
       | <search_condition> OR <boolean_term>
 
+    <select_expression> ::=
+        <query_set_expression>
+        [ <order_by_clause> ]
+        [ <offset_clause> ]
+    
     <select_list> ::=
         <asterisk>
       | <select_sublist> [ { <comma> <select_sublist> }... ]
 
     <select_query> ::=
         SELECT
-            [ <set_quantifier> ]
-            [ <set_limit> ]
-            <select_list>
-            <from_clause>
-            [ <where_clause> ]
-            [ <group_by_clause> ]
-            [ <having_clause> ]
+        [ <set_quantifier> ]
+        [ <set_limit> ]
+        <select_list>
+        <from_clause>
+        [ <where_clause> ]
+        [ <group_by_clause> ]
+        [ <having_clause> ]
 
     <select_sublist> ::= <derived_column> | <qualifier> <period> <asterisk>
 
@@ -3740,8 +3743,11 @@ TOP clause is applied to limit the number of rows returned.
 
     <where_clause> ::= WHERE <search_condition>
 
+    <with_clause> ::=
+        WITH <with_query> {, <with_query>} ...
+
     <with_query> :=
-        <query_name> AS (<query_specification>)
+        <query_name> AS (<select_expression>)
 
 \end{verbatim}
 
