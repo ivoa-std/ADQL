@@ -396,33 +396,36 @@ A simplified syntax for the \verb:SELECT: statement follows, showing the main co
 the query specification:
 
 \begin{verbatim}
+    [ WITH { cte_name AS ( SELECT ... ) }, ... ]
     SELECT
         [ ALL | DISTINCT ]
         [ TOP unsigned_decimal ]
         {
-             * |
-             { value_expression [ [AS] column_name ] }, ...
-         }
-        FROM {
-                {
-                table_name [ [AS] identifier ] |
-                ( SELECT ....) [ [AS] identifier ] |
-                table_name [NATURAL]
-                    [ INNER | { LEFT | RIGHT | FULL [OUTER] } ]
-                    JOIN table_name
-                    [ON search_condition | USING ( column_name,...) ]
-                },
-            ...
-            }
-
-        [ WHERE search_condition ]
-        [ GROUP BY group_by_term, ... ]
-        [ HAVING search_condition ]
-        [ ORDER BY
-            { order_by_expression } [ ASC | DESC],
-            ...
-            ]
-        [ OFFSET unsigned_decimal ]
+            *
+            | { value_expression [ [AS] column_name ] }, ...
+        }
+    FROM {
+        {
+              table_name [ [AS] identifier ]
+            | ( SELECT ....) [ [AS] identifier ]
+            | table_name [NATURAL]
+                  [ INNER | { LEFT | RIGHT | FULL [OUTER] } ]
+                  JOIN table_name
+                  [ON search_condition | USING ( column_name,...) ]
+        },
+        ...
+    }
+    [ WHERE search_condition ]
+    [ GROUP BY group_by_term, ... ]
+    [ HAVING search_condition ]
+    [ {
+        { UNION | INTERSECT | EXCEPT } [ALL]
+        SELECT ...
+      }
+      ...
+    ]
+    [ ORDER BY { order_by_expression } [ ASC | DESC ], ... ]
+    [ OFFSET unsigned_decimal ]
 \end{verbatim}
 
 The \verb:SELECT: statement defines a query to apply to a set of tables specified
@@ -2534,110 +2537,6 @@ ADQL requires standard behaviour for the ASCII characters, and recommends
 following algorithm R2 described in Section 3.13, "Default Case Algorithms"
 of \citet{std:UNICODE} for characters outside the ASCII set.
 
-\subsection{Set operators}
-\label{sec:set.operators}
-
-An ADQL service implementation MAY include support for the following optional
-set operators:
-
-\begin{itemize}
-    \item \verb:UNION:
-    \item \verb:EXCEPT:
-    \item \verb:INTERSECT:
-\end{itemize}
-
-\subsubsection{UNION}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-sets|}\\
-{\footnotesize \verb|name: UNION|}\\
-
-The UNION operator combines the results of two queries, accepting rows from
-both the first and second set of results,
-removing duplicate rows unless UNION ALL is used.
-
-For a UNION operation to be valid in ADQL, the following criteria MUST be met:
-\begin{itemize}
-    \item the two queries MUST result in the same number of columns
-    \item the columns in the operands MUST have the same datatypes.
-\end{itemize}
-
-In addition, the following criteria SHOULD be met: 
-\begin{itemize}
-    \item the columns in the operands SHOULD have the same metadata, e.g. units, UCD, etc.
-    \item the metadata for the results SHOULD be generated from the left-hand operand.
-\end{itemize}
-
-Note that the comparison used for removing duplicates is based purely on the
-column value and does not take into account the units.
-This means that a row with a numeric value of \verb:2: and units of \verb:m:
-and a row with a numeric value of \verb:2: and units of \verb:km: will be
-considered equal, despite the difference in units.
-\begin{verbatim}
-    2m = 2km
-\end{verbatim}
-
-\subsubsection{EXCEPT}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-sets|}\\
-{\footnotesize \verb|name: EXCEPT|}\\
-
-The EXCEPT operator combines the results of two queries, accepting rows that are
-in the first set of results but are not in the second,
-removing duplicate rows unless EXCEPT ALL is used.
-
-For an EXCEPT operation to be valid in ADQL, the following criteria MUST be met:
-
-\begin{itemize}
-    \item the two queries MUST result in the same number of columns
-    \item the columns in the operands MUST have the same datatypes.
-\end{itemize}
-
-In addition, the following criteria SHOULD be met: 
-\begin{itemize}
-    \item the columns in the operands SHOULD have the same metadata, e.g. units, UCD, etc.
-    \item the metadata for the results MUST be generated from the left-hand operand.
-\end{itemize}
-
-Note that the comparison used for removing duplicates is based purely on the
-column value and does not take into account the units.
-This means that a row with a numeric value of \verb:2: and units of \verb:m:
-and a row with a numeric value of \verb:2: and units of \verb:km: will be
-considered equal, despite the difference in units.
-\begin{verbatim}
-    2m = 2km
-\end{verbatim}
-
-\subsubsection{INTERSECT}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-sets|}\\
-{\footnotesize \verb|name: INTERSECT|}\\
-
-The INTERSECT operator combines the results of two queries, accepting rows that are
-in the first set of results but are not in the second,
-removing duplicate rows unless INTERSECT ALL is used.
-
-For an INTERSECT operation to be valid in ADQL, the following criteria MUST be met:
-
-\begin{itemize}
-    \item the two queries MUST result in the same number of columns
-    \item the columns in the operands MUST have the same datatypes.
-\end{itemize}
-
-In addition, the following criteria SHOULD be met: 
-\begin{itemize}
-    \item the columns in the operands SHOULD have the same metadata, e.g. units, UCD, etc.
-    \item the metadata for the results MUST be generated from the left-hand operand.
-\end{itemize}
-
-Note that the comparison used for removing duplicates is based purely on the
-column value and does not take into account the units.
-This means that a row with a numeric value of \verb:2: and units of \verb:m:
-and a row with a numeric value of \verb:2: and units of \verb:km: will be
-considered equal, despite the difference in units.
-\begin{verbatim}
-    2m = 2km
-\end{verbatim}
-
 \subsection{Common table expressions}
 \label{sec:common-table}
 
@@ -2703,6 +2602,185 @@ can be refactored as a named WITH query and a simpler main query:
 \end{verbatim}
 
 The current version of ADQL does not support recursive common table expressions.
+
+For clarity reason, common table expressions can be defined only in the main
+query. They are not allowed in sub-queries.
+
+\subsection{Set operators}
+\label{sec:set.operators}
+
+An ADQL service implementation MAY include support for the following optional
+set operators:
+
+\begin{itemize}
+    \item \verb:UNION:
+    \item \verb:EXCEPT:
+    \item \verb:INTERSECT:
+\end{itemize}
+
+\subsubsection{UNION}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-sets|}\\
+{\footnotesize \verb|name: UNION|}\\
+
+The UNION operator combines the results of two queries, accepting rows from
+both the first and second set of results,
+removing duplicate rows unless UNION ALL is used.
+
+For a UNION operation to be valid in ADQL, the following criteria MUST be met:
+\begin{itemize}
+    \item the two queries MUST result in the same number of columns
+    \item the columns in the operands MUST have the same datatypes.
+\end{itemize}
+
+In addition, the following criteria SHOULD be met: 
+\begin{itemize}
+    \item the columns in the operands SHOULD have the same metadata, e.g. units, UCD, etc.
+    \item the metadata for the results SHOULD be generated from the left-hand operand.
+\end{itemize}
+
+Note that the comparison used for removing duplicates is based purely on the
+column value and does not take into account the units.
+This means that a row with a numeric value of \verb:2: and units of \verb:m:
+and a row with a numeric value of \verb:2: and units of \verb:km: will be
+considered equal, despite the difference in units.
+\begin{verbatim}
+    2m = 2km
+\end{verbatim}
+
+\subsubsection{EXCEPT}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-sets|}\\
+{\footnotesize \verb|name: EXCEPT|}\\
+
+The EXCEPT operator combines the results of two queries, accepting rows that are
+in the first set of results but are not in the second,
+removing duplicate rows unless EXCEPT ALL is used.
+
+For an EXCEPT operation to be valid in ADQL, the following criteria MUST be met:
+
+\begin{itemize}
+    \item the two queries MUST result in the same number of columns
+    \item the columns in the operands MUST have the same datatypes
+    \item the metadata for the results MUST be generated from the left-hand operand.
+\end{itemize}
+
+In addition, the following criteria SHOULD be met: 
+\begin{itemize}
+    \item the columns in the operands SHOULD have the same metadata, e.g. units, UCD, etc.
+\end{itemize}
+
+Note that the comparison used for removing duplicates is based purely on the
+column value and does not take into account the units.
+This means that a row with a numeric value of \verb:2: and units of \verb:m:
+and a row with a numeric value of \verb:2: and units of \verb:km: will be
+considered equal, despite the difference in units.
+\begin{verbatim}
+    2m = 2km
+\end{verbatim}
+
+\subsubsection{INTERSECT}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-sets|}\\
+{\footnotesize \verb|name: INTERSECT|}\\
+
+The INTERSECT operator combines the results of two queries, accepting rows
+that are strictly in both the first and second set of results,
+removing duplicate rows unless INTERSECT ALL is used.
+
+For an INTERSECT operation to be valid in ADQL, the following criteria MUST be met:
+
+\begin{itemize}
+    \item the two queries MUST result in the same number of columns
+    \item the columns in the operands MUST have the same datatypes.
+\end{itemize}
+
+In addition, the following criteria SHOULD be met: 
+\begin{itemize}
+    \item the columns in the operands SHOULD have the same metadata, e.g. units, UCD, etc.
+    \item the metadata for the results SHOULD be generated from the left-hand operand.
+\end{itemize}
+
+Note that the comparison used for removing duplicates is based purely on the
+column value and does not take into account the units.
+This means that a row with a numeric value of \verb:2: and units of \verb:m:
+and a row with a numeric value of \verb:2: and units of \verb:km: will be
+considered equal, despite the difference in units.
+\begin{verbatim}
+    2m = 2km
+\end{verbatim}
+
+\subsubsection{Operands}
+
+Operands of any of the set operators can only be \verb:SELECT: queries.
+Unless within parentheses, such queries can not use any \verb:ORDER BY: or
+\verb:OFFSET: clause.
+
+Example: sorting result of a \verb:UNION: operation:
+
+\begin{verbatim}
+        SELECT id, ra, dec FROM table1
+    UNION
+        SELECT id, ra, dec FROM table2
+    ORDER BY id -- sort the UNION result
+\end{verbatim}
+
+Example: sorting result of the \verb:UNION: operands:
+
+\begin{verbatim}
+        -- take the 10 first
+        ( SELECT TOP 10 id, ra, dec FROM atable ORDER BY id ASC)
+    UNION
+        -- take the 10 last
+        ( SELECT TOP 10 id, ra, dec FROM atable ORDER BY id DESC)
+\end{verbatim}
+
+Common table expressions are not allowed in any set operator operand. They must
+always be declared at the main level.
+
+Example: sorting result of the \verb:UNION: operands: with common table
+expressions
+
+\begin{verbatim}
+WITH tenFirst AS ( SELECT TOP 10 id, ra, dec FROM atable ORDER BY id ASC),
+     tenLast  AS ( SELECT TOP 10 id, ra, dec FROM atable ORDER BY id DESC)
+  SELECT * FROM tenFirst
+UNION
+  SELECT * FROM tenLast
+\end{verbatim}
+
+\subsubsection{Precedence}
+
+When set operators are used together, the resulting expression is
+evaluated in the context of the following precedence:
+
+\begin{enumerate}
+    \item Expressions within parentheses
+    \item The \verb:INTERSECT: operator
+    \item The \verb:UNION: and \verb:EXCEPT: operators evaluated from left to right
+\end{enumerate}
+
+Example:
+
+\begin{verbatim}
+        SELECT id, ra, dec FROM table1
+    UNION
+        SELECT id, ra, dec FROM table2
+    INTERSECT
+        SELECT id, ra, dec FROM table3
+\end{verbatim}
+
+is equivalent to:
+
+\begin{verbatim}
+        SELECT id, ra, dec FROM table1
+    UNION
+        (
+            SELECT id, ra, dec FROM table2
+        INTERSECT
+            SELECT id, ra, dec FROM table3
+        )
+\end{verbatim}
 
 \subsection{Unit operations}
 \label{sec:unit}
@@ -3320,19 +3398,6 @@ TOP clause is applied to limit the number of rows returned.
 
     <not_equals_operator2> ::= "!="
 
-    <non_join_query_expression> ::=
-        <non_join_query_term>
-        | <query_expression> UNION [ ALL ] <query_term>
-        | <query_expression> EXCEPT [ ALL ] <query_term>
-
-    <non_join_query_primary> ::=
-        <query_specification>
-        | <left_paren> <non_join_query_expression> <right_paren>
-
-    <non_join_query_term> ::=
-        <non_join_query_primary>
-        | <query_term> INTERSECT [ ALL ] <query_expression>
-
     <null_predicate> ::= <column_reference> IS [ NOT ] NULL
 
     <numeric_geometry_function> ::=
@@ -3422,18 +3487,27 @@ TOP clause is applied to limit the number of rows returned.
     <qualifier> ::= <table_name> | <correlation_name>
 
     <query_expression> ::=
-        <non_join_query_expression>
-        | <joined_table>
-
-    <query_term> ::=
-        <non_join_query_term>
+        <select_expression>
         | <joined_table>
 
     <query_name> ::= <identifier>
 
-    <query_specification> :=
-        WITH <with_query> {, <with_query>} ...
+    <query_set_expression> ::=
+        <query_set_term>
+        | <query_set_expression> UNION [ ALL ] <query_set_term>
+        | <query_set_expression> EXCEPT [ ALL ] <query_set_term>
+
+    <query_set_primary> ::=
         <select_query>
+        | <left_paren> <select_expression> <right_parent>
+
+    <query_set_term> ::=
+        <query_set_primary>
+        | <query_set_term> INTERSECT [ ALL ] <query_set_expression>
+
+    <query_specification> ::=
+        [ <with_clause> ]
+        <select_expression>
 
     <question_mark> ::= ?
 
@@ -3460,16 +3534,24 @@ TOP clause is applied to limit the number of rows returned.
         <boolean_term>
       | <search_condition> OR <boolean_term>
 
+    <select_expression> ::=
+        <query_set_expression>
+        [ <order_by_clause> ]
+        [ <offset_clause> ]
+    
     <select_list> ::=
         <asterisk>
       | <select_sublist> [ { <comma> <select_sublist> }... ]
 
     <select_query> ::=
         SELECT
-            [ <set_quantifier> ]
-            [ <set_limit> ]
-            <select_list>
-            <table_expression>
+        [ <set_quantifier> ]
+        [ <set_limit> ]
+        <select_list>
+        <from_clause>
+        [ <where_clause> ]
+        [ <group_by_clause> ]
+        [ <having_clause> ]
 
     <select_sublist> ::= <derived_column> | <qualifier> <period> <asterisk>
 
@@ -3511,14 +3593,6 @@ TOP clause is applied to limit the number of rows returned.
         <string_geometry_function> | <user_defined_function>
 
     <subquery> ::= <left_paren> <query_expression> <right_paren>
-
-    <table_expression> ::=
-        <from_clause>
-        [ <where_clause> ]
-        [ <group_by_clause> ]
-        [ <having_clause> ]
-        [ <order_by_clause> ]
-        [ <offset_clause> ]
 
     <table_name> ::= [ <schema_name> <period> ] <identifier>
 
@@ -3599,8 +3673,11 @@ TOP clause is applied to limit the number of rows returned.
 
     <where_clause> ::= WHERE <search_condition>
 
+    <with_clause> ::=
+        WITH <with_query> {, <with_query>} ...
+
     <with_query> :=
-        <query_name> AS (<query_specification>)
+        <query_name> AS (<select_expression>)
 
 \end{verbatim}
 
@@ -3681,6 +3758,9 @@ issues that are still to be resolved.
             sys. argument, and coordinates VS points)
             \item Apply "ADQL-2.0 Erratum-3" (i.e. the coordinate system
             argument must be string literal)
+            \item Fixed syntax of set operators: UNION, EXCEPT and INTERSECT
+            \item Fixed description of INTERSECT
+            \item Added clarifications on operands and precedence of UNION, EXCEPT and INTERSECT
         \end{itemize}
 
     \item Changes from PR-ADQL-2.1-20180112
