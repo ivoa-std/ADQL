@@ -11,11 +11,13 @@ ADQL: **A**stronomical **D**ata **Q**uery **L**anguage
 ADQL is the language used by the [IVOA](http://www.ivoa.net/) to represent
 astronomical queries posted to VO services (e.g.
 [TAP](http://www.ivoa.net/documents/TAP/)). It is based on the Structured Query
-Language (SQL), especially on [SQL-92](https://en.wikipedia.org/wiki/SQL-92).
-The VO has a number of tabular data sets and many of them are stored in
-relational databases, making SQL a convenient access means. Thus, a subset of
-the SQL grammar has been extended to support queries that are specific to
-astronomy.
+Language (SQL), especially on [SQL-92](https://en.wikipedia.org/wiki/SQL-92)
+(see also an online
+[BNF version](https://ronsavage.github.io/SQL/sql-92.bnf.html) for an easy
+navigation). The VO has a number of tabular data sets and many of them are
+stored in relational databases, making SQL a convenient access means. Thus, a
+subset of the SQL grammar has been extended to support queries that are
+specific to astronomy.
 
 ## Status?
 
