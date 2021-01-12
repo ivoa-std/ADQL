@@ -2495,6 +2495,7 @@ string manipulation and comparison operators:
 
 \begin{itemize}
     \item \verb:LOWER(): Lower case conversion
+    \item \verb:UPPER(): Upper case conversion
     \item \verb:ILIKE: Case-insensitive comparison.
 \end{itemize}
 
@@ -2515,6 +2516,25 @@ of \citet{std:UNICODE} for characters outside the ASCII set.
     LOWER('Francis Albert Augustus Charles Emmanuel')
     =>
     francis albert augustus charles emmanuel
+\end{verbatim}
+
+\subsubsection{UPPER}
+\label{sec:string.functions.upper}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-string|}\\
+{\footnotesize \verb|name: UPPER|}\\
+
+The UPPER function converts its string parameter to upper case.
+
+Since case folding is a nontrivial operation in a multi-encoding world,
+ADQL requires standard behaviour for the ASCII characters, and recommends
+following algorithm R1 described in Section 3.13, "Default Case Algorithms"
+of \citet{std:UNICODE} for characters outside the ASCII set.
+
+\begin{verbatim}
+    UPPER('Francis Albert Augustus Charles Emmanuel')
+    =>
+    FRANCIS ALBERT AUGUSTUS CHARLES EMMANUEL
 \end{verbatim}
 
 \subsubsection{ILIKE}
@@ -2944,7 +2964,6 @@ TOP clause is applied to limit the number of rows returned.
       | DISTANCE
       | EXP
       | FLOOR
-      | ILIKE
       | INTERSECTS
       | IN_UNIT
       | LOG
@@ -3003,7 +3022,7 @@ TOP clause is applied to limit the number of rows returned.
       | GET | GLOBAL | GO | GOTO
       | GRANT | GROUP
       | HAVING | HOUR
-      | IDENTITY | IMMEDIATE | IN | INDICATOR
+      | IDENTITY | ILIKE | IMMEDIATE | IN | INDICATOR
       | INITIALLY | INNER | INPUT
       | INSENSITIVE | INSERT | INT | INTEGER | INTERSECT
       | INTERVAL | INTO | IS
@@ -3011,7 +3030,7 @@ TOP clause is applied to limit the number of rows returned.
       | JOIN
       | KEY
       | LANGUAGE | LAST | LEADING | LEFT
-      | LEVEL | LIKE | ILIKE | LOCAL | LOWER
+      | LEVEL | LIKE | LOCAL | LOWER
       | MATCH | MAX | MIN | MINUTE | MODULE
       | MONTH
       | NAMES | NATIONAL | NATURAL | NCHAR | NEXT | NO
@@ -3256,6 +3275,10 @@ TOP clause is applied to limit the number of rows returned.
         <right_paren>
 
     <factor> ::= [ <sign> ] <numeric_primary>
+
+    <case_folding_function> ::=
+          LOWER <left_paren> <character_value_expression> <right_paren>
+        | UPPER <left_paren> <character_value_expression> <right_paren>
 
     <from_clause> ::=
         FROM <table_reference>
@@ -3590,7 +3613,9 @@ TOP clause is applied to limit the number of rows returned.
     <string_value_expression> ::= <character_value_expression>
 
     <string_value_function> ::=
-        <string_geometry_function> | <user_defined_function>
+          <string_geometry_function>
+        | <case_folding_function>
+        | <user_defined_function>
 
     <subquery> ::= <left_paren> <query_expression> <right_paren>
 
@@ -3761,6 +3786,8 @@ issues that are still to be resolved.
             \item Fixed syntax of set operators: UNION, EXCEPT and INTERSECT
             \item Fixed description of INTERSECT
             \item Added clarifications on operands and precedence of UNION, EXCEPT and INTERSECT
+            \item Added \verb:LOWER(): BNF grammar
+            \item Added \verb:UPPER(): function
         \end{itemize}
 
     \item Changes from PR-ADQL-2.1-20180112
