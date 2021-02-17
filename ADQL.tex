@@ -340,6 +340,13 @@ When escaped using double quotes, the same set of identifiers are not equivalent
     "alpha" != "Alpha" != "ALPHA"
 \end{verbatim}
 
+For a better user experience, data providers should avoid defining column
+names using delimited identifiers. Indeed, when identifiers are mixed-case or
+are not written in the default case (uppercase by SQL92, lowercase in most
+modern RDBMSes), users must use delimited identifiers. This, in turn, may lead
+to interoperability problems between services offering the same table, or to
+failing backwards compatibility when moving between backend RDBMSes.
+
 \subsubsection{Literals}
 \label{sec:literals}
 
@@ -3788,6 +3795,7 @@ issues that are still to be resolved.
             \item Added clarifications on operands and precedence of UNION, EXCEPT and INTERSECT
             \item Added \verb:LOWER(): BNF grammar
             \item Added \verb:UPPER(): function
+            \item Added recommendation to data providers about case folding
         \end{itemize}
 
     \item Changes from PR-ADQL-2.1-20180112
