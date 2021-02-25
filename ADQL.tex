@@ -2958,9 +2958,12 @@ TOP clause is applied to limit the number of rows returned.
       | ASIN
       | ATAN
       | ATAN2
+      | BIGINT
       | BOX
+      | CAST
       | CEILING
       | CENTROID
+      | CHAR
       | CIRCLE
       | CONTAINS
       | COORD1
@@ -2969,26 +2972,34 @@ TOP clause is applied to limit the number of rows returned.
       | COS
       | DEGREES
       | DISTANCE
+      | DOUBLE
       | EXP
       | FLOOR
+      | INTEGER
       | INTERSECTS
       | IN_UNIT
       | LOG
       | LOG10
       | MOD
+      | NULL
       | PI
       | POINT
       | POLYGON
       | POWER
+      | PRECISION
       | RADIANS
+      | REAL
       | REGION
       | RAND
       | ROUND
       | SIN
+      | SMALLINT
       | SQRT
+      | TIMESTAMP
       | TOP
       | TAN
       | TRUNCATE
+      | VARCHAR
 
     <SQL_embedded_language_character> ::=
         <left_bracket> | <right_bracket>
@@ -3002,9 +3013,9 @@ TOP clause is applied to limit the number of rows returned.
       | AUTHORIZATION | AVG
       | BEGIN | BETWEEN | BIT | BIT_LENGTH
       | BOTH | BY
-      | CASCADE | CASCADED | CASE | CAST
+      | CASCADE | CASCADED | CASE
       | CATALOG
-      | CHAR | CHARACTER | CHAR_LENGTH
+      | CHARACTER | CHAR_LENGTH
       | CHARACTER_LENGTH | CHECK | CLOSE | COALESCE
       | COLLATE | COLLATION
       | COLUMN | COMMIT
@@ -3019,7 +3030,7 @@ TOP clause is applied to limit the number of rows returned.
       | DECIMAL | DECLARE | DEFAULT | DEFERRABLE
       | DEFERRED | DELETE | DESC | DESCRIBE | DESCRIPTOR
       | DIAGNOSTICS
-      | DISCONNECT | DISTINCT | DOMAIN | DOUBLE | DROP
+      | DISCONNECT | DISTINCT | DOMAIN | DROP
       | ELSE | END | END-EXEC | ESCAPE
       | EXCEPT | EXCEPTION
       | EXEC | EXECUTE | EXISTS
@@ -3031,7 +3042,7 @@ TOP clause is applied to limit the number of rows returned.
       | HAVING | HOUR
       | IDENTITY | ILIKE | IMMEDIATE | IN | INDICATOR
       | INITIALLY | INNER | INPUT
-      | INSENSITIVE | INSERT | INT | INTEGER | INTERSECT
+      | INSENSITIVE | INSERT | INT | INTERSECT
       | INTERVAL | INTO | IS
       | ISOLATION
       | JOIN
@@ -3041,32 +3052,32 @@ TOP clause is applied to limit the number of rows returned.
       | MATCH | MAX | MIN | MINUTE | MODULE
       | MONTH
       | NAMES | NATIONAL | NATURAL | NCHAR | NEXT | NO
-      | NOT | NULL
+      | NOT
       | NULLIF | NUMERIC
       | OCTET_LENGTH | OF
       | ON | ONLY | OPEN | OPTION | OR
       | ORDER | OUTER
       | OUTPUT | OVERLAPS
-      | PAD | PARTIAL | POSITION | PRECISION | PREPARE
+      | PAD | PARTIAL | POSITION | PREPARE
       | PRESERVE | PRIMARY
       | PRIOR | PRIVILEGES | PROCEDURE | PUBLIC
-      | READ | REAL | REFERENCES | RELATIVE | RESTRICT
+      | READ | REFERENCES | RELATIVE | RESTRICT
       | REVOKE | RIGHT
       | ROLLBACK | ROWS
       | SCHEMA | SCROLL | SECOND | SECTION
       | SELECT
       | SESSION | SESSION_USER | SET
-      | SIZE | SMALLINT | SOME | SPACE | SQL | SQLCODE
+      | SIZE | SOME | SPACE | SQL | SQLCODE
       | SQLERROR | SQLSTATE
       | SUBSTRING | SUM | SYSTEM_USER
       | TABLE | TEMPORARY
-      | THEN | TIME | TIMESTAMP
+      | THEN | TIME
       | TIMEZONE_HOUR | TIMEZONE_MINUTE
       | TO | TRAILING | TRANSACTION
       | TRANSLATE | TRANSLATION | TRIM | TRUE
       | UNION | UNIQUE | UNKNOWN | UPDATE | UPPER | USAGE
       | USER | USING
-      | VALUE | VALUES | VARCHAR | VARYING | VIEW
+      | VALUE | VALUES | VARYING | VIEW
       | WHEN | WHENEVER | WHERE | WITH | WORK | WRITE
       | YEAR
       | ZONE
@@ -3097,6 +3108,10 @@ TOP clause is applied to limit the number of rows returned.
     <ampersand> ::= &
 
     <approximate_numeric_literal> ::= <mantissa>E<exponent>
+
+    <approximate numeric type> ::=
+          REAL
+        | DOUBLE PRECISION
 
     <area> ::= AREA <left_paren> <geometry_value_expression> <right_paren>
 
@@ -3129,6 +3144,18 @@ TOP clause is applied to limit the number of rows returned.
     <box_center> ::=
         <coordinates>
         | <coord_value>
+    
+    <cast_specification> ::=
+        CAST <left_paren>
+            ( <value_expression> | NULL )
+            AS <cast_target>
+        <right_parent>
+    
+    <cast_target> ::=
+          <character_string_type>
+        | <numeric_type>
+        | <datetime_type>
+        | <geometry_type>
 
     <catalog_name> ::= <identifier>
 
@@ -3147,6 +3174,10 @@ TOP clause is applied to limit the number of rows returned.
 
     <character_string_literal> ::=
         <quote> [ <character_representation>... ] <quote>
+
+    <character_string_type> ::=
+          CHAR [ <left paren> <length> <right paren> ]
+        | VARCHAR [ <left paren> <length> <right paren> ]
 
     <character_value_expression> ::= <concatenation> | <character_factor>
 
@@ -3220,6 +3251,8 @@ TOP clause is applied to limit the number of rows returned.
 
     <correlation_specification> ::= [ AS ] <correlation_name>
 
+    <datetime_type> ::= TIMESTAMP
+
     <default_function_prefix> ::= (see text)
 
     <delimited_identifier> ::=
@@ -3280,6 +3313,11 @@ TOP clause is applied to limit the number of rows returned.
         COORDSYS <left_paren>
             <geometry_value_expression>
         <right_paren>
+    
+    <exact_numeric_type> ::=
+          SMALLINT
+        | INTEGER
+        | BIGINT
 
     <factor> ::= [ <sign> ] <numeric_primary>
 
@@ -3298,8 +3336,13 @@ TOP clause is applied to limit the number of rows returned.
             [ <set_quantifier> ] <value_expression>
         <right_paren>
 
+    <geometry_type> ::=
+          POINT
+        | CIRCLE
+        | POLYGON
+
     <geometry_value_expression> ::=
-        <value_expression_primary > | <geometry_value_function>
+        <value_expression_primary> | <geometry_value_function>
 
     <geometry_value_function> ::=
         <box>
@@ -3436,6 +3479,10 @@ TOP clause is applied to limit the number of rows returned.
     <numeric_primary> ::=
         <value_expression_primary>
       | <numeric_value_function>
+
+    <numeric_type> ::=
+          <exact_numeric_type>
+        | <approximate_numeric_type>
 
     <numeric_value_expression> ::=
         <term>
@@ -3699,6 +3746,7 @@ TOP clause is applied to limit the number of rows returned.
         <unsigned_value_specification>
         | <column_reference>
         | <set_function_specification>
+        | <cast_specification>
         | <left_paren> <value_expression> <right_paren>
 
     <vertical_bar> ::= "|"
