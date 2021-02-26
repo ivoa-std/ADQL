@@ -4,7 +4,9 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{tabularx}
+\usepackage{multirow}
 \usepackage{mathtools}
+\usepackage{makecell}
 
 \usepackage{listings}
 \lstloadlanguages{XML,sh}
@@ -2808,6 +2810,165 @@ is equivalent to:
             SELECT id, ra, dec FROM table3
         )
 \end{verbatim}
+
+\subsection{Type operations}
+\label{sec:type}
+
+An ADQL service implementation MAY include support for the following optional
+type conversion functions: 
+
+\begin{itemize}
+    \item \verb:CAST():
+\end{itemize}
+
+\subsubsection{CAST}
+\label{sec:type.cast}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-type|}\\
+{\footnotesize \verb|name: CAST|}\\
+
+The \verb:CAST(): function returns the value of the first argument converted
+into the datatype specified by the second argument.
+
+\paragraph{Syntax} \verb:<cast_specification>:
+\begin{verbatim}
+CAST <left_paren>
+         ( <value_expression> | NULL ) AS <cast_target>
+     <right_parent>
+\end{verbatim}
+
+\paragraph{Target types}
+
+This function does not replicate the full functionality and range of types
+supported by common RDBMS implementations of \verb:CAST():. Here is the minimum
+range of types that MUST be supported if \verb:CAST(): is implemented:
+
+\begin{itemize}
+    \item Exact numeric:
+    \begin{itemize}
+        \item \verb:INTEGER:
+        \item \verb:SMALLINT:
+        \item \verb:BIGINT:
+    \end{itemize}
+    \item Approximate numeric:
+    \begin{itemize}
+        \item \verb:REAL:
+        \item \verb:DOUBLE PRECISION:
+    \end{itemize}
+    \item Character:
+    \begin{itemize}
+        \item \verb:CHAR: or \verb:CHAR(n): (where n is the fixed string length)
+        \item \verb:VARCHAR: or \verb:VARCHAR(n): (where n is the maximum string length)
+    \end{itemize}
+    \item Date, Time:
+    \begin{itemize}
+        \item \verb:TIMESTAMP:
+    \end{itemize}
+\end{itemize}
+
+Examples:
+
+\begin{verbatim}
+    CAST(3 AS REAL)
+    CAST('3.14159265358979323846' AS DOUBLE PRECISION)
+\end{verbatim}
+
+\paragraph{Input types}
+
+The range of types allowed for the value to cast entirely depends on the target
+type. Although cast operations may vary from one implementation to another, ADQL
+SHOULD support the following ones:
+
+\begin{table}[!ht]
+    \center{
+        \resizebox{\linewidth}{!}{
+            \begin{tabular}{| c | c | c | c | c | c |}
+                \hline
+                \multirow{3}{*}{\diaghead{\theadfont Output TyInput Ty}%
+                {\textbf{Input}}{\textbf{Output}}}
+                                     & \textbf{Exact}      & \textbf{Approximate} & \textbf{Variable}  & \textbf{Fixed}      &                    \\
+                                     & \textbf{numeric}    & \textbf{numeric}     & \textbf{length}    & \textbf{length}     & \textbf{Timestamp} \\
+                                     &                     &                      & \textbf{character} & \textbf{character}  &                    \\
+                \hline
+                \textbf{Exact}       & \multirow{2}{*}{X}  & \multirow{2}{*}{X}   & \multirow{2}{*}{X} & \multirow{2}{*}{X*} &                    \\
+                \textbf{numeric}     & & & & & \\
+                \hline
+                \textbf{Approximate} & \multirow{2}{*}{X*} & \multirow{2}{*}{X}   & \multirow{2}{*}{X} & \multirow{2}{*}{X*} &                    \\
+                \textbf{numeric}     & & & & & \\
+                \hline
+                \textbf{Character}   &         X           &          X           &          X         &          X*         &         X          \\
+                \hline
+                \textbf{Timestamp}   &                     &                      &          X         &          X*         &         X          \\
+                \hline
+            \end{tabular}
+        }
+        \textit{\footnotesize{X: supported ; X*: supported but possible implementation differences}}
+    }
+\end{table}
+
+\paragraph{Cast into a smaller datatype}
+
+Converting a value to a datatype that is too small to represent it SHOULD be
+treated as an error. Details of the mechanism for reporting the error condition
+are implementation dependent.
+
+This rule especially applies when casting a value into a character string too
+small to contain its entire serialization. The output string may be truncated,
+adjusted to the needed length, or an error may be thrown.
+
+\paragraph{Fixed-length character}
+
+The creation of a fixed-length character string is implementation dependent.
+In function of the implementation, \verb:CHAR: may be equivalent to
+\verb:CHAR(1): or to a \verb:CHAR: just big enough to contain the entire string
+to create.
+
+\paragraph{Approximate numeric}
+
+The rounding mechanism used when converting from approximate numerics
+(\verb:REAL: or \verb:DOUBLE PRECISION:) to precise numerics (\verb:SMALLINT:,
+\verb:INTEGER: or \verb:BIGINT:) is implementation dependent.
+
+\paragraph{Timestamp}
+
+Only a character string can be casted into a timestamp. This string MUST follow
+the syntax defined in the \DALISpec:
+\begin{verbatim}
+    YYYY-MM-DD[’T’hh:mm:ss[.SSS][’Z’]]
+\end{verbatim}
+
+Example:
+
+\begin{verbatim}
+    CAST('2021-01-14T11:25:00' AS TIMESTAMP)
+\end{verbatim}
+
+Note that other serializations or any other kind of value MAY also be supported.
+
+\paragraph{Geometry}
+
+\verb:CAST(): MAY also produce geometries. If an implementation wants to support
+this particular cast operation, it MUST accept a character string following the
+DALI serialization matching the precise geometry type to produce.
+
+Then, the supported geometry types SHOULD be:
+
+\begin{itemize}
+    \item \verb:POINT:
+    \item \verb:CIRCLE:
+    \item \verb:POLYGON:
+\end{itemize}
+
+Examples:
+
+\begin{verbatim}
+    CAST('12.3 45.6' AS POINT)
+    CAST('12.3 45.6 1.0' AS CIRCLE)
+    CAST('1.0 0.1 2.0 0.2 3.0 0.3' AS POLYGON)
+\end{verbatim}
+
+Note that other serializations (e.g. STC/s) or any other kind of value MAY also
+be supported.
 
 \subsection{Unit operations}
 \label{sec:unit}
