@@ -770,13 +770,13 @@ VOTables into ADQL-visible tables.
 \subsubsection{Numeric primitives}
 \label{sec:types.numeric.primitive}
 
-The numeric datatypes, BIT, SMALLINT, INTEGER, BIGINT, REAL
-and DOUBLE map to the corresponding datatypes defined
-in the \VOTableSpec.
+The numeric datatypes, \verb:BIT:, \verb:SMALLINT:, \verb:INTEGER:,
+\verb:BIGINT:, \verb:REAL:  \linebreak and \verb:DOUBLE PRECISION: map to the
+corresponding datatypes defined in the \VOTableSpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
-        {|p{0.20\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        {|p{0.30\textwidth}|p{0.26\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
 
         \hline
@@ -834,7 +834,7 @@ in the \VOTableSpec.
         \tabularnewline
 
         \hline
-        DOUBLE &
+        DOUBLE PRECISION &
         double &
         - &
         -
@@ -847,20 +847,22 @@ in the \VOTableSpec.
 \end{table}
 
 Where possible ADQL numeric values SHOULD be implemented using database types
-that correspond to the VOTable serialization types, e.g. SMALLINT should map to a
-16 bit integer, INTEGER should map to a 32 bit integer, etc. 
+that correspond to the VOTable serialization types, e.g. \verb:SMALLINT: should
+map to a 16 bit integer, \verb:INTEGER: should map to a 32 bit integer, etc. 
 
 \subsubsection{INTERVAL}
 \label{sec:types.numeric.interval}
 
-The \DALISpec defines INTERVAL as a pair of integer or floating-point
+The \DALISpec defines \verb:INTERVAL: as a pair of integer or floating-point
 numeric values which are serialized as an array of numbers.
 
-TBD - The details of how INTERVAL values behave in ADQL are not yet defined.
+None of the ADQL operators apply to \verb:INTERVAL: values.
+However, specific implementations MAY provide user defined functions that
+operate on some \verb:INTERVAL: values.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
-        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
 
         \hline
@@ -887,21 +889,24 @@ TBD - The details of how INTERVAL values behave in ADQL are not yet defined.
     \label{table:types.numeric.interval}
 \end{table}
 
+The details of how \verb:INTERVAL: values behave in ADQL are not yet
+defined.
+
 \subsection{Date and time}
 \label{sec:types.datetime}
 
-Where possible, date and time values SHOULD be implemented as
-described in the \DALISpec.
+Where possible, date and time values SHOULD be implemented as described in the
+\DALISpec.
 
 \subsubsection{TIMESTAMP}
 \label{sec:types.datetime.timestamp}
 
-The TIMESTAMP datatype maps to the corresponding type defined in the
+The \verb:TIMESTAMP: datatype maps to the corresponding type defined in the
 \DALISpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
-        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
 
         \hline
@@ -928,30 +933,27 @@ The TIMESTAMP datatype maps to the corresponding type defined in the
     \label{table:types.datetime.timestamp}
 \end{table}
 
-TIMESTAMP literals should be created using the \verb:TIMESTAMP():
-constructor, using the syntax defined in the \DALISpec:
-\begin{verbatim}
-    YYYY-MM-DD[’T’hh:mm:ss[.SSS][’Z’]]
-\end{verbatim}
+\verb:TIMESTAMP: literals can be created using the \verb:CAST(): function
+(if supported) described in \SectionRef{sec:type.cast}.
 
 The basic comparison operators \verb:=:, \verb:<:, \verb:>:, \verb:<=:, \verb:>=:,
-\verb:<>: and \verb:BETWEEN: can all be applied to TIMESTAMP values:
+\verb:<>: and \verb:BETWEEN: can all be applied to \verb:TIMESTAMP: values:
 \begin{verbatim}
     SELECT
         ..
     WHERE
-        obstime > TIMESTAMP('2015-01-01')
+        obstime > CAST('2015-01-01' AS TIMESTAMP)
     OR
         obstime
             BETWEEN
-                TIMESTAMP('2014-01-01')
+                CAST('2014-01-01' AS TIMESTAMP)
             AND
-                TIMESTAMP('2014-01-02')
+                CAST('2014-01-02' AS TIMESTAMP)
 \end{verbatim}
 
-Within the database, the details of how TIMESTAMP values are implemented
+Within the database, the details of how \verb:TIMESTAMP: values are implemented
 is platform dependent. The primary requirement is that the results of the
-comparison operators on TIMESTAMP values are consistent with respect to
+comparison operators on \verb:TIMESTAMP: values are consistent with respect to
 chronological time.
 
 \subsection{Character types}
@@ -960,16 +962,16 @@ chronological time.
 \subsubsection{Character primitives}
 \label{sec:types.character.primitive}
 
-The CHAR and VARCHAR datatypes map to the \verb:char: or
+The \verb:CHAR: and \verb:VARCHAR: datatypes map to the \verb:char: or
 \verb:unicodeChar: type defined in the \VOTableSpec.
 
-The choice of whether CHAR and VARCHAR map to \verb:char: or
-\verb:unicodeChar: is implementation dependent and may depend
-on the data content.
+The choice of whether \verb:CHAR: and \verb:VARCHAR: map to \verb:char: or
+\verb:unicodeChar: is implementation dependent and may depend on the data
+content.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
-        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
 
         \hline
@@ -1008,18 +1010,18 @@ on the data content.
 \label{sec:types.character.clob}
 
 To provide support for string values which are generated by the server,
-ADQL includes the Character Large OBject (CLOB) datatype,
+ADQL includes the Character Large OBject (\verb:CLOB:) datatype,
 which behaves as an opaque immutable string of characters.
 
-None of the ADQL operators apply to CLOB values.
+None of the ADQL operators apply to \verb:CLOB: values.
 However, specific database implementations MAY provide user
-defined functions that operate on some CLOB values.
+defined functions that operate on some \verb:CLOB: values.
 
-CLOB values are serialized as arrays of characters.
+\verb:CLOB: values are serialized as arrays of characters.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
-        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
 
         \hline
@@ -1047,11 +1049,11 @@ CLOB values are serialized as arrays of characters.
     \label{table:types.character.clob}
 \end{table}
 
-The details of how CLOB values are handled within a
+The details of how \verb:CLOB: values are handled within a
 database is implementation dependent.
 
-An example use case for CLOB is a URL field that is generated on the fly
-using one or more fields stored the database.
+An example use case for \verb:CLOB: is a URL field that is generated on the fly
+using one or more fields stored in the database.
 Although some of the components are stored in the database, the final URL
 that appears in the results is not stored in the database.
 Hence it would not be possible to apply ADQL functions or operators to the
@@ -1066,12 +1068,12 @@ specific operations on the generated URL field.
 \subsubsection{Binary primitives}
 \label{sec:types.binary.primitive}
 
-The BINARY and VARBINARY datatypes map to the \verb:unsignedByte: type defined
-in the \VOTableSpec.
+The \verb:BINARY: and \verb:VARBINARY: datatypes map to the \verb:unsignedByte:
+type defined in the \VOTableSpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
-        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
 
         \hline
@@ -1110,19 +1112,19 @@ in the \VOTableSpec.
 \label{sec:types.binary.blob}
 
 To support large blocks of binary data such as images,
-ADQL includes the Binary Large OBject (BLOB) datatype,
+ADQL includes the Binary Large OBject (\verb:BLOB:) datatype,
 which behaves as an opaque immutable array of bytes.
 
-None of the ADQL operators apply to BLOB values.
+None of the ADQL operators apply to \verb:BLOB: values.
 However, specific database implementations MAY provide user
-defined functions that operate on some BLOB values.
+defined functions that operate on some \verb:BLOB: values.
 
-BLOB values are serialized as arrays of \verb:unsignedByte: defined
+\verb:BLOB: values are serialized as arrays of \verb:unsignedByte: defined
 in the \VOTableSpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
-        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
 
         \hline
@@ -1150,10 +1152,10 @@ in the \VOTableSpec.
     \label{table:types.binary.blob}
 \end{table}
 
-The details of how BLOB values are handled within a
+The details of how \verb:BLOB: values are handled within a
 database is implementation dependent.
 
-An example use case for BLOB is for storing thumbnail images
+An example use case for \verb:BLOB: is for storing thumbnail images
 in the database alongside the tabular data.
 ADQL does not provide functions or operations that operate on
 images.
@@ -1164,24 +1166,24 @@ operations on the image data.
 \subsection{Geometric types}
 \label{sec:types.geom}
 
-ADQL provides support for the POINT, CIRCLE and POLYGON geometric
-types defined in the \DALISpec.
+ADQL provides support for the \verb:POINT:, \verb:CIRCLE: and \verb:POLYGON:
+geometric types defined in the \DALISpec.
 
-ADQL also provides support for STC-S based geomertic regions,
-as defined in the \STCSSpec, using the REGION datatype.
+ADQL also provides support for STC-S based geometric regions,
+as defined in the \STCSSpec, using the \verb:REGION: datatype.
 
 \subsubsection{POINT}
 \label{sec:types.geom.point}
 
-The POINT datatype maps to the corresponding type defined in the
+The \verb:POINT: datatype maps to the corresponding type defined in the
 \DALISpec.
 
-POINT values are serialized as arrays of floating point numbers
+\verb:POINT: values are serialized as arrays of floating point numbers
 using the \verb:point: xtype defined in the \DALISpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
-        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
 
         \hline
@@ -1209,8 +1211,9 @@ using the \verb:point: xtype defined in the \DALISpec.
     \label{table:types.geom.point}
 \end{table}
 
-POINT literals can be expressed using the \verb:POINT():
+\verb:POINT: literals can be expressed using the \verb:POINT():
 constructor defined in \SectionRef{sec:functions.geom.point}.
+
 For example:
 \begin{verbatim}
     POINT(
@@ -1219,21 +1222,18 @@ For example:
         )
 \end{verbatim}
 
-%References to POINT-typed columns must be valid wherever the ADQL
-%\textit{point} nonterminal is allowed.
-
 \subsubsection{CIRCLE}
 \label{sec:types.geom.circle}
 
-The CIRCLE datatype maps to the corresponding type defined in the
+The \verb:CIRCLE: datatype maps to the corresponding type defined in the
 \DALISpec.
 
-CIRCLE values are serialized as arrays of floating point numbers
+\verb:CIRCLE: values are serialized as arrays of floating point numbers
 using the \verb:circle: xtype defined in the \DALISpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
-        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
 
         \hline
@@ -1261,7 +1261,7 @@ using the \verb:circle: xtype defined in the \DALISpec.
     \label{table:types.geom.circle}
 \end{table}
 
-CIRCLE literals can be expressed using the \verb:CIRCLE():
+\verb:CIRCLE: literals can be expressed using the \verb:CIRCLE():
 constructor defined in \SectionRef{sec:functions.geom.circle}.
 For example:
 \begin{verbatim}
@@ -1275,15 +1275,15 @@ For example:
 \subsubsection{POLYGON}
 \label{sec:types.geom.polygon}
 
-The POLYGON datatype maps to the corresponding type defined in the
+The \verb:POLYGON: datatype maps to the corresponding type defined in the
 \DALISpec.
 
-POLYGON values are serialized as arrays of floating point numbers
+\verb:POLYGON: values are serialized as arrays of floating point numbers
 using the \verb:polygon: xtype defined in the \DALISpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
-        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
 
         \hline
@@ -1311,8 +1311,9 @@ using the \verb:polygon: xtype defined in the \DALISpec.
     \label{table:types.geom.polygon}
 \end{table}
 
-POLYGON literals can be expressed using the \verb:POLYGON():
+\verb:POLYGON: literals can be expressed using the \verb:POLYGON():
 constructor defined in \SectionRef{sec:functions.geom.polygon}.
+
 For example:
 \begin{verbatim}
     POLYGON(
@@ -1331,13 +1332,13 @@ and (30.0, 30.5) degrees.
 \subsubsection{REGION}
 \label{sec:types.geom.region}
 
-REGION is introduced as the type of the result of intersections and
+\verb:REGION: is introduced as the type of the result of intersections and
 unions of other geometries (although ADQL at this point does not support
 these operations).
 
-We do not specify the serialisation of REGION-typed values in result
+We do not specify the serialisation of \verb:REGION:-typed values in result
 sets.  It is expected that next version of DALI will provide normative
-guidance on this.  However, at least for the \textit{s\_region}
+guidance on this. However, at least for the \textit{s\_region}
 column described in the \ObsCoreSpec,
 % ObsCore 1.1 Section 4.12
 % http://ivoa.net/documents/ObsCore/20170509/REC-ObsCore-v1.1-20170509.pdf#26
@@ -4005,6 +4006,7 @@ issues that are still to be resolved.
             \item Added \verb:LOWER(): BNF grammar
             \item Added \verb:UPPER(): function
             \item Added recommendation to data providers about case folding
+            \item Re-added \verb:CAST(): function
         \end{itemize}
 
     \item Changes from PR-ADQL-2.1-20180112
