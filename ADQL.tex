@@ -4,7 +4,9 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{tabularx}
+\usepackage{multirow}
 \usepackage{mathtools}
+\usepackage{makecell}
 
 \usepackage{listings}
 \lstloadlanguages{XML,sh}
@@ -768,13 +770,13 @@ VOTables into ADQL-visible tables.
 \subsubsection{Numeric primitives}
 \label{sec:types.numeric.primitive}
 
-The numeric datatypes, BIT, SMALLINT, INTEGER, BIGINT, REAL
-and DOUBLE map to the corresponding datatypes defined
-in the \VOTableSpec.
+The numeric datatypes, \verb:BIT:, \verb:SMALLINT:, \verb:INTEGER:,
+\verb:BIGINT:, \verb:REAL:  \linebreak and \verb:DOUBLE PRECISION: map to the
+corresponding datatypes defined in the \VOTableSpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
-        {|p{0.20\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        {|p{0.30\textwidth}|p{0.26\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
 
         \hline
@@ -832,7 +834,7 @@ in the \VOTableSpec.
         \tabularnewline
 
         \hline
-        DOUBLE &
+        DOUBLE PRECISION &
         double &
         - &
         -
@@ -845,20 +847,22 @@ in the \VOTableSpec.
 \end{table}
 
 Where possible ADQL numeric values SHOULD be implemented using database types
-that correspond to the VOTable serialization types, e.g. SMALLINT should map to a
-16 bit integer, INTEGER should map to a 32 bit integer, etc. 
+that correspond to the VOTable serialization types, e.g. \verb:SMALLINT: should
+map to a 16 bit integer, \verb:INTEGER: should map to a 32 bit integer, etc. 
 
 \subsubsection{INTERVAL}
 \label{sec:types.numeric.interval}
 
-The \DALISpec defines INTERVAL as a pair of integer or floating-point
+The \DALISpec defines \verb:INTERVAL: as a pair of integer or floating-point
 numeric values which are serialized as an array of numbers.
 
-TBD - The details of how INTERVAL values behave in ADQL are not yet defined.
+None of the ADQL operators apply to \verb:INTERVAL: values.
+However, specific implementations MAY provide user defined functions that
+operate on some \verb:INTERVAL: values.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
-        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
 
         \hline
@@ -885,21 +889,24 @@ TBD - The details of how INTERVAL values behave in ADQL are not yet defined.
     \label{table:types.numeric.interval}
 \end{table}
 
+The details of how \verb:INTERVAL: values behave in ADQL are not yet
+defined.
+
 \subsection{Date and time}
 \label{sec:types.datetime}
 
-Where possible, date and time values SHOULD be implemented as
-described in the \DALISpec.
+Where possible, date and time values SHOULD be implemented as described in the
+\DALISpec.
 
 \subsubsection{TIMESTAMP}
 \label{sec:types.datetime.timestamp}
 
-The TIMESTAMP datatype maps to the corresponding type defined in the
+The \verb:TIMESTAMP: datatype maps to the corresponding type defined in the
 \DALISpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
-        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
 
         \hline
@@ -926,30 +933,27 @@ The TIMESTAMP datatype maps to the corresponding type defined in the
     \label{table:types.datetime.timestamp}
 \end{table}
 
-TIMESTAMP literals should be created using the \verb:TIMESTAMP():
-constructor, using the syntax defined in the \DALISpec:
-\begin{verbatim}
-    YYYY-MM-DD[’T’hh:mm:ss[.SSS][’Z’]]
-\end{verbatim}
+\verb:TIMESTAMP: literals can be created using the \verb:CAST(): function
+(if supported) described in \SectionRef{sec:type.cast}.
 
 The basic comparison operators \verb:=:, \verb:<:, \verb:>:, \verb:<=:, \verb:>=:,
-\verb:<>: and \verb:BETWEEN: can all be applied to TIMESTAMP values:
+\verb:<>: and \verb:BETWEEN: can all be applied to \verb:TIMESTAMP: values:
 \begin{verbatim}
     SELECT
         ..
     WHERE
-        obstime > TIMESTAMP('2015-01-01')
+        obstime > CAST('2015-01-01' AS TIMESTAMP)
     OR
         obstime
             BETWEEN
-                TIMESTAMP('2014-01-01')
+                CAST('2014-01-01' AS TIMESTAMP)
             AND
-                TIMESTAMP('2014-01-02')
+                CAST('2014-01-02' AS TIMESTAMP)
 \end{verbatim}
 
-Within the database, the details of how TIMESTAMP values are implemented
+Within the database, the details of how \verb:TIMESTAMP: values are implemented
 is platform dependent. The primary requirement is that the results of the
-comparison operators on TIMESTAMP values are consistent with respect to
+comparison operators on \verb:TIMESTAMP: values are consistent with respect to
 chronological time.
 
 \subsection{Character types}
@@ -958,16 +962,16 @@ chronological time.
 \subsubsection{Character primitives}
 \label{sec:types.character.primitive}
 
-The CHAR and VARCHAR datatypes map to the \verb:char: or
+The \verb:CHAR: and \verb:VARCHAR: datatypes map to the \verb:char: or
 \verb:unicodeChar: type defined in the \VOTableSpec.
 
-The choice of whether CHAR and VARCHAR map to \verb:char: or
-\verb:unicodeChar: is implementation dependent and may depend
-on the data content.
+The choice of whether \verb:CHAR: and \verb:VARCHAR: map to \verb:char: or
+\verb:unicodeChar: is implementation dependent and may depend on the data
+content.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
-        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
 
         \hline
@@ -1006,18 +1010,18 @@ on the data content.
 \label{sec:types.character.clob}
 
 To provide support for string values which are generated by the server,
-ADQL includes the Character Large OBject (CLOB) datatype,
+ADQL includes the Character Large OBject (\verb:CLOB:) datatype,
 which behaves as an opaque immutable string of characters.
 
-None of the ADQL operators apply to CLOB values.
+None of the ADQL operators apply to \verb:CLOB: values.
 However, specific database implementations MAY provide user
-defined functions that operate on some CLOB values.
+defined functions that operate on some \verb:CLOB: values.
 
-CLOB values are serialized as arrays of characters.
+\verb:CLOB: values are serialized as arrays of characters.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
-        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
 
         \hline
@@ -1045,11 +1049,11 @@ CLOB values are serialized as arrays of characters.
     \label{table:types.character.clob}
 \end{table}
 
-The details of how CLOB values are handled within a
+The details of how \verb:CLOB: values are handled within a
 database is implementation dependent.
 
-An example use case for CLOB is a URL field that is generated on the fly
-using one or more fields stored the database.
+An example use case for \verb:CLOB: is a URL field that is generated on the fly
+using one or more fields stored in the database.
 Although some of the components are stored in the database, the final URL
 that appears in the results is not stored in the database.
 Hence it would not be possible to apply ADQL functions or operators to the
@@ -1064,12 +1068,12 @@ specific operations on the generated URL field.
 \subsubsection{Binary primitives}
 \label{sec:types.binary.primitive}
 
-The BINARY and VARBINARY datatypes map to the \verb:unsignedByte: type defined
-in the \VOTableSpec.
+The \verb:BINARY: and \verb:VARBINARY: datatypes map to the \verb:unsignedByte:
+type defined in the \VOTableSpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
-        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
 
         \hline
@@ -1108,19 +1112,19 @@ in the \VOTableSpec.
 \label{sec:types.binary.blob}
 
 To support large blocks of binary data such as images,
-ADQL includes the Binary Large OBject (BLOB) datatype,
+ADQL includes the Binary Large OBject (\verb:BLOB:) datatype,
 which behaves as an opaque immutable array of bytes.
 
-None of the ADQL operators apply to BLOB values.
+None of the ADQL operators apply to \verb:BLOB: values.
 However, specific database implementations MAY provide user
-defined functions that operate on some BLOB values.
+defined functions that operate on some \verb:BLOB: values.
 
-BLOB values are serialized as arrays of \verb:unsignedByte: defined
+\verb:BLOB: values are serialized as arrays of \verb:unsignedByte: defined
 in the \VOTableSpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
-        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
 
         \hline
@@ -1148,10 +1152,10 @@ in the \VOTableSpec.
     \label{table:types.binary.blob}
 \end{table}
 
-The details of how BLOB values are handled within a
+The details of how \verb:BLOB: values are handled within a
 database is implementation dependent.
 
-An example use case for BLOB is for storing thumbnail images
+An example use case for \verb:BLOB: is for storing thumbnail images
 in the database alongside the tabular data.
 ADQL does not provide functions or operations that operate on
 images.
@@ -1162,24 +1166,24 @@ operations on the image data.
 \subsection{Geometric types}
 \label{sec:types.geom}
 
-ADQL provides support for the POINT, CIRCLE and POLYGON geometric
-types defined in the \DALISpec.
+ADQL provides support for the \verb:POINT:, \verb:CIRCLE: and \verb:POLYGON:
+geometric types defined in the \DALISpec.
 
-ADQL also provides support for STC-S based geomertic regions,
-as defined in the \STCSSpec, using the REGION datatype.
+ADQL also provides support for STC-S based geometric regions,
+as defined in the \STCSSpec, using the \verb:REGION: datatype.
 
 \subsubsection{POINT}
 \label{sec:types.geom.point}
 
-The POINT datatype maps to the corresponding type defined in the
+The \verb:POINT: datatype maps to the corresponding type defined in the
 \DALISpec.
 
-POINT values are serialized as arrays of floating point numbers
+\verb:POINT: values are serialized as arrays of floating point numbers
 using the \verb:point: xtype defined in the \DALISpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
-        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
 
         \hline
@@ -1207,8 +1211,9 @@ using the \verb:point: xtype defined in the \DALISpec.
     \label{table:types.geom.point}
 \end{table}
 
-POINT literals can be expressed using the \verb:POINT():
+\verb:POINT: literals can be expressed using the \verb:POINT():
 constructor defined in \SectionRef{sec:functions.geom.point}.
+
 For example:
 \begin{verbatim}
     POINT(
@@ -1217,21 +1222,18 @@ For example:
         )
 \end{verbatim}
 
-%References to POINT-typed columns must be valid wherever the ADQL
-%\textit{point} nonterminal is allowed.
-
 \subsubsection{CIRCLE}
 \label{sec:types.geom.circle}
 
-The CIRCLE datatype maps to the corresponding type defined in the
+The \verb:CIRCLE: datatype maps to the corresponding type defined in the
 \DALISpec.
 
-CIRCLE values are serialized as arrays of floating point numbers
+\verb:CIRCLE: values are serialized as arrays of floating point numbers
 using the \verb:circle: xtype defined in the \DALISpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
-        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
 
         \hline
@@ -1259,7 +1261,7 @@ using the \verb:circle: xtype defined in the \DALISpec.
     \label{table:types.geom.circle}
 \end{table}
 
-CIRCLE literals can be expressed using the \verb:CIRCLE():
+\verb:CIRCLE: literals can be expressed using the \verb:CIRCLE():
 constructor defined in \SectionRef{sec:functions.geom.circle}.
 For example:
 \begin{verbatim}
@@ -1273,15 +1275,15 @@ For example:
 \subsubsection{POLYGON}
 \label{sec:types.geom.polygon}
 
-The POLYGON datatype maps to the corresponding type defined in the
+The \verb:POLYGON: datatype maps to the corresponding type defined in the
 \DALISpec.
 
-POLYGON values are serialized as arrays of floating point numbers
+\verb:POLYGON: values are serialized as arrays of floating point numbers
 using the \verb:polygon: xtype defined in the \DALISpec.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
-        {|p{0.30\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+        {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
         \hline
 
         \hline
@@ -1309,8 +1311,9 @@ using the \verb:polygon: xtype defined in the \DALISpec.
     \label{table:types.geom.polygon}
 \end{table}
 
-POLYGON literals can be expressed using the \verb:POLYGON():
+\verb:POLYGON: literals can be expressed using the \verb:POLYGON():
 constructor defined in \SectionRef{sec:functions.geom.polygon}.
+
 For example:
 \begin{verbatim}
     POLYGON(
@@ -1329,13 +1332,13 @@ and (30.0, 30.5) degrees.
 \subsubsection{REGION}
 \label{sec:types.geom.region}
 
-REGION is introduced as the type of the result of intersections and
+\verb:REGION: is introduced as the type of the result of intersections and
 unions of other geometries (although ADQL at this point does not support
 these operations).
 
-We do not specify the serialisation of REGION-typed values in result
+We do not specify the serialisation of \verb:REGION:-typed values in result
 sets.  It is expected that next version of DALI will provide normative
-guidance on this.  However, at least for the \textit{s\_region}
+guidance on this. However, at least for the \textit{s\_region}
 column described in the \ObsCoreSpec,
 % ObsCore 1.1 Section 4.12
 % http://ivoa.net/documents/ObsCore/20170509/REC-ObsCore-v1.1-20170509.pdf#26
@@ -2809,6 +2812,165 @@ is equivalent to:
         )
 \end{verbatim}
 
+\subsection{Type operations}
+\label{sec:type}
+
+An ADQL service implementation MAY include support for the following optional
+type conversion functions: 
+
+\begin{itemize}
+    \item \verb:CAST():
+\end{itemize}
+
+\subsubsection{CAST}
+\label{sec:type.cast}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-type|}\\
+{\footnotesize \verb|name: CAST|}\\
+
+The \verb:CAST(): function returns the value of the first argument converted
+into the datatype specified by the second argument.
+
+\paragraph{Syntax} \verb:<cast_specification>:
+\begin{verbatim}
+CAST <left_paren>
+         ( <value_expression> | NULL ) AS <cast_target>
+     <right_parent>
+\end{verbatim}
+
+\paragraph{Target types}
+
+This function does not replicate the full functionality and range of types
+supported by common RDBMS implementations of \verb:CAST():. Here is the minimum
+range of types that MUST be supported if \verb:CAST(): is implemented:
+
+\begin{itemize}
+    \item Exact numeric:
+    \begin{itemize}
+        \item \verb:INTEGER:
+        \item \verb:SMALLINT:
+        \item \verb:BIGINT:
+    \end{itemize}
+    \item Approximate numeric:
+    \begin{itemize}
+        \item \verb:REAL:
+        \item \verb:DOUBLE PRECISION:
+    \end{itemize}
+    \item Character:
+    \begin{itemize}
+        \item \verb:CHAR: or \verb:CHAR(n): (where n is the fixed string length)
+        \item \verb:VARCHAR: or \verb:VARCHAR(n): (where n is the maximum string length)
+    \end{itemize}
+    \item Date, Time:
+    \begin{itemize}
+        \item \verb:TIMESTAMP:
+    \end{itemize}
+\end{itemize}
+
+Examples:
+
+\begin{verbatim}
+    CAST(3 AS REAL)
+    CAST('3.14159265358979323846' AS DOUBLE PRECISION)
+\end{verbatim}
+
+\paragraph{Input types}
+
+The range of types allowed for the value to cast entirely depends on the target
+type. Although cast operations may vary from one implementation to another, ADQL
+SHOULD support the following ones:
+
+\begin{table}[!ht]
+    \center{
+        \resizebox{\linewidth}{!}{
+            \begin{tabular}{| c | c | c | c | c | c |}
+                \hline
+                \multirow{3}{*}{\diaghead{\theadfont Output TyInput Ty}%
+                {\textbf{Input}}{\textbf{Output}}}
+                                     & \textbf{Exact}      & \textbf{Approximate} & \textbf{Variable}  & \textbf{Fixed}      &                    \\
+                                     & \textbf{numeric}    & \textbf{numeric}     & \textbf{length}    & \textbf{length}     & \textbf{Timestamp} \\
+                                     &                     &                      & \textbf{character} & \textbf{character}  &                    \\
+                \hline
+                \textbf{Exact}       & \multirow{2}{*}{X}  & \multirow{2}{*}{X}   & \multirow{2}{*}{X} & \multirow{2}{*}{X*} &                    \\
+                \textbf{numeric}     & & & & & \\
+                \hline
+                \textbf{Approximate} & \multirow{2}{*}{X*} & \multirow{2}{*}{X}   & \multirow{2}{*}{X} & \multirow{2}{*}{X*} &                    \\
+                \textbf{numeric}     & & & & & \\
+                \hline
+                \textbf{Character}   &         X           &          X           &          X         &          X*         &         X          \\
+                \hline
+                \textbf{Timestamp}   &                     &                      &          X         &          X*         &         X          \\
+                \hline
+            \end{tabular}
+        }
+        \textit{\footnotesize{X: supported ; X*: supported but possible implementation differences}}
+    }
+\end{table}
+
+\paragraph{Cast into a smaller datatype}
+
+Converting a value to a datatype that is too small to represent it SHOULD be
+treated as an error. Details of the mechanism for reporting the error condition
+are implementation dependent.
+
+This rule especially applies when casting a value into a character string too
+small to contain its entire serialization. The output string may be truncated,
+adjusted to the needed length, or an error may be thrown.
+
+\paragraph{Fixed-length character}
+
+The creation of a fixed-length character string is implementation dependent.
+In function of the implementation, \verb:CHAR: may be equivalent to
+\verb:CHAR(1): or to a \verb:CHAR: just big enough to contain the entire string
+to create.
+
+\paragraph{Approximate numeric}
+
+The rounding mechanism used when converting from approximate numerics
+(\verb:REAL: or \verb:DOUBLE PRECISION:) to precise numerics (\verb:SMALLINT:,
+\verb:INTEGER: or \verb:BIGINT:) is implementation dependent.
+
+\paragraph{Timestamp}
+
+Only a character string can be casted into a timestamp. This string MUST follow
+the syntax defined in the \DALISpec:
+\begin{verbatim}
+    YYYY-MM-DD[’T’hh:mm:ss[.SSS][’Z’]]
+\end{verbatim}
+
+Example:
+
+\begin{verbatim}
+    CAST('2021-01-14T11:25:00' AS TIMESTAMP)
+\end{verbatim}
+
+Note that other serializations or any other kind of value MAY also be supported.
+
+\paragraph{Geometry}
+
+\verb:CAST(): MAY also produce geometries. If an implementation wants to support
+this particular cast operation, it MUST accept a character string following the
+DALI serialization matching the precise geometry type to produce.
+
+Then, the supported geometry types SHOULD be:
+
+\begin{itemize}
+    \item \verb:POINT:
+    \item \verb:CIRCLE:
+    \item \verb:POLYGON:
+\end{itemize}
+
+Examples:
+
+\begin{verbatim}
+    CAST('12.3 45.6' AS POINT)
+    CAST('12.3 45.6 1.0' AS CIRCLE)
+    CAST('1.0 0.1 2.0 0.2 3.0 0.3' AS POLYGON)
+\end{verbatim}
+
+Note that other serializations (e.g. STC/s) or any other kind of value MAY also
+be supported.
+
 \subsection{Unit operations}
 \label{sec:unit}
 
@@ -2958,9 +3120,12 @@ TOP clause is applied to limit the number of rows returned.
       | ASIN
       | ATAN
       | ATAN2
+      | BIGINT
       | BOX
+      | CAST
       | CEILING
       | CENTROID
+      | CHAR
       | CIRCLE
       | CONTAINS
       | COORD1
@@ -2969,26 +3134,34 @@ TOP clause is applied to limit the number of rows returned.
       | COS
       | DEGREES
       | DISTANCE
+      | DOUBLE
       | EXP
       | FLOOR
+      | INTEGER
       | INTERSECTS
       | IN_UNIT
       | LOG
       | LOG10
       | MOD
+      | NULL
       | PI
       | POINT
       | POLYGON
       | POWER
+      | PRECISION
       | RADIANS
+      | REAL
       | REGION
       | RAND
       | ROUND
       | SIN
+      | SMALLINT
       | SQRT
+      | TIMESTAMP
       | TOP
       | TAN
       | TRUNCATE
+      | VARCHAR
 
     <SQL_embedded_language_character> ::=
         <left_bracket> | <right_bracket>
@@ -3002,9 +3175,9 @@ TOP clause is applied to limit the number of rows returned.
       | AUTHORIZATION | AVG
       | BEGIN | BETWEEN | BIT | BIT_LENGTH
       | BOTH | BY
-      | CASCADE | CASCADED | CASE | CAST
+      | CASCADE | CASCADED | CASE
       | CATALOG
-      | CHAR | CHARACTER | CHAR_LENGTH
+      | CHARACTER | CHAR_LENGTH
       | CHARACTER_LENGTH | CHECK | CLOSE | COALESCE
       | COLLATE | COLLATION
       | COLUMN | COMMIT
@@ -3019,7 +3192,7 @@ TOP clause is applied to limit the number of rows returned.
       | DECIMAL | DECLARE | DEFAULT | DEFERRABLE
       | DEFERRED | DELETE | DESC | DESCRIBE | DESCRIPTOR
       | DIAGNOSTICS
-      | DISCONNECT | DISTINCT | DOMAIN | DOUBLE | DROP
+      | DISCONNECT | DISTINCT | DOMAIN | DROP
       | ELSE | END | END-EXEC | ESCAPE
       | EXCEPT | EXCEPTION
       | EXEC | EXECUTE | EXISTS
@@ -3031,7 +3204,7 @@ TOP clause is applied to limit the number of rows returned.
       | HAVING | HOUR
       | IDENTITY | ILIKE | IMMEDIATE | IN | INDICATOR
       | INITIALLY | INNER | INPUT
-      | INSENSITIVE | INSERT | INT | INTEGER | INTERSECT
+      | INSENSITIVE | INSERT | INT | INTERSECT
       | INTERVAL | INTO | IS
       | ISOLATION
       | JOIN
@@ -3041,32 +3214,32 @@ TOP clause is applied to limit the number of rows returned.
       | MATCH | MAX | MIN | MINUTE | MODULE
       | MONTH
       | NAMES | NATIONAL | NATURAL | NCHAR | NEXT | NO
-      | NOT | NULL
+      | NOT
       | NULLIF | NUMERIC
       | OCTET_LENGTH | OF
       | ON | ONLY | OPEN | OPTION | OR
       | ORDER | OUTER
       | OUTPUT | OVERLAPS
-      | PAD | PARTIAL | POSITION | PRECISION | PREPARE
+      | PAD | PARTIAL | POSITION | PREPARE
       | PRESERVE | PRIMARY
       | PRIOR | PRIVILEGES | PROCEDURE | PUBLIC
-      | READ | REAL | REFERENCES | RELATIVE | RESTRICT
+      | READ | REFERENCES | RELATIVE | RESTRICT
       | REVOKE | RIGHT
       | ROLLBACK | ROWS
       | SCHEMA | SCROLL | SECOND | SECTION
       | SELECT
       | SESSION | SESSION_USER | SET
-      | SIZE | SMALLINT | SOME | SPACE | SQL | SQLCODE
+      | SIZE | SOME | SPACE | SQL | SQLCODE
       | SQLERROR | SQLSTATE
       | SUBSTRING | SUM | SYSTEM_USER
       | TABLE | TEMPORARY
-      | THEN | TIME | TIMESTAMP
+      | THEN | TIME
       | TIMEZONE_HOUR | TIMEZONE_MINUTE
       | TO | TRAILING | TRANSACTION
       | TRANSLATE | TRANSLATION | TRIM | TRUE
       | UNION | UNIQUE | UNKNOWN | UPDATE | UPPER | USAGE
       | USER | USING
-      | VALUE | VALUES | VARCHAR | VARYING | VIEW
+      | VALUE | VALUES | VARYING | VIEW
       | WHEN | WHENEVER | WHERE | WITH | WORK | WRITE
       | YEAR
       | ZONE
@@ -3097,6 +3270,10 @@ TOP clause is applied to limit the number of rows returned.
     <ampersand> ::= &
 
     <approximate_numeric_literal> ::= <mantissa>E<exponent>
+
+    <approximate numeric type> ::=
+          REAL
+        | DOUBLE PRECISION
 
     <area> ::= AREA <left_paren> <geometry_value_expression> <right_paren>
 
@@ -3129,6 +3306,18 @@ TOP clause is applied to limit the number of rows returned.
     <box_center> ::=
         <coordinates>
         | <coord_value>
+    
+    <cast_specification> ::=
+        CAST <left_paren>
+            ( <value_expression> | NULL )
+            AS <cast_target>
+        <right_parent>
+    
+    <cast_target> ::=
+          <character_string_type>
+        | <numeric_type>
+        | <datetime_type>
+        | <geometry_type>
 
     <catalog_name> ::= <identifier>
 
@@ -3147,6 +3336,10 @@ TOP clause is applied to limit the number of rows returned.
 
     <character_string_literal> ::=
         <quote> [ <character_representation>... ] <quote>
+
+    <character_string_type> ::=
+          CHAR [ <left paren> <length> <right paren> ]
+        | VARCHAR [ <left paren> <length> <right paren> ]
 
     <character_value_expression> ::= <concatenation> | <character_factor>
 
@@ -3220,6 +3413,8 @@ TOP clause is applied to limit the number of rows returned.
 
     <correlation_specification> ::= [ AS ] <correlation_name>
 
+    <datetime_type> ::= TIMESTAMP
+
     <default_function_prefix> ::= (see text)
 
     <delimited_identifier> ::=
@@ -3280,6 +3475,11 @@ TOP clause is applied to limit the number of rows returned.
         COORDSYS <left_paren>
             <geometry_value_expression>
         <right_paren>
+    
+    <exact_numeric_type> ::=
+          SMALLINT
+        | INTEGER
+        | BIGINT
 
     <factor> ::= [ <sign> ] <numeric_primary>
 
@@ -3298,8 +3498,13 @@ TOP clause is applied to limit the number of rows returned.
             [ <set_quantifier> ] <value_expression>
         <right_paren>
 
+    <geometry_type> ::=
+          POINT
+        | CIRCLE
+        | POLYGON
+
     <geometry_value_expression> ::=
-        <value_expression_primary > | <geometry_value_function>
+        <value_expression_primary> | <geometry_value_function>
 
     <geometry_value_function> ::=
         <box>
@@ -3436,6 +3641,10 @@ TOP clause is applied to limit the number of rows returned.
     <numeric_primary> ::=
         <value_expression_primary>
       | <numeric_value_function>
+
+    <numeric_type> ::=
+          <exact_numeric_type>
+        | <approximate_numeric_type>
 
     <numeric_value_expression> ::=
         <term>
@@ -3699,6 +3908,7 @@ TOP clause is applied to limit the number of rows returned.
         <unsigned_value_specification>
         | <column_reference>
         | <set_function_specification>
+        | <cast_specification>
         | <left_paren> <value_expression> <right_paren>
 
     <vertical_bar> ::= "|"
@@ -3796,6 +4006,7 @@ issues that are still to be resolved.
             \item Added \verb:LOWER(): BNF grammar
             \item Added \verb:UPPER(): function
             \item Added recommendation to data providers about case folding
+            \item Re-added \verb:CAST(): function
         \end{itemize}
 
     \item Changes from PR-ADQL-2.1-20180112
