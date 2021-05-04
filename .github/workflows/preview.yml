@@ -35,10 +35,10 @@ jobs:
         test -f ${{ env.doc_name }}.bbl
     
     - name: Move the auto-pdf-preview tag
-      uses: weareyipyip/walking-tag-action@v1
+      uses: weareyipyip/walking-tag-action@v2
       with:
-        TAG_NAME: auto-pdf-preview
-        TAG_MESSAGE: |
+        tag-name: auto-pdf-preview
+        tag-message: |
           Last commit taken into account for the automatically updated PDF preview of this IVOA document.
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
