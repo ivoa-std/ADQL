@@ -3993,35 +3993,6 @@ For example, the following XML fragment describes a service that supports the
 \end{verbatim}
 
 \newpage
-\section{Outstanding issues}
-\label{sec:issues}
-
-The following section identifies areas of the specification that have known
-issues that are still to be resolved.
-
-\begin{itemize}
-
-    \item 20171129-003 Now that we allow polymorphism, do we still need to deprecate
-    the coordsys param for BOX, CIRCLE AND POLYGON? \SectionSee{sec:geom.coordsys.param}.
-
-    \item 20171129-004 Should support for REGION be optional (if so, how) ? \SectionSee{sec:types.geom.region}
-    \item 20171129-005 Should we add a literal constructor for REGION? \SectionSee{sec:types.geom.region}.
-
-    \item 20171129-007 Should we add prefixes to the xytpe names to indicate
-    which standard they are defined in?.
-
-    \item 20171129-008 INTERVAL is defined in DALI but not in ADQL. \SectionSee{sec:types.numeric.interval}.
-
-    \item 20170608-009 Can we add in ADQL an INTERSECTION function
-    which returns the polygon intersection of two regions?.
-    http://mail.ivoa.net/pipermail/dal/2017-June/007721.html
-
-    \item 20171228-010 Table inserted between text and example (POINT).
-
-
-\end{itemize}
-
-\newpage
 \section{Changes from previous versions}
 \label{sec:changes}
 
@@ -4047,6 +4018,7 @@ issues that are still to be resolved.
             \item Added \verb:UPPER(): function
             \item Added recommendation to data providers about case folding
             \item Re-added \verb:CAST(): function
+            \item Replaced the section for outstanding issues by the GitHub Issue mechanism
         \end{itemize}
 
     \item Changes from PR-ADQL-2.1-20180112
