@@ -170,8 +170,8 @@ The language allows simple Latin letters (lower and upper case, i.e.
 
 \begin{itemize}
     \item space
-    \item single quote \verb:’:
-    \item double quote \verb:“:
+    \item single quote \verb:':
+    \item double quote \verb:":
     \item percent \verb:%:
     \item left and right parenthesis \verb:():
     \item asterisk \verb:*:
@@ -1181,7 +1181,7 @@ in the database alongside the tabular data.
 ADQL does not provide functions or operations that operate on
 images.
 However, a service implementation could provide user defined
-functions that use implemetation specific features to perform
+functions that use implementation specific features to perform
 operations on the image data.
 
 \subsection{Geometric types}
@@ -1408,7 +1408,7 @@ the \TAPRegSpec.
 \subsubsection{Overview}
 \label{sec:functions.geom.overview}
 
-In addition to the mathematical functions, ADQL provides a the following geometrical
+In addition to the mathematical functions, ADQL provides the following geometrical
 functions to enhance the astronomical usage of the language:
 
 \begin{itemize}
@@ -2026,7 +2026,7 @@ For example:
         )
 \end{verbatim}
 \noindent
-where \textit{t.center} is a reference to a column that contans POINT values.
+where \textit{t.center} is a reference to a column that contains POINT values.
 
 \subsubsection{COORD2}
 \label{sec:functions.geom.coord2}
@@ -2059,7 +2059,7 @@ For example:
         )
 \end{verbatim}
 \noindent
-where \textit{t.center} is a reference to a column that contans POINT values.
+where \textit{t.center} is a reference to a column that contains POINT values.
 
 \subsubsection{COORDSYS}
 \label{sec:functions.geom.coordsys}
@@ -2874,7 +2874,7 @@ into the datatype specified by the second argument.
 \begin{verbatim}
 CAST <left_paren>
          ( <value_expression> | NULL ) AS <cast_target>
-     <right_parent>
+     <right_paren>
 \end{verbatim}
 
 \paragraph{Target types}
@@ -3351,7 +3351,7 @@ TOP clause is applied to limit the number of rows returned.
         CAST <left_paren>
             ( <value_expression> | NULL )
             AS <cast_target>
-        <right_parent>
+        <right_paren>
     
     <cast_target> ::=
           <character_string_type>
@@ -3778,7 +3778,7 @@ TOP clause is applied to limit the number of rows returned.
 
     <query_set_primary> ::=
         <select_query>
-        | <left_paren> <select_expression> <right_parent>
+        | <left_paren> <select_expression> <right_paren>
 
     <query_set_term> ::=
         <query_set_primary>
