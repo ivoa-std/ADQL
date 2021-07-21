@@ -25,7 +25,7 @@ The last stable version is
 **[REC-2.0](http://www.ivoa.net/documents/latest/ADQL.html)**.
 
 Next version will be 2.1. A
-[Proposed Recommendation](http://www.ivoa.net/documents/ADQL/20180112/) is
+[Proposed Recommendation](https://www.ivoa.net/documents/ADQL/20210528/) is
 already available. _It is not yet finalized and so, should not be considered
 yet as stable for operational implementation._
 
