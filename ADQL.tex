@@ -71,7 +71,7 @@ education and outreach. The
 is a global collaboration of separately funded
 projects to develop standards and infrastructure that enable VO applications.
 
-\clearpage
+\clearpage % section cut
 \section{Introduction}
 \label{sec:introduction}
 
@@ -105,12 +105,11 @@ has been achieved as far as it can be done in SQL. The exact meaning of keywords
 indicating requirement levels can be found in the References section.
 %Should this be 'Conformance-related definitions' not 'References' ?
 
-
-\clearpage
+\clearpage % to have the VOArch figure along its description and subsection title
 \subsection{Role within the VO architecture}
 \label{sec:role}
 
-\begin{figure}
+\begin{figure}[th]
 \centering
 \includegraphics[width=0.9\textwidth]{ADQL-archdiag.png}
 \caption{Architecture diagram for this document}
@@ -133,7 +132,8 @@ Service implementations are free to extend this functionality by providing
 additional functions, operators or datatypes beyond those defined in this
 specification, as long as the extended functionality does not conflict
 with anything defined in this specification.
-\clearpage
+
+\clearpage % section cut
 \section{Language structure}
 \label{sec:language}
 
@@ -156,7 +156,7 @@ for ADQL. The following conventions are used through this document:
     \item Case-insensitive unless otherwise stated.
 \end{itemize}
 
-\clearpage
+
 \subsection{Characters, keywords, identifiers and literals}
 \subsubsection{Characters}
 \label{sec:characters}
@@ -411,7 +411,7 @@ Numeric literals are expressed as an exact decimal value, e.g. \verb:12: or
 The rules on where whitespace is allowed and required are as in SQL-92;
 essentially, any \verb:<token>: may be followed by a \verb:<separator>:.
 
-\clearpage
+\clearpage % to keep the entire verbatim block for query syntax on the same page
 \subsection{Query syntax}
 \label{sec:syntax}
 
@@ -544,7 +544,6 @@ case-insensitive string comparison operator, defined in \SectionRef{sec:string.f
     \item \verb:ILIKE:
 \end{itemize}
 
-\clearpage
 \subsection{Mathematical and Trigonometrical Functions}
 \label{sec:math.functions}
 
@@ -554,8 +553,7 @@ usage and description are detailed in the following tables:
 
 \begin{table}[th]\footnotesize
     \begin{tabular}{|p{0.20\textwidth}|p{0.125\textwidth}|p{0.125\textwidth}|p{0.55\textwidth}|}
-        \hline
-
+        
         \hline
         \textbf{Name} &
         \textbf{Argument \newline datatype} &
@@ -686,7 +684,6 @@ usage and description are detailed in the following tables:
         Truncates \textit{x} to \textit{n} decimal places.
         The integer \textit{n} is optional and defaults to 0 if not specified. 
         \tabularnewline
-
         \hline
     \end{tabular}
     \caption{Mathematical functions}
@@ -695,8 +692,7 @@ usage and description are detailed in the following tables:
 
 \begin{table}[th]\footnotesize
     \begin{tabular}{|p{0.20\textwidth}|p{0.125\textwidth}|p{0.125\textwidth}|p{0.55\textwidth}|}
-        \hline
-
+        
         \hline
         \textbf{Name} &
         \textbf{Argument \newline datatype} &
@@ -754,14 +750,13 @@ usage and description are detailed in the following tables:
         double &
         Returns the tangent of the angle \textit{x} in radians, in the range of -1.0 through 1.0.
         \tabularnewline
-
         \hline
     \end{tabular}
     \caption{Trigonometrical functions}
     \label{table:trig.functions}
 \end{table}
 
-\clearpage
+\clearpage % section cut
 \section{Type system}
 \label{sec:types}
 
@@ -794,11 +789,10 @@ corresponding datatypes defined in the \VOTableSpec{}.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.30\textwidth}|p{0.26\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
+        
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
-        \multicolumn{3}{|c|}{\textbf{VOTable}}
+        \multicolumn{3}{c|}{\textbf{VOTable}}
         \tabularnewline
         
         \hline
@@ -814,13 +808,6 @@ corresponding datatypes defined in the \VOTableSpec{}.
         - &
         -
         \tabularnewline
-
-%       \hline
-%       ?? &
-%       unsignedByte &
-%       - &
-%       -
-%       \tabularnewline
 
         \hline
         SMALLINT &
@@ -856,7 +843,6 @@ corresponding datatypes defined in the \VOTableSpec{}.
         - &
         -
         \tabularnewline
-
         \hline
     \end{tabular}
     \caption{ADQL type mapping for numeric values}
@@ -880,8 +866,7 @@ operate on some \verb:INTERVAL: values.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
+        
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
@@ -924,8 +909,7 @@ The \verb:TIMESTAMP: datatype maps to the corresponding type defined in the
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
+        
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
@@ -989,8 +973,7 @@ content.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
+        
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
@@ -1016,7 +999,6 @@ content.
         n* &
         -
         \tabularnewline
-
         \hline
     \end{tabular}
     \caption{ADQL type mapping for character strings}
@@ -1039,8 +1021,7 @@ defined functions that operate on some \verb:CLOB: values.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
+        
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
@@ -1059,7 +1040,6 @@ defined functions that operate on some \verb:CLOB: values.
         n, n*, * &
         adql:clob
         \tabularnewline
-
         \hline
     \end{tabular}
     \caption{ADQL type mapping for CLOB}
@@ -1091,8 +1071,7 @@ type defined in the \VOTableSpec{}.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
+        
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
@@ -1118,7 +1097,6 @@ type defined in the \VOTableSpec{}.
         n* &
         -
         \tabularnewline
-
         \hline
     \end{tabular}
     \caption{ADQL type mapping for binary arrays}
@@ -1142,8 +1120,7 @@ in the \VOTableSpec{}.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
+        
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
@@ -1162,7 +1139,6 @@ in the \VOTableSpec{}.
         n, n*, * &
         adql:blob
         \tabularnewline
-
         \hline
     \end{tabular}
     \caption{ADQL type mapping for BLOB}
@@ -1202,8 +1178,7 @@ using the \verb:point: xtype defined in the \DALISpec{}.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
+        
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
@@ -1222,7 +1197,6 @@ using the \verb:point: xtype defined in the \DALISpec{}.
         2 &
         point
         \tabularnewline
-
         \hline
     \end{tabular}
     \caption{ADQL type mapping for POINT}
@@ -1253,8 +1227,7 @@ using the \verb:circle: xtype defined in the \DALISpec{}.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
+        
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
@@ -1273,7 +1246,6 @@ using the \verb:circle: xtype defined in the \DALISpec{}.
         3 &
         circle
         \tabularnewline
-
         \hline
     \end{tabular}
     \caption{ADQL type mapping for CIRCLE}
@@ -1304,8 +1276,7 @@ using the \verb:polygon: xtype defined in the \DALISpec{}.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
+        
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
@@ -1324,7 +1295,6 @@ using the \verb:polygon: xtype defined in the \DALISpec{}.
         n, *, n* &
         polygon
         \tabularnewline
-
         \hline
     \end{tabular}
     \caption{ADQL type mapping for POLYGON}
@@ -1366,7 +1336,7 @@ informal practice is to produce strings conforming to section 6
 of TAP 1.0 \citep{2010ivoa.spec.0327D} with an xtype of
 \texttt{adql:region}.
 
-\clearpage
+clearpage % section cut
 \section{Optional components}
 \label{sec:optional}
 
@@ -1658,14 +1628,6 @@ for the sky positions in the two tables, \textit{t1}, and \textit{t2}.
 
 Alternative semantically equivalent forms however MAY still be
 used by clients, and MUST still be handled correctly by services.
-
-%\subsubsection{Function definitions}
-\clearpage
-\label{sec:functions.geom.definitions}
-
-The following sections provide a detailed description for each geometrical
-function. In each case, the functionality and usage is described rather
-than going into the BNF grammar details as above.
 
 \subsubsection{AREA}
 \label{sec:functions.geom.area}
@@ -2940,7 +2902,6 @@ SHOULD support the following ones:
         \textit{\footnotesize{X: supported ; X*: supported but possible implementation differences}}
     }
 \end{table}
-\newpage % to force the compatibility table to be close to the "Input types" paragragh
 
 \paragraph{Cast into a smaller datatype}
 
@@ -3136,7 +3097,7 @@ then the OFFSET clause is applied first, dropping the specified
 number of rows from the beginning of the result set before the
 TOP clause is applied to limit the number of rows returned.
 
-\newpage
+\clearpage % section cut
 \appendix
 \section{BNF grammar}
 \label{sec:grammar}
@@ -3958,7 +3919,7 @@ TOP clause is applied to limit the number of rows returned.
 
 \end{verbatim}
 
-\newpage
+\clearpage % section cut
 \section{Language feature support}
 \label{sec:features}
 
@@ -3987,7 +3948,7 @@ For example, the following XML fragment describes a service that supports the
 </languageFeatures>    
 \end{verbatim}
 
-\newpage
+\clearpage % section cut
 \section{Changes from previous versions}
 \label{sec:changes}
 
@@ -4164,6 +4125,7 @@ For example, the following XML fragment describes a service that supports the
 
 \end{itemize}
 
+\clearpage % section cut
 \bibliography{ivoatex/ivoabib,ivoatex/docrepo}
 
 \end{document}
