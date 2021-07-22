@@ -513,6 +513,21 @@ of a query:
         alpha_source.id = subsample.id
 \end{verbatim}
 
+If supported by the implementation, table subqueries MAY be used for declaring
+named result sets in the \verb:WITH: clause of the main query:
+
+\begin{verbatim}
+    WITH subsample AS (
+        SELECT alpha_source.id FROM alpha_source WHERE id < 10
+    )
+    SELECT
+        alpha_source.id
+    FROM
+        alpha_source INNER JOIN subsample USING(id)
+    WHERE
+        alpha_source.id >= 5
+\end{verbatim}
+
 \subsubsection{Joins}
 \label{sec:joins}
 %TBD - cosmopterix tests for this
