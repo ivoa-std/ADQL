@@ -14,10 +14,6 @@
 
 \usepackage{hyperref}
 
-% Preserve spaces after \newcommand{}
-% https://tex.stackexchange.com/a/17873
-\usepackage{xspace}
-
 % Macros for referring to IVOA standards and notes.
 \input{ivoa-cite.tex}
 
@@ -75,7 +71,7 @@ education and outreach. The
 is a global collaboration of separately funded
 projects to develop standards and infrastructure that enable VO applications.
 
-\clearpage
+\clearpage % section cut
 \section{Introduction}
 \label{sec:introduction}
 
@@ -109,12 +105,11 @@ has been achieved as far as it can be done in SQL. The exact meaning of keywords
 indicating requirement levels can be found in the References section.
 %Should this be 'Conformance-related definitions' not 'References' ?
 
-
-\clearpage
+\clearpage % to have the VOArch figure along its description and subsection title
 \subsection{Role within the VO architecture}
 \label{sec:role}
 
-\begin{figure}
+\begin{figure}[th]
 \centering
 \includegraphics[width=0.9\textwidth]{ADQL-archdiag.png}
 \caption{Architecture diagram for this document}
@@ -122,7 +117,7 @@ indicating requirement levels can be found in the References section.
 \end{figure}
 
 Figure \ref{fig:archdiag} shows the role this document plays within the
-IVOA architecture \citep{note:VOARCH}.
+IVOA architecture \VOArch{}.
 
 \subsection{Extended functionality}
 \label{sec:extending}
@@ -137,7 +132,8 @@ Service implementations are free to extend this functionality by providing
 additional functions, operators or datatypes beyond those defined in this
 specification, as long as the extended functionality does not conflict
 with anything defined in this specification.
-\clearpage
+
+\clearpage % section cut
 \section{Language structure}
 \label{sec:language}
 
@@ -160,7 +156,7 @@ for ADQL. The following conventions are used through this document:
     \item Case-insensitive unless otherwise stated.
 \end{itemize}
 
-\clearpage
+
 \subsection{Characters, keywords, identifiers and literals}
 \subsubsection{Characters}
 \label{sec:characters}
@@ -415,7 +411,7 @@ Numeric literals are expressed as an exact decimal value, e.g. \verb:12: or
 The rules on where whitespace is allowed and required are as in SQL-92;
 essentially, any \verb:<token>: may be followed by a \verb:<separator>:.
 
-\clearpage
+\clearpage % to keep the entire verbatim block for query syntax on the same page
 \subsection{Query syntax}
 \label{sec:syntax}
 
@@ -548,7 +544,6 @@ case-insensitive string comparison operator, defined in \SectionRef{sec:string.f
     \item \verb:ILIKE:
 \end{itemize}
 
-\clearpage
 \subsection{Mathematical and Trigonometrical Functions}
 \label{sec:math.functions}
 
@@ -558,8 +553,7 @@ usage and description are detailed in the following tables:
 
 \begin{table}[th]\footnotesize
     \begin{tabular}{|p{0.20\textwidth}|p{0.125\textwidth}|p{0.125\textwidth}|p{0.55\textwidth}|}
-        \hline
-
+        
         \hline
         \textbf{Name} &
         \textbf{Argument \newline datatype} &
@@ -690,7 +684,6 @@ usage and description are detailed in the following tables:
         Truncates \textit{x} to \textit{n} decimal places.
         The integer \textit{n} is optional and defaults to 0 if not specified. 
         \tabularnewline
-
         \hline
     \end{tabular}
     \caption{Mathematical functions}
@@ -699,8 +692,7 @@ usage and description are detailed in the following tables:
 
 \begin{table}[th]\footnotesize
     \begin{tabular}{|p{0.20\textwidth}|p{0.125\textwidth}|p{0.125\textwidth}|p{0.55\textwidth}|}
-        \hline
-
+        
         \hline
         \textbf{Name} &
         \textbf{Argument \newline datatype} &
@@ -758,14 +750,13 @@ usage and description are detailed in the following tables:
         double &
         Returns the tangent of the angle \textit{x} in radians, in the range of -1.0 through 1.0.
         \tabularnewline
-
         \hline
     \end{tabular}
     \caption{Trigonometrical functions}
     \label{table:trig.functions}
 \end{table}
 
-\clearpage
+\clearpage % section cut
 \section{Type system}
 \label{sec:types}
 
@@ -776,8 +767,8 @@ the underlying database's native language and type system.
 However, service metadata needs to give column types in order to allow the
 construction of queries that are both syntactically and semantically correct.
 Examples of such metadata includes the \verb:TAP_SCHEMA: tables defined
-in the \TAPSpec and the \verb:/tables:
-webservice response defined in the \VOSISpec.
+in the \TAPSpec{} and the \verb:/tables:
+webservice response defined in the \VOSISpec{}.
 
 Services SHOULD, if at all possible, try to express their column metadata in
 these terms even if the underlying database employs different types.
@@ -793,16 +784,15 @@ VOTables into ADQL-visible tables.
 
 The numeric datatypes, \verb:BIT:, \verb:SMALLINT:, \verb:INTEGER:,
 \verb:BIGINT:, \verb:REAL:  \linebreak and \verb:DOUBLE PRECISION: map to the
-corresponding datatypes defined in the \VOTableSpec.
+corresponding datatypes defined in the \VOTableSpec{}.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.30\textwidth}|p{0.26\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
+        
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
-        \multicolumn{3}{|c|}{\textbf{VOTable}}
+        \multicolumn{3}{c|}{\textbf{VOTable}}
         \tabularnewline
         
         \hline
@@ -818,13 +808,6 @@ corresponding datatypes defined in the \VOTableSpec.
         - &
         -
         \tabularnewline
-
-%       \hline
-%       ?? &
-%       unsignedByte &
-%       - &
-%       -
-%       \tabularnewline
 
         \hline
         SMALLINT &
@@ -860,7 +843,6 @@ corresponding datatypes defined in the \VOTableSpec.
         - &
         -
         \tabularnewline
-
         \hline
     \end{tabular}
     \caption{ADQL type mapping for numeric values}
@@ -874,7 +856,7 @@ map to a 16 bit integer, \verb:INTEGER: should map to a 32 bit integer, etc.
 \subsubsection{INTERVAL}
 \label{sec:types.numeric.interval}
 
-The \DALISpec defines \verb:INTERVAL: as a pair of integer or floating-point
+The \DALISpec{} defines \verb:INTERVAL: as a pair of integer or floating-point
 numeric values which are serialized as an array of numbers.
 
 None of the ADQL operators apply to \verb:INTERVAL: values.
@@ -884,8 +866,7 @@ operate on some \verb:INTERVAL: values.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
+        
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
@@ -917,19 +898,18 @@ defined.
 \label{sec:types.datetime}
 
 Where possible, date and time values SHOULD be implemented as described in the
-\DALISpec.
+\DALISpec{}.
 
 \subsubsection{TIMESTAMP}
 \label{sec:types.datetime.timestamp}
 
 The \verb:TIMESTAMP: datatype maps to the corresponding type defined in the
-\DALISpec.
+\DALISpec{}.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
+        
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
@@ -984,7 +964,7 @@ chronological time.
 \label{sec:types.character.primitive}
 
 The \verb:CHAR: and \verb:VARCHAR: datatypes map to the \verb:char: or
-\verb:unicodeChar: type defined in the \VOTableSpec.
+\verb:unicodeChar: type defined in the \VOTableSpec{}.
 
 The choice of whether \verb:CHAR: and \verb:VARCHAR: map to \verb:char: or
 \verb:unicodeChar: is implementation dependent and may depend on the data
@@ -993,8 +973,7 @@ content.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
+        
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
@@ -1020,7 +999,6 @@ content.
         n* &
         -
         \tabularnewline
-
         \hline
     \end{tabular}
     \caption{ADQL type mapping for character strings}
@@ -1043,8 +1021,7 @@ defined functions that operate on some \verb:CLOB: values.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
+        
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
@@ -1063,7 +1040,6 @@ defined functions that operate on some \verb:CLOB: values.
         n, n*, * &
         adql:clob
         \tabularnewline
-
         \hline
     \end{tabular}
     \caption{ADQL type mapping for CLOB}
@@ -1090,13 +1066,12 @@ specific operations on the generated URL field.
 \label{sec:types.binary.primitive}
 
 The \verb:BINARY: and \verb:VARBINARY: datatypes map to the \verb:unsignedByte:
-type defined in the \VOTableSpec.
+type defined in the \VOTableSpec{}.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
+        
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
@@ -1122,7 +1097,6 @@ type defined in the \VOTableSpec.
         n* &
         -
         \tabularnewline
-
         \hline
     \end{tabular}
     \caption{ADQL type mapping for binary arrays}
@@ -1141,13 +1115,12 @@ However, specific database implementations MAY provide user
 defined functions that operate on some \verb:BLOB: values.
 
 \verb:BLOB: values are serialized as arrays of \verb:unsignedByte: defined
-in the \VOTableSpec.
+in the \VOTableSpec{}.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
+        
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
@@ -1166,7 +1139,6 @@ in the \VOTableSpec.
         n, n*, * &
         adql:blob
         \tabularnewline
-
         \hline
     \end{tabular}
     \caption{ADQL type mapping for BLOB}
@@ -1188,26 +1160,25 @@ operations on the image data.
 \label{sec:types.geom}
 
 ADQL provides support for the \verb:POINT:, \verb:CIRCLE: and \verb:POLYGON:
-spherical geometry types defined in the \DALISpec.
+spherical geometry types defined in the \DALISpec{}.
 
 ADQL also provides support for STC-S based geometric regions,
-as defined in the \STCSSpec, using the \verb:REGION: datatype.
+as defined in the \STCSSpec{}, using the \verb:REGION: datatype.
 
 \subsubsection{POINT}
 \label{sec:types.geom.point}
 
 The \verb:POINT: datatype maps to the corresponding type
 for spherical coordinates defined in the
-\DALISpec.
+\DALISpec{}.
 
 \verb:POINT: values are serialized as arrays of floating point numbers
-using the \verb:point: xtype defined in the \DALISpec.
+using the \verb:point: xtype defined in the \DALISpec{}.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
+        
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
@@ -1226,7 +1197,6 @@ using the \verb:point: xtype defined in the \DALISpec.
         2 &
         point
         \tabularnewline
-
         \hline
     \end{tabular}
     \caption{ADQL type mapping for POINT}
@@ -1249,16 +1219,15 @@ For example:
 
 The \verb:CIRCLE: datatype maps to the corresponding type
 for spherical coordinates defined in the
-\DALISpec.
+\DALISpec{}.
 
 \verb:CIRCLE: values are serialized as arrays of floating point numbers
-using the \verb:circle: xtype defined in the \DALISpec.
+using the \verb:circle: xtype defined in the \DALISpec{}.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
+        
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
@@ -1277,7 +1246,6 @@ using the \verb:circle: xtype defined in the \DALISpec.
         3 &
         circle
         \tabularnewline
-
         \hline
     \end{tabular}
     \caption{ADQL type mapping for CIRCLE}
@@ -1300,16 +1268,15 @@ For example:
 
 The \verb:POLYGON: datatype maps to the corresponding type
 for spherical coordinates defined in the
-\DALISpec.
+\DALISpec{}.
 
 \verb:POLYGON: values are serialized as arrays of floating point numbers
-using the \verb:polygon: xtype defined in the \DALISpec.
+using the \verb:polygon: xtype defined in the \DALISpec{}.
 
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        \hline
-
+        
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
@@ -1328,7 +1295,6 @@ using the \verb:polygon: xtype defined in the \DALISpec.
         n, *, n* &
         polygon
         \tabularnewline
-
         \hline
     \end{tabular}
     \caption{ADQL type mapping for POLYGON}
@@ -1363,14 +1329,14 @@ these operations).
 We do not specify the serialisation of \verb:REGION:-typed values in result
 sets.  It is expected that next version of DALI will provide normative
 guidance on this. However, at least for the \textit{s\_region}
-column described in the \ObsCoreSpec,
+column described in the \ObsCoreSpec{},
 % ObsCore 1.1 Section 4.12
 % http://ivoa.net/documents/ObsCore/20170509/REC-ObsCore-v1.1-20170509.pdf#26
 informal practice is to produce strings conforming to section 6
 of TAP 1.0 \citep{2010ivoa.spec.0327D} with an xtype of
 \texttt{adql:region}.
 
-\clearpage
+clearpage % section cut
 \section{Optional components}
 \label{sec:optional}
 
@@ -1392,7 +1358,7 @@ ADQL queries that it sends.
 \subsection{Service capabilities}
 \label{sec:capabilities}
 
-The \TAPRegSpec defines an XML schema that a service SHOULD
+The \TAPRegSpec{} defines an XML schema that a service SHOULD
 use to declare which optional features it supports.
 
 In general, each group of language features is identified by a \verb:type:
@@ -1401,10 +1367,10 @@ feature name.
 
 \AppendixRef{sec:features} contains examples of how to declare support
 for each of the language features defined in this document using the
-XML schema from the \TAPRegSpec.
+XML schema from the \TAPRegSpec{}.
 
 For full details on the XML schema and how it can be used, please refer to
-the \TAPRegSpec.
+the \TAPRegSpec{}.
 
 \subsection{Geometrical functions}
 \label{sec:functions.geom}
@@ -1445,7 +1411,7 @@ implementation dependent.
 
 The following functions provide constructors for each of the geometry datatypes.
 The semantics of these datatypes are based on the corresponding
-concepts from the \STCSpec data model.
+concepts from the \STCSpec{} data model.
 
 The geometry datatypes and expressions are part of the core \verb:<value_expression>:
 in the ADQL grammar.
@@ -1503,7 +1469,7 @@ the appropriate conversion to make these operations possible. Now this argument
 is deprecated and will later be removed, the users should explicitly ask for
 such conversion. If this behavior is desired, the ADQL implementers have to
 allow it through User Defined Functions. Then, it is recommended to define them
-as declared in the \CatalogueUDF.
+as declared in the \CatalogueUDF{}.
 % Catalogue of {ADQL} User Defined Functions - Endorsed Note 1.0+
 % http://www.ivoa.net/documents/udf-catalogue/index.html
 
@@ -1663,14 +1629,6 @@ for the sky positions in the two tables, \textit{t1}, and \textit{t2}.
 Alternative semantically equivalent forms however MAY still be
 used by clients, and MUST still be handled correctly by services.
 
-%\subsubsection{Function definitions}
-\clearpage
-\label{sec:functions.geom.definitions}
-
-The following sections provide a detailed description for each geometrical
-function. In each case, the functionality and usage is described rather
-than going into the BNF grammar details as above.
-
 \subsubsection{AREA}
 \label{sec:functions.geom.area}
 {\footnotesize Language feature :}\\
@@ -1719,7 +1677,7 @@ and will be removed from future versions of the specification.
 The BOX function expresses a box on the sky. A BOX is a special case of POLYGON,
 defined purely for convenience,
 and it corresponds semantically to the equivalent term, Box, defined in
-the \STCSpec.
+the \STCSpec{}.
 %(STC Box, Section 4.5.1.5)
 
 It is specified by a center position and size
@@ -1848,7 +1806,7 @@ contains geometric (POINT, BOX, CIRCLE, POLYGON or REGION) values.
 
 The CIRCLE function expresses a circular region on the sky (a cone in space),
 and it corresponds semantically to the equivalent term, Circle, defined in
-the \STCSpec.
+the \STCSpec{}.
 %(STC Circle, Section 4.5.1.2)
 
 The function arguments specify the center position and the radius, where:
@@ -2071,7 +2029,7 @@ been marked as deprecated. This function may be removed in future versions
 of this specification.
 Details of the coordinate system for a database column are available as part of
 the service metadata, available via the \verb:TAP_SCHEMA: tables defined in the
-\TAPSpec and the \verb:/tables: webservice response defined in the \VOSISpec.
+\TAPSpec{} and the \verb:/tables: webservice response defined in the \VOSISpec{}.
 
 %As described in \SectionRef{sec:functions.geom.overview}, the allowed return values must be defined
 %by any service making use of ADQL, and a list of standard coordinate system
@@ -2288,7 +2246,7 @@ implementation dependent.
 
 The POINT function expresses a single location on the sky,
 and it corresponds semantically to the equivalent term, SpatialCoord, defined in
-the \STCSpec.
+the \STCSpec{}.
 %(STC SpatialCoord, Section 4.4.2.2)
 
 The function arguments specify the position, where:
@@ -2478,7 +2436,7 @@ Observatory (GAVO):
 \end{verbatim}
 
 The \verb:ivo: prefix is reserved for functions that have been defined
-in an IVOA specification. For example the \RegTAPSpec defines the following
+in an IVOA specification. For example the \RegTAPSpec{} defines the following
 functions:
 \begin{verbatim}
     ivo_nocasematch()
@@ -2489,7 +2447,7 @@ functions:
 
 In order to avoid different signatures for the same functions, it is recommended
 that ADQL implementers follow as much as possible the User Defined Function
-signatures listed in the \CatalogueUDF.
+signatures listed in the \CatalogueUDF{}.
 % Catalogue of {ADQL} User Defined Functions - Endorsed Note 1.0+
 % http://www.ivoa.net/documents/udf-catalogue/index.html
 
@@ -2501,7 +2459,7 @@ signatures listed in the \CatalogueUDF.
 \label{sec:user.metadata}
 
 The URI for identifying the language feature for a user defined function
-is defined as part of the \TAPRegSpec.
+is defined as part of the \TAPRegSpec{}.
 
 \begin{verbatim}
     ivo://ivoa.net/std/TAPRegExt#features-udf
@@ -2532,7 +2490,7 @@ depending on the regular expression pattern matching:
     </languageFeatures>
 \end{verbatim}
 
-See the \TAPRegSpec for full details on how to use the
+See the \TAPRegSpec{} for full details on how to use the
 XML schema to declare user defined functions.
 
 \subsection{String functions and operators}
@@ -2944,7 +2902,6 @@ SHOULD support the following ones:
         \textit{\footnotesize{X: supported ; X*: supported but possible implementation differences}}
     }
 \end{table}
-\newpage % to force the compatibility table to be close to the "Input types" paragragh
 
 \paragraph{Cast into a smaller datatype}
 
@@ -2972,7 +2929,7 @@ The rounding mechanism used when converting from approximate numerics
 \paragraph{Timestamp}
 
 Only a character string can be casted into a timestamp. This string MUST follow
-the syntax defined in the \DALISpec:
+the syntax defined in the \DALISpec{}:
 \begin{verbatim}
     YYYY-MM-DD[’T’hh:mm:ss[.SSS][’Z’]]
 \end{verbatim}
@@ -3032,9 +2989,9 @@ transformed into the unit defined by the second argument.
 The first argument MUST be a numeric expression.
 
 The second argument MUST be a string literal containing a valid unit
-description using the formatting defined in the \VOUnitSpec.
+description using the formatting defined in the \VOUnitSpec{}.
 
-It has to be noted that a unitless value, as defined by the \VOUnitSpec, can not
+It has to be noted that a unitless value, as defined by the \VOUnitSpec{}, can not
 be converted. Similarly a non-unitless value can not be converted into a
 unitless one.
 
@@ -3140,7 +3097,7 @@ then the OFFSET clause is applied first, dropping the specified
 number of rows from the beginning of the result set before the
 TOP clause is applied to limit the number of rows returned.
 
-\newpage
+\clearpage % section cut
 \appendix
 \section{BNF grammar}
 \label{sec:grammar}
@@ -3962,11 +3919,11 @@ TOP clause is applied to limit the number of rows returned.
 
 \end{verbatim}
 
-\newpage
+\clearpage % section cut
 \section{Language feature support}
 \label{sec:features}
 
-In the \TAPRegSpec XML schema, each group of features is
+In the \TAPRegSpec{} XML schema, each group of features is
 described by a \verb:languageFeatures: element, which has a \verb:type:
 URI that identifies the group, and contains a \verb:form: element for each
 individual feature from the group that the service supports.
@@ -3991,7 +3948,7 @@ For example, the following XML fragment describes a service that supports the
 </languageFeatures>    
 \end{verbatim}
 
-\newpage
+\clearpage % section cut
 \section{Changes from previous versions}
 \label{sec:changes}
 
@@ -4144,7 +4101,7 @@ For example, the following XML fragment describes a service that supports the
             (svn version 3374)
         \end{itemize}
 
-    \item Changes from \TAPImpNote
+    \item Changes from \TAPImpNote{}
         \begin{itemize}
             \item 2.1.1.  The Separator Nonterminal
             \item 2.1.2.  Type System
@@ -4168,7 +4125,8 @@ For example, the following XML fragment describes a service that supports the
 
 \end{itemize}
 
-\bibliography{ivoatex/ivoabib,ivoatex/docrepo,ADQL}
+\clearpage % section cut
+\bibliography{ivoatex/ivoabib,ivoatex/docrepo}
 
 \end{document}
 

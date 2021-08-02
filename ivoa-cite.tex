@@ -12,29 +12,34 @@
 %   VOTable specification
 %
 
-\usepackage{etoolbox}
-\newcommand{\IvoaCite}[3]{\providebool{#1}\ifbool{#1}{#3}{#3\xspace(\citet{#2})\booltrue{#1}}\xspace}
+\def\definestandard#1#2#3{%
+  \expandafter\def\csname#1\endcsname{%
+    \expandafter\ifx\csname#1cited\endcsname\relax #3 \citep{#2}%
+    \expandafter\def\csname#1cited\endcsname{#1}%
+      \else #3\fi}}
 
-\newcommand{\VOTableSpec} {\IvoaCite{votspec}     {2013ivoa.spec.0920O} {VOTable specification}}
-\newcommand{\DALISpec}    {\IvoaCite{dalispec}    {2017ivoa.spec.0517D} {DALI specification}}
-\newcommand{\VOSISpec}    {\IvoaCite{vosispec}    {2017ivoa.spec.0524G} {VOSI specification}}
-\newcommand{\VOUnitSpec}  {\IvoaCite{unitspec}    {2014ivoa.spec.0523D} {VOUnits specification}}
+\definestandard{VOArch}       {2010ivoa.rept.1123A} {IVOA Architecture}
 
-\newcommand{\RegTAPSpec}  {\IvoaCite{regtapspec}  {2014ivoa.spec.1208D} {RegTAP specification}}
+\definestandard{VOTableSpec}  {2013ivoa.spec.0920O} {VOTable specification}
+\definestandard{DALISpec}     {2017ivoa.spec.0517D} {DALI specification}
+\definestandard{VOSISpec}     {2017ivoa.spec.0524G} {VOSI specification}
+\definestandard{VOUnitSpec}   {2014ivoa.spec.0523D} {VOUnits specification}
 
-\newcommand{\TAPSpec}     {\IvoaCite{tapspec}     {2010ivoa.spec.0327D} {TAP specification}}
-\newcommand{\TAPRegSpec}  {\IvoaCite{tapregspec}  {2012ivoa.spec.0827D} {TAPRegExt specification}}
-\newcommand{\TAPImpNote}  {\IvoaCite{tapimpnote}  {note:TAPNotes}       {TAP implementation note}}
+\definestandard{RegTAPSpec}   {2014ivoa.spec.1208D} {RegTAP specification}
 
-\newcommand{\STCSpec}     {\IvoaCite{stcspec}     {2007ivoa.spec.1030R} {STC specification}}
-\newcommand{\STCSSpec}    {\IvoaCite{stcsspec}    {std:STCS}            {STC-S specification}}
-\newcommand{\ObsCoreSpec} {\IvoaCite{obscorespec} {2017ivoa.spec.0509L} {ObsCore specification}}
+\definestandard{TAPSpec}      {2010ivoa.spec.0327D} {TAP specification}
+\definestandard{TAPRegSpec}   {2012ivoa.spec.0827D} {TAPRegExt specification}
+\definestandard{TAPImpNote}   {2013ivoa.rept.1213D} {TAP Implementation Notes}
 
-\newcommand{\CatalogueUDF} {\IvoaCite{udfcat}     {2021ivoa.spec.0310C} {Catalogue of ADQL User Defined Functions}}
+\definestandard{STCSpec}      {2007ivoa.spec.1030R} {STC specification}
+\definestandard{STCSSpec}     {std:STCS}            {STC-S specification}
+\definestandard{ObsCoreSpec}  {2017ivoa.spec.0509L} {ObsCore specification}
+
+\definestandard{CatalogueUDF} {2021ivoa.spec.0310C} {Catalogue of ADQL User Defined Functions}
 
 %
 % Useful macros for referring to figures, sections and appendices in a consistent style.
-\newcommand{\FigureRef}[1]{Figure \ref{#1}\xspace}
-\newcommand{\SectionRef}[1]{Section \ref{#1}\xspace}
-\newcommand{\SectionSee}[1]{(see Section \ref{#1})\xspace}
-\newcommand{\AppendixRef}[1]{Appendix \ref{#1}\xspace}
+\newcommand{\FigureRef}[1]{Figure \ref{#1}}
+\newcommand{\SectionRef}[1]{Section \ref{#1}}
+\newcommand{\SectionSee}[1]{(see Section \ref{#1})}
+\newcommand{\AppendixRef}[1]{Appendix \ref{#1}}
