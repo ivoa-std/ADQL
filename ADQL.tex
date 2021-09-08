@@ -84,26 +84,22 @@ These protocols might be satisfied using a single
 table query. However, different VO services have different needs in terms
 of query complexity and ADQL arises in this context.
 
-The ADQL specification makes no distinction between core and advanced or
-extended functionalities. Hence ADQL has been built according to a single
-Backus Naur Form (BNF) based language definition. Any service making use of ADQL would
-then define the level of compliancy to the language. This would allow the
-notion of core and extension to be service-driven and it would decouple the
-language from the service specifications.
-
 ADQL is based on the Structured Query Language (SQL), especially on SQL 92
 \footnote{\url{https://en.wikipedia.org/wiki/SQL-92}}
 \footnote{\url{https://www.iso.org/standard/16663.html}}
 \footnote{\url{http://www.contrib.andrew.cmu.edu/~shadow/sql/sql1992.txt}}.
-.
+
 The VO has a number of tabular data sets and many of them are stored in relational
 databases, making SQL a convenient access means. A subset of the SQL grammar
 has been extended to support queries that are specific to astronomy. Similarly
 to SQL, the ADQL language definition is not semantically safe by design and
 therefore this specification defines syntactical correctness only. Type safety
-has been achieved as far as it can be done in SQL. The exact meaning of keywords
-indicating requirement levels can be found in the References section.
-%Should this be 'Conformance-related definitions' not 'References' ?
+has been achieved as far as it can be done in SQL. 
+
+This specification provides a complete definition of the ADQL through a single
+Backus Naur Form (BNF) based language definition. It includes both mandatory
+and optional features. Thus, this BNF aims to help implementing ADQL core
+features as well as some or all of the defined optional ones.
 
 \clearpage % to have the VOArch figure along its description and subsection title
 \subsection{Role within the VO architecture}
@@ -126,11 +122,13 @@ IVOA architecture \VOArch{}.
 % Explicit permisson for services that provide additional functionality.
 This document defines the minimum set of functions, operators and datatypes
 that a service MUST implement in order to register as a service that
-implements this version of the ADQL specification.
+implements this version of the ADQL specification. It also defines optional
+features that a service MUST implement as such if it requires some or all of
+them.
 
-Service implementations are free to extend this functionality by providing
-additional functions, operators or datatypes beyond those defined in this
-specification, as long as the extended functionality does not conflict
+Of course, service implementations are free to extend this functionality by
+providing additional functions, operators or datatypes beyond those defined in
+this specification, as long as the extended functionality does not conflict
 with anything defined in this specification.
 
 \clearpage % section cut
