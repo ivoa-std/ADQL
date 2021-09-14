@@ -1464,17 +1464,20 @@ and column references.
 \subsubsection{Coordsys}
 \label{sec:geom.coordsys.param}
 
-%TODO check on the list ...
-For historical reasons, the geometry constructors (BOX, CIRCLE, POINT
-and POLYGON) all accept an optional string literal as the first argument.
-This was originally intended to carry
-information on a reference system or other coordinate system metadata.
-As of this version of the specification this parameter has been
-marked as deprecated. Services are permitted to ignore this parameter and
-clients are advised to pass an empty string here. Future versions of this
-specification may remove this parameter from the listed functions.
+For historical reasons, the geometry constructors (\verb:BOX:, \verb:CIRCLE:,
+\verb:POINT: and \verb:POLYGON:) all accept a string literal as the first
+argument, hereafter called the COOSYS argument. Since version 2.1 of the
+specification, this parameter has been made optional and marked as deprecated.
+Future versions of this specification may remove this parameter from the listed
+functions.
 
-This coordinate system argument was originally intended to carry information on
+This specification makes no guarantees for any semantics for the deprecated
+COOSYS argument. Queries against services implementing ADQL 2.1 (or higher)
+SHOULD omit it. For interoperability, queries against 2.0 services SHOULD NOT
+pass arguments with differing COOSYS arguments to \verb:CONTAINS: or
+\verb:INTERSECTS:, as behaviour is undefined in that case.
+
+The COOSYS argument was originally intended to carry information on
 a reference system or other coordinate system metadata. This was helpful in
 order to deal with data specified in different coordinate systems while
 performing geometric operations. It was up to the ADQL service to perform
