@@ -2832,6 +2832,7 @@ type conversion functions:
 
 \begin{itemize}
     \item \verb:CAST():
+    \item \verb:COALESCE():
 \end{itemize}
 
 \subsubsection{CAST}
@@ -2982,6 +2983,23 @@ Examples:
 
 Note that other serializations (e.g. STC/s) or any other kind of value MAY also
 be supported.
+
+\subsubsection{COALESCE}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-type|}\\
+{\footnotesize \verb|name: COALESCE|}\\
+
+The COALESCE function returns the first of its arguments that is not
+NULL. NULL is returned only if all arguments are NULL. 
+
+This is typcially used to provide fallback values:
+
+\begin{verbatim}
+COALESCE(access_url, '')
+\end{verbatim}
+
+will return an empty string when \verb|access_url| is NULL.
+
 
 \subsection{Unit operations}
 \label{sec:unit}
@@ -3367,6 +3385,11 @@ TOP clause is applied to limit the number of rows returned.
         | <coord_value>
 
     <circumflex> ::= ^
+
+    <coalesce_expression> ::= 
+        COALESCE <left_paren>
+            <value_expression>
+            [ { <comma> <value_expression }... ]
 
     <colon> ::= ":"
 
@@ -3921,6 +3944,7 @@ TOP clause is applied to limit the number of rows returned.
         | <column_reference>
         | <set_function_specification>
         | <cast_specification>
+        | <coalesce_expression>
         | <left_paren> <value_expression> <right_paren>
 
     <vertical_bar> ::= "|"
