@@ -2983,6 +2983,37 @@ Examples:
 Note that other serializations (e.g. STC/s) or any other kind of value MAY also
 be supported.
 
+\subsection{Conditional Functions}
+\label{sec:condfunc}
+
+An ADQL service implementation MAY include support for the following optional
+conditional functions: 
+
+\begin{itemize}
+    \item \verb:COALESCE():
+\end{itemize}
+
+\subsubsection{COALESCE}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-conditional|}\\
+{\footnotesize \verb|name: COALESCE|}\\
+
+The COALESCE function returns the first of its arguments that is not
+NULL. NULL is returned only if all arguments are NULL. 
+
+All arguments must be of the same datatype. An error should be returned
+if this rule is not respected. The way to report this error is
+implementation dependent.
+
+This is typically used to provide fallback values.  For instance,
+
+\begin{verbatim}
+COALESCE(access_url, '')
+\end{verbatim}
+
+\noindent will return an empty string when \verb|access_url| is NULL.
+
+
 \subsection{Unit operations}
 \label{sec:unit}
 
@@ -3367,6 +3398,11 @@ TOP clause is applied to limit the number of rows returned.
         | <coord_value>
 
     <circumflex> ::= ^
+
+    <coalesce_expression> ::= 
+        COALESCE <left_paren>
+            <value_expression>
+            [ { <comma> <value_expression }... ] <right_paren>
 
     <colon> ::= ":"
 
@@ -3921,6 +3957,7 @@ TOP clause is applied to limit the number of rows returned.
         | <column_reference>
         | <set_function_specification>
         | <cast_specification>
+        | <coalesce_expression>
         | <left_paren> <value_expression> <right_paren>
 
     <vertical_bar> ::= "|"
