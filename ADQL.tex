@@ -1431,7 +1431,8 @@ in the ADQL grammar.
 
 \begin{verbatim}
     <value_expression> ::=
-        <numeric_value_expression>
+        NULL
+      | <numeric_value_expression>
       | <string_value_expression>
       | <geometry_value_expression>
 \end{verbatim}
@@ -2600,7 +2601,7 @@ to elsewhere in the main query.
 Using a common table expression can make complex queries easier to understand
 by factoring subqueries out of the main SQL statement.
 
-For example, the following query with a nested subquery: 
+For example, the following query with a nested subquery:
 \begin{verbatim}
     SELECT
         ra,
@@ -2846,7 +2847,7 @@ into the datatype specified by the second argument.
 \paragraph{Syntax} \verb:<cast_specification>:
 \begin{verbatim}
 CAST <left_paren>
-         ( <value_expression> | NULL ) AS <cast_target>
+         <value_expression> AS <cast_target>
      <right_paren>
 \end{verbatim}
 
@@ -3221,7 +3222,7 @@ TOP clause is applied to limit the number of rows returned.
       | CASCADE | CASCADED | CASE
       | CATALOG
       | CHARACTER | CHAR_LENGTH
-      | CHARACTER_LENGTH | CHECK | CLOSE | COALESCE
+      | CHARACTER_LENGTH | CHECK | CLOSE
       | COLLATE | COLLATION
       | COLUMN | COMMIT
       | CONNECT
@@ -3351,10 +3352,7 @@ TOP clause is applied to limit the number of rows returned.
         | <coord_value>
     
     <cast_specification> ::=
-        CAST <left_paren>
-            ( <value_expression> | NULL )
-            AS <cast_target>
-        <right_paren>
+        CAST <left_paren> <value_expression> AS <cast_target> <right_paren>
     
     <cast_target> ::=
           <character_string_type>
@@ -3948,7 +3946,8 @@ TOP clause is applied to limit the number of rows returned.
     <user_defined_function_param> ::= <value_expression>
 
     <value_expression> ::=
-        <numeric_value_expression>
+        NULL
+      | <numeric_value_expression>
       | <string_value_expression>
       | <geometry_value_expression>
 
