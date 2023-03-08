@@ -1378,6 +1378,14 @@ In general, each group of language features is identified by a \verb:type:
 URI, and each individual feature within the group is identified by the
 feature name.
 
+In the context of ADQL, the \verb:type: URI is expected to be an IVOID.
+
+Please, note that IVOIDs are case insensitive. Therefore, ADQL clients MAY
+compare IVOIDs without case normalisation. Thus, in order to minimize risk of
+interoperability issue due to case folding, ADQL services MUST provide IVOIDs of
+all supported ADQL features in lower-case. This rule is already enforced
+in all the definition and examples of ADQL features in this whole document.
+
 \AppendixRef{sec:features} contains examples of how to declare support
 for each of the language features defined in this document using the
 XML schema from the \TAPRegSpec{}.
@@ -1415,7 +1423,7 @@ functions to enhance the astronomical usage of the language:
 All functions described in this section use the following IVOID:
 
 \begin{verbatim}
-    ivo://ivoa.net/std/TAPRegExt#features-adqlgeo
+    ivo://ivoa.net/std/tapregext#features-adqlgeo
 \end{verbatim}
     
 Each geometrical function is declared using this IVOID and its name.
@@ -1424,7 +1432,7 @@ See \SectionRef{sec:capabilities} for more details.
 All other optional features have an IVOID starting with:
 
 \begin{verbatim}
-    ivo://ivoa.net/std/TAPRegExt#features-adql-
+    ivo://ivoa.net/std/tapregext#features-adql-
 \end{verbatim}
 
 Note the ending hyphen. The IVOID for the geometry features does not have this
@@ -1676,7 +1684,7 @@ used by clients, and MUST still be handled correctly by services.
 \subsubsection{AREA}
 \label{sec:functions.geom.area}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adqlgeo|}\\
 {\footnotesize \verb|name: AREA|}\\
 
 The AREA function computes the area, in square degrees, of a given geometry.
@@ -1712,7 +1720,7 @@ contains geometric (POINT, BOX, CIRCLE, POLYGON or REGION) values.
 \subsubsection{BOX}
 \label{sec:functions.geom.box}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adqlgeo|}\\
 {\footnotesize \verb|name: BOX|}\\
 
 Note - the \verb|BOX| function has been deprecated in this version of the standard,
@@ -1808,7 +1816,7 @@ Future versions of this specification may remove this parameter
 \subsubsection{CENTROID}
 \label{sec:functions.geom.centroid}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adqlgeo|}\\
 {\footnotesize \verb|name: CENTROID|}\\
 
 The CENTROID function computes the centroid of a given geometry and returns a POINT.
@@ -1845,7 +1853,7 @@ contains geometric (POINT, BOX, CIRCLE, POLYGON or REGION) values.
 \subsubsection{CIRCLE}
 \label{sec:functions.geom.circle}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adqlgeo|}\\
 {\footnotesize \verb|name: CIRCLE|}\\
 
 The CIRCLE function expresses a circular region on the sky (a cone in space),
@@ -1907,7 +1915,7 @@ Future versions of this specification may remove this parameter
 \subsubsection{CONTAINS}
 \label{sec:functions.geom.contains}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adqlgeo|}\\
 {\footnotesize \verb|name: CONTAINS|}\\
 
 The CONTAINS function determines if a geometry is wholly contained within
@@ -2001,7 +2009,7 @@ implementation dependent.
 \subsubsection{COORD1}
 \label{sec:functions.geom.coord1}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adqlgeo|}\\
 {\footnotesize \verb|name: COORD1|}\\
 
 The COORD1 function extracts the first coordinate value, in degrees, of a given
@@ -2032,7 +2040,7 @@ where \textit{t.center} is a reference to a column that contains POINT values.
 \subsubsection{COORD2}
 \label{sec:functions.geom.coord2}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adqlgeo|}\\
 {\footnotesize \verb|name: COORD2|}\\
 
 The COORD2 function extracts the second coordinate value, in degrees, of a given
@@ -2065,7 +2073,7 @@ where \textit{t.center} is a reference to a column that contains POINT values.
 \subsubsection{COORDSYS}
 \label{sec:functions.geom.coordsys}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adqlgeo|}\\
 {\footnotesize \verb|name: COORDSYS|}\\
 
 As of this version of the specification the COORDSYS function has
@@ -2110,7 +2118,7 @@ contains geometric (POINT, BOX, CIRCLE, POLYGON or REGION) values.
 \subsubsection{DISTANCE}
 \label{sec:functions.geom.distance}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adqlgeo|}\\
 {\footnotesize \verb|name: DISTANCE|}\\
 
 The DISTANCE function computes the arc length along a great circle between two
@@ -2182,7 +2190,7 @@ use the same coordinate system.
 \subsubsection{INTERSECTS}
 \label{sec:functions.geom.intersects}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adqlgeo|}\\
 {\footnotesize \verb|name: INTERSECTS|}\\
 
 The INTERSECTS function determines if two geometry values overlap. This is
@@ -2285,7 +2293,7 @@ implementation dependent.
 \subsubsection{POINT}
 \label{sec:functions.geom.point}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adqlgeo|}\\
 {\footnotesize \verb|name: POINT|}\\
 
 The POINT function expresses a single location on the sky,
@@ -2337,7 +2345,7 @@ Future versions of this specification may remove this parameter
 \subsubsection{POLYGON}
 \label{sec:functions.geom.polygon}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adqlgeo|}\\
 {\footnotesize \verb|name: POLYGON|}\\
 
 The POLYGON function expresses a region on the sky with boundaries denoted by great
@@ -2423,7 +2431,7 @@ Future versions of this specification may remove this parameter
 \label{sec:functions.geom.region}
 
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adqlgeo|}\\
 {\footnotesize \verb|name: REGION|}\\
 
 
@@ -2506,7 +2514,7 @@ The URI for identifying the language feature for a user defined function
 is defined as part of the \TAPRegSpec{}.
 
 \begin{verbatim}
-    ivo://ivoa.net/std/TAPRegExt#features-udf
+    ivo://ivoa.net/std/tapregext#features-udf
 \end{verbatim}
 
 For user defined functions, the \verb:form: element of the language feature
@@ -2523,7 +2531,7 @@ For example, the following fragment declares a user defined function that
 takes two \verb:TEXT: parameters and returns an integer, zero or one,
 depending on the regular expression pattern matching:
 \begin{verbatim}
-    <languageFeatures type="ivo://ivoa.net/std/TAPRegExt#features-udf">
+    <languageFeatures type="ivo://ivoa.net/std/tapregext#features-udf">
         <feature>
             <form>match(pattern TEXT, string TEXT) -> INTEGER</form>
             <description>
@@ -2552,7 +2560,7 @@ string manipulation and comparison operators:
 \subsubsection{LOWER}
 \label{sec:string.functions.lower}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-string|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-string|}\\
 {\footnotesize \verb|name: LOWER|}\\
 
 The LOWER function converts its string parameter to lower case.
@@ -2571,7 +2579,7 @@ of \citet{std:UNICODE} for characters outside the ASCII set.
 \subsubsection{UPPER}
 \label{sec:string.functions.upper}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-string|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-string|}\\
 {\footnotesize \verb|name: UPPER|}\\
 
 The UPPER function converts its string parameter to upper case.
@@ -2590,7 +2598,7 @@ of \citet{std:UNICODE} for characters outside the ASCII set.
 \subsubsection{ILIKE}
 \label{sec:string.functions.ilike}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-string|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-string|}\\
 {\footnotesize \verb|name: ILIKE|}\\
 
 The ILIKE string comparison operator performs a case-insensitive comparison
@@ -2619,7 +2627,7 @@ support for common table expressions:
 
 \subsubsection{WITH}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-common-table|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-common-table|}\\
 {\footnotesize \verb|name: WITH|}\\
 
 The WITH operator creates a temporary named result set that can be referred
@@ -2690,7 +2698,7 @@ set operators:
 
 \subsubsection{UNION}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-sets|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-sets|}\\
 {\footnotesize \verb|name: UNION|}\\
 
 The UNION operator combines the results of two queries, accepting rows from
@@ -2720,7 +2728,7 @@ considered equal, despite the difference in units.
 
 \subsubsection{EXCEPT}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-sets|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-sets|}\\
 {\footnotesize \verb|name: EXCEPT|}\\
 
 The EXCEPT operator combines the results of two queries, accepting rows that are
@@ -2751,7 +2759,7 @@ considered equal, despite the difference in units.
 
 \subsubsection{INTERSECT}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-sets|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-sets|}\\
 {\footnotesize \verb|name: INTERSECT|}\\
 
 The INTERSECT operator combines the results of two queries, accepting rows
@@ -2865,7 +2873,7 @@ type conversion functions:
 \subsubsection{CAST}
 \label{sec:type.cast}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-type|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-type|}\\
 {\footnotesize \verb|name: CAST|}\\
 
 The \verb:CAST(): function returns the value of the first argument converted
@@ -3023,7 +3031,7 @@ conditional functions:
 
 \subsubsection{COALESCE}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-conditional|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-conditional|}\\
 {\footnotesize \verb|name: COALESCE|}\\
 
 The COALESCE function returns the first of its arguments that is not
@@ -3055,7 +3063,7 @@ unit conversion functions:
 \subsubsection{IN\_UNIT}
 \label{sec:unit.in_unit}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-unit|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-unit|}\\
 {\footnotesize \verb|name: IN_UNIT|}\\
 
 The \verb:IN_UNIT(): function returns the value of the first argument
@@ -3153,7 +3161,7 @@ clauses to modify the cardinality of query results:
 \label{sec:offset}
 
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-offset|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-offset|}\\
 {\footnotesize \verb|name: OFFSET|}\\
 
 An ADQL service implementation MAY include support for the OFFSET clause
@@ -4011,11 +4019,11 @@ For example, the following XML fragment describes a service that supports the
 \verb:POINT: and \verb:CIRCLE: functions from the set of geometrical functions,
 
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adqlgeo|}\\
 {\footnotesize \verb|name: POINT, CIRCLE|}\\
 
 \begin{verbatim}
-<languageFeatures type="ivo://ivoa.net/std/TAPRegExt#features-adqlgeo">
+<languageFeatures type="ivo://ivoa.net/std/tapregext#features-adqlgeo">
     <feature>
         <form>POINT</form>
     </feature>
