@@ -313,6 +313,12 @@ String functions and operators:\\
 Conversion functions:\\
 \noindent
 \texttt{IN\_UNIT}
+\newline
+
+\noindent
+Conditional functions:\\
+\noindent
+\texttt{COALESCE}
 
 
 \subsubsection{Identifiers}
@@ -426,16 +432,16 @@ the query specification:
         [ TOP unsigned_decimal ]
         {
             *
-            | { value_expression [ [AS] column_name ] }, ...
+          | { value_expression [ [AS] column_name ] }, ...
         }
     FROM {
         {
-              table_name [ [AS] identifier ]
-            | ( SELECT ...) [AS] identifier
-            | table_reference [NATURAL]
-                  [ INNER | { LEFT | RIGHT | FULL [OUTER] } ]
-                  JOIN table_reference
-                  [ON search_condition | USING ( column_name,...) ]
+            table_name [ [AS] identifier ]
+          | ( SELECT ...) [AS] identifier
+          | table_reference [NATURAL]
+            [ INNER | { LEFT | RIGHT | FULL [OUTER] } ]
+            JOIN table_reference
+            [ON search_condition | USING ( column_name,...) ]
         },
         ...
     }
@@ -3204,6 +3210,7 @@ TOP clause is applied to limit the number of rows returned.
       | CENTROID
       | CHAR
       | CIRCLE
+      | COALESCE
       | CONTAINS
       | COORD1
       | COORD2
@@ -4035,177 +4042,146 @@ For example, the following XML fragment describes a service that supports the
 \section{Changes from previous versions}
 \label{sec:changes}
 
+\subsection{Between 2.0 and 2.1}
+\label{sec:changes-2.1}
+
 \begin{itemize}
-
-    \item Changes from PR-ADQL-2.1-20191105
+    \item \textbf{Applied ADQL-2.0's errata}:
         \begin{itemize}
-            \item Removed support of hexadecimal values
-            \item Removed bitwise operators
-            \item Removed boolean type
-            \item Re-added REGION, but only defined for literal
-            arguments.
-            \item Updated \verb:IN_UNIT(): description
-            \item Updated \verb:DISTANCE(): description and BNF grammar
-            \item Fix BNF grammar of BOX, CIRCLE and POLYGON (optional coord.
-            sys. argument, and coordinates VS points)
-            \item Apply "ADQL-2.0 Erratum-3" (i.e. the coordinate system
-            argument must be string literal)
-            \item Fixed syntax of set operators: UNION, EXCEPT and INTERSECT
-            \item Fixed description of INTERSECT
-            \item Added clarifications on operands and precedence of UNION, EXCEPT and INTERSECT
-            \item Added \verb:LOWER(): BNF grammar
-            \item Added \verb:UPPER(): function
-            \item Added recommendation to data providers about case folding
-            \item Re-added \verb:CAST(): function
-            \item Replaced the section for outstanding issues by the GitHub Issue mechanism
+            \item Erratum 1 - add clarification about the usage of white spaces
+                  between ADQL terms
+            \item Erratum 2 - fix description of \verb:mod():, \verb:rand():,
+                  \verb:round(): and \verb:truncate():
+            \item Erratum 3 - the coordinate system argument of geometrical
+                  functions must be a string literal
+            \item Erratum 4 - accept \verb:NULL: as a valid expression value
         \end{itemize}
-
-    \item Changes from PR-ADQL-2.1-20180112
+    \item \textbf{General}
         \begin{itemize}
-            \item Issue 20171129-006 deprecated BOX, will be removed in 3.0
-            (svn version 5219, 08 Nov 2018)
-            \item Removed support for CAST\\
-            (svn version 5218, 08 Nov 2018)
-            \item Added section on whitespace from ADQL-2.0 Erratum 1\\
-            (svn version 5217, 07 Nov 2018)
+            \item \textbf{Added}
+                \begin{itemize}
+                    \item IVOA architecture diagram \SectionSee{sec:role}
+                    \item Recommendation to data providers about case folding
+                          (see \SectionRef{sec:adql.escape} and
+                          \SectionRef{sec:adql.case})
+                    \item Description of accepted datatypes and their mapping
+                          with VOTable \SectionSee{sec:types}
+                    \item Language feature description \SectionSee{sec:features}
+                \end{itemize}
+            \item \textbf{Updated}
+                \begin{itemize}
+                    \item Description of SQL-92 with links/URLs
+                          \SectionSee{sec:introduction}
+                    \item BNF grammar syntax fixes
+                          \SectionSee{sec:grammar}
+                    \item \verb:ORDER BY: accepts qualified column names (i.e.
+                          prefixed by a table name eventually prefixed by a
+                          schema name)
+                          \SectionSee{sec:grammar}
+                    \item \verb:ORDER BY: accepts expressions
+                          \SectionSee{sec:grammar}
+                \end{itemize}
         \end{itemize}
-
-    \item Changes from WD-ADQL-2.1-20171129
+    \item \textbf{Optional features}
         \begin{itemize}
-            \item Added blob and clob xtypes\\
-            (svn version 4616, 08 Dec 2017)
-            \item Added xtype prefixes\\
-            (svn version 4613, 08 Dec 2017)
+            \item \textbf{Added}
+                \begin{itemize}
+                    \item Case sensitive functions and operators:
+                          \verb:LOWER():, \verb:UPPER(): and \verb:ILIKE:
+                          \SectionSee{sec:string.functions}
+                    \item Common table expressions (i.e. \verb:WITH: keyword)
+                          \SectionSee{sec:common-table}
+                    \item Set operators: \verb:UNION:, \verb:INTERSECT: and
+                          \verb:EXCEPT: \SectionSee{sec:set.operators}
+                    \item Datatype conversion function: \verb:CAST():
+                          \SectionSee{sec:type}
+                    \item Conditional function: \verb:COALESCE():
+                          \SectionSee{sec:condfunc}
+                    \item Unit conversion function: \verb:IN_UNIT():
+                          \SectionSee{sec:unit}
+                    \item \verb:OFFSET:
+                          \SectionSee{sec:cardinality}
+                \end{itemize}
+            \item \textbf{Updated}
+                \begin{itemize}
+                    \item A User Defined Function (UDF) can return a geometrical
+                          value \SectionSee{sec:functions.geom.type}
+                    \item Recommendation for data providers to look at the
+                          \CatalogueUDF{} before implementing a UDF
+                          \SectionSee{sec:user.functions}
+                \end{itemize}
         \end{itemize}
-
-    \item Changes from WD-ADQL-2.1-20171024
+    \item \textbf{Geometries}
         \begin{itemize}
-            \item Fixed issue 20171129-002 : Added text to describe 'preferred crossmatch method'\\
-            (svn version 4594, 29 Nov 2017)
-            \item Fixed issue 20171129-001 : Imported changes for MOD, RAND, ROUND and TRUNCATE from ADQL-2.0 Erratum 2\\
-            (svn version 4593, 29 Nov 2017)
-            \item Added section for outstanding issues\\
-            (svn version 4592, 29 Nov 2017)
-            \item Updated STC-S description for REGION\\
-            (svn version 4590, 29 Nov 2017)
-            \item Restoring STC-S REGION\\
-            (svn version 4588, 28 Nov 2017)
-            \item Added use case for BLOB and CLOB\\
-            (svn version 4587, 28 Nov 2017)
-            \item Added expressions in ORDER BY and GROUP BY clauses\\
-            (svn version 4586, 28 Nov 2017)
-            \item Added explicit permission for providing extensions\\
-            (svn version 4585, 28 Nov 2017)
-            \item Clarification of geometric function arguments\\
-            (svn version 4581, 24 Nov 2017)
-            \item Added support for STC-S REGION in results\\
-            (svn version 4575, 21 Nov 2017)
-            \item Exclude recursive WITH statements\\
-            (svn version 4558, 25 Oct 2017)
-            \item Updated architecture diagram\\
-            (svn version 4555, 25 Oct 2017)
-            \item Removed duplicate description for unsignedByte\\
-            (svn version 4554, 25 Oct 2017)
+            \item \textbf{Deprecated}
+                \begin{itemize}
+                    \item Coordinate system argument in all geometrical
+                          functions ; temporarily made optional
+                          \SectionSee{sec:geom.coordsys.param}
+                    \item \verb:COORDSYS(): \SectionSee{sec:functions.geom.coordsys}
+                    \item \verb:BOX(): \SectionSee{sec:functions.geom.box}
+                \end{itemize}
+            \item \textbf{Added}
+                \begin{itemize}
+                    \item Recommendation to use UDFs from the \CatalogueUDF{}
+                          for coordinates conversions
+                          \SectionSee{sec:geom.coordsys.param}
+                \end{itemize}
+            \item \textbf{Updated}
+                \begin{itemize}
+                    \item Clarification about the serialization of geometries in
+                          the \verb:SELECT: clause: basically, use the syntax
+                          described in DALI \SectionSee{sec:types.geom}
+                    \item Clarification about coordinates limits
+                          \SectionSee{sec:functions.geom.limits}
+                    \item Clarification about geometry types and functions being
+                          spherical
+                          (see \SectionRef{sec:functions.geom.limits} and
+                          \SectionRef{sec:functions.geom.point})
+                    \item Recommendation of a preferred crossmatch syntax (use
+                          of \verb:DISTANCE(): instead of \verb:CONTAINS():)
+                          \SectionSee{sec:functions.geom.crossmatch}
+                    \item \verb:REGION(): argument restricted to a string
+                          literal and clarification about its syntax
+                          \SectionSee{sec:functions.geom.region}
+                    \item Description and BNF of \verb:DISTANCE():
+                          (see \SectionRef{sec:functions.geom.distance} and
+                          \SectionRef{sec:grammar})
+                    \item \verb:BOX():, \verb:CIRCLE():, \verb:DISTANCE(): and
+                          \verb:POLYGON(): with a coordinate version of their
+                          arguments instead of \verb:POINT(): (example:
+                          \verb:CIRCLE(0, 0, 1/60.): equivalent to
+                          \verb:CIRCLE(POINT(0,0), 1/60.):)
+                          (see \SectionRef{sec:functions.geom.box},
+                          \SectionRef{sec:functions.geom.circle},
+                          \SectionRef{sec:functions.geom.distance},
+                          \SectionRef{sec:functions.geom.polygon})
+                \end{itemize}
         \end{itemize}
+\end{itemize}
 
-    \item Changes from WD-ADQL-2.1-20160502
-        \begin{itemize}
-            \item Changed coordsys to be optional in BNF\\
-            (svn version 4545, 23 Oct 2017)
-            \item Removed hard coded version number\\
-            (svn version r4544, 23 Oct 2017)
-            \item Restored coordsys param for now\\
-            (svn version r4543, 23 Oct 2017)
-            \item Updates to CAST and IN\_UNIT\\
-            (svn version r4539, 18 Oct 2017)
-            \item Updates to UNION, EXCEPT, INTERSECT and WITH\\
-            (svn version r4538, 18 Oct 2017)
-            \item Updates to user defined functions\\
-            (svn version r4537, 18 Oct 2017)
-            \item Updates to DISTANCE, POINT and POLYGON\\
-            (svn version r4536, 18 Oct 2017)
-            \item Proof reading typos and readability fixes\\
-            (svn version r4527, 16 Oct 2017)
-            \item Updates to COORDSYS\\
-            (svn version r4522, 16 Oct 2017)
-            \item Removed (commented) text describing coordsys argument\\
-            (svn version r4521, 16 Oct 2017)
-            \item Updates to COORD1, COORD2 and COORDSYS\\
-            (svn version r4520, 16 Oct 2017)
-            \item Updates to AREA, BOX, CENTROID, CIRCLE and CONTAINS\\
-            (svn version r4519, 13 Oct 2017)
-            \item Removed old section about 'Geometry in the SELECT clause'\\
-            (svn version r4481, 10 Oct 2017)
-            \item Updated text for AREA and BOX\\
-            (svn version r4480, 10 Oct 2017)
-            \item Updated text for AREA\\
-            (svn version r4469, 09 Oct 2017)
-            \item Cleaned up text describing ranges for coordinates\\
-            (svn version r4467, 09 Oct 2017)
-            \item Removed REGION\\
-            (svn version r4466, 09 Oct 2017)
-            \item Removed reference to ADQL from section titles in the ADQL document\\
-            (svn version r4465, 09 Oct 2017)
-            \item Expanded the datatypes to add sub-section for each xtype\\
-            (svn version r4353, 19 Sep 2017)
-            \item Removed restriction on nested JOINs\\
-            (svn version r4283, 12 Sep 2017)
-            \item Added subversion properties\\
-            (svn version r4282, 12 Sep 2017)
-            \item Updated types and xtypes to match DALI\\
-            (svn version r4281, 12 Sep 2017)
-            \item Clarify text for SELECT and subqueries\\
-            (svn version r4256, 12 Sep 2017)
-            \item Improved wording for keywords and identifiers\\
-            (svn version r4242, 11 Sep 2017)
-            \item Fixed section references\\
-            (svn version r3637, 18 Oct 2016)
-            \item Fixed typo in definition of MOD\\
-            (svn version 3456)
-            \item Fixed section references\\
-            (svn version 3637)
-            \item Improved wording for keywords and identifiers\\
-            (svn version 4242)
-        \end{itemize}
+\subsection{Ideas for future versions}
+\label{sec:changes-future}
 
-    \item Changes from ADQL-20150601
-        \begin{itemize}
-            \item Added boolean type\\
-            (svn version 3364)
-            \item Removed bitwise functions and updated the operators\\
-            (svn version 3365)
-            \item Changed 'hierarchical queries' to 'common table expressions'\\
-            (svn version 3366)
-            \item Added OFFSET clause\\
-            (svn version 3367)
-            \item Added four parameter DISTANCE\\
-            (svn version 3370)
-            \item Added hexadecimal literals\\
-            (svn version 3374)
-        \end{itemize}
-
-    \item Changes from \TAPImpNote{}
-        \begin{itemize}
-            \item 2.1.1.  The Separator Nonterminal
-            \item 2.1.2.  Type System
-            \item 2.1.4.  Empty Coordinate Systems
-            \item 2.1.5.  Explanation of optional features
-            \item 2.2.2.  No Type-based Decay of INTERSECTS
-            \item 2.2.3.  Generalized User Defined Functions
-            \item 2.2.4.  Case-insensitive String Comparisons
-            \item 2.2.5.  Set Operators
-            \item 2.2.6.  Boolean Type
-            \item 2.2.7.  Casting to Unit
-            \item 2.2.10. Bitwise operators
-            \item 2.2.10. Hexadecimal literals
-            \item 2.2.11. CAST operator
-            \item 2.NN    WITH
-        \end{itemize}
-
-    \item Created [Optional components] section.
-    \item Moved [Geometrical Functions] into [Optional components].
-    \item Added [Language feature] information.
-
+\begin{itemize}
+    \item Move from BNF to PEG grammar
+    \item Filtering on timestamp values
+    \item Support interval values
+    \item Support MOC
+    \item Support array values
+    \item Support bitwise operators
+    \item Support hexadecimal values
+    \item Better support of boolean values (i.e. boolean type ; no more
+          \verb:=1:)
+    \item Add a substring function (already existing in SQL-92)
+    \item Extend \verb:DISTANCE(): to other geometries (not only
+          \verb:POINT():s)
+    \item Add a function returning the polygonal intersection of two geometries:
+          \verb:INTERSECTION():
+    \item Unit annotation of values
+    \item Consider the OGC Standard (OpenGIS\textsuperscript{\textregistered}
+          Implementation Standard for Geographic information) for ADQL
+          geometries evolution
 \end{itemize}
 
 \clearpage % section cut
