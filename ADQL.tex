@@ -1409,6 +1409,33 @@ functions to enhance the astronomical usage of the language:
     \item REGION
 \end{itemize}
 
+\subsubsection{Language feature}
+\label{sec:functions.geom.feature}
+
+All functions described in this section use the following IVOID:
+
+\begin{verbatim}
+    ivo://ivoa.net/std/TAPRegExt#features-adqlgeo
+\end{verbatim}
+    
+Each geometrical function is declared using this IVOID and its name.
+See \SectionRef{sec:capabilities} for more details.
+
+All other optional features have an IVOID starting with:
+
+\begin{verbatim}
+    ivo://ivoa.net/std/TAPRegExt#features-adql-
+\end{verbatim}
+
+Note the ending hyphen. The IVOID for the geometry features does not have this
+hyphen. This is done on purpose. It is actually due to a typo when preparing the
+ADQL-2.1. This typo lasted until the first ADQL-2.1 implementations appeared in
+the IVOA registry and before ADQL-2.1 became an IVOA Recommendation. Because a
+lot of implementations were already in a production state when this typo was
+detected, it had been decided to not break these implementations and to keep
+this inconsistency between the IVOID of the geometry features and the one of the
+other ADQL features.
+
 \subsubsection{Coordinate limits}
 \label{sec:functions.geom.limits}
 
@@ -1649,7 +1676,7 @@ used by clients, and MUST still be handled correctly by services.
 \subsubsection{AREA}
 \label{sec:functions.geom.area}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
 {\footnotesize \verb|name: AREA|}\\
 
 The AREA function computes the area, in square degrees, of a given geometry.
@@ -1685,7 +1712,7 @@ contains geometric (POINT, BOX, CIRCLE, POLYGON or REGION) values.
 \subsubsection{BOX}
 \label{sec:functions.geom.box}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
 {\footnotesize \verb|name: BOX|}\\
 
 Note - the \verb|BOX| function has been deprecated in this version of the standard,
@@ -1781,7 +1808,7 @@ Future versions of this specification may remove this parameter
 \subsubsection{CENTROID}
 \label{sec:functions.geom.centroid}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
 {\footnotesize \verb|name: CENTROID|}\\
 
 The CENTROID function computes the centroid of a given geometry and returns a POINT.
@@ -1818,7 +1845,7 @@ contains geometric (POINT, BOX, CIRCLE, POLYGON or REGION) values.
 \subsubsection{CIRCLE}
 \label{sec:functions.geom.circle}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
 {\footnotesize \verb|name: CIRCLE|}\\
 
 The CIRCLE function expresses a circular region on the sky (a cone in space),
@@ -1880,7 +1907,7 @@ Future versions of this specification may remove this parameter
 \subsubsection{CONTAINS}
 \label{sec:functions.geom.contains}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
 {\footnotesize \verb|name: CONTAINS|}\\
 
 The CONTAINS function determines if a geometry is wholly contained within
@@ -1974,7 +2001,7 @@ implementation dependent.
 \subsubsection{COORD1}
 \label{sec:functions.geom.coord1}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
 {\footnotesize \verb|name: COORD1|}\\
 
 The COORD1 function extracts the first coordinate value, in degrees, of a given
@@ -2005,7 +2032,7 @@ where \textit{t.center} is a reference to a column that contains POINT values.
 \subsubsection{COORD2}
 \label{sec:functions.geom.coord2}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
 {\footnotesize \verb|name: COORD2|}\\
 
 The COORD2 function extracts the second coordinate value, in degrees, of a given
@@ -2038,7 +2065,7 @@ where \textit{t.center} is a reference to a column that contains POINT values.
 \subsubsection{COORDSYS}
 \label{sec:functions.geom.coordsys}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
 {\footnotesize \verb|name: COORDSYS|}\\
 
 As of this version of the specification the COORDSYS function has
@@ -2083,7 +2110,7 @@ contains geometric (POINT, BOX, CIRCLE, POLYGON or REGION) values.
 \subsubsection{DISTANCE}
 \label{sec:functions.geom.distance}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
 {\footnotesize \verb|name: DISTANCE|}\\
 
 The DISTANCE function computes the arc length along a great circle between two
@@ -2155,7 +2182,7 @@ use the same coordinate system.
 \subsubsection{INTERSECTS}
 \label{sec:functions.geom.intersects}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
 {\footnotesize \verb|name: INTERSECTS|}\\
 
 The INTERSECTS function determines if two geometry values overlap. This is
@@ -2258,7 +2285,7 @@ implementation dependent.
 \subsubsection{POINT}
 \label{sec:functions.geom.point}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
 {\footnotesize \verb|name: POINT|}\\
 
 The POINT function expresses a single location on the sky,
@@ -2310,7 +2337,7 @@ Future versions of this specification may remove this parameter
 \subsubsection{POLYGON}
 \label{sec:functions.geom.polygon}
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
 {\footnotesize \verb|name: POLYGON|}\\
 
 The POLYGON function expresses a region on the sky with boundaries denoted by great
@@ -2396,7 +2423,7 @@ Future versions of this specification may remove this parameter
 \label{sec:functions.geom.region}
 
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
 {\footnotesize \verb|name: REGION|}\\
 
 
@@ -3984,13 +4011,11 @@ For example, the following XML fragment describes a service that supports the
 \verb:POINT: and \verb:CIRCLE: functions from the set of geometrical functions,
 
 {\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adql-geo|}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/TAPRegExt#features-adqlgeo|}\\
 {\footnotesize \verb|name: POINT, CIRCLE|}\\
 
 \begin{verbatim}
-<languageFeatures
-    type="ivo://ivoa.net/std/TAPRegExt#features-adql-geo"
-    >
+<languageFeatures type="ivo://ivoa.net/std/TAPRegExt#features-adqlgeo">
     <feature>
         <form>POINT</form>
     </feature>
