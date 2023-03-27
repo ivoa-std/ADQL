@@ -1,4 +1,5 @@
 <archdiag xmlns="http://ivoa.net/archdiag">
+  <rec name="DALI" x="310" y="290" w="33"/>
   <rec name="TAPRegExt" x="67.5" y="255" w="65"/>
   <rec name="TAP" x="686" y="255" w="28"/>
   <thisrec name="ADQL" x="250" y="160" w="37"/>
