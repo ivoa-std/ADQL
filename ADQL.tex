@@ -4039,6 +4039,36 @@ For example, the following XML fragment describes a service that supports the
 \end{verbatim}
 
 \clearpage % section cut
+\section{ADQL capability}
+\label{sec:adql-capability}
+
+Any standard making use of ADQL can declare this capability with the following
+IVOID:
+
+\begin{verbatim}
+    ivo://ivoa.net/std/adql
+\end{verbatim}
+
+A specific ADQL version MAY be specified with a hash parameter following one of
+these syntax:
+
+\begin{itemize}
+    \item \verb:vx: for the latest minor revision of the major version \verb:x:
+    \item \verb:vx.y: for exactly the minor revision \verb:x.y:
+\end{itemize}
+
+When no version is specified, the latest ADQL version is expected to be
+supported.\\
+
+Examples of valid IVOIDs:
+
+\begin{verbatim}
+    ivo://ivoa.net/std/adql
+    ivo://ivoa.net/std/adql#v2
+    ivo://ivoa.net/std/adql#v2.1
+\end{verbatim}
+
+\clearpage % section cut
 \section{Changes from previous versions}
 \label{sec:changes}
 
@@ -4071,6 +4101,8 @@ For example, the following XML fragment describes a service that supports the
                           \verb:BLOB: \SectionSee{sec:types}
                     \item Language feature description
                           (see \AppendixRef{sec:features})
+                    \item ADQL capability (i.e. IVOID)
+                          (see \AppendixRef{sec:adql-capability})
                 \end{itemize}
             \item \textbf{Updated}
                 \begin{itemize}
