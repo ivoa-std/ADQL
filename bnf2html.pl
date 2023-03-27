@@ -79,7 +79,14 @@ sub add_refs
 }
 
 # NB: webcode replaces tabs with blanks!
-open( my $WEBCODE, "-|", "webcode @ARGV") or die "$!";
+# open( my $WEBCODE, "-|", "webcode @ARGV") or die "$!";
+
+# Replace the above lines to avoid dependency on webcode
+# (which is a small C utility).  Output is the same, at least for
+# the current version of the ADQL BNF.
+# Could also do this using regexs in perl.
+my $escape_html = "sed -e's/&/\\&amp;/g' -e's/</\\&lt;/g' -e's/>/\\&gt;/g'";
+open( my $WEBCODE, "-|", "$escape_html @ARGV") or die "$!";
 
 # Read first line of file - use as title in head and in H1 heading in body
 $_ = <$WEBCODE>;
