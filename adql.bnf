@@ -1,0 +1,817 @@
+    <ADQL_language_character> ::=
+        <simple_Latin_letter>
+      | <digit>
+      | <SQL_special_character>
+
+    <ADQL_reserved_word> ::=
+        ABS
+      | ACOS
+      | AREA
+      | ASIN
+      | ATAN
+      | ATAN2
+      | BIGINT
+      | BOX
+      | CAST
+      | CEILING
+      | CENTROID
+      | CHAR
+      | CIRCLE
+      | COALESCE
+      | CONTAINS
+      | COORD1
+      | COORD2
+      | COORDSYS
+      | COS
+      | DEGREES
+      | DISTANCE
+      | DOUBLE
+      | EXP
+      | FLOOR
+      | INTEGER
+      | INTERSECTS
+      | IN_UNIT
+      | LOG
+      | LOG10
+      | MOD
+      | NULL
+      | PI
+      | POINT
+      | POLYGON
+      | POWER
+      | PRECISION
+      | RADIANS
+      | REAL
+      | REGION
+      | RAND
+      | ROUND
+      | SIN
+      | SMALLINT
+      | SQRT
+      | TIMESTAMP
+      | TOP
+      | TAN
+      | TRUNCATE
+      | VARCHAR
+
+    <SQL_embedded_language_character> ::=
+        <left_bracket> | <right_bracket>
+
+    <SQL_reserved_word> ::=
+        ABSOLUTE | ACTION | ADD | ALL
+      | ALLOCATE | ALTER | AND
+      | ANY | ARE
+      | AS | ASC
+      | ASSERTION | AT
+      | AUTHORIZATION | AVG
+      | BEGIN | BETWEEN | BIT | BIT_LENGTH
+      | BOTH | BY
+      | CASCADE | CASCADED | CASE
+      | CATALOG
+      | CHARACTER | CHAR_LENGTH
+      | CHARACTER_LENGTH | CHECK | CLOSE
+      | COLLATE | COLLATION
+      | COLUMN | COMMIT
+      | CONNECT
+      | CONNECTION | CONSTRAINT
+      | CONSTRAINTS | CONTINUE
+      | CONVERT | CORRESPONDING | COUNT | CREATE | CROSS
+      | CURRENT
+      | CURRENT_DATE | CURRENT_TIME
+      | CURRENT_TIMESTAMP | CURRENT_USER | CURSOR
+      | DATE | DAY | DEALLOCATE
+      | DECIMAL | DECLARE | DEFAULT | DEFERRABLE
+      | DEFERRED | DELETE | DESC | DESCRIBE | DESCRIPTOR
+      | DIAGNOSTICS
+      | DISCONNECT | DISTINCT | DOMAIN | DROP
+      | ELSE | END | END-EXEC | ESCAPE
+      | EXCEPT | EXCEPTION
+      | EXEC | EXECUTE | EXISTS
+      | EXTERNAL | EXTRACT
+      | FALSE | FETCH | FIRST | FLOAT | FOR
+      | FOREIGN | FOUND | FROM | FULL
+      | GET | GLOBAL | GO | GOTO
+      | GRANT | GROUP
+      | HAVING | HOUR
+      | IDENTITY | ILIKE | IMMEDIATE | IN | INDICATOR
+      | INITIALLY | INNER | INPUT
+      | INSENSITIVE | INSERT | INT | INTERSECT
+      | INTERVAL | INTO | IS
+      | ISOLATION
+      | JOIN
+      | KEY
+      | LANGUAGE | LAST | LEADING | LEFT
+      | LEVEL | LIKE | LOCAL | LOWER
+      | MATCH | MAX | MIN | MINUTE | MODULE
+      | MONTH
+      | NAMES | NATIONAL | NATURAL | NCHAR | NEXT | NO
+      | NOT
+      | NULLIF | NUMERIC
+      | OCTET_LENGTH | OF
+      | ON | ONLY | OPEN | OPTION | OR
+      | ORDER | OUTER
+      | OUTPUT | OVERLAPS
+      | PAD | PARTIAL | POSITION | PREPARE
+      | PRESERVE | PRIMARY
+      | PRIOR | PRIVILEGES | PROCEDURE | PUBLIC
+      | READ | REFERENCES | RELATIVE | RESTRICT
+      | REVOKE | RIGHT
+      | ROLLBACK | ROWS
+      | SCHEMA | SCROLL | SECOND | SECTION
+      | SELECT
+      | SESSION | SESSION_USER | SET
+      | SIZE | SOME | SPACE | SQL | SQLCODE
+      | SQLERROR | SQLSTATE
+      | SUBSTRING | SUM | SYSTEM_USER
+      | TABLE | TEMPORARY
+      | THEN | TIME
+      | TIMEZONE_HOUR | TIMEZONE_MINUTE
+      | TO | TRAILING | TRANSACTION
+      | TRANSLATE | TRANSLATION | TRIM | TRUE
+      | UNION | UNIQUE | UNKNOWN | UPDATE | UPPER | USAGE
+      | USER | USING
+      | VALUE | VALUES | VARYING | VIEW
+      | WHEN | WHENEVER | WHERE | WITH | WORK | WRITE
+      | YEAR
+      | ZONE
+
+    <SQL_special_character> ::=
+        <space>
+      | <double_quote>
+      | <percent>
+      | <ampersand>
+      | <quote>
+      | <left_paren>
+      | <right_paren>
+      | <asterisk>
+      | <plus_sign>
+      | <comma>
+      | <minus_sign>
+      | <period>
+      | <solidus>
+      | <colon>
+      | <semicolon>
+      | <less_than_operator>
+      | <equals_operator>
+      | <greater_than_operator>
+      | <question_mark>
+      | <underscore>
+      | <vertical_bar>
+
+    <ampersand> ::= &
+
+    <approximate_numeric_literal> ::= <mantissa>E<exponent>
+
+    <approximate numeric type> ::=
+          REAL
+        | DOUBLE PRECISION
+
+    <area> ::= AREA <left_paren> <geometry_value_expression> <right_paren>
+
+    <as_clause> ::= [ AS ] <column_name>
+
+    <asterisk> ::= *
+
+    <between_predicate> ::=
+        <value_expression> [ NOT ] BETWEEN
+        <value_expression> AND <value_expression>
+
+    <boolean_factor> ::= [ NOT ] <boolean_primary>
+
+    <boolean_primary> ::=
+        <left_paren> <search_condition> <right_paren>
+      | <predicate>
+
+    <boolean_term> ::=
+        <boolean_factor>
+      | <boolean_term> AND <boolean_factor>
+
+    <box> ::=
+        BOX <left_paren>
+            [ <coord_sys> <comma> ]
+            <box_center>
+            <comma> <numeric_value_expression>
+            <comma> <numeric_value_expression>
+        <right_paren>
+    
+    <box_center> ::=
+        <coordinates>
+        | <coord_value>
+    
+    <cast_specification> ::=
+        CAST <left_paren> <value_expression> AS <cast_target> <right_paren>
+    
+    <cast_target> ::=
+          <character_string_type>
+        | <numeric_type>
+        | <datetime_type>
+        | <geometry_type>
+
+    <catalog_name> ::= <identifier>
+
+    <centroid> ::=
+        CENTROID <left_paren>
+            <geometry_value_expression>
+        <right_paren>
+
+    <character_factor> ::= <character_primary>
+
+    <character_primary> ::=
+        <value_expression_primary>
+      | <string_value_function>
+
+    <character_representation> ::= <nonquote_character> | <quote_symbol>
+
+    <character_string_literal> ::=
+        <quote> [ <character_representation>... ] <quote>
+
+    <character_string_type> ::=
+          CHAR [ <left paren> <length> <right paren> ]
+        | VARCHAR [ <left paren> <length> <right paren> ]
+
+    <character_value_expression> ::= <concatenation> | <character_factor>
+
+    <circle> ::=
+        CIRCLE <left_paren>
+            [ <coord_sys> <comma> ]
+            <circle_center>
+            <comma> <radius>
+        <right_paren>
+    
+    <circle_center> ::=
+        <coordinates>
+        | <coord_value>
+
+    <circumflex> ::= ^
+
+    <coalesce_expression> ::= 
+        COALESCE <left_paren>
+            <value_expression>
+            [ { <comma> <value_expression }... ] <right_paren>
+
+    <colon> ::= ":"
+
+    <column_name> ::= <identifier>
+
+    <column_name_list> ::= <column_name> [ { <comma> <column_name> }... ]
+
+    <column_reference> ::= [ <qualifier> <period> ] <column_name>
+
+    <comma> ::= ,
+
+    <comment> ::= <comment_introducer> [ <comment_character>... ] <newline>
+
+    <comment_character> ::= <nonquote_character> | <quote>
+
+    <comment_introducer> ::= <minus_sign><minus_sign> [<minus_sign>...]
+
+    <comp_op> ::=
+        <equals_operator>
+      | <not_equals_operator>
+      | <less_than_operator>
+      | <greater_than_operator>
+      | <less_than_or_equals_operator>
+      | <greater_than_or_equals_operator>
+
+    <comparison_predicate> ::=
+        <value_expression> <comp_op> <value_expression>
+
+    <concatenation> ::=
+        <character_value_expression>
+        <concatenation_operator>
+        <character_factor>
+
+    <concatenation_operator> ::= "||"
+
+    <contains> ::=
+        CONTAINS <left_paren>
+            <geometry_value_expression> <comma> <geometry_value_expression>
+        <right_paren>
+
+    <coord1> ::= COORD1 <left_paren> <coord_value> <right_paren>
+
+    <coord2> ::= COORD2 <left_paren> <coord_value> <right_paren>
+
+    <coord_sys> ::= <character_string_literal>
+
+    <coord_value> ::= <point_value> | <column_reference>
+
+    <coordinate1> ::= <numeric_value_expression>
+
+    <coordinate2> ::= <numeric_value_expression>
+
+    <coordinates> ::= <coordinate1> <comma> <coordinate2>
+
+    <correlation_name> ::= <identifier>
+
+    <correlation_specification> ::= [ AS ] <correlation_name>
+
+    <datetime_type> ::= TIMESTAMP
+
+    <default_function_prefix> ::= (see text)
+
+    <delimited_identifier> ::=
+        <double_quote> <delimited_identifier_body> <double_quote>
+
+    <delimited_identifier_body> ::= <delimited_identifier_part>...
+
+    <delimited_identifier_part> ::=
+        <nondoublequote_character> | <double_quote_symbol>
+
+    <delimiter_token> ::=
+        <character_string_literal>
+        | <delimited_identifier>
+        | <SQL_special_character>
+        | <not_equals_operator>
+        | <greater_than_or_equals_operator>
+        | <less_than_or_equals_operator>
+        | <concatenation_operator>
+        | <double_period>
+        | <left_bracket>
+        | <right_bracket>
+
+    <derived_column> ::= <value_expression> [ <as_clause> ]
+
+    <derived_table> ::= <table_subquery>
+
+    <digit> ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+    <distance_function> ::=
+        DISTANCE <left_paren>
+            <coord_value> <comma>
+            <coord_value>
+            <right_paren>
+      | DISTANCE <left_paren>
+            <numeric_value_expression> <comma>
+            <numeric_value_expression> <comma>
+            <numeric_value_expression> <comma>
+            <numeric_value_expression>
+            <right_paren>
+
+    <double_period> ::= ".."
+
+    <double_quote> ::= """
+
+    <double_quote_symbol> ::= <double_quote><double_quote>
+
+    <equals_operator> ::= "="
+
+    <exact_numeric_literal> ::=
+        <unsigned_decimal> [ <period> [ <unsigned_decimal> ] ]
+      | <period> <unsigned_decimal>
+
+    <exists_predicate> ::= EXISTS <table_subquery>
+
+    <exponent> ::= <signed_integer>
+
+    <extract_coordsys> ::=
+        COORDSYS <left_paren>
+            <geometry_value_expression>
+        <right_paren>
+    
+    <exact_numeric_type> ::=
+          SMALLINT
+        | INTEGER
+        | BIGINT
+
+    <factor> ::= [ <sign> ] <numeric_primary>
+
+    <case_folding_function> ::=
+          LOWER <left_paren> <character_value_expression> <right_paren>
+        | UPPER <left_paren> <character_value_expression> <right_paren>
+
+    <from_clause> ::=
+        FROM <table_reference>
+            [ { <comma> <table_reference> }... ]
+
+    <general_literal> ::= <character_string_literal>
+
+    <general_set_function> ::=
+        <set_function_type> <left_paren>
+            [ <set_quantifier> ] <value_expression>
+        <right_paren>
+
+    <geometry_type> ::=
+          POINT
+        | CIRCLE
+        | POLYGON
+
+    <geometry_value_expression> ::=
+        <value_expression_primary> | <geometry_value_function>
+
+    <geometry_value_function> ::=
+        <box>
+      | <centroid>
+      | <circle>
+      | <point>
+      | <polygon>
+      | <region>
+      | <user_defined_function>
+
+    <greater_than_operator> ::= ">"
+
+    <greater_than_or_equals_operator> ::= ">="
+
+    <group_by_clause> ::= GROUP BY <group_by_term_list>
+
+    <group_by_term> ::=
+          <column_reference>
+        | <value_expression>
+
+    <group_by_term_list> ::=
+        <group_by_term>
+        [ { <comma> <group_by_term> }... ]
+
+    <having_clause> ::= HAVING <search_condition>
+
+    <identifier> ::= <regular_identifier> | <delimited_identifier>
+
+    <in_predicate> ::=
+        <value_expression> [ NOT ] IN <in_predicate_value>
+
+    <in_predicate_value> ::=
+        <table_subquery> | <left_paren> <in_value_list> <right_paren>
+
+    <in_value_list> ::=
+        <value_expression> { <comma> <value_expression> } ...
+
+    <intersects> ::=
+        INTERSECTS <left_paren>
+            <geometry_value_expression> <comma> <geometry_value_expression>
+        <right_paren>
+
+    <join_column_list> ::= <column_name_list>
+
+    <join_condition> ::= ON <search_condition>
+
+    <join_specification> ::= <join_condition> | <named_columns_join>
+
+    <join_type> ::=
+        INNER | <outer_join_type> [ OUTER ]
+
+    <joined_table> ::=
+        <qualified_join> | <left_paren> <joined_table> <right_paren>
+
+    <keyword> ::= <SQL_reserved_word> | <ADQL_reserved_word>
+
+    <left_bracket> ::= "["
+
+    <left_paren> ::= (
+
+    <less_than_operator> ::= "<"
+
+    <less_than_or_equals_operator> ::= "<="
+
+    <like_predicate> ::=
+        <match_value> [ NOT ] LIKE <pattern>
+      | <match_value> [ NOT ] ILIKE <pattern>
+
+    <mantissa> ::= <exact_numeric_literal>
+
+    <match_value> ::= <character_value_expression>
+
+    <math_function> ::=
+        ABS <left_paren> <numeric_value_expression> <right_paren>
+      | CEILING <left_paren> <numeric_value_expression> <right_paren>
+      | DEGREES <left_paren> <numeric_value_expression> <right_paren>
+      | EXP <left_paren> <numeric_value_expression> <right_paren>
+      | FLOOR <left_paren> <numeric_value_expression> <right_paren>
+      | LOG <left_paren> <numeric_value_expression> <right_paren>
+      | LOG10 <left_paren> <numeric_value_expression> <right_paren>
+      | MOD <left_paren>
+            <numeric_value_expression> <comma> <numeric_value_expression>
+        <right_paren>
+      | PI <left_paren><right_paren>
+      | POWER <left_paren>
+            <numeric_value_expression> <comma> <numeric_value_expression>
+        <right_paren>
+      | RADIANS <left_paren> <numeric_value_expression> <right_paren>
+      | RAND <left_paren> [ <unsigned_decimal> ] <right_paren>
+      | ROUND <left_paren>
+            <numeric_value_expression> [ <comma> <signed_integer>]
+        <right_paren>
+      | SQRT <left_paren> <numeric_value_expression> <right_paren>
+      | TRUNCATE <left_paren>
+            <numeric_value_expression>
+            [ <comma> <signed_integer>]
+        <right_paren>
+
+    <minus_sign> ::= -
+
+    <named_columns_join> ::=
+        USING <left_paren>
+            <join_column_list>
+        <right_paren>
+
+    <newline> ::=
+
+    <non_predicate_geometry_function> ::=
+        <area>
+      | <coord1>
+      | <coord2>
+      | <distance>
+
+    <nondelimiter_token> ::=
+        <regular_identifier>
+      | <keyword>
+      | <unsigned_numeric_literal>
+
+    <nondoublequote_character> ::= any character except "
+
+    <nonquote_character> ::= any character except '
+
+    <not_equals_operator> ::= <not_equals_operator1> | <not_equals_operator2>
+
+    <not_equals_operator1> ::= "<>"
+
+    <not_equals_operator2> ::= "!="
+
+    <null_predicate> ::= <column_reference> IS [ NOT ] NULL
+
+    <numeric_geometry_function> ::=
+        <predicate_geometry_function> | <non_predicate_geometry_function>
+
+    <numeric_primary> ::=
+        <value_expression_primary>
+      | <numeric_value_function>
+
+    <numeric_type> ::=
+          <exact_numeric_type>
+        | <approximate_numeric_type>
+
+    <numeric_value_expression> ::=
+        <term>
+      | <numeric_value_expression> <plus_sign> <term>
+      | <numeric_value_expression> <minus_sign> <term>
+
+    <numeric_value_function> ::=
+        <trig_function>
+      | <math_function>
+      | <numeric_geometry_function >
+      | <user_defined_function>
+
+    <offset_clause> ::= OFFSET <unsigned_decimal>
+
+    <order_by_clause> ::= ORDER BY <order_by_term_list>
+
+    <order_by_direction> ::= ASC | DESC
+
+    <order_by_expression> ::=
+          <unsigned_decimal>
+        | <column_reference>
+        | <value_expression>
+
+    <order_by_term> ::=
+        <order_by_expression> [ <order_by_direction> ]
+
+    <order_by_term_list> ::=
+        <order_by_term> [ { <comma> <order_by_term> }... ]
+
+    <outer_join_type> ::= LEFT | RIGHT | FULL
+
+    <pattern> ::= <character_value_expression>
+
+    <percent> ::= %
+
+    <period> ::= "."
+
+    <plus_sign> ::= +
+
+    <point> ::=
+        POINT <left_paren>
+            [ <coord_sys> <comma> ]
+            <coordinates>
+        <right_paren>
+
+    <point_value> ::= <point> | <centroid> | <user_defined_function>
+
+    <polygon> ::=
+        POLYGON <left_paren>
+            [ <coord_sys> <comma> ]
+            <polygon_vertices>
+        <right_paren>
+    
+    <polygon_vertices> ::=
+        <coordinates>
+        <comma> <coordinates>
+        <comma> <coordinates>
+        { <comma> <coordinates> }...
+        |
+        <coord_value>
+        <comma> <coord_value>
+        <comma> <coord_value>
+        { <comma> <coord_value> }...
+
+    <predicate> ::=
+        <comparison_predicate>
+      | <between_predicate>
+      | <in_predicate>
+      | <like_predicate>
+      | <null_predicate>
+      | <exists_predicate>
+
+    <predicate_geometry_function> ::= <contains> | <intersects>
+
+    <qualified_join> ::=
+        <table_reference> [ NATURAL ] [ <join_type> ] JOIN
+        <table_reference> [ <join_specification> ]
+
+    <qualifier> ::= <table_name> | <correlation_name>
+
+    <query_expression> ::=
+        <select_expression>
+        | <joined_table>
+
+    <query_name> ::= <identifier>
+
+    <query_set_expression> ::=
+        <query_set_term>
+        | <query_set_expression> UNION [ ALL ] <query_set_term>
+        | <query_set_expression> EXCEPT [ ALL ] <query_set_term>
+
+    <query_set_primary> ::=
+        <select_query>
+        | <left_paren> <select_expression> <right_paren>
+
+    <query_set_term> ::=
+        <query_set_primary>
+        | <query_set_term> INTERSECT [ ALL ] <query_set_expression>
+
+    <query_specification> ::=
+        [ <with_clause> ]
+        <select_expression>
+
+    <question_mark> ::= ?
+
+    <quote> ::= '
+
+    <quote_symbol> ::= <quote> <quote>
+
+    <radius> ::= <numeric_value_expression>
+
+    <region> ::=
+      REGION <left_paren> <character_string_literal> <right_paren>
+
+    <regular_identifier> ::=
+        <simple_Latin_letter>...
+        [ { <digit> | <simple_Latin_letter> | <underscore> }... ]
+
+    <right_bracket> ::= "]"
+
+    <right_paren> ::= )
+
+    <schema_name> ::= [ <catalog_name> <period> ] <unqualified_schema name>
+
+    <search_condition> ::=
+        <boolean_term>
+      | <search_condition> OR <boolean_term>
+
+    <select_expression> ::=
+        <query_set_expression>
+        [ <order_by_clause> ]
+        [ <offset_clause> ]
+    
+    <select_list> ::=
+        <asterisk>
+      | <select_sublist> [ { <comma> <select_sublist> }... ]
+
+    <select_query> ::=
+        SELECT
+        [ <set_quantifier> ]
+        [ <set_limit> ]
+        <select_list>
+        <from_clause>
+        [ <where_clause> ]
+        [ <group_by_clause> ]
+        [ <having_clause> ]
+
+    <select_sublist> ::= <derived_column> | <qualifier> <period> <asterisk>
+
+    <semicolon> ::= ;
+
+    <set_function_specification> ::=
+        COUNT <left_paren> <asterisk> <right_paren>
+      | <general_set_function>
+
+    <set_function_type> ::= AVG | MAX | MIN | SUM | COUNT
+
+    <set_limit> ::= TOP <unsigned_decimal>
+
+    <set_quantifier> ::= DISTINCT | ALL
+
+    <sign> ::= <plus_sign> | <minus_sign>
+
+    <signed_integer> ::= [ <sign> ] <unsigned_decimal>
+
+    <simple_Latin_letter> ::=
+        <simple_Latin_upper_case_letter>
+      | <simple_Latin_lower_case_letter>
+
+    <simple_Latin_lower_case_letter> ::=
+        a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z
+
+    <simple_Latin_upper_case_letter> ::=
+        A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z
+
+    <solidus> ::= /
+
+    <space> ::=
+
+    <string_geometry_function> ::= <extract_coordsys>
+
+    <string_value_expression> ::= <character_value_expression>
+
+    <string_value_function> ::=
+          <string_geometry_function>
+        | <case_folding_function>
+        | <user_defined_function>
+
+    <subquery> ::= <left_paren> <query_expression> <right_paren>
+
+    <table_name> ::= [ <schema_name> <period> ] <identifier>
+
+    <table_reference> ::=
+        <table_name> [ <correlation_specification> ]
+      | <derived_table> <correlation_specification>
+      | <joined_table>
+
+    <table_subquery> ::= <subquery>
+
+    <term> ::=
+        <factor>
+      | <term> <asterisk> <factor>
+      | <term> <solidus> <factor>
+
+    <tilde> ::= ~
+
+    <token> ::=
+        <nondelimiter_token> | <delimiter_token>
+
+    <trig_function> ::=
+        ACOS <left_paren> <numeric_value_expression> <right_paren>
+      | ASIN <left_paren> <numeric_value_expression> <right_paren>
+      | ATAN <left_paren> <numeric_value_expression> <right_paren>
+      | ATAN2 <left_paren>
+            <numeric_value_expression> <comma> <numeric_value_expression>
+        <right_paren>
+      | COS <left_paren> <numeric_value_expression> <right_paren>
+      | COT <left_paren> <numeric_value_expression> <right_paren>
+      | SIN <left_paren> <numeric_value_expression> <right_paren>
+      | TAN <left_paren> <numeric_value_expression> <right_paren>
+
+    <underscore> ::= _
+
+    <unqualified_schema name> ::= <identifier>
+
+    <unsigned_decimal> ::= <digit>...
+
+    <unsigned_literal> ::=
+        <unsigned_numeric_literal>
+      | <general_literal>
+
+    <unsigned_numeric_literal> ::=
+        <exact_numeric_literal>
+      | <approximate_numeric_literal>
+
+    <unsigned_value_specification> ::= <unsigned_literal>
+
+    <user_defined_function> ::=
+        <user_defined_function_name> <left_paren>
+                [
+                    <user_defined_function_param>
+                [
+                    {
+                        <comma> <user_defined_function_param>
+                    }...
+                ]
+                ]
+            <right_paren>
+
+    <user_defined_function_name> ::=
+        [ <default_function_prefix> ] <regular_identifier>
+
+    <user_defined_function_param> ::= <value_expression>
+
+    <value_expression> ::=
+        NULL
+      | <numeric_value_expression>
+      | <string_value_expression>
+      | <geometry_value_expression>
+
+    <value_expression_primary> ::=
+        <unsigned_value_specification>
+        | <column_reference>
+        | <set_function_specification>
+        | <cast_specification>
+        | <coalesce_expression>
+        | <left_paren> <value_expression> <right_paren>
+
+    <vertical_bar> ::= "|"
+
+    <where_clause> ::= WHERE <search_condition>
+
+    <with_clause> ::=
+        WITH <with_query> {, <with_query>} ...
+
+    <with_query> :=
+        <query_name> AS (<select_expression>)
