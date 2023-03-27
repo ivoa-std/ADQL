@@ -1,0 +1,75 @@
+<ri:Resource
+  xsi:type="vstd:Standard"
+  created="2023-03-24T10:00:00"
+  updated="2023-03-24T10:00:00"
+  status="active"
+  xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0"
+  xmlns:vstd="http://www.ivoa.net/xml/StandardsRegExt/v1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ri="http://www.ivoa.net/xml/RegistryInterface/v1.0"
+  xsi:schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0
+    https://www.ivoa.net/xml/VOResource/v1.0
+  http://www.ivoa.net/xml/StandardsRegExt/v1.0
+    https://www.ivoa.net/xml/StandardsRegExt/v1.0
+  http://www.ivoa.net/xml/VOResource/v1.0
+    https://www.ivoa.net/xml/VOResource/v1.0">
+
+  <title>Astronomical Data Query Language ADQL</title>
+  <shortName>ADQL</shortName>
+  <identifier>ivo://ivoa.net/std/ADQL</identifier>
+  <altIdentifier>doi:10.5479/ADS/bib/2008ivoa.spec.1030O</altIdentifier>
+  <curation>
+    <publisher>IVOA</publisher>
+
+    <creator>
+      <name>Mantelet, G.</name>
+    </creator>
+    <creator>
+      <name>Morris, D.</name>
+    </creator>
+    <creator><name>Demleitner, M.</name></creator>
+    <creator><name>Dowler, P.</name></creator>
+    <creator><name>Lusted, J.</name></creator>
+    <creator><name>Nieto-Santisteban, M.A.</name></creator>
+    <creator><name>Ohishi, M.</name></creator>
+    <creator><name>O’Mullane, W.</name></creator>
+    <creator><name>Ortiz, I.</name></creator>
+    <creator><name>Osuna, P.</name></creator>
+    <creator><name>Shirasaki, Y.</name></creator>
+    <creator><name>Szalay, A.</name></creator>
+
+    <date role="update">2021-05-28</date>
+    <version>2.1</version>
+    <contact>
+      <name>IVOA Data Access Layer Working Group</name>
+      <email>dal@ivoa.net</email>
+    </contact>
+  </curation>
+  <content>
+    <subject>virtual-observatories</subject>
+
+    <description>
+      This document describes the Astronomical Data Query Language (ADQL). ADQL
+      has been developed based on SQL92. This document describes the subset of
+      the SQL grammar supported by ADQL. Special restrictions and extensions to
+      SQL92 have been defined in order to support generic and astronomy
+      specific operations.
+    </description>
+    <referenceURL>https://ivoa.net/documents/latest/ADQL.html</referenceURL>
+    <type>Other</type>
+    <contentLevel>Research</contentLevel>
+  </content>
+
+  <endorsedVersion status="pr">2.1</endorsedVersion>
+
+  <key>
+    <name>v2.0</name>
+    <description>Version 2.0 of ADQL (2008).  Version 1 was unreleased.
+    </description>
+  </key>
+  <key>
+    <name>v2.1</name>
+    <description>Version 2.1 of ADQL (2023)</description>
+  </key>
+
+</ri:Resource>
