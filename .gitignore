@@ -5,3 +5,8 @@ ADQL.out
 ADQL.pdf
 ADQL.toc
 ivoatexmeta.tex
+*.swp
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
