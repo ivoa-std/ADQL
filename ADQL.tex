@@ -94,7 +94,7 @@ databases, making SQL a convenient access means. A subset of the SQL grammar
 has been extended to support queries that are specific to astronomy. Similarly
 to SQL, the ADQL language definition is not semantically safe by design and
 therefore this specification defines syntactical correctness only. Type safety
-has been achieved as far as it can be done in SQL. 
+has been achieved as far as it can be done in SQL.
 
 This specification provides a complete definition of the ADQL through a single
 Backus Naur Form (BNF) based language definition. It includes both mandatory
@@ -107,13 +107,29 @@ features as well as the defined optional ones.
 
 \begin{figure}[th]
 \centering
-\includegraphics[width=0.9\textwidth]{ADQL-archdiag.png}
+\includegraphics[width=0.9\textwidth]{role_diagram.pdf}
 \caption{Architecture diagram for this document}
 \label{fig:archdiag}
 \end{figure}
 
 Figure \ref{fig:archdiag} shows the role this document plays within the
 IVOA architecture \VOArch{}.
+
+It is the only mandatory query language within the Table Access Protocol
+TAP \citep{2019ivoa.spec.0927D}; it is thus an important element in
+enabling interoperable queries against remote astronomical databases.
+
+TAP services communicate their metadata, and hence metadata about the
+specific version of ADQL they implement, in capabilities of the
+VOResource type \xmlel{tr:TableAccess} defined in TAPRegExt
+\citep{2012ivoa.spec.0827D}.  Within these TAPRegExt records, the
+language defined in this document, ADQL 2.1, has the IVOA identifier $$
+\hbox{\nolinkurl{ivo://ivoa.net/std/adql#v2.1}}.$$ Clients should note
+that IVOA identifiers need to be compared case-insensitively.
+
+DALI \citep{2017ivoa.spec.0517D} defines conventions for many of the
+types ADQL is talking about, in particular geometry objects, timestamps,
+and intervals.
 
 \subsection{Extended functionality}
 \label{sec:extending}
@@ -208,69 +224,69 @@ is case-insensitive.
 \label{sec:adql.keywords}
 
 \noindent
-\texttt{ABSOLUTE,} \texttt{ACTION,} \texttt{ADD,} \texttt{ALL,} 
-\texttt{ALLOCATE,} \texttt{ALTER,} \texttt{AND,} \texttt{ANY,} 
-\texttt{ARE,} \texttt{AS,} \texttt{ASC,} \texttt{ASSERTION,} 
-\texttt{AT,} \texttt{AUTHORIZATION,} \texttt{AVG,} \texttt{BEGIN,} 
-\texttt{BETWEEN,} \texttt{BIT,} \texttt{BIT\_LENGTH,} \texttt{BOTH,} 
-\texttt{BY,} \texttt{CASCADE,} \texttt{CASCADED,} \texttt{CASE,} 
+\texttt{ABSOLUTE,} \texttt{ACTION,} \texttt{ADD,} \texttt{ALL,}
+\texttt{ALLOCATE,} \texttt{ALTER,} \texttt{AND,} \texttt{ANY,}
+\texttt{ARE,} \texttt{AS,} \texttt{ASC,} \texttt{ASSERTION,}
+\texttt{AT,} \texttt{AUTHORIZATION,} \texttt{AVG,} \texttt{BEGIN,}
+\texttt{BETWEEN,} \texttt{BIT,} \texttt{BIT\_LENGTH,} \texttt{BOTH,}
+\texttt{BY,} \texttt{CASCADE,} \texttt{CASCADED,} \texttt{CASE,}
 \texttt{CATALOG,} \texttt{CHAR,} \texttt{CHARACTER,}
-\texttt{CHAR\_LENGTH,} \texttt{CHARACTER\_LENGTH,} \texttt{CHECK,} 
-\texttt{CLOSE,} \texttt{COALESCE,} \texttt{COLLATE,} 
-\texttt{COLLATION,} \texttt{COLUMN,} \texttt{COMMIT,} 
-\texttt{CONNECT,} \texttt{CONNECTION,} \texttt{CONSTRAINT,} 
-\texttt{CONSTRAINTS,} \texttt{CONTINUE,} \texttt{CONVERT,} 
-\texttt{CORRESPONDING,} \texttt{COUNT,} \texttt{CREATE,} 
-\texttt{CROSS,} \texttt{CURRENT,} \texttt{CURRENT\_DATE,} 
-\texttt{CURRENT\_TIME,} \texttt{CURRENT\_TIMESTAMP,} 
-\texttt{CURRENT\_USER,} \texttt{CURSOR,} \texttt{DATE,} \texttt{DAY,} 
-\texttt{DEALLOCATE,} \texttt{DECIMAL,} \texttt{DECLARE,} 
-\texttt{DEFAULT,} \texttt{DEFERRABLE,} \texttt{DEFERRED,} 
-\texttt{DELETE,} \texttt{DESC,} \texttt{DESCRIBE,} 
-\texttt{DESCRIPTOR,} \texttt{DIAGNOSTICS,} \texttt{DISCONNECT,} 
-\texttt{DISTINCT,} \texttt{DOMAIN,} \texttt{DROP,} 
-\texttt{ELSE,} \texttt{END,} \texttt{END-EXEC,} \texttt{ESCAPE,} 
-\texttt{EXCEPT,} \texttt{EXCEPTION,} \texttt{EXEC,} \texttt{EXECUTE,} 
-\texttt{EXISTS,} \texttt{EXTERNAL,} \texttt{EXTRACT,} \texttt{FALSE,} 
-\texttt{FETCH,} \texttt{FIRST,} \texttt{FLOAT,} \texttt{FOR,} 
-\texttt{FOREIGN,} \texttt{FOUND,} \texttt{FROM,} \texttt{FULL,} 
-\texttt{GET,} \texttt{GLOBAL,} \texttt{GO,} \texttt{GOTO,} 
-\texttt{GRANT,} \texttt{GROUP,} \texttt{HAVING,} \texttt{HOUR,} 
+\texttt{CHAR\_LENGTH,} \texttt{CHARACTER\_LENGTH,} \texttt{CHECK,}
+\texttt{CLOSE,} \texttt{COALESCE,} \texttt{COLLATE,}
+\texttt{COLLATION,} \texttt{COLUMN,} \texttt{COMMIT,}
+\texttt{CONNECT,} \texttt{CONNECTION,} \texttt{CONSTRAINT,}
+\texttt{CONSTRAINTS,} \texttt{CONTINUE,} \texttt{CONVERT,}
+\texttt{CORRESPONDING,} \texttt{COUNT,} \texttt{CREATE,}
+\texttt{CROSS,} \texttt{CURRENT,} \texttt{CURRENT\_DATE,}
+\texttt{CURRENT\_TIME,} \texttt{CURRENT\_TIMESTAMP,}
+\texttt{CURRENT\_USER,} \texttt{CURSOR,} \texttt{DATE,} \texttt{DAY,}
+\texttt{DEALLOCATE,} \texttt{DECIMAL,} \texttt{DECLARE,}
+\texttt{DEFAULT,} \texttt{DEFERRABLE,} \texttt{DEFERRED,}
+\texttt{DELETE,} \texttt{DESC,} \texttt{DESCRIBE,}
+\texttt{DESCRIPTOR,} \texttt{DIAGNOSTICS,} \texttt{DISCONNECT,}
+\texttt{DISTINCT,} \texttt{DOMAIN,} \texttt{DROP,}
+\texttt{ELSE,} \texttt{END,} \texttt{END-EXEC,} \texttt{ESCAPE,}
+\texttt{EXCEPT,} \texttt{EXCEPTION,} \texttt{EXEC,} \texttt{EXECUTE,}
+\texttt{EXISTS,} \texttt{EXTERNAL,} \texttt{EXTRACT,} \texttt{FALSE,}
+\texttt{FETCH,} \texttt{FIRST,} \texttt{FLOAT,} \texttt{FOR,}
+\texttt{FOREIGN,} \texttt{FOUND,} \texttt{FROM,} \texttt{FULL,}
+\texttt{GET,} \texttt{GLOBAL,} \texttt{GO,} \texttt{GOTO,}
+\texttt{GRANT,} \texttt{GROUP,} \texttt{HAVING,} \texttt{HOUR,}
 \texttt{IDENTITY,} \texttt{IMMEDIATE,} \texttt{IN,}
-\texttt{INDICATOR,} \texttt{INITIALLY,} \texttt{INNER,} 
-\texttt{INPUT,} \texttt{INSENSITIVE,} \texttt{INSERT,} \texttt{INT,} 
-\texttt{INTERSECT,} \texttt{INTERVAL,} 
-\texttt{INTO,} \texttt{IS,} \texttt{ISOLATION,} \texttt{JOIN,} 
-\texttt{KEY,} \texttt{LANGUAGE,} \texttt{LAST,} \texttt{LEADING,} 
-\texttt{LEFT,} \texttt{LEVEL,} \texttt{LIKE,} \texttt{LOCAL,} 
-\texttt{MATCH,} \texttt{MAX,} \texttt{MIN,} 
-\texttt{MINUTE,} \texttt{MODULE,} \texttt{MONTH,} \texttt{NAMES,} 
-\texttt{NATIONAL,} \texttt{NATURAL,} \texttt{NCHAR,} \texttt{NEXT,} 
-\texttt{NO,} \texttt{NOT,} \texttt{NULL,} \texttt{NULLIF,} 
-\texttt{NUMERIC,} \texttt{OCTET\_LENGTH,} \texttt{OF,} \texttt{ON,} 
-\texttt{ONLY,} \texttt{OPEN,} \texttt{OPTION,} \texttt{OR,} 
-\texttt{ORDER,} \texttt{OUTER,} \texttt{OUTPUT,} \texttt{OVERLAPS,} 
-\texttt{PAD,} \texttt{PARTIAL,} \texttt{POSITION,} 
-\texttt{PREPARE,} \texttt{PRESERVE,} 
-\texttt{PRIMARY,} \texttt{PRIOR,} \texttt{PRIVILEGES,} 
-\texttt{PROCEDURE,} \texttt{PUBLIC,} \texttt{READ,} 
-\texttt{REFERENCES,} \texttt{RELATIVE,} \texttt{RESTRICT,} 
-\texttt{REVOKE,} \texttt{RIGHT,} \texttt{ROLLBACK,} \texttt{ROWS,} 
-\texttt{SCHEMA,} \texttt{SCROLL,} \texttt{SECOND,} \texttt{SECTION,} 
-\texttt{SELECT,} \texttt{SESSION,} \texttt{SESSION\_USER,} 
-\texttt{SET,} \texttt{SIZE,} \texttt{SOME,} 
-\texttt{SPACE,} \texttt{SQL,} \texttt{SQLCODE,} \texttt{SQLERROR,} 
-\texttt{SQLSTATE,} \texttt{SUBSTRING,} \texttt{SUM,} 
-\texttt{SYSTEM\_USER,} \texttt{TABLE,} \texttt{TEMPORARY,} 
-\texttt{THEN,} \texttt{TIME,} 
-\texttt{TIMEZONE\_HOUR,} \texttt{TIMEZONE\_MINUTE,} \texttt{TO,} 
-\texttt{TRAILING,} \texttt{TRANSACTION,} \texttt{TRANSLATE,} 
-\texttt{TRANSLATION,} \texttt{TRIM,} \texttt{TRUE,} \texttt{UNION,} 
-\texttt{UNIQUE,} \texttt{UNKNOWN,} \texttt{UPDATE,} 
-\texttt{USAGE,} \texttt{USER,} \texttt{USING,} \texttt{VALUE,} 
-\texttt{VALUES,} \texttt{VARYING,} \texttt{VIEW,} 
-\texttt{WHEN,} \texttt{WHENEVER,} \texttt{WHERE,} \texttt{WITH,} 
-\texttt{WORK,} \texttt{WRITE,} \texttt{YEAR,} \texttt{ZONE} 
+\texttt{INDICATOR,} \texttt{INITIALLY,} \texttt{INNER,}
+\texttt{INPUT,} \texttt{INSENSITIVE,} \texttt{INSERT,} \texttt{INT,}
+\texttt{INTERSECT,} \texttt{INTERVAL,}
+\texttt{INTO,} \texttt{IS,} \texttt{ISOLATION,} \texttt{JOIN,}
+\texttt{KEY,} \texttt{LANGUAGE,} \texttt{LAST,} \texttt{LEADING,}
+\texttt{LEFT,} \texttt{LEVEL,} \texttt{LIKE,} \texttt{LOCAL,}
+\texttt{MATCH,} \texttt{MAX,} \texttt{MIN,}
+\texttt{MINUTE,} \texttt{MODULE,} \texttt{MONTH,} \texttt{NAMES,}
+\texttt{NATIONAL,} \texttt{NATURAL,} \texttt{NCHAR,} \texttt{NEXT,}
+\texttt{NO,} \texttt{NOT,} \texttt{NULL,} \texttt{NULLIF,}
+\texttt{NUMERIC,} \texttt{OCTET\_LENGTH,} \texttt{OF,} \texttt{ON,}
+\texttt{ONLY,} \texttt{OPEN,} \texttt{OPTION,} \texttt{OR,}
+\texttt{ORDER,} \texttt{OUTER,} \texttt{OUTPUT,} \texttt{OVERLAPS,}
+\texttt{PAD,} \texttt{PARTIAL,} \texttt{POSITION,}
+\texttt{PREPARE,} \texttt{PRESERVE,}
+\texttt{PRIMARY,} \texttt{PRIOR,} \texttt{PRIVILEGES,}
+\texttt{PROCEDURE,} \texttt{PUBLIC,} \texttt{READ,}
+\texttt{REFERENCES,} \texttt{RELATIVE,} \texttt{RESTRICT,}
+\texttt{REVOKE,} \texttt{RIGHT,} \texttt{ROLLBACK,} \texttt{ROWS,}
+\texttt{SCHEMA,} \texttt{SCROLL,} \texttt{SECOND,} \texttt{SECTION,}
+\texttt{SELECT,} \texttt{SESSION,} \texttt{SESSION\_USER,}
+\texttt{SET,} \texttt{SIZE,} \texttt{SOME,}
+\texttt{SPACE,} \texttt{SQL,} \texttt{SQLCODE,} \texttt{SQLERROR,}
+\texttt{SQLSTATE,} \texttt{SUBSTRING,} \texttt{SUM,}
+\texttt{SYSTEM\_USER,} \texttt{TABLE,} \texttt{TEMPORARY,}
+\texttt{THEN,} \texttt{TIME,}
+\texttt{TIMEZONE\_HOUR,} \texttt{TIMEZONE\_MINUTE,} \texttt{TO,}
+\texttt{TRAILING,} \texttt{TRANSACTION,} \texttt{TRANSLATE,}
+\texttt{TRANSLATION,} \texttt{TRIM,} \texttt{TRUE,} \texttt{UNION,}
+\texttt{UNIQUE,} \texttt{UNKNOWN,} \texttt{UPDATE,}
+\texttt{USAGE,} \texttt{USER,} \texttt{USING,} \texttt{VALUE,}
+\texttt{VALUES,} \texttt{VARYING,} \texttt{VIEW,}
+\texttt{WHEN,} \texttt{WHENEVER,} \texttt{WHERE,} \texttt{WITH,}
+\texttt{WORK,} \texttt{WRITE,} \texttt{YEAR,} \texttt{ZONE}
 
 \subsubsection{ADQL reserved keywords}
 \label{sec:adql.reswords}
@@ -278,35 +294,35 @@ is case-insensitive.
 \noindent
 Mathematical functions and operators:\\
 \noindent
-\texttt{ABS,} \texttt{ACOS,} \texttt{ASIN,} \texttt{ATAN,} 
-\texttt{ATAN2,} \texttt{CEILING,} \texttt{COS,} \texttt{DEGREES,} 
-\texttt{EXP,} \texttt{FLOOR,} \texttt{LOG,} \texttt{LOG10,} 
-\texttt{MOD,} \texttt{PI,} \texttt{POWER,} \texttt{RADIANS,} 
-\texttt{RAND,} \texttt{ROUND,} \texttt{SIN,} \texttt{SQRT,} 
+\texttt{ABS,} \texttt{ACOS,} \texttt{ASIN,} \texttt{ATAN,}
+\texttt{ATAN2,} \texttt{CEILING,} \texttt{COS,} \texttt{DEGREES,}
+\texttt{EXP,} \texttt{FLOOR,} \texttt{LOG,} \texttt{LOG10,}
+\texttt{MOD,} \texttt{PI,} \texttt{POWER,} \texttt{RADIANS,}
+\texttt{RAND,} \texttt{ROUND,} \texttt{SIN,} \texttt{SQRT,}
 \texttt{TAN,} \texttt{TRUNCATE}
 \newline
 
 \noindent
 Geometric functions and operators:\\
 \noindent
-\texttt{AREA,} \texttt{BOX,} \texttt{CENTROID,} \texttt{CIRCLE,} 
-\texttt{CONTAINS,} \texttt{COORD1,} \texttt{COORD2,} 
-\texttt{COORDSYS,} \texttt{DISTANCE,} \texttt{INTERSECTS,} 
+\texttt{AREA,} \texttt{BOX,} \texttt{CENTROID,} \texttt{CIRCLE,}
+\texttt{CONTAINS,} \texttt{COORD1,} \texttt{COORD2,}
+\texttt{COORDSYS,} \texttt{DISTANCE,} \texttt{INTERSECTS,}
 \texttt{POINT,} \texttt{POLYGON,} \texttt{REGION}
 \newline
 
 \noindent
 \verb:CAST: function and datatypes:\\
 \noindent
-\texttt{BIGINT,} \texttt{CAST,} \texttt{CHAR,} \texttt{DOUBLE PRECISION,} 
+\texttt{BIGINT,} \texttt{CAST,} \texttt{CHAR,} \texttt{DOUBLE PRECISION,}
 \texttt{INTEGER,} \texttt{REAL,} \texttt{SMALLINT,} \texttt{TIMESTAMP,}
-\texttt{VARCHAR} 
+\texttt{VARCHAR}
 \newline
 
 \noindent
 String functions and operators:\\
 \noindent
-\texttt{ILIKE,} \texttt{LOWER,} \texttt{UPPER} 
+\texttt{ILIKE,} \texttt{LOWER,} \texttt{UPPER}
 \newline
 
 \noindent
@@ -386,10 +402,10 @@ Numeric literals are expressed as an exact decimal value, e.g. \verb:12: or
 \begin{verbatim}
     <signed_numeric_literal> ::= [<sign>] <unsigned_numeric_literal>
 
-    <unsigned_numeric_literal> ::= 
+    <unsigned_numeric_literal> ::=
         <exact_numeric_literal>
       | <approximate_numeric_literal>
-              
+
     <exact_numeric_literal> ::=
         <unsigned_decimal> [<period> [<unsigned_decimal>]]
       | <period><unsigned_decimal>
@@ -405,7 +421,7 @@ Numeric literals are expressed as an exact decimal value, e.g. \verb:12: or
     <unsigned_decimal> ::= <digit>...
 
     <digit> ::= 0 | 1  | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-    
+
     <sign> ::= <plus_sign> | <minus_sign>
 \end{verbatim}
 
@@ -462,11 +478,11 @@ The \verb:SELECT: statement defines a query to apply to a set of tables specifie
 in the \verb:FROM: clause. As a result of this query, a subset of the tables
 is returned.
 The order of the rows MAY be arbitrary unless an \verb:ORDER BY: clause is specified.
-A \verb:TOP: clause MAY be specified to limit the number of rows returned. 
+A \verb:TOP: clause MAY be specified to limit the number of rows returned.
 An \verb:OFFSET: clause MAY be specified to skip a number of rows at the start
 of the results.
 If both \verb:TOP: and \verb:OFFSET: are used together then \verb:OFFSET: is applied
-first followed by \verb:TOP: \SectionSee{sec:offset}. 
+first followed by \verb:TOP: \SectionSee{sec:offset}.
 
 The order of the columns in the query results SHALL be the same as the
 order specified in the selection list,
@@ -485,12 +501,12 @@ in the \verb:WHERE: clause of a query:
 \begin{verbatim}
     SELECT
         alpha_source.id
-    FROM 
+    FROM
         alpha_source
     WHERE
         alpha_sourceid >=5
     AND
-        alpha_sourceid IN 
+        alpha_sourceid IN
             (
             SELECT id FROM alpha_source WHERE id < 10
             )
@@ -572,7 +588,7 @@ usage and description are detailed in the following tables:
 
 \begin{table}[th]\footnotesize
     \begin{tabular}{|p{0.20\textwidth}|p{0.125\textwidth}|p{0.125\textwidth}|p{0.55\textwidth}|}
-        
+
         \hline
         \textbf{Name} &
         \textbf{Argument \newline datatype} &
@@ -643,14 +659,14 @@ usage and description are detailed in the following tables:
             \item \textit{x} = (\textit{f} * \textit{y}) + \textit{r} for a given integer \textit{f}
         \end{itemize}
         \tabularnewline
-        
+
         \hline
         pi() &
         &
         double &
         The numeric constant \(\pi\).
         \tabularnewline
-        
+
         \hline
         power(x,y) &
         \textit{x} double,
@@ -690,7 +706,7 @@ usage and description are detailed in the following tables:
         \textit{n} integer &
         double &
         Rounds \textit{x} to \textit{n} decimal places.
-        The integer \textit{n} is optional and defaults to 0 if not specified. 
+        The integer \textit{n} is optional and defaults to 0 if not specified.
         A negative value of \textit{n} will round to the left of the decimal point.
         \tabularnewline
 
@@ -701,7 +717,7 @@ usage and description are detailed in the following tables:
         \textit{n} integer &
         double &
         Truncates \textit{x} to \textit{n} decimal places.
-        The integer \textit{n} is optional and defaults to 0 if not specified. 
+        The integer \textit{n} is optional and defaults to 0 if not specified.
         \tabularnewline
         \hline
     \end{tabular}
@@ -711,7 +727,7 @@ usage and description are detailed in the following tables:
 
 \begin{table}[th]\footnotesize
     \begin{tabular}{|p{0.20\textwidth}|p{0.125\textwidth}|p{0.125\textwidth}|p{0.55\textwidth}|}
-        
+
         \hline
         \textbf{Name} &
         \textbf{Argument \newline datatype} &
@@ -739,7 +755,7 @@ usage and description are detailed in the following tables:
         double &
         Returns the arc tangent of \textit{x} , in the range of -\(\pi\)/2 through \(\pi\)/2 radians.
         \tabularnewline
-        
+
         \hline
         atan2(y,x) &
         \textit{x} double,
@@ -808,12 +824,12 @@ corresponding datatypes defined in the \VOTableSpec{}.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.30\textwidth}|p{0.26\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        
+
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{c|}{\textbf{VOTable}}
         \tabularnewline
-        
+
         \hline
         \textbf{type} &
         \textbf{datatype} &
@@ -870,7 +886,7 @@ corresponding datatypes defined in the \VOTableSpec{}.
 
 Where possible ADQL numeric values SHOULD be implemented using database types
 that correspond to the VOTable serialization types, e.g. \verb:SMALLINT: should
-map to a 16 bit integer, \verb:INTEGER: should map to a 32 bit integer, etc. 
+map to a 16 bit integer, \verb:INTEGER: should map to a 32 bit integer, etc.
 
 \subsubsection{INTERVAL}
 \label{sec:types.numeric.interval}
@@ -885,12 +901,12 @@ operate on some \verb:INTERVAL: values.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        
+
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
         \tabularnewline
-        
+
         \hline
         \textbf{type} &
         \textbf{datatype} &
@@ -928,12 +944,12 @@ The \verb:TIMESTAMP: datatype maps to the corresponding type defined in the
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        
+
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
         \tabularnewline
-        
+
         \hline
         \textbf{type} &
         \textbf{datatype} &
@@ -992,12 +1008,12 @@ content.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        
+
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
         \tabularnewline
-        
+
         \hline
         \textbf{type} &
         \textbf{datatype} &
@@ -1040,12 +1056,12 @@ defined functions that operate on some \verb:CLOB: values.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        
+
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
         \tabularnewline
-        
+
         \hline
         \textbf{type} &
         \textbf{datatype} &
@@ -1090,12 +1106,12 @@ type defined in the \VOTableSpec{}.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        
+
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
         \tabularnewline
-        
+
         \hline
         \textbf{type} &
         \textbf{datatype} &
@@ -1139,12 +1155,12 @@ in the \VOTableSpec{}.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        
+
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
         \tabularnewline
-        
+
         \hline
         \textbf{type} &
         \textbf{datatype} &
@@ -1197,12 +1213,12 @@ using the \verb:point: xtype defined in the \DALISpec{}.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        
+
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
         \tabularnewline
-        
+
         \hline
         \textbf{type} &
         \textbf{datatype} &
@@ -1246,12 +1262,12 @@ using the \verb:circle: xtype defined in the \DALISpec{}.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        
+
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
         \tabularnewline
-        
+
         \hline
         \textbf{type} &
         \textbf{datatype} &
@@ -1295,12 +1311,12 @@ using the \verb:polygon: xtype defined in the \DALISpec{}.
 \begin{table}[th]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
-        
+
         \hline
         \multicolumn{1}{|c|}{\textbf{ADQL}} &
         \multicolumn{3}{|c|}{\textbf{VOTable}}
         \tabularnewline
-        
+
         \hline
         \textbf{type} &
         \textbf{datatype} &
@@ -1431,7 +1447,7 @@ All functions described in this section use the following IVOID:
 \begin{verbatim}
     ivo://ivoa.net/std/tapregext#features-adqlgeo
 \end{verbatim}
-    
+
 Each geometrical function is declared using this IVOID and its name.
 See \SectionRef{sec:capabilities} for more details.
 
@@ -1454,7 +1470,7 @@ hyphen.
 The arguments for a geometric function represent spherical coordinates
 in units of degrees (square degrees for area).
 The values SHOULD be limited to [0, 360] and [-90, 90].
-            
+
 Details of the mechanism for reporting the out of range arguments are
 implementation dependent.
 
@@ -1482,7 +1498,7 @@ column values where a geometry datatype is stored in a column.
 
 Therefore, \verb:<geometry_value_expression>: is expanded as:
 \begin{verbatim}
-    <geometry_value_expression> ::= 
+    <geometry_value_expression> ::=
         <value_expression_primary>
       | <geometry_value_function>
 \end{verbatim}
@@ -1639,7 +1655,7 @@ a given threshold.
 
 The geometrical functions provided by ADQL offer a number of
 semantically equivalent ways to specify such a condition
-in either the JOIN or the WHERE clause, using various 
+in either the JOIN or the WHERE clause, using various
 combinations of POINT, CIRCLE and DISTANCE.
 While a correct implementation MUST generate the same result for
 any of these alternatives, the performance characteristics may
@@ -1647,15 +1663,15 @@ differ dramatically depending on implementation.
 Given this, it is difficult for (human or machine) ADQL authors
 to know how to phrase a crossmatch with the expectation that it
 will be executed efficiently, and difficult for services to know
-which forms of query to optimise.  The result can be the 
+which forms of query to optimise.  The result can be the
 unnecessarily slow operation of the common sky crossmatch operation.
 
 The purpose of this section is to recommend a preferred form of ADQL
 to use for sky crossmatches.  Clients proposing crossmatch-like
 queries are advised to phrase them this way rather than semantically
 equivalent alternatives, and services are encouraged to ensure that
-this form of join is executed efficiently; this might involve 
-identifying such ADQL input clauses and rewriting them appropriately 
+this form of join is executed efficiently; this might involve
+identifying such ADQL input clauses and rewriting them appropriately
 for efficient processing on the database backend.
 
 The preferred way to specify a sky position-only crossmatch is:
@@ -1758,7 +1774,7 @@ points at right angles with the arms.
 % extending, parallel to the coordinate axes at the center position,
 % for half the respective sizes on either side.
 % The box’s sides are line segments or great circles intersecting the
-% arms of the cross in its end points at right angles with the arms. 
+% arms of the cross in its end points at right angles with the arms.
 
 The function arguments specify the center position and the width and height,
 where:
@@ -2656,7 +2672,7 @@ For example, the following query with a nested subquery:
         )
     WHERE
         ra > 10
-    AND 
+    AND
         ra < 20
 \end{verbatim}
 \noindent
@@ -2679,7 +2695,7 @@ can be refactored as a named WITH query and a simpler main query:
         alpha_subset
     WHERE
         ra > 10
-    AND 
+    AND
         ra < 20
 \end{verbatim}
 
@@ -2715,7 +2731,7 @@ For a UNION operation to be valid in ADQL, the following criteria MUST be met:
     \item the columns in the operands MUST have the same datatypes.
 \end{itemize}
 
-In addition, the following criteria SHOULD be met: 
+In addition, the following criteria SHOULD be met:
 \begin{itemize}
     \item the columns in the operands SHOULD have the same metadata, e.g. units, UCD, etc.
     \item the metadata for the results SHOULD be generated from the left-hand operand.
@@ -2747,7 +2763,7 @@ For an EXCEPT operation to be valid in ADQL, the following criteria MUST be met:
     \item the metadata for the results MUST be generated from the left-hand operand.
 \end{itemize}
 
-In addition, the following criteria SHOULD be met: 
+In addition, the following criteria SHOULD be met:
 \begin{itemize}
     \item the columns in the operands SHOULD have the same metadata, e.g. units, UCD, etc.
 \end{itemize}
@@ -2777,7 +2793,7 @@ For an INTERSECT operation to be valid in ADQL, the following criteria MUST be m
     \item the columns in the operands MUST have the same datatypes.
 \end{itemize}
 
-In addition, the following criteria SHOULD be met: 
+In addition, the following criteria SHOULD be met:
 \begin{itemize}
     \item the columns in the operands SHOULD have the same metadata, e.g. units, UCD, etc.
     \item the metadata for the results SHOULD be generated from the left-hand operand.
@@ -2868,7 +2884,7 @@ is equivalent to:
 \label{sec:type}
 
 An ADQL service implementation MAY include support for the following optional
-type conversion functions: 
+type conversion functions:
 
 \begin{itemize}
     \item \verb:CAST():
@@ -3027,7 +3043,7 @@ be supported.
 \label{sec:condfunc}
 
 An ADQL service implementation MAY include support for the following optional
-conditional functions: 
+conditional functions:
 
 \begin{itemize}
     \item \verb:COALESCE():
@@ -3039,7 +3055,7 @@ conditional functions:
 {\footnotesize \verb|name: COALESCE|}\\
 
 The COALESCE function returns the first of its arguments that is not
-NULL. NULL is returned only if all arguments are NULL. 
+NULL. NULL is returned only if all arguments are NULL.
 
 All arguments must be of the same datatype. An error should be returned
 if this rule is not respected. The way to report this error is
@@ -3173,7 +3189,7 @@ which limits the number of rows returned by removing a specified number
 of rows from the beginning of the result set.
 
 If a query contains both an ORDER BY clause and an OFFSET clause,
-then the ORDER BY is applied before the specified number of 
+then the ORDER BY is applied before the specified number of
 rows are dropped by the OFFSET clause.
 
 If the total number of rows is less than the value
@@ -3215,7 +3231,7 @@ For example, the following XML fragment describes a service that supports the
     <feature>
         <form>CIRCLE</form>
     </feature>
-</languageFeatures>    
+</languageFeatures>
 \end{verbatim}
 
 \clearpage % section cut
