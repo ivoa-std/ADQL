@@ -193,6 +193,8 @@
 <br>&nbsp;&nbsp;&nbsp;&nbsp; <a href='#value_expression'>&lt;value_expression&gt;</a>  [  <a href="#xref-NOT"> NOT </a>  ]  <a href="#xref-IN"> IN </a>  <a href='#in_predicate_value'>&lt;in_predicate_value&gt;</a>
 <p><a href="#xref-in_predicate_value" name="in_predicate_value"> &lt;in_predicate_value&gt; </a>&nbsp;&nbsp;&nbsp;::=
 <br>&nbsp;&nbsp;&nbsp;&nbsp; <a href='#table_subquery'>&lt;table_subquery&gt;</a>  |  <a href='#left_paren'>&lt;left_paren&gt;</a>  <a href='#in_value_list'>&lt;in_value_list&gt;</a>  <a href='#right_paren'>&lt;right_paren&gt;</a>
+<p><a href="#xref-in_unit_function" name="in_unit_function"> &lt;in_unit_function&gt; </a>&nbsp;&nbsp;&nbsp;::=
+<br>&nbsp;&nbsp;&nbsp;&nbsp; <a href="#xref-IN_UNIT"> IN_UNIT </a>  <a href='#left_paren'>&lt;left_paren&gt;</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href='#numeric_value_expression'>&lt;numeric_value_expression&gt;</a>  <a href='#comma'>&lt;comma&gt;</a>  <a href='#character_string_literal'>&lt;character_string_literal&gt;</a><br>&nbsp;&nbsp;&nbsp;&nbsp; <a href='#right_paren'>&lt;right_paren&gt;</a>
 <p><a href="#xref-in_value_list" name="in_value_list"> &lt;in_value_list&gt; </a>&nbsp;&nbsp;&nbsp;::=
 <br>&nbsp;&nbsp;&nbsp;&nbsp; <a href='#value_expression'>&lt;value_expression&gt;</a>  {  <a href='#comma'>&lt;comma&gt;</a>  <a href='#value_expression'>&lt;value_expression&gt;</a>  }  ...
 <p><a href="#xref-intersects" name="intersects"> &lt;intersects&gt; </a>&nbsp;&nbsp;&nbsp;::=
@@ -256,7 +258,7 @@
 <p><a href="#xref-numeric_value_expression" name="numeric_value_expression"> &lt;numeric_value_expression&gt; </a>&nbsp;&nbsp;&nbsp;::=
 <br>&nbsp;&nbsp;&nbsp;&nbsp; <a href='#term'>&lt;term&gt;</a><br>&nbsp;&nbsp;&nbsp;&nbsp; |  <a href='#numeric_value_expression'>&lt;numeric_value_expression&gt;</a>  <a href='#plus_sign'>&lt;plus_sign&gt;</a>  <a href='#term'>&lt;term&gt;</a><br>&nbsp;&nbsp;&nbsp;&nbsp; |  <a href='#numeric_value_expression'>&lt;numeric_value_expression&gt;</a>  <a href='#minus_sign'>&lt;minus_sign&gt;</a>  <a href='#term'>&lt;term&gt;</a>
 <p><a href="#xref-numeric_value_function" name="numeric_value_function"> &lt;numeric_value_function&gt; </a>&nbsp;&nbsp;&nbsp;::=
-<br>&nbsp;&nbsp;&nbsp;&nbsp; <a href='#trig_function'>&lt;trig_function&gt;</a><br>&nbsp;&nbsp;&nbsp;&nbsp; |  <a href='#math_function'>&lt;math_function&gt;</a><br>&nbsp;&nbsp;&nbsp;&nbsp; |  <a href='#numeric_geometry_function '>&lt;numeric_geometry_function &gt;</a><br>&nbsp;&nbsp;&nbsp;&nbsp; |  <a href='#user_defined_function'>&lt;user_defined_function&gt;</a>
+<br>&nbsp;&nbsp;&nbsp;&nbsp; <a href='#trig_function'>&lt;trig_function&gt;</a><br>&nbsp;&nbsp;&nbsp;&nbsp; |  <a href='#math_function'>&lt;math_function&gt;</a><br>&nbsp;&nbsp;&nbsp;&nbsp; |  <a href='#in_unit_function'>&lt;in_unit_function&gt;</a><br>&nbsp;&nbsp;&nbsp;&nbsp; |  <a href='#numeric_geometry_function'>&lt;numeric_geometry_function&gt;</a><br>&nbsp;&nbsp;&nbsp;&nbsp; |  <a href='#user_defined_function'>&lt;user_defined_function&gt;</a>
 <p><a href="#xref-offset_clause" name="offset_clause"> &lt;offset_clause&gt; </a>&nbsp;&nbsp;&nbsp;::=&nbsp;&nbsp; <a href="#xref-OFFSET"> OFFSET </a>  <a href='#unsigned_decimal'>&lt;unsigned_decimal&gt;</a>
 
 <p><a href="#xref-order_by_clause" name="order_by_clause"> &lt;order_by_clause&gt; </a>&nbsp;&nbsp;&nbsp;::=&nbsp;&nbsp; <a href="#xref-ORDER"> ORDER </a>  <a href="#xref-BY"> BY </a>  <a href='#order_by_term_list'>&lt;order_by_term_list&gt;</a>
@@ -538,6 +540,7 @@ Z
      <td> <a href="#coord_sys"> &lt;coord_sys&gt; </a>
           <a href="#delimiter_token"> &lt;delimiter_token&gt; </a>
           <a href="#general_literal"> &lt;general_literal&gt; </a>
+          <a href="#in_unit_function"> &lt;in_unit_function&gt; </a>
           <a href="#region"> &lt;region&gt; </a>
      </td>
 </tr>
@@ -598,6 +601,7 @@ Z
           <a href="#from_clause"> &lt;from_clause&gt; </a>
           <a href="#group_by_term_list"> &lt;group_by_term_list&gt; </a>
           <a href="#intersects"> &lt;intersects&gt; </a>
+          <a href="#in_unit_function"> &lt;in_unit_function&gt; </a>
           <a href="#in_value_list"> &lt;in_value_list&gt; </a>
           <a href="#math_function"> &lt;math_function&gt; </a>
           <a href="#order_by_term_list"> &lt;order_by_term_list&gt; </a>
@@ -850,6 +854,10 @@ Z
      <td> <a href="#in_predicate"> &lt;in_predicate&gt; </a>
      </td>
 </tr>
+<tr> <td>  <a href="#in_unit_function" name="xref-in_unit_function"> in_unit_function </a> </td>
+     <td> <a href="#numeric_value_function"> &lt;numeric_value_function&gt; </a>
+     </td>
+</tr>
 <tr> <td>  <a href="#in_value_list" name="xref-in_value_list"> in_value_list </a> </td>
      <td> <a href="#in_predicate_value"> &lt;in_predicate_value&gt; </a>
      </td>
@@ -906,6 +914,7 @@ Z
           <a href="#general_set_function"> &lt;general_set_function&gt; </a>
           <a href="#intersects"> &lt;intersects&gt; </a>
           <a href="#in_predicate_value"> &lt;in_predicate_value&gt; </a>
+          <a href="#in_unit_function"> &lt;in_unit_function&gt; </a>
           <a href="#joined_table"> &lt;joined_table&gt; </a>
           <a href="#math_function"> &lt;math_function&gt; </a>
           <a href="#named_columns_join"> &lt;named_columns_join&gt; </a>
@@ -1000,7 +1009,7 @@ Z
      <td> <a href="#predicate"> &lt;predicate&gt; </a>
      </td>
 </tr>
-<tr> <td>  <a href="#numeric_geometry_function " name="xref-numeric_geometry_function "> numeric_geometry_function  </a> </td>
+<tr> <td>  <a href="#numeric_geometry_function" name="xref-numeric_geometry_function"> numeric_geometry_function </a> </td>
      <td> <a href="#numeric_value_function"> &lt;numeric_value_function&gt; </a>
      </td>
 </tr>
@@ -1017,6 +1026,7 @@ Z
           <a href="#coordinate1"> &lt;coordinate1&gt; </a>
           <a href="#coordinate2"> &lt;coordinate2&gt; </a>
           <a href="#distance_function"> &lt;distance_function&gt; </a>
+          <a href="#in_unit_function"> &lt;in_unit_function&gt; </a>
           <a href="#math_function"> &lt;math_function&gt; </a>
           <a href="#numeric_value_expression"> &lt;numeric_value_expression&gt; </a>
           <a href="#radius"> &lt;radius&gt; </a>
@@ -1191,6 +1201,7 @@ Z
           <a href="#general_set_function"> &lt;general_set_function&gt; </a>
           <a href="#intersects"> &lt;intersects&gt; </a>
           <a href="#in_predicate_value"> &lt;in_predicate_value&gt; </a>
+          <a href="#in_unit_function"> &lt;in_unit_function&gt; </a>
           <a href="#joined_table"> &lt;joined_table&gt; </a>
           <a href="#math_function"> &lt;math_function&gt; </a>
           <a href="#named_columns_join"> &lt;named_columns_join&gt; </a>
@@ -2086,6 +2097,7 @@ X
 </tr>
 <tr> <td>  <a name="xref-IN_UNIT"> </a> IN_UNIT </td>
      <td> <a href="#ADQL_reserved_word"> &lt;ADQL_reserved_word&gt; </a>
+          <a href="#in_unit_function"> &lt;in_unit_function&gt; </a>
      </td>
 </tr>
 <tr> <td>  <a name="xref-IS"> </a> IS </td>

@@ -424,6 +424,11 @@
     <in_predicate_value> ::=
         <table_subquery> | <left_paren> <in_value_list> <right_paren>
 
+    <in_unit_function> ::= 
+        IN_UNIT <left_paren>
+            <numeric_value_expression> <comma> <character_string_literal>
+        <right_paren>
+
     <in_value_list> ::=
         <value_expression> { <comma> <value_expression> } ...
 
@@ -539,7 +544,8 @@
     <numeric_value_function> ::=
         <trig_function>
       | <math_function>
-      | <numeric_geometry_function >
+      | <in_unit_function>
+      | <numeric_geometry_function>
       | <user_defined_function>
 
     <offset_clause> ::= OFFSET <unsigned_decimal>
