@@ -12,47 +12,39 @@
       | ATAN2
       | BIGINT
       | BOX
-      | CAST
       | CEILING
       | CENTROID
-      | CHAR
       | CIRCLE
-      | COALESCE
       | CONTAINS
       | COORD1
       | COORD2
       | COORDSYS
       | COS
+      | COT
       | DEGREES
       | DISTANCE
-      | DOUBLE
       | EXP
       | FLOOR
-      | INTEGER
+      | ILIKE
       | INTERSECTS
       | IN_UNIT
       | LOG
       | LOG10
       | MOD
-      | NULL
+      | OFFSET
       | PI
       | POINT
       | POLYGON
       | POWER
-      | PRECISION
       | RADIANS
-      | REAL
       | REGION
       | RAND
       | ROUND
       | SIN
-      | SMALLINT
       | SQRT
-      | TIMESTAMP
       | TOP
       | TAN
       | TRUNCATE
-      | VARCHAR
 
     <SQL_embedded_language_character> ::=
         <left_bracket> | <right_bracket>
@@ -66,11 +58,11 @@
       | AUTHORIZATION | AVG
       | BEGIN | BETWEEN | BIT | BIT_LENGTH
       | BOTH | BY
-      | CASCADE | CASCADED | CASE
+      | CASCADE | CASCADED | CASE | CAST
       | CATALOG
-      | CHARACTER | CHAR_LENGTH
+      | CHAR | CHARACTER | CHAR_LENGTH
       | CHARACTER_LENGTH | CHECK | CLOSE
-      | COLLATE | COLLATION
+      | COALESCE | COLLATE | COLLATION
       | COLUMN | COMMIT
       | CONNECT
       | CONNECTION | CONSTRAINT
@@ -83,7 +75,7 @@
       | DECIMAL | DECLARE | DEFAULT | DEFERRABLE
       | DEFERRED | DELETE | DESC | DESCRIBE | DESCRIPTOR
       | DIAGNOSTICS
-      | DISCONNECT | DISTINCT | DOMAIN | DROP
+      | DISCONNECT | DISTINCT | DOMAIN | DOUBLE | DROP
       | ELSE | END | END-EXEC | ESCAPE
       | EXCEPT | EXCEPTION
       | EXEC | EXECUTE | EXISTS
@@ -93,9 +85,9 @@
       | GET | GLOBAL | GO | GOTO
       | GRANT | GROUP
       | HAVING | HOUR
-      | IDENTITY | ILIKE | IMMEDIATE | IN | INDICATOR
+      | IDENTITY | IMMEDIATE | IN | INDICATOR
       | INITIALLY | INNER | INPUT
-      | INSENSITIVE | INSERT | INT | INTERSECT
+      | INSENSITIVE | INSERT | INT | INTEGER | INTERSECT
       | INTERVAL | INTO | IS
       | ISOLATION
       | JOIN
@@ -105,32 +97,32 @@
       | MATCH | MAX | MIN | MINUTE | MODULE
       | MONTH
       | NAMES | NATIONAL | NATURAL | NCHAR | NEXT | NO
-      | NOT
+      | NOT | NULL
       | NULLIF | NUMERIC
       | OCTET_LENGTH | OF
       | ON | ONLY | OPEN | OPTION | OR
       | ORDER | OUTER
       | OUTPUT | OVERLAPS
-      | PAD | PARTIAL | POSITION | PREPARE
+      | PAD | PARTIAL | POSITION | PRECISION | PREPARE
       | PRESERVE | PRIMARY
       | PRIOR | PRIVILEGES | PROCEDURE | PUBLIC
-      | READ | REFERENCES | RELATIVE | RESTRICT
+      | READ | REAL | REFERENCES | RELATIVE | RESTRICT
       | REVOKE | RIGHT
       | ROLLBACK | ROWS
       | SCHEMA | SCROLL | SECOND | SECTION
       | SELECT
       | SESSION | SESSION_USER | SET
-      | SIZE | SOME | SPACE | SQL | SQLCODE
+      | SIZE | SMALLINT | SOME | SPACE | SQL | SQLCODE
       | SQLERROR | SQLSTATE
       | SUBSTRING | SUM | SYSTEM_USER
       | TABLE | TEMPORARY
-      | THEN | TIME
+      | THEN | TIME | TIMESTAMP
       | TIMEZONE_HOUR | TIMEZONE_MINUTE
       | TO | TRAILING | TRANSACTION
       | TRANSLATE | TRANSLATION | TRIM | TRUE
       | UNION | UNIQUE | UNKNOWN | UPDATE | UPPER | USAGE
       | USER | USING
-      | VALUE | VALUES | VARYING | VIEW
+      | VALUE | VALUES | VARCHAR | VARYING | VIEW
       | WHEN | WHENEVER | WHERE | WITH | WORK | WRITE
       | YEAR
       | ZONE
@@ -432,6 +424,11 @@
     <in_predicate_value> ::=
         <table_subquery> | <left_paren> <in_value_list> <right_paren>
 
+    <in_unit_function> ::= 
+        IN_UNIT <left_paren>
+            <numeric_value_expression> <comma> <character_string_literal>
+        <right_paren>
+
     <in_value_list> ::=
         <value_expression> { <comma> <value_expression> } ...
 
@@ -547,7 +544,8 @@
     <numeric_value_function> ::=
         <trig_function>
       | <math_function>
-      | <numeric_geometry_function >
+      | <in_unit_function>
+      | <numeric_geometry_function>
       | <user_defined_function>
 
     <offset_clause> ::= OFFSET <unsigned_decimal>

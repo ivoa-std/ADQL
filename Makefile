@@ -33,7 +33,9 @@ html: $(DOCNAME).html
 
 zip: package
 
-# Custom target for geneating a hyperlinked HTML version of the BNF.
+bnf: adql-bnf.html
+
+# Custom target for generating a hyperlinked HTML version of the BNF.
 # This is not currently run by default during the build.
 BNFHTML_INTRO = \
    <p>The SELECT statement is found at \
@@ -41,12 +43,11 @@ BNFHTML_INTRO = \
    </p>
    
 adql-bnf.html: adql.bnf
-	( echo "ADQL 2.1"; cat $< ) \
+	@( echo "ADQL 2.1"; cat $< ) \
         | perl bnf2html.pl \
         | sed -e's/#xref-  */#xref-/g' \
+              -e's/href="#  */href="#/g' \
               -e's/name="  */name="/g' \
               -e's/&lt;  */\&lt;/g' \
         | sed -e"s%</h1>%</h1>\n$(BNFHTML_INTRO)%" \
-        > $@
-
-
+        > $@ && echo "=> HTML version of BNF successfully generated in: $@"
