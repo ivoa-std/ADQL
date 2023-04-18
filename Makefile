@@ -7,10 +7,17 @@ DOCNAME = ADQL
 DOCVERSION = 2.1
 
 # Publication date, ISO format; update manually for "releases"
-DOCDATE = 2021-05-28
+DOCDATE = 2023-04-18
 
 # What is it you're writing: NOTE, WD, PR, or REC
 DOCTYPE = PR
+
+# IVOA group submitting this document
+IVOA_GROUP = DAL
+
+# An e-mail address of the person doing the submission to the document
+# repository (can be empty until a make upload is being made)
+#AUTHOR_EMAIL=
 
 # Source files for the TeX document (but the main file must always
 # be called $(DOCNAME).tex
@@ -43,7 +50,7 @@ BNFHTML_INTRO = \
    </p>
    
 adql-bnf.html: adql.bnf
-	@( echo "ADQL 2.1"; cat $< ) \
+	@( echo "ADQL ${DOCVERSION}"; cat $< ) \
         | perl bnf2html.pl \
         | sed -e's/#xref-  */#xref-/g' \
               -e's/href="#  */href="#/g' \
