@@ -1621,6 +1621,11 @@ where
 \noindent
 and
 \begin{verbatim}
+    <predicate_geometry_function> ::= <contains> | <intersects>
+\end{verbatim}
+\noindent
+and
+\begin{verbatim}
     <non_predicate_geometry_function> ::=
         AREA <left_paren> <geometry_value_expression> <right_paren>
       | COORD1 <left_paren> <coord_value> <right_paren>
@@ -1637,9 +1642,9 @@ and
             <right_paren>
 \end{verbatim}
 \noindent
-and
+where
 \begin{verbatim}
-    <predicate_geometry_function> ::= <contains> | <intersects>
+    <coord_value> ::= <point_value> | <column_reference>
 \end{verbatim}
 
 \subsubsection{Preferred crossmatch syntax}
