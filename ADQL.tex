@@ -35,7 +35,7 @@
 \author{Yuji Shirasaki}
 \author{Alexander Szalay}
 
-\editor[http://wiki.ivoa.net/twiki/bin/view/IVOA/GregoryMantelet]{Grégory Mantelet }
+\editor[http://wiki.ivoa.net/twiki/bin/view/IVOA/GregoryMantelet]{Grégory Mantelet}
 \editor[http://wiki.ivoa.net/twiki/bin/view/IVOA/DaveMorris]{Dave Morris}
 
 \previousversion[http://www.ivoa.net/Documents/ADQL/2.0]{ADQL-2.0}
@@ -84,21 +84,21 @@ These protocols might be satisfied using a single
 table query. However, different VO services have different needs in terms
 of query complexity and ADQL arises in this context.
 
-ADQL is based on the Structured Query Language (SQL), especially on SQL 92
-\footnote{\url{https://en.wikipedia.org/wiki/SQL-92}}
-\footnote{\url{https://www.iso.org/standard/16663.html}}
-\footnote{\url{http://www.contrib.andrew.cmu.edu/~shadow/sql/sql1992.txt}}.
+ADQL is based on the Structured Query Language (SQL), especially on SQL
+92 \citep{std:SQL1992}\footnote{see also
+\url{https://en.wikipedia.org/wiki/SQL-92},
+\url{http://www.contrib.andrew.cmu.edu/~shadow/sql/sql1992.txt}.}.
 
-The VO has a number of tabular data sets and many of them are stored in relational
-databases, making SQL a convenient access means. A subset of the SQL grammar
-has been extended to support queries that are specific to astronomy. Similarly
+The VO has a number of tabular data sets, and many of them are stored in relational
+databases, making SQL a convenient means of access. A subset of the SQL grammar
+has been extended to support queries that are specific to astronomy. Similarl
 to SQL, the ADQL language definition is not semantically safe by design and
 therefore this specification defines syntactical correctness only. Type safety
 has been achieved as far as it can be done in SQL.
 
 This specification provides a complete definition of the ADQL through a single
 Backus Naur Form (BNF) based language definition. It includes both mandatory
-and optional features. Thus, this BNF aims to help implementing ADQL core
+and optional features.  This BNF aims to help implementing ADQL core
 features as well as the defined optional ones.
 
 \clearpage % to have the VOArch figure along its description and subsection title
@@ -223,6 +223,7 @@ is case-insensitive.
 \subsubsection{SQL reserved keywords}
 \label{sec:adql.keywords}
 
+\begin{raggedright}
 \noindent
 \texttt{ABSOLUTE,} \texttt{ACTION,} \texttt{ADD,} \texttt{ALL,}
 \texttt{ALLOCATE,} \texttt{ALTER,} \texttt{AND,} \texttt{ANY,}
@@ -287,53 +288,50 @@ is case-insensitive.
 \texttt{VALUES,} \texttt{VARCHAR,} \texttt{VARYING,} \texttt{VIEW,}
 \texttt{WHEN,} \texttt{WHENEVER,} \texttt{WHERE,} \texttt{WITH,}
 \texttt{WORK,} \texttt{WRITE,} \texttt{YEAR,} \texttt{ZONE}
+\end{raggedright}
 
 \subsubsection{ADQL reserved keywords}
 \label{sec:adql.reswords}
 
-\noindent
-Mathematical functions and operators:\\
-\noindent
+
+\begin{raggedright}
+\paragraph{Mathematical functions and operators}
 \texttt{ABS,} \texttt{ACOS,} \texttt{ASIN,} \texttt{ATAN,}
 \texttt{ATAN2,} \texttt{CEILING,} \texttt{COS,} \texttt{COT,}
 \texttt{DEGREES,} \texttt{EXP,} \texttt{FLOOR,} \texttt{LOG,}
 \texttt{LOG10,} \texttt{MOD,}  \texttt{PI,} \texttt{POWER,}
 \texttt{RADIANS,} \texttt{RAND,} \texttt{ROUND,} \texttt{SIN,}
 \texttt{SQRT,} \texttt{TAN,} \texttt{TRUNCATE}
-\newline
+\end{raggedright}
 
-\noindent
-Geometric functions and operators:\\
-\noindent
+
+\begin{raggedright}
+\paragraph{Geometric functions and operators}
 \texttt{AREA,} \texttt{BOX,} \texttt{CENTROID,} \texttt{CIRCLE,}
 \texttt{CONTAINS,} \texttt{COORD1,} \texttt{COORD2,}
 \texttt{COORDSYS,} \texttt{DISTANCE,} \texttt{INTERSECTS,}
 \texttt{POINT,} \texttt{POLYGON,} \texttt{REGION}
-\newline
+\end{raggedright}
 
-\noindent
-\verb:CAST: function and datatypes:\\
-\noindent
+\begin{raggedright}
+\paragraph{CAST function and datatypes}
 \texttt{BIGINT}
-\newline
+\end{raggedright}
 
-\noindent
-String functions and operators:\\
-\noindent
+\begin{raggedright}
+\paragraph{String functions and operators}
 \texttt{ILIKE}
-\newline
+\end{raggedright}
 
-\noindent
-Conversion functions:\\
-\noindent
+\begin{raggedright}
+\paragraph{Conversion functions}
 \texttt{IN\_UNIT}
-\newline
+\end{raggedright}
 
-\noindent
-Cardinality:\\
-\noindent
-\texttt{OFFSET,} \texttt{TOP}
-\newline
+\begin{raggedright}
+\paragraph{Cardinality}
+\texttt{OFFSET} \texttt{TOP}
+\end{raggedright}
 
 
 \subsubsection{Identifiers}
@@ -347,7 +345,7 @@ digits \verb:{0-9}: as follows:
 <Latin_letter>... [{ <digit> | <Latin_letter> | <underscore> }...]
 \end{verbatim}
 
-\subsubsection{Escape syntax}
+\subsubsection{Delimited identifiers}
 \label{sec:adql.escape}
 
 To address reserved keyword and special character conflicts the ADQL language
@@ -477,8 +475,8 @@ The \verb:SELECT: statement defines a query to apply to a set of tables specifie
 in the \verb:FROM: clause. As a result of this query, a subset of the tables
 is returned.
 The order of the rows MAY be arbitrary unless an \verb:ORDER BY: clause is specified.
-A \verb:TOP: clause MAY be specified to limit the number of rows returned.
-An \verb:OFFSET: clause MAY be specified to skip a number of rows at the start
+A \verb:TOP: clause may be specified to limit the number of rows returned.
+An \verb:OFFSET: clause may be specified to skip a number of rows at the start
 of the results.
 If both \verb:TOP: and \verb:OFFSET: are used together then \verb:OFFSET: is applied
 first followed by \verb:TOP: \SectionSee{sec:offset}.
@@ -494,7 +492,7 @@ string or geometry value expressions.
 \label{sec:subqueries}
 %TBD - cosmopterix tests for this
 
-Table subqueries MAY be used by predicates such as \verb:IN: and \verb:EXISTS:
+Table subqueries may be used by predicates such as \verb:IN: and \verb:EXISTS:
 in the \verb:WHERE: clause of a query:
 
 \begin{verbatim}
@@ -511,7 +509,7 @@ in the \verb:WHERE: clause of a query:
             )
 \end{verbatim}
 
-Table subqueries MAY be used for declaring derived tables in the \verb:FROM: clause
+Table subqueries may be used for declaring derived tables in the \verb:FROM: clause
 of a query:
 
 \begin{verbatim}
@@ -528,7 +526,7 @@ of a query:
         alpha_source.id = subsample.id
 \end{verbatim}
 
-If supported by the implementation, table subqueries MAY be used for declaring
+If supported by the implementation, table subqueries may be used for declaring
 named result sets in the \verb:WITH: clause of the main query:
 
 \begin{verbatim}
@@ -557,11 +555,11 @@ default is \verb:INNER:. All of these can be \verb:NATURAL: or not.
 \subsubsection{Search condition}
 \label{sec:search}
 
-A search condition MAY be part of other clauses including \verb:JOIN:, \verb:HAVING: and \verb:WHERE:.
+A search condition may be part of other clauses including \verb:JOIN:, \verb:HAVING: and \verb:WHERE:.
 
-A search condition MAY contain the standard logical operators, \verb:AND:, \verb:OR: and \verb:NOT:.
+A search condition may contain the standard logical operators, \verb:AND:, \verb:OR: and \verb:NOT:.
 
-A search condition MAY contain the following predicates:
+A search condition may contain the following predicates:
 
 \begin{itemize}
     \item Standard comparison operators: \verb:=:, \verb:!=:, \verb:<>:, \verb:<:, \verb:>:, \verb:<=:, \verb:>=:
@@ -583,9 +581,10 @@ case-insensitive string comparison operator, defined in \SectionRef{sec:string.f
 
 ADQL declares a list of reserved keywords \SectionSee{sec:keywords} which include
 the mathematical and trigonometrical function names. Their syntax,
-usage and description are detailed in the following tables:
+usage and description are detailed in tables~\ref{table:math.functions}
+and \ref{table:trig.functions}.
 
-\begin{table}[th]\footnotesize
+\begin{table}[tpb]\footnotesize
     \begin{tabular}{|p{0.20\textwidth}|p{0.125\textwidth}|p{0.125\textwidth}|p{0.55\textwidth}|}
 
         \hline
@@ -724,7 +723,7 @@ usage and description are detailed in the following tables:
     \label{table:math.functions}
 \end{table}
 
-\begin{table}[th]\footnotesize
+\begin{table}[tbh]\footnotesize
     \begin{tabular}{|p{0.20\textwidth}|p{0.125\textwidth}|p{0.125\textwidth}|p{0.55\textwidth}|}
 
         \hline
@@ -790,7 +789,6 @@ usage and description are detailed in the following tables:
     \label{table:trig.functions}
 \end{table}
 
-\clearpage % section cut
 \section{Type system}
 \label{sec:types}
 
@@ -820,7 +818,7 @@ The numeric datatypes, \verb:BIT:, \verb:SMALLINT:, \verb:INTEGER:,
 \verb:BIGINT:, \verb:REAL:  \linebreak and \verb:DOUBLE PRECISION: map to the
 corresponding datatypes defined in the \VOTableSpec{}.
 
-\begin{table}[th]\footnotesize
+\begin{table}[h]\footnotesize
     \begin{tabular}
         {|p{0.30\textwidth}|p{0.26\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
 
@@ -897,7 +895,7 @@ None of the ADQL operators apply to \verb:INTERVAL: values.
 However, specific implementations MAY provide user defined functions that
 operate on some \verb:INTERVAL: values.
 
-\begin{table}[th]\footnotesize
+\begin{table}[h]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
 
@@ -940,7 +938,7 @@ Where possible, date and time values SHOULD be implemented as described in the
 The \verb:TIMESTAMP: datatype maps to the corresponding type defined in the
 \DALISpec{}.
 
-\begin{table}[th]\footnotesize
+\begin{table}[h]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
 
@@ -968,7 +966,7 @@ The \verb:TIMESTAMP: datatype maps to the corresponding type defined in the
     \label{table:types.datetime.timestamp}
 \end{table}
 
-\verb:TIMESTAMP: literals can be created using the \verb:CAST(): function
+\verb:TIMESTAMP:-s can be created from string literals using the \verb:CAST(): function
 (if supported) described in \SectionRef{sec:type.cast}.
 
 The basic comparison operators \verb:=:, \verb:<:, \verb:>:, \verb:<=:, \verb:>=:,
@@ -987,7 +985,7 @@ The basic comparison operators \verb:=:, \verb:<:, \verb:>:, \verb:<=:, \verb:>=
 \end{verbatim}
 
 Within the database, the details of how \verb:TIMESTAMP: values are implemented
-is platform dependent. The primary requirement is that the results of the
+are platform dependent. The primary requirement is that the results of the
 comparison operators on \verb:TIMESTAMP: values are consistent with respect to
 chronological time.
 
@@ -1004,7 +1002,7 @@ The choice of whether \verb:CHAR: and \verb:VARCHAR: map to \verb:char: or
 \verb:unicodeChar: is implementation dependent and may depend on the data
 content.
 
-\begin{table}[th]\footnotesize
+\begin{table}[h]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
 
@@ -1052,7 +1050,7 @@ defined functions that operate on some \verb:CLOB: values.
 
 \verb:CLOB: values are serialized as arrays of characters.
 
-\begin{table}[th]\footnotesize
+\begin{table}[h]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
 
@@ -1102,7 +1100,7 @@ specific operations on the generated URL field.
 The \verb:BINARY: and \verb:VARBINARY: datatypes map to the \verb:unsignedByte:
 type defined in the \VOTableSpec{}.
 
-\begin{table}[th]\footnotesize
+\begin{table}[h]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
 
@@ -1151,7 +1149,7 @@ defined functions that operate on some \verb:BLOB: values.
 \verb:BLOB: values are serialized as arrays of \verb:unsignedByte: defined
 in the \VOTableSpec{}.
 
-\begin{table}[th]\footnotesize
+\begin{table}[h]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
 
@@ -1209,7 +1207,7 @@ for spherical coordinates defined in the
 \verb:POINT: values are serialized as arrays of floating point numbers
 using the \verb:point: xtype defined in the \DALISpec{}.
 
-\begin{table}[th]\footnotesize
+\begin{table}[h]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
 
@@ -1258,7 +1256,7 @@ for spherical coordinates defined in the
 \verb:CIRCLE: values are serialized as arrays of floating point numbers
 using the \verb:circle: xtype defined in the \DALISpec{}.
 
-\begin{table}[th]\footnotesize
+\begin{table}[h]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
 
@@ -1307,7 +1305,7 @@ for spherical coordinates defined in the
 \verb:POLYGON: values are serialized as arrays of floating point numbers
 using the \verb:polygon: xtype defined in the \DALISpec{}.
 
-\begin{table}[th]\footnotesize
+\begin{table}[h]\footnotesize
     \begin{tabular}
         {|p{0.26\textwidth}|p{0.30\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
 
@@ -1350,7 +1348,7 @@ For example:
         )
 \end{verbatim}
 \noindent
-describes a triangle, whose vertices are (10.0, -10.5), (20.0, 20.5)
+describes a triangle with vertices at (10.0, -10.5), (20.0, 20.5)
 and (30.0, 30.5) degrees.
 
 \subsubsection{REGION}
@@ -1401,11 +1399,10 @@ feature name.
 
 In the context of ADQL, the \verb:type: URI is expected to be an IVOID.
 
-Please, note that IVOIDs are case insensitive. Therefore, ADQL clients MAY
-compare IVOIDs without case normalisation. Thus, in order to minimize risk of
-interoperability issue due to case folding, ADQL services MUST provide IVOIDs of
-all supported ADQL features in lower-case. This rule is already enforced
-in all the definition and examples of ADQL features in this whole document.
+Note that IVOIDs are case insensitive. However, in order to minimize
+interoperability issues when clients neglect to normalize IVOID case, 
+ADQL services MUST provide the feature IVOIDs in all-lower case as shown
+in the present document.
 
 \AppendixRef{sec:features} contains examples of how to declare support
 for each of the language features defined in this document using the
@@ -1420,7 +1417,7 @@ the \TAPRegSpec{}.
 \label{sec:functions.geom.overview}
 
 In addition to the mathematical functions, ADQL provides the following geometrical
-functions to enhance the astronomical usage of the language:
+functions to facilitate queries commonly useful in astronomy:
 
 \begin{itemize}
     \item AREA
@@ -1576,7 +1573,7 @@ For example:
 \subsubsection{Utility functions}
 \label{sec:functions.geom.utility}
 
-Function COORDSYS extracts the coordinate system string from a given
+The COORDSYS function extracts the coordinate system string from a given
 geometry. To do so it accepts a geometry expression and returns a calculated
 string value.
 
@@ -1943,7 +1940,7 @@ Future versions of this specification may remove this parameter
 {\footnotesize \verb|name: CONTAINS|}\\
 
 The CONTAINS function determines if a geometry is wholly contained within
-another. This is most commonly used to express a "point-in-shape" condition.
+another. This is most commonly used to express a ``point-in-shape'' condition.
 
 For example, an expression to determine whether the point (25.0, -19.5) degrees
 is within a circle of ten degrees radius centered on position (25.4, -20.0) degrees,
@@ -1985,7 +1982,7 @@ value must be compared to the numeric values 0 or 1 to form a SQL predicate:
             )
 \end{verbatim}
 \noindent
-for "does contain" and
+for ``does contain'' and
 \begin{verbatim}
     WHERE
         0 = CONTAINS(
@@ -2001,7 +1998,7 @@ for "does contain" and
             )
 \end{verbatim}
 \noindent
-for "does not contain".
+for ``does not contain''.
 
 %TODO - CONTAINS(thing, POINT) ?
 
@@ -2218,7 +2215,7 @@ use the same coordinate system.
 {\footnotesize \verb|name: INTERSECTS|}\\
 
 The INTERSECTS function determines if two geometry values overlap. This is
-most commonly used to express a "shape-vs-shape" intersection test.
+most commonly used to express a ``shape-vs-shape'' intersection test.
 
 For example, an expression to determine whether a circle of one degree radius
 centered on position (25.4, -20.0) degrees overlaps with a POLYGON, could be
@@ -2261,7 +2258,7 @@ value should be compared to the numeric values 0 or 1 to form a SQL predicate:
             )
 \end{verbatim}
 \noindent
-for "does intersect" and
+for ``does intersect'' and
 \begin{verbatim}
     WHERE
         0 = INTERSECTS(
@@ -2279,7 +2276,7 @@ for "does intersect" and
             )
 \end{verbatim}
 \noindent
-for "does not intersect".
+for ``does not intersect''.
 
 The geometric arguments for INTERSECTS may be literal values, as above,
 or they may be column references, functions or expressions that return
@@ -2389,7 +2386,7 @@ The function arguments specify three or more vertices, where:
     \SectionRef{sec:functions.geom.limits}
 \end{itemize}
 
-For example, a function expressing a triangle, whose vertices are (10.0,
+For example, a function expressing a triangle with vertices at (10.0,
 -10.5), (20.0, 20.5) and (30.0,30.5) in degrees would be written
 as follows:
 \begin{verbatim}
@@ -2591,8 +2588,8 @@ The LOWER function converts its string parameter to lower case.
 
 Since case folding is a nontrivial operation in a multi-encoding world,
 ADQL requires standard behaviour for the ASCII characters, and recommends
-following algorithm R2 described in Section 3.13, "Default Case Algorithms"
-of \citet{std:UNICODE} for characters outside the ASCII set.
+following algorithm R2 described in Section 3.13, ``Default Case
+Algorithms'' of \citet{std:UNICODE} for characters outside the ASCII set.
 
 \begin{verbatim}
     LOWER('Francis Albert Augustus Charles Emmanuel')
@@ -2610,7 +2607,7 @@ The UPPER function converts its string parameter to upper case.
 
 Since case folding is a nontrivial operation in a multi-encoding world,
 ADQL requires standard behaviour for the ASCII characters, and recommends
-following algorithm R1 described in Section 3.13, "Default Case Algorithms"
+following algorithm R1 described in Section 3.13, ``Default Case Algorithms''
 of \citet{std:UNICODE} for characters outside the ASCII set.
 
 \begin{verbatim}
@@ -2636,7 +2633,7 @@ of its string operands.
 
 Since case folding is a nontrivial operation in a multi-encoding world,
 ADQL requires standard behaviour for the ASCII characters, and recommends
-following algorithm R2 described in Section 3.13, "Default Case Algorithms"
+following algorithm R2 described in Section 3.13, ``Default Case Algorithms''
 of \citet{std:UNICODE} for characters outside the ASCII set.
 
 \subsection{Common table expressions}
@@ -2705,7 +2702,7 @@ can be refactored as a named WITH query and a simpler main query:
 
 The current version of ADQL does not support recursive common table expressions.
 
-For clarity reason, common table expressions can be defined only in the main
+Common table expressions can be defined only in the main
 query. They are not allowed in sub-queries.
 
 \subsection{Set operators}
@@ -2952,7 +2949,7 @@ The range of types allowed for the value to cast entirely depends on the target
 type. Although cast operations may vary from one implementation to another, ADQL
 SHOULD support the following ones:
 
-\begin{table}[!ht]
+\begin{table}[!h]
     \center{
         \resizebox{\linewidth}{!}{
             \begin{tabular}{| c | c | c | c | c | c |}
@@ -3040,7 +3037,7 @@ Examples:
     CAST('1.0 0.1 2.0 0.2 3.0 0.3' AS POLYGON)
 \end{verbatim}
 
-Note that other serializations (e.g. STC/s) or any other kind of value MAY also
+Note that other serializations (e.g. STC-S) or any other kind of value MAY also
 be supported.
 
 \subsection{Conditional Functions}
@@ -3148,7 +3145,8 @@ Examples:
 \end{verbatim}
 
 An ADQL service implementation could use a unit inference mechanism. In such
-case, unit of relatively complex numeric expressions could be guessed. With the
+case, the units of numeric expressions can be inferred (or at least
+guessed). With the
 help of a such mechanism, \verb:IN_UNIT(): MAY convert more complex
 expressions.
 
