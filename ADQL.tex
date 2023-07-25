@@ -565,10 +565,11 @@ A search condition MAY contain the following predicates:
 
 \begin{itemize}
     \item Standard comparison operators: \verb:=:, \verb:!=:, \verb:<>:, \verb:<:, \verb:>:, \verb:<=:, \verb:>=:
-    \item Range comparison, \verb:BETWEEN:
-    \item Case-sensitive string comparison, \verb:LIKE:
-    \item Null value checks, \verb:IS NULL: and \verb:IS NOT NULL:
-    \item Non-empty subquery check, \verb:EXISTS:
+    \item Range comparison: \verb:BETWEEN:
+    \item Membership check: \verb:IN:
+    \item Case-sensitive string comparison: \verb:LIKE:
+    \item Null value checks: \verb:IS NULL:, \verb:IS NOT NULL:
+    \item Non-empty subquery check: \verb:EXISTS:
 \end{itemize}
 
 In addition, some service implementations may also support the optional \verb:ILIKE:
