@@ -2552,19 +2552,21 @@ the signature nonterminal in the following grammar:
     arg ::= <regular_identifier> <type_name>
 \end{verbatim}
 
+\verb:<type_name>: should be one of the terms defined in \SectionRef{sec:types}.
+
 For example, the following fragment declares a user defined function that
-takes two \verb:TEXT: parameters and returns an integer, zero or one,
+takes two string parameters and returns an integer, zero or one,
 depending on the regular expression pattern matching:
 \begin{verbatim}
-    <languageFeatures type="ivo://ivoa.net/std/tapregext#features-udf">
-        <feature>
-            <form>match(pattern TEXT, string TEXT) -> INTEGER</form>
-            <description>
-                match returns 1 if the POSIX regular expression pattern
-                matches anything in string, 0 otherwise.
-            </description>
-        </feature>
-    </languageFeatures>
+<languageFeatures type="ivo://ivoa.net/std/tapregext#features-udf">
+    <feature>
+        <form>match(pattern VARCHAR, string VARCHAR) -> INTEGER</form>
+        <description>
+            match returns 1 if the POSIX regular expression pattern
+            matches anything in string, 0 otherwise.
+        </description>
+    </feature>
+</languageFeatures>
 \end{verbatim}
 
 See the \TAPRegSpec{} for full details on how to use the
