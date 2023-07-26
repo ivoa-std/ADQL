@@ -2723,35 +2723,23 @@ set operators:
     \item \verb:INTERSECT:
 \end{itemize}
 
+For a set operation to be valid in ADQL, the following criteria must be met:
+\begin{itemize}
+    \item the two queries MUST result in the same number of columns
+    \item the columns in the operands MUST have the same datatypes.
+\end{itemize}
+
+In addition, the columns returned by a set operation SHOULD have the same
+metadata, e.g. units, UCD, etc. These metadata SHOULD be generated from the
+left-hand operand of the set operation.
+
 \subsubsection{UNION}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-sets|}\\
 {\footnotesize \verb|name: UNION|}\\
 
 The UNION operator combines the results of two queries, accepting rows from
-both the first and second set of results,
-removing duplicate rows unless UNION ALL is used.
-
-For a UNION operation to be valid in ADQL, the following criteria MUST be met:
-\begin{itemize}
-    \item the two queries MUST result in the same number of columns
-    \item the columns in the operands MUST have the same datatypes.
-\end{itemize}
-
-In addition, the following criteria SHOULD be met:
-\begin{itemize}
-    \item the columns in the operands SHOULD have the same metadata, e.g. units, UCD, etc.
-    \item the metadata for the results SHOULD be generated from the left-hand operand.
-\end{itemize}
-
-Note that the comparison used for removing duplicates is based purely on the
-column value and does not take into account the units.
-This means that a row with a numeric value of \verb:2: and units of \verb:m:
-and a row with a numeric value of \verb:2: and units of \verb:km: will be
-considered equal, despite the difference in units.
-\begin{verbatim}
-    2m = 2km
-\end{verbatim}
+both the first and second set of results.
 
 \subsubsection{EXCEPT}
 {\footnotesize Language feature :}\\
@@ -2759,30 +2747,7 @@ considered equal, despite the difference in units.
 {\footnotesize \verb|name: EXCEPT|}\\
 
 The EXCEPT operator combines the results of two queries, accepting rows that are
-in the first set of results but are not in the second,
-removing duplicate rows unless EXCEPT ALL is used.
-
-For an EXCEPT operation to be valid in ADQL, the following criteria MUST be met:
-
-\begin{itemize}
-    \item the two queries MUST result in the same number of columns
-    \item the columns in the operands MUST have the same datatypes
-    \item the metadata for the results MUST be generated from the left-hand operand.
-\end{itemize}
-
-In addition, the following criteria SHOULD be met:
-\begin{itemize}
-    \item the columns in the operands SHOULD have the same metadata, e.g. units, UCD, etc.
-\end{itemize}
-
-Note that the comparison used for removing duplicates is based purely on the
-column value and does not take into account the units.
-This means that a row with a numeric value of \verb:2: and units of \verb:m:
-and a row with a numeric value of \verb:2: and units of \verb:km: will be
-considered equal, despite the difference in units.
-\begin{verbatim}
-    2m = 2km
-\end{verbatim}
+in the first set of results but are not in the second one.
 
 \subsubsection{INTERSECT}
 {\footnotesize Language feature :}\\
@@ -2790,30 +2755,19 @@ considered equal, despite the difference in units.
 {\footnotesize \verb|name: INTERSECT|}\\
 
 The INTERSECT operator combines the results of two queries, accepting rows
-that are strictly in both the first and second set of results,
-removing duplicate rows unless INTERSECT ALL is used.
+that are strictly in both the first and second set of results.
 
-For an INTERSECT operation to be valid in ADQL, the following criteria MUST be met:
+\subsubsection{Duplicated rows}
 
-\begin{itemize}
-    \item the two queries MUST result in the same number of columns
-    \item the columns in the operands MUST have the same datatypes.
-\end{itemize}
+\verb:UNION:, \verb:EXCEPT: and \verb:INTERSECT: remove duplicated rows,
+while \verb:UNION ALL:, \verb:EXCEPT ALL: and \verb:INTERSECT ALL: keep all of
+them.
 
-In addition, the following criteria SHOULD be met:
-\begin{itemize}
-    \item the columns in the operands SHOULD have the same metadata, e.g. units, UCD, etc.
-    \item the metadata for the results SHOULD be generated from the left-hand operand.
-\end{itemize}
-
-Note that the comparison used for removing duplicates is based purely on the
-column value and does not take into account the units.
-This means that a row with a numeric value of \verb:2: and units of \verb:m:
-and a row with a numeric value of \verb:2: and units of \verb:km: will be
-considered equal, despite the difference in units.
-\begin{verbatim}
-    2m = 2km
-\end{verbatim}
+Note that the comparison used for removing duplicated rows is based purely on
+the column value and does not take into account the units. This means that a row
+with a numeric value of \verb:2: and unit of \verb:m: and a row with a numeric
+value of \verb:2: and unit of \verb:km: will be considered equal, despite the
+difference in units.
 
 \subsubsection{Operands}
 
