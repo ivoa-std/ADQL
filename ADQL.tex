@@ -113,7 +113,7 @@ Figure \ref{fig:archdiag} shows the role this document plays within the
 IVOA architecture \VOArch{}.
 
 It is the only mandatory query language within the Table Access Protocol
-TAP \citep{2019ivoa.spec.0927D}; it is thus an important element in
+\TAPSpec{} ; it is thus an important element in
 enabling interoperable queries against remote astronomical databases.
 
 TAP services communicate their metadata, and hence metadata about the
@@ -795,9 +795,9 @@ the underlying database's native language and type system.
 
 However, service metadata needs to give column types in order to allow the
 construction of queries that are both syntactically and semantically correct.
-Examples of such metadata includes the \verb:TAP_SCHEMA: tables defined
-in the \TAPSpec{} and the \verb:/tables:
-webservice response defined in the \VOSISpec{}.
+Examples of such metadata includes the \verb:TAP_SCHEMA: tables defined in the
+\TAPSpec{} and the \verb:/tables: webservice response defined in the
+\VOSISpec{}.
 
 Services SHOULD, if at all possible, try to express their column metadata in
 these terms even if the underlying database employs different types.
@@ -1191,8 +1191,8 @@ operations on the image data.
 ADQL provides support for the \verb:POINT:, \verb:CIRCLE: and \verb:POLYGON:
 spherical geometry types defined in the \DALISpec{}.
 
-ADQL also provides support for STC-S based geometric regions,
-as defined in the \STCSSpec{}, using the \verb:REGION: datatype.
+ADQL also provides support for STC-S based geometric regions, as defined in the
+\STCSAppendix{}, using the \verb:REGION: datatype.
 
 \subsubsection{POINT}
 \label{sec:types.geom.point}
@@ -1361,9 +1361,8 @@ guidance on this. However, at least for the \textit{s\_region}
 column described in the \ObsCoreSpec{},
 % ObsCore 1.1 Section 4.12
 % http://ivoa.net/documents/ObsCore/20170509/REC-ObsCore-v1.1-20170509.pdf#26
-informal practice is to produce strings conforming to section 6
-of TAP 1.0 \citep{2010ivoa.spec.0327D} with an xtype of
-\texttt{adql:region}.
+informal practice is to produce strings conforming to the \STCSAppendix{} with
+an xtype of \texttt{adql:region}.
 
 \clearpage % section cut
 \section{Optional components}
@@ -2460,10 +2459,9 @@ requires literals as arguments rather than string expressions or column
 references.  The latter would require parsing these representations
 within the database, which is not intended.
 
-This document does not specify possible syntaxes for REGION
-literals.  A de-facto standard that many services understanding ADQL 2.0
-implemented at least partially is given by the (non-normative) section 6
-of TAP 1.0 \citep{2010ivoa.spec.0327D}, and implementations of ADQL 2.1 are
+This document does not specify possible syntaxes for REGION literals. A de-facto
+standard that many services understanding ADQL 2.0 implemented at least
+partially is given by the \STCSAppendix{}, and implementations of ADQL 2.1 are
 encouraged to support as much of that as reasonable for them.
 
 \subsection{User defined functions}
