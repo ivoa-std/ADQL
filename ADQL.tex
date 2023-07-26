@@ -2565,6 +2565,18 @@ string manipulation and comparison operators:
     \item \verb:ILIKE: Case-insensitive comparison.
 \end{itemize}
 
+\subsubsection{Case folding}
+
+Since case folding is a nontrivial operation in a multi-encoding world, ADQL
+requires standard behaviour for the ASCII characters, and recommends
+following algorithms described in Section 3.13, "Default Case Algorithms"
+of \citet{std:UNICODE} for characters outside the ASCII set:
+
+\begin{itemize}
+    \item algorithm R1 for \verb:UPPER():
+    \item algorithm R2 for \verb:LOWER(): and \verb:ILIKE:
+\end{itemize}
+
 \subsubsection{LOWER}
 \label{sec:string.functions.lower}
 {\footnotesize Language feature :}\\
@@ -2572,11 +2584,6 @@ string manipulation and comparison operators:
 {\footnotesize \verb|name: LOWER|}\\
 
 The LOWER function converts its string parameter to lower case.
-
-Since case folding is a nontrivial operation in a multi-encoding world,
-ADQL requires standard behaviour for the ASCII characters, and recommends
-following algorithm R2 described in Section 3.13, "Default Case Algorithms"
-of \citet{std:UNICODE} for characters outside the ASCII set.
 
 \begin{verbatim}
     LOWER('Francis Albert Augustus Charles Emmanuel')
@@ -2591,11 +2598,6 @@ of \citet{std:UNICODE} for characters outside the ASCII set.
 {\footnotesize \verb|name: UPPER|}\\
 
 The UPPER function converts its string parameter to upper case.
-
-Since case folding is a nontrivial operation in a multi-encoding world,
-ADQL requires standard behaviour for the ASCII characters, and recommends
-following algorithm R1 described in Section 3.13, "Default Case Algorithms"
-of \citet{std:UNICODE} for characters outside the ASCII set.
 
 \begin{verbatim}
     UPPER('Francis Albert Augustus Charles Emmanuel')
@@ -2617,11 +2619,6 @@ of its string operands.
 
     'Francis' ILIKE 'francis' => True
 \end{verbatim}
-
-Since case folding is a nontrivial operation in a multi-encoding world,
-ADQL requires standard behaviour for the ASCII characters, and recommends
-following algorithm R2 described in Section 3.13, "Default Case Algorithms"
-of \citet{std:UNICODE} for characters outside the ASCII set.
 
 \subsection{Common table expressions}
 \label{sec:common-table}
