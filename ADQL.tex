@@ -1624,7 +1624,7 @@ where
     <coord_value> ::= <point_value> | <column_reference>
 \end{verbatim}
 
-\subsubsection{Preferred crossmatch syntax}
+\subsubsection{Preferred sky crossmatch syntax}
 \label{sec:functions.geom.crossmatch}
 
 An especially common operation that astronomers require when working
@@ -1650,7 +1650,7 @@ unnecessarily slow operation of the common sky crossmatch operation.
 This section therefore recommends a preferred form of ADQL
 to use for sky crossmatching and the related cone search operation,
 namely to impose an upper limit on one of the two forms of the
-DISTANCE operator.
+DISTANCE function.
 Clients submitting crossmatch-like and cone-like
 queries are advised to phrase them in this way rather than using semantically
 equivalent alternatives, and services are encouraged to ensure that
@@ -1670,7 +1670,7 @@ and a cone search for rows within 2.5 degrees of
 the center of M31 might look like:
 \begin{verbatim}
     SELECT ...
-    WHERE DISTANCE(t.pos, POINT(10.68, 41.27)) < 2.5
+    WHERE DISTANCE(t.pos, POINT(10.68, 41.27)) <= 2.5
 \end{verbatim}
 
 \subsubsection{AREA}
@@ -3073,7 +3073,7 @@ For example, the following XML fragment describes a service that supports the
                           spherical
                           (see \SectionRef{sec:functions.geom.limits} and
                           \SectionRef{sec:functions.geom.point})
-                    \item Recommendation of a preferred crossmatch and
+                    \item Recommendation of a preferred sky crossmatch and
                           cone search syntax (use
                           of \verb:DISTANCE(): instead of \verb:CONTAINS():)
                           \SectionSee{sec:functions.geom.crossmatch}
