@@ -1647,34 +1647,31 @@ will be executed efficiently, and difficult for services to know
 which forms of query to optimise.  The result can be the
 unnecessarily slow operation of the common sky crossmatch operation.
 
-The purpose of this section is to recommend a preferred form of ADQL
-to use for sky crossmatches.  Clients proposing crossmatch-like
-queries are advised to phrase them this way rather than semantically
+This section therefore recommends a preferred form of ADQL
+to use for sky crossmatching and the related cone search operation,
+namely to impose an upper limit on one of the two forms of the
+DISTANCE operator.
+Clients submitting crossmatch-like and cone-like
+queries are advised to phrase them in this way rather than using semantically
 equivalent alternatives, and services are encouraged to ensure that
-this form of join is executed efficiently; this might involve
+these forms of query are executed efficiently; this might involve
 identifying such ADQL input clauses and rewriting them appropriately
 for efficient processing on the database backend.
-
-The preferred way to specify a sky position-only crossmatch is:
-\begin{verbatim}
-    JOIN ...
-      ON DISTANCE(t1.lon, t1.lat, t2.lon, t2.lat) < r_max_deg
-\end{verbatim}
-where \textit{t1.lon}, \textit{t1.lat}, and \textit{t2.lon}, \textit{t2.lat}
-are references to numeric columns for the latitude and longitude
-in the respective tables, \textit{t1}, and \textit{t2}.
-
-Alternatively, using geometric POINT values,
-\begin{verbatim}
-    JOIN ...
-      ON DISTANCE(t1.point, t2.point) < r_max_deg
-\end{verbatim}
-where \textit{t1.point} and \textit{t2.point}
-are references to columns containing geometric POINT values
-for the sky positions in the two tables, \textit{t1}, and \textit{t2}.
-
 Alternative semantically equivalent forms however MAY still be
 used by clients, and MUST still be handled correctly by services.
+
+An example sky position-only crossmatch joining rows of tables
+\textit{t1} and \textit{t2} within one arcsecond might therefore look like:
+\begin{verbatim}
+    JOIN ...
+      ON DISTANCE(t1.ra, t1.dec, t2.ra, t2.dec) < 0.00027
+\end{verbatim}
+and a cone search for rows within 2.5 degrees of
+the center of M31 might look like:
+\begin{verbatim}
+    SELECT ...
+    WHERE DISTANCE(t.pos, POINT(10.68, 41.27)) < 2.5
+\end{verbatim}
 
 \subsubsection{AREA}
 \label{sec:functions.geom.area}
@@ -3076,7 +3073,8 @@ For example, the following XML fragment describes a service that supports the
                           spherical
                           (see \SectionRef{sec:functions.geom.limits} and
                           \SectionRef{sec:functions.geom.point})
-                    \item Recommendation of a preferred crossmatch syntax (use
+                    \item Recommendation of a preferred crossmatch and
+                          cone search syntax (use
                           of \verb:DISTANCE(): instead of \verb:CONTAINS():)
                           \SectionSee{sec:functions.geom.crossmatch}
                     \item \verb:REGION(): argument restricted to a string
