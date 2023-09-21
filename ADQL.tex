@@ -89,12 +89,9 @@ ADQL is based on the Structured Query Language (SQL), especially on SQL 92
 \footnote{\url{https://www.iso.org/standard/16663.html}}
 \footnote{\url{http://www.contrib.andrew.cmu.edu/~shadow/sql/sql1992.txt}}.
 
-The VO has a number of tabular data sets and many of them are stored in relational
-databases, making SQL a convenient access means. A subset of the SQL grammar
-has been extended to support queries that are specific to astronomy. Similarly
-to SQL, the ADQL language definition is not semantically safe by design and
-therefore this specification defines syntactical correctness only. Type safety
-has been achieved as far as it can be done in SQL.
+The VO has a number of tabular data sets and many of them are stored in
+relational databases, making SQL a convenient access means. A subset of the SQL
+grammar has been extended to support queries that are specific to astronomy.
 
 This specification provides a complete definition of the ADQL through a single
 Backus Naur Form (BNF) based language definition. It includes both mandatory
@@ -116,7 +113,7 @@ Figure \ref{fig:archdiag} shows the role this document plays within the
 IVOA architecture \VOArch{}.
 
 It is the only mandatory query language within the Table Access Protocol
-TAP \citep{2019ivoa.spec.0927D}; it is thus an important element in
+\TAPSpec{}; it is thus an important element in
 enabling interoperable queries against remote astronomical databases.
 
 TAP services communicate their metadata, and hence metadata about the
@@ -487,8 +484,6 @@ The order of the columns in the query results SHALL be the same as the
 order specified in the selection list,
 %or the order defined in the original table if
 unless an asterisk is specified.
-The selection list MAY include numeric,
-string or geometry value expressions.
 
 \subsubsection{Subqueries}
 \label{sec:subqueries}
@@ -796,9 +791,9 @@ the underlying database's native language and type system.
 
 However, service metadata needs to give column types in order to allow the
 construction of queries that are both syntactically and semantically correct.
-Examples of such metadata includes the \verb:TAP_SCHEMA: tables defined
-in the \TAPSpec{} and the \verb:/tables:
-webservice response defined in the \VOSISpec{}.
+Examples of such metadata includes the \verb:TAP_SCHEMA: tables defined in the
+\TAPSpec{} and the \verb:/tables: webservice response defined in the
+\VOSISpec{}.
 
 Services SHOULD, if at all possible, try to express their column metadata in
 these terms even if the underlying database employs different types.
@@ -1193,8 +1188,8 @@ operations on the image data.
 ADQL provides support for the \verb:POINT:, \verb:CIRCLE: and \verb:POLYGON:
 spherical geometry types defined in the \DALISpec{}.
 
-ADQL also provides support for STC-S based geometric regions,
-as defined in the \STCSSpec{}, using the \verb:REGION: datatype.
+ADQL also provides support for STC-S based geometric regions, as defined in the
+\STCSAppendix{}, using the \verb:REGION: datatype.
 
 \subsubsection{POINT}
 \label{sec:types.geom.point}
@@ -1349,9 +1344,8 @@ guidance on this. However, at least for the \textit{s\_region}
 column described in the \ObsCoreSpec{},
 % ObsCore 1.1 Section 4.12
 % http://ivoa.net/documents/ObsCore/20170509/REC-ObsCore-v1.1-20170509.pdf#26
-informal practice is to produce strings conforming to section 6
-of TAP 1.0 \citep{2010ivoa.spec.0327D} with an xtype of
-\texttt{adql:region}.
+informal practice is to produce strings conforming to the \STCSAppendix{} with
+an xtype of \texttt{adql:region}.
 
 \clearpage % section cut
 \section{Optional components}
@@ -2258,10 +2252,9 @@ requires literals as arguments rather than string expressions or column
 references.  The latter would require parsing these representations
 within the database, which is not intended.
 
-This document does not specify possible syntaxes for REGION
-literals.  A de-facto standard that many services understanding ADQL 2.0
-implemented at least partially is given by the (non-normative) section 6
-of TAP 1.0 \citep{2010ivoa.spec.0327D}, and implementations of ADQL 2.1 are
+This document does not specify possible syntaxes for REGION literals. A de-facto
+standard that many services understanding ADQL 2.0 implemented at least
+partially is given by the \STCSAppendix{}, and implementations of ADQL 2.1 are
 encouraged to support as much of that as reasonable for them.
 
 \subsection{User defined functions}
@@ -2314,15 +2307,6 @@ following functions:
     ivo_string_agg()
 \end{verbatim}
 
-In order to avoid different signatures for the same functions, it is recommended
-that ADQL implementers follow as much as possible the User Defined Function
-signatures listed in the \CatalogueUDF{}.
-% Catalogue of {ADQL} User Defined Functions - Endorsed Note 1.0+
-% http://www.ivoa.net/documents/udf-catalogue/index.html
-
-%If metadata on a user defined function is available, this should be used. For
-%example function names and cardinality of arguments should be checked against
-%metadata where available.
 
 \subsubsection{Metadata}
 \label{sec:user.metadata}
@@ -2376,6 +2360,18 @@ string manipulation and comparison operators:
     \item \verb:ILIKE: Case-insensitive comparison.
 \end{itemize}
 
+\subsubsection{Case folding}
+
+Since case folding is a nontrivial operation in a multi-encoding world, ADQL
+requires standard behaviour for the ASCII characters, and recommends
+following algorithms described in Section 3.13, ``Default Case Algorithms''
+of \citet{std:UNICODE} for characters outside the ASCII set:
+
+\begin{itemize}
+    \item algorithm R1 for \verb:UPPER():
+    \item algorithm R2 for \verb:LOWER(): and \verb:ILIKE:
+\end{itemize}
+
 \subsubsection{LOWER}
 \label{sec:string.functions.lower}
 {\footnotesize Language feature :}\\
@@ -2383,11 +2379,6 @@ string manipulation and comparison operators:
 {\footnotesize \verb|name: LOWER|}\\
 
 The LOWER function converts its string parameter to lower case.
-
-Since case folding is a nontrivial operation in a multi-encoding world,
-ADQL requires standard behaviour for the ASCII characters, and recommends
-following algorithm R2 described in Section 3.13, "Default Case Algorithms"
-of \citet{std:UNICODE} for characters outside the ASCII set.
 
 \begin{verbatim}
     LOWER('Francis Albert Augustus Charles Emmanuel')
@@ -2402,11 +2393,6 @@ of \citet{std:UNICODE} for characters outside the ASCII set.
 {\footnotesize \verb|name: UPPER|}\\
 
 The UPPER function converts its string parameter to upper case.
-
-Since case folding is a nontrivial operation in a multi-encoding world,
-ADQL requires standard behaviour for the ASCII characters, and recommends
-following algorithm R1 described in Section 3.13, "Default Case Algorithms"
-of \citet{std:UNICODE} for characters outside the ASCII set.
 
 \begin{verbatim}
     UPPER('Francis Albert Augustus Charles Emmanuel')
@@ -2428,11 +2414,6 @@ of its string operands.
 
     'Francis' ILIKE 'francis' => True
 \end{verbatim}
-
-Since case folding is a nontrivial operation in a multi-encoding world,
-ADQL requires standard behaviour for the ASCII characters, and recommends
-following algorithm R2 described in Section 3.13, "Default Case Algorithms"
-of \citet{std:UNICODE} for characters outside the ASCII set.
 
 \subsection{Common table expressions}
 \label{sec:common-table}
