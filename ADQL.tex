@@ -89,12 +89,9 @@ ADQL is based on the Structured Query Language (SQL), especially on SQL
 \url{https://en.wikipedia.org/wiki/SQL-92},
 \url{http://www.contrib.andrew.cmu.edu/~shadow/sql/sql1992.txt}.}.
 
-The VO has a number of tabular data sets, and many of them are stored in relational
-databases, making SQL a convenient means of access. A subset of the SQL grammar
-has been extended to support queries that are specific to astronomy.  Similarly
-to SQL, the ADQL language definition is not semantically safe by design and
-therefore this specification defines syntactical correctness only. Type safety
-has been achieved as far as it can be done in SQL.
+The VO has a number of tabular data sets and many of them are stored in
+relational databases, making SQL a convenient access means. A subset of the SQL
+grammar has been extended to support queries that are specific to astronomy.
 
 This specification provides a complete definition of the ADQL through a single
 Backus Naur Form (BNF) based language definition. It includes both mandatory
@@ -116,7 +113,7 @@ Figure \ref{fig:archdiag} shows the role this document plays within the
 IVOA architecture \VOArch{}.
 
 It is the only mandatory query language within the Table Access Protocol
-TAP \citep{2019ivoa.spec.0927D}; it is thus an important element in
+\TAPSpec{}; it is thus an important element in
 enabling interoperable queries against remote astronomical databases.
 
 TAP services communicate their metadata, and hence metadata about the
@@ -485,8 +482,6 @@ The order of the columns in the query results SHALL be the same as the
 order specified in the selection list,
 %or the order defined in the original table if
 unless an asterisk is specified.
-The selection list MAY include numeric,
-string or geometry value expressions.
 
 \subsubsection{Subqueries}
 \label{sec:subqueries}
@@ -496,34 +491,29 @@ Table subqueries may be used by predicates such as \verb:IN: and \verb:EXISTS:
 in the \verb:WHERE: clause of a query:
 
 \begin{verbatim}
-    SELECT
-        alpha_source.id
-    FROM
-        alpha_source
-    WHERE
-        alpha_sourceid >=5
-    AND
-        alpha_sourceid IN
-            (
-            SELECT id FROM alpha_source WHERE id < 10
-            )
+    SELECT alpha_source.id
+    FROM alpha_source
+    WHERE alpha_sourceid >=5
+      AND alpha_sourceid IN (
+            SELECT id
+            FROM alpha_source
+            WHERE id < 10
+          )
 \end{verbatim}
 
 Table subqueries may be used for declaring derived tables in the \verb:FROM: clause
 of a query:
 
 \begin{verbatim}
-    SELECT
-        alpha_source.id
-    FROM
-        alpha_source,
-        (
-        SELECT alpha_source.id FROM alpha_source WHERE id < 10
-        ) AS subsample
-    WHERE
-        alpha_source.id >=5
-    AND
-        alpha_source.id = subsample.id
+    SELECT alpha_source.id
+    FROM alpha_source,
+         (
+          SELECT alpha_source.id
+          FROM alpha_source
+          WHERE id < 10
+         ) AS subsample
+    WHERE alpha_source.id >=5
+      AND alpha_source.id = subsample.id
 \end{verbatim}
 
 If supported by the implementation, table subqueries may be used for declaring
@@ -531,14 +521,14 @@ named result sets in the \verb:WITH: clause of the main query:
 
 \begin{verbatim}
     WITH subsample AS (
-        SELECT alpha_source.id FROM alpha_source WHERE id < 10
+        SELECT alpha_source.id
+        FROM alpha_source
+        WHERE id < 10
     )
-    SELECT
-        alpha_source.id
-    FROM
-        alpha_source INNER JOIN subsample USING(id)
-    WHERE
-        alpha_source.id >= 5
+    SELECT alpha_source.id
+    FROM alpha_source
+      INNER JOIN subsample USING(id)
+    WHERE alpha_source.id >= 5
 \end{verbatim}
 
 \subsubsection{Joins}
@@ -563,10 +553,11 @@ A search condition may contain the following predicates:
 
 \begin{itemize}
     \item Standard comparison operators: \verb:=:, \verb:!=:, \verb:<>:, \verb:<:, \verb:>:, \verb:<=:, \verb:>=:
-    \item Range comparison, \verb:BETWEEN:
-    \item Case-sensitive string comparison, \verb:LIKE:
-    \item Null value checks, \verb:IS NULL: and \verb:IS NOT NULL:
-    \item Non-empty subquery check, \verb:EXISTS:
+    \item Range comparison: \verb:BETWEEN:
+    \item Membership check: \verb:IN:
+    \item Case-sensitive string comparison: \verb:LIKE:
+    \item Null value checks: \verb:IS NULL:, \verb:IS NOT NULL:
+    \item Non-empty subquery check: \verb:EXISTS:
 \end{itemize}
 
 In addition, some service implementations may also support the optional \verb:ILIKE:
@@ -798,9 +789,9 @@ the underlying database's native language and type system.
 
 However, service metadata needs to give column types in order to allow the
 construction of queries that are both syntactically and semantically correct.
-Examples of such metadata includes the \verb:TAP_SCHEMA: tables defined
-in the \TAPSpec{} and the \verb:/tables:
-webservice response defined in the \VOSISpec{}.
+Examples of such metadata includes the \verb:TAP_SCHEMA: tables defined in the
+\TAPSpec{} and the \verb:/tables: webservice response defined in the
+\VOSISpec{}.
 
 Services SHOULD, if at all possible, try to express their column metadata in
 these terms even if the underlying database employs different types.
@@ -970,19 +961,20 @@ The \verb:TIMESTAMP: datatype maps to the corresponding type defined in the
 (if supported) described in \SectionRef{sec:type.cast}.
 
 The basic comparison operators \verb:=:, \verb:<:, \verb:>:, \verb:<=:, \verb:>=:,
-\verb:<>: and \verb:BETWEEN: can all be applied to \verb:TIMESTAMP: values:
-\begin{verbatim}
-    SELECT
-        ..
-    WHERE
-        obstime > CAST('2015-01-01' AS TIMESTAMP)
-    OR
-        obstime
-            BETWEEN
-                CAST('2014-01-01' AS TIMESTAMP)
-            AND
-                CAST('2014-01-02' AS TIMESTAMP)
+\verb:<>: and \verb:BETWEEN: can all be applied to \verb:TIMESTAMP: values.
+
+For instance:
+\begin{itemize}
+    \item \begin{verbatim}
+  obstime > CAST('2015-01-01' AS TIMESTAMP)
 \end{verbatim}
+    \item \begin{verbatim}
+  obstime BETWEEN
+    CAST('2014-01-01' AS TIMESTAMP)
+  AND
+    CAST('2014-01-02' AS TIMESTAMP)
+    \end{verbatim}
+\end{itemize}
 
 Within the database, the details of how \verb:TIMESTAMP: values are implemented
 are platform dependent. The primary requirement is that the results of the
@@ -1194,8 +1186,8 @@ operations on the image data.
 ADQL provides support for the \verb:POINT:, \verb:CIRCLE: and \verb:POLYGON:
 spherical geometry types defined in the \DALISpec{}.
 
-ADQL also provides support for STC-S based geometric regions,
-as defined in the \STCSSpec{}, using the \verb:REGION: datatype.
+ADQL also provides support for STC-S based geometric regions, as defined in the
+\STCSAppendix{}, using the \verb:REGION: datatype.
 
 \subsubsection{POINT}
 \label{sec:types.geom.point}
@@ -1240,10 +1232,7 @@ constructor defined in \SectionRef{sec:functions.geom.point}.
 
 For example:
 \begin{verbatim}
-    POINT(
-        12.3,
-        45.6
-        )
+    POINT(12.3, 45.6)
 \end{verbatim}
 
 \subsubsection{CIRCLE}
@@ -1288,11 +1277,7 @@ using the \verb:circle: xtype defined in the \DALISpec{}.
 constructor defined in \SectionRef{sec:functions.geom.circle}.
 For example:
 \begin{verbatim}
-    CIRCLE(
-        12.3,
-        45.6,
-        0.5
-        )
+    CIRCLE(12.3, 45.6, 0.5)
 \end{verbatim}
 
 \subsubsection{POLYGON}
@@ -1338,14 +1323,7 @@ constructor defined in \SectionRef{sec:functions.geom.polygon}.
 
 For example:
 \begin{verbatim}
-    POLYGON(
-        10.0,
-       -10.5,
-        20.0,
-        20.5,
-        30.0,
-        30.5
-        )
+    POLYGON(10.0, -10.5, 20.0, 20.5, 30.0, 30.5)
 \end{verbatim}
 \noindent
 describes a triangle with vertices at (10.0, -10.5), (20.0, 20.5)
@@ -1364,9 +1342,8 @@ guidance on this. However, at least for the \textit{s\_region}
 column described in the \ObsCoreSpec{},
 % ObsCore 1.1 Section 4.12
 % http://ivoa.net/documents/ObsCore/20170509/REC-ObsCore-v1.1-20170509.pdf#26
-informal practice is to produce strings conforming to section 6
-of TAP 1.0 \citep{2010ivoa.spec.0327D} with an xtype of
-\texttt{adql:region}.
+informal practice is to produce strings conforming to the \STCSAppendix{} with
+an xtype of \texttt{adql:region}.
 
 \clearpage % section cut
 \section{Optional components}
@@ -1553,15 +1530,9 @@ Each of these functions can be used as a WHERE clause predicate by
 comparing the numeric result with zero or one.
 For example:
 \begin{verbatim}
-    SELECT
-        *
-    FROM
-        table
-    WHERE
-        1 = CONTAINS(
-              POINT(...),
-              CIRCLE(...)
-              )
+    SELECT *
+    FROM table
+    WHERE 1 = CONTAINS(POINT(...), CIRCLE(...))
 \end{verbatim}
 
 %REMOVED - speculative, not definitive.
@@ -1644,7 +1615,7 @@ where
     <coord_value> ::= <point_value> | <column_reference>
 \end{verbatim}
 
-\subsubsection{Preferred crossmatch syntax}
+\subsubsection{Preferred sky crossmatch syntax}
 \label{sec:functions.geom.crossmatch}
 
 An especially common operation that astronomers require when working
@@ -1667,40 +1638,31 @@ will be executed efficiently, and difficult for services to know
 which forms of query to optimise.  The result can be the
 unnecessarily slow operation of the common sky crossmatch operation.
 
-The purpose of this section is to recommend a preferred form of ADQL
-to use for sky crossmatches.  Clients proposing crossmatch-like
-queries are advised to phrase them this way rather than semantically
+This section therefore recommends a preferred form of ADQL
+to use for sky crossmatching and the related cone search operation,
+namely to impose an upper limit on one of the two forms of the
+DISTANCE function.
+Clients submitting crossmatch-like and cone-like
+queries are advised to phrase them in this way rather than using semantically
 equivalent alternatives, and services are encouraged to ensure that
-this form of join is executed efficiently; this might involve
+these forms of query are executed efficiently; this might involve
 identifying such ADQL input clauses and rewriting them appropriately
 for efficient processing on the database backend.
-
-The preferred way to specify a sky position-only crossmatch is:
-\begin{verbatim}
-    JOIN ... ON DISTANCE(
-        t1.lon,
-        t1.lat,
-        t2.lon,
-        t2.lat
-        ) < r_max_deg
-\end{verbatim}
-where \textit{t1.lon}, \textit{t1.lat}, and \textit{t2.lon}, \textit{t2.lat}
-are references to numeric columns for the latitude and longitude
-in the respective tables, \textit{t1}, and \textit{t2}.
-
-Alternatively, using geometric POINT values,
-\begin{verbatim}
-    JOIN ... ON DISTANCE(
-        t1.point,
-        t2.point
-        ) < r_max_deg
-\end{verbatim}
-where \textit{t1.point} and \textit{t2.point}
-are references to columns containing geometric POINT values
-for the sky positions in the two tables, \textit{t1}, and \textit{t2}.
-
 Alternative semantically equivalent forms however MAY still be
 used by clients, and MUST still be handled correctly by services.
+
+An example sky position-only crossmatch joining rows of tables
+\textit{t1} and \textit{t2} within one arcsecond might therefore look like:
+\begin{verbatim}
+    JOIN ...
+      ON DISTANCE(t1.ra, t1.dec, t2.ra, t2.dec) < 0.00027
+\end{verbatim}
+and a cone search for rows within 2.5 degrees of
+the center of M31 might look like:
+\begin{verbatim}
+    SELECT ...
+    WHERE DISTANCE(t.pos, POINT(10.68, 41.27)) <= 2.5
+\end{verbatim}
 
 \subsubsection{AREA}
 \label{sec:functions.geom.area}
@@ -1713,16 +1675,7 @@ The AREA function computes the area, in square degrees, of a given geometry.
 For example, an expression to calculate the area of a POLYGON could be
 written as follows:
 \begin{verbatim}
-    AREA(
-        POLYGON(
-            10.0,
-           -10.5,
-            20.0,
-            20.5,
-            30.0,
-            30.5
-            )
-        )
+    AREA(POLYGON(10.0, -10.5, 20.0, 20.5, 30.0, 30.5))
 \end{verbatim}
 
 The AREA of a single POINT is zero.
@@ -1731,9 +1684,7 @@ The geometry argument may be a literal value, as above, or it may be a
 column reference, function or expression that returns a geometric type.
 For example:
 \begin{verbatim}
-    AREA(
-        t1.footprint
-        )
+    AREA(t1.footprint)
 \end{verbatim}
 where \textit{t1.footprint} is a reference to a database column that
 contains geometric (POINT, BOX, CIRCLE, POLYGON or REGION) values.
@@ -1790,24 +1741,12 @@ where:
 For example, a BOX of ten degrees centered on a position
 (25.4, -20.0) in degrees could be written as follows:
 \begin{verbatim}
-    BOX(
-        25.4,
-       -20.0,
-        10.0,
-        10.0
-        )
+    BOX(25.4, -20.0, 10.0, 10.0)
 \end{verbatim}
 
 Alternatively, the center position could be expressed as a POINT:
 \begin{verbatim}
-    BOX(
-        POINT(
-            25.4,
-           -20.0
-           ),
-        10.0,
-        10.0
-        )
+    BOX(POINT(25.4, -20.0), 10.0, 10.0)
 \end{verbatim}
 
 The function arguments may be literal values, as above, or they may be
@@ -1815,11 +1754,7 @@ column references, functions or expressions that return the appropriate
 datatypes.
 For example:
 \begin{verbatim}
-    BOX(
-        t1.center,
-        t1.width,
-        t1.height
-        )
+    BOX(t1.center, t1.width, t1.height)
 \end{verbatim}
 where \textit{t1.center}, \textit{t1.width} and \textit{t1.height}
 are references to database columns that contain POINT, DOUBLE
@@ -1845,16 +1780,7 @@ The CENTROID function computes the centroid of a given geometry and returns a PO
 For example, an expression to calculate the centroid of a POLYGON could
 be written as follows :
 \begin{verbatim}
-    CENTROID(
-        POLYGON(
-            10.0,
-           -10.5,
-            20.0,
-            20.5,
-            30.0,
-            30.5
-            )
-        )
+    CENTROID(POLYGON(10.0, -10.5, 20.0, 20.5, 30.0, 30.5))
 \end{verbatim}
 
 The CENTROID of a single POINT is that POINT.
@@ -1863,9 +1789,7 @@ The geometry argument may be a literal value, as above, or it may be a
 column reference, function or expression that returns a geometric type.
 For example:
 \begin{verbatim}
-    CENTROID(
-        t1.footprint
-        )
+    CENTROID(t1.footprint)
 \end{verbatim}
 where \textit{t1.footprint} is a reference to a database column that
 contains geometric (POINT, BOX, CIRCLE, POLYGON or REGION) values.
@@ -1894,32 +1818,19 @@ The function arguments specify the center position and the radius, where:
 For example, a CIRCLE of ten degrees radius centered on position
 (25.4, -20.0) in degrees could be written as follows:
 \begin{verbatim}
-    CIRCLE(
-        25.4,
-       -20.0,
-        10.0
-        )
+    CIRCLE(25.4, -20.0, 10.0)
 \end{verbatim}
 
 Alternatively, the center position may be expressed as a POINT:
 \begin{verbatim}
-    CIRCLE(
-        POINT(
-            25.4,
-           -20.0,
-            ),
-       10.0
-       )
+    CIRCLE(POINT(25.4, -20.0), 10.0)
 \end{verbatim}
 
 The position argument may be a literal value, as above, or it may be a
 column reference, function or expression that returns a geometric type.
 For example:
 \begin{verbatim}
-    CIRCLE(
-        t1.center,
-        t1.radius
-       )
+    CIRCLE(t1.center, t1.radius)
 \end{verbatim}
 where \textit{t1.center} and \textit{t1.radius} are references to
 database columns that contain POINT and DOUBLE values respectively.
@@ -1946,17 +1857,7 @@ For example, an expression to determine whether the point (25.0, -19.5) degrees
 is within a circle of ten degrees radius centered on position (25.4, -20.0) degrees,
 could be written as follows:
 \begin{verbatim}
-    CONTAINS(
-        POINT(
-            25.0,
-           -19.5
-           ),
-        CIRCLE(
-            25.4,
-           -20.0,
-            10.0
-           )
-        )
+    CONTAINS(POINT(25.0, -19.5), CIRCLE(25.4, -20.0, 10.0))
 \end{verbatim}
 
 The CONTAINS function is not symmetric in the meaning of the arguments.
@@ -1968,34 +1869,14 @@ if it is not.
 When used as a predicate in the WHERE clause of a query, the numeric return
 value must be compared to the numeric values 0 or 1 to form a SQL predicate:
 \begin{verbatim}
-    WHERE
-        1 = CONTAINS(
-            POINT(
-                25.0,
-               -19.5
-               ),
-            CIRCLE(
-                25.4,
-               -20.0,
-                10.0
-               )
-            )
+    WHERE 1 = CONTAINS(POINT(25.0, -19.5),
+                       CIRCLE(25.4, -20.0, 10.0))
 \end{verbatim}
 \noindent
 for ``does contain'' and
 \begin{verbatim}
-    WHERE
-        0 = CONTAINS(
-            POINT(
-                25.0,
-               -19.5
-               ),
-            CIRCLE(
-                25.4,
-               -20.0,
-                10.0
-               )
-            )
+    WHERE 0 = CONTAINS(POINT(25.0, -19.5),
+                       CIRCLE(25.4, -20.0, 10.0))
 \end{verbatim}
 \noindent
 for ``does not contain''.
@@ -2007,11 +1888,7 @@ or they may be column references, functions or expressions that return
 geometric values.
 For example:
 \begin{verbatim}
-    WHERE
-        0 = CONTAINS(
-            t1.center,
-            t2.footprint
-            )
+    WHERE 0 = CONTAINS(t1.center, t2.footprint)
 \end{verbatim}
 where \textit{t1.center} and \textit{t2.footprint} are references to
 database columns that contain POINT and geometric (BOX, CIRCLE, POLYGON or REGION)
@@ -2039,21 +1916,14 @@ POINT \SectionSee{sec:functions.geom.point} or column reference.
 For example, the right ascension of a point with position (25, -19.5) in
 degrees would be obtained using the following expression:
 \begin{verbatim}
-    COORD1(
-        POINT(
-            25.0,
-           -19.5
-            )
-        )
+    COORD1(POINT(25.0, -19.5))
 \end{verbatim}
 \noindent
 which would return a numeric value of 25.0 degrees.
 
 For example:
 \begin{verbatim}
-    COORD1(
-        t.center
-        )
+    COORD1(t.center)
 \end{verbatim}
 \noindent
 where \textit{t.center} is a reference to a column that contains POINT values.
@@ -2070,12 +1940,7 @@ POINT \SectionSee{sec:functions.geom.point} or column reference.
 For example, the declination of a point with position (25, -19.5) in degrees,
 could be obtained using the following expression:
 \begin{verbatim}
-    COORD2(
-        POINT(
-            25.0,
-           -19.5
-            )
-        )
+    COORD2(POINT(25.0, -19.5))
 \end{verbatim}
 \noindent
 which would return a numeric value of -19.5 degrees.
@@ -2084,9 +1949,7 @@ The COORD2 function may be applied to any expression that returns a
 geometric POINT value.
 For example:
 \begin{verbatim}
-    COORD2(
-        t.center
-        )
+    COORD2(t.center)
 \end{verbatim}
 \noindent
 where \textit{t.center} is a reference to a column that contains POINT values.
@@ -2114,12 +1977,7 @@ a given geometry as a string.
 
 The following example would return the coordinate system of a POINT literal:
 \begin{verbatim}
-    COORDSYS(
-        POINT(
-            25.0,
-           -19.5
-           )
-       )
+    COORDSYS(POINT(25.0, -19.5))
 \end{verbatim}
 \noindent
 which would return a string value representing the coordinate system used
@@ -2128,9 +1986,7 @@ to create the POINT.
 The COORDSYS function may be applied to any expression that returns a
 geometric datatype. For example:
 \begin{verbatim}
-    COORDSYS(
-        t.footprint
-        )
+    COORDSYS(t.footprint)
 \end{verbatim}
 \noindent
 where \textit{t.footprint} is a reference to a database column that
@@ -2156,28 +2012,14 @@ forms of the function.
 For example, an expression calculating the distance between two points of
 coordinates (25,-19.5) and (25.4,-20) could be written as follows:
 \begin{verbatim}
-    DISTANCE(
-        POINT(
-            25.0,
-           -19.5
-            ),
-        POINT(
-            25.4,
-           -20.0
-           )
-        )
+    DISTANCE(POINT(25.0, -19.5), POINT(25.4, -20.0))
 \end{verbatim}
 \noindent
 where all numeric values and the returned arc length are in degrees.
 
 The equivalent call to the four parameter form of the function would be:
 \begin{verbatim}
-    DISTANCE(
-        25.0,
-       -19.5,
-        25.4,
-       -20.0
-        )
+    DISTANCE(25.0, -19.5, 25.4, -20.0)
 \end{verbatim}
 
 The DISTANCE function may be applied to any expression that returns a
@@ -2187,10 +2029,7 @@ from a POINT is undefined at this point (but may be defined later).
 For example, the distance between two points stored in the database could
 be calculated as follows:
 \begin{verbatim}
-    DISTANCE(
-        t1.base,
-        t2.target
-        )
+    DISTANCE(t1.base, t2.target)
 \end{verbatim}
 \noindent
 where \textit{t1.base} and \textit{t2.target} are references to
@@ -2221,19 +2060,11 @@ For example, an expression to determine whether a circle of one degree radius
 centered on position (25.4, -20.0) degrees overlaps with a POLYGON, could be
 written as follows:
 \begin{verbatim}
-    INTERSECTS(
-        CIRCLE(
-            25.4,
-           -20.0,
-            1
-            ),
-        POLYGON(
-            20.0, -15.0,
-            20.0, -5.0,
-            10.0, -5.0,
-            10.0, -15.0
-            )
-        )
+    INTERSECTS(CIRCLE(25.4, -20.0, 1),
+               POLYGON(20.0, -15.0,
+                       20.0, -5.0,
+                       10.0, -5.0,
+                       10.0, -15.0))
 \end{verbatim}
 \noindent
 where the INTERSECTS function returns the numeric value 1 if the two arguments
@@ -2242,38 +2073,20 @@ overlap and 0 if they do not.
 When used as a predicate in the WHERE clause of a query, the numeric return
 value should be compared to the numeric values 0 or 1 to form a SQL predicate:
 \begin{verbatim}
-    WHERE
-        1 = INTERSECTS(
-            CIRCLE(
-                25.4,
-               -20.0,
-                1
-                ),
-            POLYGON(
-                20.0, -15.0,
-                20.0, -5.0,
-                10.0, -5.0,
-                10.0, -15.0
-                )
-            )
+    WHERE 1 = INTERSECTS(CIRCLE(25.4, -20.0, 1),
+                         POLYGON(20.0, -15.0,
+                                 20.0, -5.0,
+                                 10.0, -5.0,
+                                 10.0, -15.0))
 \end{verbatim}
 \noindent
 for ``does intersect'' and
 \begin{verbatim}
-    WHERE
-        0 = INTERSECTS(
-            CIRCLE(
-                25.4,
-               -20.0,
-                1
-                ),
-            POLYGON(
-                20.0, -15.0,
-                20.0, -5.0,
-                10.0, -5.0,
-                10.0, -15.0
-                )
-            )
+    WHERE 0 = INTERSECTS(CIRCLE(25.4, -20.0, 1),
+                         POLYGON(20.0, -15.0,
+                                 20.0, -5.0,
+                                 10.0, -5.0,
+                                 10.0, -15.0))
 \end{verbatim}
 \noindent
 for ``does not intersect''.
@@ -2283,11 +2096,7 @@ or they may be column references, functions or expressions that return
 geometric values.
 For example:
 \begin{verbatim}
-    WHERE
-        0 = INTERSECTS(
-            t1.target,
-            t2.footprint
-            )
+    WHERE 0 = INTERSECTS(t1.target, t2.footprint)
 \end{verbatim}
 where \textit{t1.target} and \textit{t2.footprint} are references to
 database columns that contain geometric (BOX, CIRCLE, POLYGON or REGION) values.
@@ -2332,10 +2141,7 @@ The function arguments specify the position, where:
 For example, a function expressing a point with right ascension of 25 degrees
 and declination of -19.5 degrees would be written as follows:
 \begin{verbatim}
-    POINT(
-        25.0,
-       -19.5
-       )
+    POINT(25.0, -19.5)
 \end{verbatim}
 \noindent
 where numeric values are in degrees.
@@ -2345,10 +2151,7 @@ or they may be column references, functions or expressions that return
 numeric values.
 For example:
 \begin{verbatim}
-    POINT(
-        t.ra,
-        t.dec
-        )
+    POINT(t.ra, t.dec)
 \end{verbatim}
 \noindent
 where \textit{t.ra} and \textit{t.dec} are references to database
@@ -2390,14 +2193,7 @@ For example, a function expressing a triangle with vertices at (10.0,
 -10.5), (20.0, 20.5) and (30.0,30.5) in degrees would be written
 as follows:
 \begin{verbatim}
-    POLYGON(
-        10.0,
-       -10.5,
-        20.0,
-        20.5,
-        30.0,
-        30.5
-        )
+    POLYGON(10.0, -10.5, 20.0, 20.5, 30.0, 30.5)
 \end{verbatim}
 \noindent
 where all numeric values are in degrees.
@@ -2407,14 +2203,9 @@ or they may be column references, functions or expressions that return
 numeric values.
 For example:
 \begin{verbatim}
-    POLYGON(
-        t1.ra,
-        t1.dec + 5,
-        t1.ra  - 5,
-        t1.dec - 5,
-        t1.ra  - 5,
-        t1.dec + 5,
-        )
+    POLYGON(t1.ra    , t1.dec + 5,
+            t1.ra - 5, t1.dec - 5,
+            t1.ra - 5, t1.dec + 5)
 \end{verbatim}
 \noindent
 where \textit{t1.ra} and \textit{t1.dec} are references to database columns
@@ -2425,11 +2216,7 @@ Alternatively, the coordinates for the POLYGON vertices may be column references
 functions or expressions that return POINT values.
 For example:
 \begin{verbatim}
-    POLYGON(
-        t2.toppoint,
-        t2.bottomleft,
-        t2.bottomright
-        )
+    POLYGON(t2.toppoint, t2.bottomleft, t2.bottomright)
 \end{verbatim}
 \noindent
 where \textit{t2.toppoint}, \textit{t2.bottomleft} and \textit{t2.bottomright}
@@ -2462,10 +2249,9 @@ requires literals as arguments rather than string expressions or column
 references.  The latter would require parsing these representations
 within the database, which is not intended.
 
-This document does not specify possible syntaxes for REGION
-literals.  A de-facto standard that many services understanding ADQL 2.0
-implemented at least partially is given by the (non-normative) section 6
-of TAP 1.0 \citep{2010ivoa.spec.0327D}, and implementations of ADQL 2.1 are
+This document does not specify possible syntaxes for REGION literals. A de-facto
+standard that many services understanding ADQL 2.0 implemented at least
+partially is given by the \STCSAppendix{}, and implementations of ADQL 2.1 are
 encouraged to support as much of that as reasonable for them.
 
 \subsection{User defined functions}
@@ -2508,9 +2294,9 @@ Observatory (GAVO):
     gavo_convert()
 \end{verbatim}
 
-The \verb:ivo: prefix is reserved for functions that have been defined
-in an IVOA specification. For example the \RegTAPSpec{} defines the following
-functions:
+The \verb:ivo: prefix is reserved for functions that have been defined in an
+IVOA specification or Endorsed Note. For example the \CatalogueUDF{} defines the
+following functions:
 \begin{verbatim}
     ivo_nocasematch()
     ivo_hasword()
@@ -2518,15 +2304,6 @@ functions:
     ivo_string_agg()
 \end{verbatim}
 
-In order to avoid different signatures for the same functions, it is recommended
-that ADQL implementers follow as much as possible the User Defined Function
-signatures listed in the \CatalogueUDF{}.
-% Catalogue of {ADQL} User Defined Functions - Endorsed Note 1.0+
-% http://www.ivoa.net/documents/udf-catalogue/index.html
-
-%If metadata on a user defined function is available, this should be used. For
-%example function names and cardinality of arguments should be checked against
-%metadata where available.
 
 \subsubsection{Metadata}
 \label{sec:user.metadata}
@@ -2548,19 +2325,21 @@ the signature nonterminal in the following grammar:
     arg ::= <regular_identifier> <type_name>
 \end{verbatim}
 
+\verb:<type_name>: should be one of the terms defined in \SectionRef{sec:types}.
+
 For example, the following fragment declares a user defined function that
-takes two \verb:TEXT: parameters and returns an integer, zero or one,
+takes two string parameters and returns an integer, zero or one,
 depending on the regular expression pattern matching:
 \begin{verbatim}
-    <languageFeatures type="ivo://ivoa.net/std/tapregext#features-udf">
-        <feature>
-            <form>match(pattern TEXT, string TEXT) -> INTEGER</form>
-            <description>
-                match returns 1 if the POSIX regular expression pattern
-                matches anything in string, 0 otherwise.
-            </description>
-        </feature>
-    </languageFeatures>
+<languageFeatures type="ivo://ivoa.net/std/tapregext#features-udf">
+    <feature>
+        <form>match(pattern VARCHAR, string VARCHAR) -> INTEGER</form>
+        <description>
+            match returns 1 if the POSIX regular expression pattern
+            matches anything in string, 0 otherwise.
+        </description>
+    </feature>
+</languageFeatures>
 \end{verbatim}
 
 See the \TAPRegSpec{} for full details on how to use the
@@ -2578,6 +2357,18 @@ string manipulation and comparison operators:
     \item \verb:ILIKE: Case-insensitive comparison.
 \end{itemize}
 
+\subsubsection{Case folding}
+
+Since case folding is a nontrivial operation in a multi-encoding world, ADQL
+requires standard behaviour for the ASCII characters, and recommends
+following algorithms described in Section 3.13, ``Default Case Algorithms''
+of \citet{std:UNICODE} for characters outside the ASCII set:
+
+\begin{itemize}
+    \item algorithm R1 for \verb:UPPER():
+    \item algorithm R2 for \verb:LOWER(): and \verb:ILIKE:
+\end{itemize}
+
 \subsubsection{LOWER}
 \label{sec:string.functions.lower}
 {\footnotesize Language feature :}\\
@@ -2585,11 +2376,6 @@ string manipulation and comparison operators:
 {\footnotesize \verb|name: LOWER|}\\
 
 The LOWER function converts its string parameter to lower case.
-
-Since case folding is a nontrivial operation in a multi-encoding world,
-ADQL requires standard behaviour for the ASCII characters, and recommends
-following algorithm R2 described in Section 3.13, ``Default Case
-Algorithms'' of \citet{std:UNICODE} for characters outside the ASCII set.
 
 \begin{verbatim}
     LOWER('Francis Albert Augustus Charles Emmanuel')
@@ -2604,11 +2390,6 @@ Algorithms'' of \citet{std:UNICODE} for characters outside the ASCII set.
 {\footnotesize \verb|name: UPPER|}\\
 
 The UPPER function converts its string parameter to upper case.
-
-Since case folding is a nontrivial operation in a multi-encoding world,
-ADQL requires standard behaviour for the ASCII characters, and recommends
-following algorithm R1 described in Section 3.13, ``Default Case Algorithms''
-of \citet{std:UNICODE} for characters outside the ASCII set.
 
 \begin{verbatim}
     UPPER('Francis Albert Augustus Charles Emmanuel')
@@ -2630,11 +2411,6 @@ of its string operands.
 
     'Francis' ILIKE 'francis' => True
 \end{verbatim}
-
-Since case folding is a nontrivial operation in a multi-encoding world,
-ADQL requires standard behaviour for the ASCII characters, and recommends
-following algorithm R2 described in Section 3.13, ``Default Case Algorithms''
-of \citet{std:UNICODE} for characters outside the ASCII set.
 
 \subsection{Common table expressions}
 \label{sec:common-table}
@@ -2659,45 +2435,27 @@ by factoring subqueries out of the main SQL statement.
 
 For example, the following query with a nested subquery:
 \begin{verbatim}
-    SELECT
-        ra,
-        dec
-    FROM
-        (
-        SELECT
-            *
-        FROM
-            alpha_source
-        WHERE
-            id % 10 = 0
-        )
-    WHERE
-        ra > 10
-    AND
-        ra < 20
+    SELECT ra, dec
+    FROM (
+           SELECT *
+           FROM alpha_source
+           WHERE id % 10 = 0
+         ) AS alpha_subset
+    WHERE ra > 10
+      AND ra < 20
 \end{verbatim}
 \noindent
 can be refactored as a named WITH query and a simpler main query:
 \begin{verbatim}
-    WITH alpha_subset AS
-        (
-        SELECT
-            *
-        FROM
-            alpha_source
-        WHERE
-            id % 10 = 0
-        )
-
-    SELECT
-        ra,
-        dec
-    FROM
-        alpha_subset
-    WHERE
-        ra > 10
-    AND
-        ra < 20
+    WITH alpha_subset AS (
+      SELECT *
+      FROM alpha_source
+      WHERE id % 10 = 0
+    )
+    SELECT ra, dec
+    FROM alpha_subset
+    WHERE ra > 10
+      AND ra < 20
 \end{verbatim}
 
 The current version of ADQL does not support recursive common table expressions.
@@ -2717,35 +2475,23 @@ set operators:
     \item \verb:INTERSECT:
 \end{itemize}
 
+For a set operation to be valid in ADQL, the following criteria must be met:
+\begin{itemize}
+    \item the two queries MUST result in the same number of columns
+    \item the columns in the operands MUST have the same datatypes.
+\end{itemize}
+
+In addition, the columns returned by a set operation SHOULD have the same
+metadata, e.g. units, UCD, etc. These metadata SHOULD be generated from the
+left-hand operand of the set operation.
+
 \subsubsection{UNION}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-sets|}\\
 {\footnotesize \verb|name: UNION|}\\
 
 The UNION operator combines the results of two queries, accepting rows from
-both the first and second set of results,
-removing duplicate rows unless UNION ALL is used.
-
-For a UNION operation to be valid in ADQL, the following criteria MUST be met:
-\begin{itemize}
-    \item the two queries MUST result in the same number of columns
-    \item the columns in the operands MUST have the same datatypes.
-\end{itemize}
-
-In addition, the following criteria SHOULD be met:
-\begin{itemize}
-    \item the columns in the operands SHOULD have the same metadata, e.g. units, UCD, etc.
-    \item the metadata for the results SHOULD be generated from the left-hand operand.
-\end{itemize}
-
-Note that the comparison used for removing duplicates is based purely on the
-column value and does not take into account the units.
-This means that a row with a numeric value of \verb:2: and units of \verb:m:
-and a row with a numeric value of \verb:2: and units of \verb:km: will be
-considered equal, despite the difference in units.
-\begin{verbatim}
-    2m = 2km
-\end{verbatim}
+both the first and second set of results.
 
 \subsubsection{EXCEPT}
 {\footnotesize Language feature :}\\
@@ -2753,30 +2499,7 @@ considered equal, despite the difference in units.
 {\footnotesize \verb|name: EXCEPT|}\\
 
 The EXCEPT operator combines the results of two queries, accepting rows that are
-in the first set of results but are not in the second,
-removing duplicate rows unless EXCEPT ALL is used.
-
-For an EXCEPT operation to be valid in ADQL, the following criteria MUST be met:
-
-\begin{itemize}
-    \item the two queries MUST result in the same number of columns
-    \item the columns in the operands MUST have the same datatypes
-    \item the metadata for the results MUST be generated from the left-hand operand.
-\end{itemize}
-
-In addition, the following criteria SHOULD be met:
-\begin{itemize}
-    \item the columns in the operands SHOULD have the same metadata, e.g. units, UCD, etc.
-\end{itemize}
-
-Note that the comparison used for removing duplicates is based purely on the
-column value and does not take into account the units.
-This means that a row with a numeric value of \verb:2: and units of \verb:m:
-and a row with a numeric value of \verb:2: and units of \verb:km: will be
-considered equal, despite the difference in units.
-\begin{verbatim}
-    2m = 2km
-\end{verbatim}
+in the first set of results but are not in the second one.
 
 \subsubsection{INTERSECT}
 {\footnotesize Language feature :}\\
@@ -2784,30 +2507,19 @@ considered equal, despite the difference in units.
 {\footnotesize \verb|name: INTERSECT|}\\
 
 The INTERSECT operator combines the results of two queries, accepting rows
-that are strictly in both the first and second set of results,
-removing duplicate rows unless INTERSECT ALL is used.
+that are strictly in both the first and second set of results.
 
-For an INTERSECT operation to be valid in ADQL, the following criteria MUST be met:
+\subsubsection{Duplicated rows}
 
-\begin{itemize}
-    \item the two queries MUST result in the same number of columns
-    \item the columns in the operands MUST have the same datatypes.
-\end{itemize}
+\verb:UNION:, \verb:EXCEPT: and \verb:INTERSECT: remove duplicated rows,
+while \verb:UNION ALL:, \verb:EXCEPT ALL: and \verb:INTERSECT ALL: keep all of
+them.
 
-In addition, the following criteria SHOULD be met:
-\begin{itemize}
-    \item the columns in the operands SHOULD have the same metadata, e.g. units, UCD, etc.
-    \item the metadata for the results SHOULD be generated from the left-hand operand.
-\end{itemize}
-
-Note that the comparison used for removing duplicates is based purely on the
-column value and does not take into account the units.
-This means that a row with a numeric value of \verb:2: and units of \verb:m:
-and a row with a numeric value of \verb:2: and units of \verb:km: will be
-considered equal, despite the difference in units.
-\begin{verbatim}
-    2m = 2km
-\end{verbatim}
+Note that the comparison used for removing duplicated rows is based purely on
+the column value and does not take into account the units. This means that a row
+with a numeric value of \verb:2: and unit of \verb:m: and a row with a numeric
+value of \verb:2: and unit of \verb:km: will be considered equal, despite the
+difference in units.
 
 \subsubsection{Operands}
 
@@ -2828,10 +2540,10 @@ Example: sorting result of the \verb:UNION: operands:
 
 \begin{verbatim}
         -- take the 10 first
-        ( SELECT TOP 10 id, ra, dec FROM atable ORDER BY id ASC)
+        (SELECT TOP 10 id, ra, dec FROM atable ORDER BY id ASC)
     UNION
         -- take the 10 last
-        ( SELECT TOP 10 id, ra, dec FROM atable ORDER BY id DESC)
+        (SELECT TOP 10 id, ra, dec FROM atable ORDER BY id DESC)
 \end{verbatim}
 
 Common table expressions are not allowed in any set operator operand. They must
@@ -2841,8 +2553,8 @@ Example: sorting result of the \verb:UNION: operands: with common table
 expressions
 
 \begin{verbatim}
-WITH tenFirst AS ( SELECT TOP 10 id, ra, dec FROM atable ORDER BY id ASC),
-     tenLast  AS ( SELECT TOP 10 id, ra, dec FROM atable ORDER BY id DESC)
+WITH tenFirst AS (SELECT TOP 10 id, ra, dec FROM atable ORDER BY id ASC),
+     tenLast  AS (SELECT TOP 10 id, ra, dec FROM atable ORDER BY id DESC)
   SELECT * FROM tenFirst
 UNION
   SELECT * FROM tenLast
@@ -3062,10 +2774,10 @@ All arguments must be of the same datatype. An error should be returned
 if this rule is not respected. The way to report this error is
 implementation dependent.
 
-This is typically used to provide fallback values.  For instance,
+This is typically used to provide fallback values. For instance,
 
 \begin{verbatim}
-COALESCE(access_url, '')
+    COALESCE(access_url, '')
 \end{verbatim}
 
 \noindent will return an empty string when \verb|access_url| is NULL.
@@ -3340,7 +3052,8 @@ For example, the following XML fragment describes a service that supports the
                           spherical
                           (see \SectionRef{sec:functions.geom.limits} and
                           \SectionRef{sec:functions.geom.point})
-                    \item Recommendation of a preferred crossmatch syntax (use
+                    \item Recommendation of a preferred sky crossmatch and
+                          cone search syntax (use
                           of \verb:DISTANCE(): instead of \verb:CONTAINS():)
                           \SectionSee{sec:functions.geom.crossmatch}
                     \item \verb:REGION(): argument restricted to a string
