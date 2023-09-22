@@ -1507,9 +1507,10 @@ Since version 2.1, this argument is deprecated and has been made optional.
 Future versions of this specification will remove this parameter from the listed
 functions.
 
-Coordinate conversions SHOULD now be explictly asked. The ADQL implementers have
-to allow it through User Defined Functions. Then, it is recommended to define
-them as declared in the \CatalogueUDF{}.
+Coordinate conversions SHOULD now be explictly requested. The ADQL implementers
+have to allow it through User Defined Functions. An interoperable facility for
+frame transformations is in preparation as of this writing and is expected to be
+part of the \CatalogueUDF{}.
 % Catalogue of {ADQL} User Defined Functions - Endorsed Note 1.0+
 % http://www.ivoa.net/documents/udf-catalogue/index.html
 
@@ -1792,12 +1793,12 @@ degrees, could be written as follows:
 
 The CONTAINS function is not symmetric in the meaning of the arguments.
 
-The CONTAINS function returns the numeric value 1 if the first argument
-is in, or on, the boundary of the second argument and the numeric value 0
+The CONTAINS function returns the integer value 1 if the first argument
+is in, or on, the boundary of the second argument and the integer value 0
 if it is not.
 
-When used as a predicate in the WHERE clause of a query, the numeric returned
-value must be compared to the numeric values 0 or 1 to form a SQL predicate:
+When used as a predicate in the WHERE clause of a query, the returned integer
+value must be compared to the integer values 0 or 1 to form a SQL predicate:
 \begin{verbatim}
     WHERE 1 = CONTAINS(POINT(25.0, -19.5),
                        CIRCLE(25.4, -20.0, 10.0))
@@ -1985,11 +1986,11 @@ written as follows:
                        10.0, -15.0))
 \end{verbatim}
 \noindent
-where the INTERSECTS function returns the numeric value 1 if the two arguments
+where the INTERSECTS function returns the integer value 1 if the two arguments
 overlap and 0 if they do not.
 
-When used as a predicate in the WHERE clause of a query, the numeric return
-value should be compared to the numeric values 0 or 1 to form a SQL predicate:
+When used as a predicate in the WHERE clause of a query, the returned integer
+value should be compared to the integer values 0 or 1 to form a SQL predicate:
 \begin{verbatim}
     WHERE 1 = INTERSECTS(CIRCLE(25.4, -20.0, 1),
                          POLYGON(20.0, -15.0,
