@@ -1495,28 +1495,32 @@ and column references.
 
 For historical reasons, the geometry constructors (\verb:BOX:, \verb:CIRCLE:,
 \verb:POINT: and \verb:POLYGON:) all accept a string literal as the first
-argument, hereafter called the COOSYS argument. Since version 2.1 of the
-specification, this parameter has been made optional and marked as deprecated.
-Future versions of this specification may remove this parameter from the listed
-functions.
-
-This specification makes no guarantees about any semantics for the deprecated
-COOSYS argument. Queries against services implementing ADQL 2.1 (or higher)
-SHOULD omit it. For interoperability, queries against 2.0 services SHOULD NOT
-pass arguments with differing COOSYS arguments to \verb:CONTAINS: or
-\verb:INTERSECTS:, as behaviour is undefined in that case.
+argument, hereafter called the COOSYS argument.
 
 The COOSYS argument was originally intended to carry information on
 a reference system or other coordinate system metadata. This was helpful in
 order to deal with data specified in different coordinate systems while
 performing geometric operations. It was up to the ADQL service to perform
-the appropriate conversion to make these operations possible. Now this argument
-is deprecated and will later be removed, the users should explicitly ask for
-such conversion. If this behavior is desired, the ADQL implementers have to
-allow it through User Defined Functions. Then, it is recommended to define them
-as declared in the \CatalogueUDF{}.
+the appropriate conversion to make these operations possible.
+
+Since version 2.1, this argument is deprecated and has been made optional.
+Future versions of this specification will remove this parameter from the listed
+functions.
+
+Coordinate conversions SHOULD now be explictly asked. The ADQL implementers have
+to allow it through User Defined Functions. Then, it is recommended to define
+them as declared in the \CatalogueUDF{}.
 % Catalogue of {ADQL} User Defined Functions - Endorsed Note 1.0+
 % http://www.ivoa.net/documents/udf-catalogue/index.html
+
+\verb:DISTANCE:, \verb:CONTAINS: and \verb:INTERSECTS: MAY still convert
+coordinates of its geometric operands if they are expressed in different
+coordinate systems. However, be aware that in a future version of ADQL, these
+functions will no longer be expected to perform any coordinate conversion.
+Consequently, it is recommanded to avoid relying on this deprecated feature.
+For interoperability reasons, queries against 2.0 services SHOULD NOT pass
+arguments with differing COOSYS arguments to \verb:DISTANCE:, \verb:CONTAINS:
+or \verb:INTERSECTS:, as behaviour is undefined in that case.
 
 \subsubsection{Predicate functions}
 \label{sec:functions.geom.predicate}
@@ -1780,8 +1784,8 @@ The CONTAINS function determines if a geometry is wholly contained within
 another. This is most commonly used to express a ``point-in-shape'' condition.
 
 For example, an expression to determine whether the point (25.0, -19.5) degrees
-is within a circle of ten degrees radius centered on position (25.4, -20.0) degrees,
-could be written as follows:
+is within a circle of ten degrees radius centered on position (25.4, -20.0)
+degrees, could be written as follows:
 \begin{verbatim}
     CONTAINS(POINT(25.0, -19.5), CIRCLE(25.4, -20.0, 10.0))
 \end{verbatim}
@@ -1792,7 +1796,7 @@ The CONTAINS function returns the numeric value 1 if the first argument
 is in, or on, the boundary of the second argument and the numeric value 0
 if it is not.
 
-When used as a predicate in the WHERE clause of a query, the numeric return
+When used as a predicate in the WHERE clause of a query, the numeric returned
 value must be compared to the numeric values 0 or 1 to form a SQL predicate:
 \begin{verbatim}
     WHERE 1 = CONTAINS(POINT(25.0, -19.5),
@@ -1822,13 +1826,8 @@ values respectively.
 %TODO - ObsCore example
 
 %coordsys trans
-If the geometric arguments are expressed in different coordinate systems,
-the CONTAINS function is responsible for converting one, or both, of the
-arguments into a different coordinate system.
-If the CONTAINS function cannot perform the required conversion then
-it SHOULD throw an error.
-Details of the mechanism for reporting the error condition are
-implementation dependent.
+Geometric arguments SHOULD be expressed in the same coordinate system.
+See \SectionRef{sec:geom.coordsys.param} for more details.
 
 \subsubsection{COORD1}
 \label{sec:functions.geom.coord1}
@@ -1962,16 +1961,9 @@ where \textit{t1.base} and \textit{t2.target} are references to
 database columns that contain POINT values.
 
 %coordsys trans
-If the geometric arguments are expressed in different coordinate systems,
-the DISTANCE function is responsible for converting one, or both, of the
-arguments into a different coordinate system.
-If the DISTANCE function cannot perform the required conversion then
-it SHOULD throw an error.
-Details of the mechanism for reporting the error condition are
-implementation dependent.
-
-It is assumed that the arguments for the four numeric parameter form all
-use the same coordinate system.
+Geometric arguments SHOULD be expressed in the same coordinate system, even in
+the four numeric parameter form. See \SectionRef{sec:geom.coordsys.param} for
+more details.
 
 \subsubsection{INTERSECTS}
 \label{sec:functions.geom.intersects}
@@ -2027,24 +2019,18 @@ For example:
 where \textit{t1.target} and \textit{t2.footprint} are references to
 database columns that contain geometric (BOX, CIRCLE, POLYGON or REGION) values.
 
-%TODO
 The arguments to INTERSECTS SHOULD be geometric expressions evaluating to
 either BOX, CIRCLE, POLYGON or REGION.
-Previous versions of this
-specification also allowed POINT values and required server implementations to
-interpret the expression as a CONTAINS with the POINT moved into the first position.
-Server implementations SHOULD still implement that behaviour, but clients
-SHOULD NOT expect it.
-This behaviour MAY be dropped in the next major version of this specification.
+
+Previous versions of this specification also allowed POINT values and required
+server implementations to interpret the expression as a CONTAINS with the POINT
+moved into the first position. Server implementations SHOULD still implement
+that behaviour, but clients SHOULD NOT expect it. This behaviour MAY be dropped
+in the next major version of this specification.
 
 %coordsys trans
-If the geometric arguments are expressed in different coordinate systems,
-the INTERSECTS function is responsible for converting one, or both, of the
-arguments into a different coordinate system.
-If the INTERSECTS function cannot perform the required conversion then
-it SHOULD throw an error.
-Details of the mechanism for reporting the error condition are
-implementation dependent.
+Geometric arguments SHOULD be expressed in the same coordinate system.
+See \SectionRef{sec:geom.coordsys.param} for more details.
 
 \subsubsection{POINT}
 \label{sec:functions.geom.point}
