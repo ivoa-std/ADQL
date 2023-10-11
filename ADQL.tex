@@ -425,6 +425,22 @@ Numeric literals are expressed as an exact decimal value, e.g. \verb:12: or
 The rules on where whitespace is allowed and required are as in SQL-92;
 essentially, any \verb:<token>: may be followed by a \verb:<separator>:.
 
+\subsubsection{Comments}
+\label{sec:comments}
+
+As in SQL-92, comments are supported in ADQL. A comment can be anywhere in the
+query. It starts with a double minus sign and ends with the end of line.
+
+\begin{verbatim}
+    <comment> ::= <comment_introducer> [ <comment_character>... ] <newline>
+
+    <comment_character> ::= <nonquote_character> | <quote>
+
+    <comment_introducer> ::= <minus_sign><minus_sign> [<minus_sign>...]
+\end{verbatim}
+
+Comments are not expected to be interpreted by ADQL parsers.
+
 \clearpage % to keep the entire verbatim block for query syntax on the same page
 \subsection{Query syntax}
 \label{sec:syntax}
@@ -2894,6 +2910,8 @@ For example, the following XML fragment describes a service that supports the
                           \verb:BLOB: \SectionSee{sec:types}
                     \item Language feature description
                           (see \AppendixRef{sec:features})
+                    \item Syntax description for comments inside a query
+                          (see \SectionRef{sec:comments})
                 \end{itemize}
             \item \textbf{Updated}
                 \begin{itemize}
