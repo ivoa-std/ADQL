@@ -1536,9 +1536,9 @@ coordinates of its geometric operands if they are expressed in different
 coordinate systems. However, be aware that in a future version of ADQL, these
 functions will no longer be expected to perform any coordinate conversion.
 Consequently, it is recommanded to avoid relying on this deprecated feature.
-For interoperability reasons, queries against 2.0 services SHOULD NOT pass
-arguments with differing COOSYS arguments to \verb:DISTANCE:, \verb:CONTAINS:
-or \verb:INTERSECTS:, as behaviour is undefined in that case.
+For interoperability reasons, queries against 2.0 or later services SHOULD NOT
+pass arguments with differing COOSYS arguments to \verb:DISTANCE:,
+\verb:CONTAINS: or \verb:INTERSECTS:, as behaviour is undefined in that case.
 
 \subsubsection{Predicate functions}
 \label{sec:functions.geom.predicate}
