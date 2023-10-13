@@ -428,8 +428,9 @@ essentially, any \verb:<token>: may be followed by a \verb:<separator>:.
 \subsubsection{Comments}
 \label{sec:comments}
 
-As in SQL-92, comments are supported in ADQL. A comment can be anywhere in the
-query. It starts with a double minus sign and ends with the end of line.
+As in SQL-92, comments are supported in ADQL. A comment is syntactically legal
+wherever whitespace is legal and can then stand in for that whitespace. It
+starts with a double minus sign and ends with the end of line.
 
 \begin{verbatim}
     <comment> ::= <comment_introducer> [ <comment_character>... ] <newline>
