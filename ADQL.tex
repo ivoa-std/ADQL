@@ -1626,7 +1626,7 @@ contains geometric (POINT, BOX, CIRCLE, POLYGON or REGION) values.
 {\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adqlgeo|}\\
 {\footnotesize \verb|name: BOX|}\\
 
-Note - the \verb|BOX| function has been deprecated in this version of the standard,
+Note - the \verb|BOX| function has been deprecated in version 2.1 of the standard,
 and will be removed from future versions of the specification.
 
 The BOX function expresses a box on the sky. A BOX is a special case of POLYGON,
@@ -1695,7 +1695,7 @@ and DOUBLE values respectively.
 %coordsys param
 For historical reasons, the BOX function accepts an optional string literal as
 the first argument.
-As of this version of the specification this parameter has been
+As of version 2.1 of the specification this parameter has been
 marked as deprecated.
 Future versions of this specification may remove this parameter
 \SectionSee{sec:geom.coordsys.param}.
@@ -1770,7 +1770,7 @@ database columns that contain POINT and DOUBLE values respectively.
 %coordsys param
 For historical reasons, the CIRCLE function accepts an optional string literal
 as the first argument.
-As of this version of the specification this parameter has been
+As of version 2.1 of the specification this parameter has been
 marked as deprecated.
 Future versions of this specification may remove this parameter
 \SectionSee{sec:geom.coordsys.param}.
@@ -1886,7 +1886,7 @@ where \textit{t.center} is a reference to a column that contains POINT values.
 {\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adqlgeo|}\\
 {\footnotesize \verb|name: COORDSYS|}\\
 
-As of this version of the specification the COORDSYS function has
+As of version 2.1 of the specification the COORDSYS function has
 been marked as deprecated. This function may be removed in future versions
 of this specification.
 Details of the coordinate system for a database column are available as part of
@@ -2074,7 +2074,7 @@ columns that contain numeric values.
 %coordsys param
 For historical reasons, the POINT function accepts an optional string literal
 as the first argument.
-As of this version of the specification this parameter has been
+As of version 2.1 of the specification this parameter has been
 marked as deprecated.
 Future versions of this specification may remove this parameter
 \SectionSee{sec:geom.coordsys.param}.
@@ -2143,7 +2143,7 @@ arguments.
 %coordsys param
 For historical reasons, the POLYGON function accepts an optional string literal
 as the first argument.
-As of this version of the specification this parameter has been
+As of version 2.1 of the specification this parameter has been
 marked as deprecated.
 Future versions of this specification may remove this parameter
 \SectionSee{sec:geom.coordsys.param}.
@@ -2288,7 +2288,7 @@ of \citet{std:UNICODE} for characters outside the ASCII set:
 {\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-string|}\\
 {\footnotesize \verb|name: LOWER|}\\
 
-The LOWER function converts its string parameter to lower case.
+The LOWER function converts its string parameter to lower case in accordance with the rules of the database's locale.
 
 \begin{verbatim}
     LOWER('Francis Albert Augustus Charles Emmanuel')
@@ -2302,7 +2302,7 @@ The LOWER function converts its string parameter to lower case.
 {\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-string|}\\
 {\footnotesize \verb|name: UPPER|}\\
 
-The UPPER function converts its string parameter to upper case.
+The UPPER function converts its string parameter to upper case in accordance with the rules of the database's locale.
 
 \begin{verbatim}
     UPPER('Francis Albert Augustus Charles Emmanuel')
@@ -2329,7 +2329,7 @@ of its string operands.
 \label{sec:common-table}
 
 An ADQL service implementation MAY include support for the following optional
-support for common table expressions:
+common table expressions:
 
 \begin{itemize}
     \item \verb:WITH:
@@ -2572,7 +2572,7 @@ Examples:
 
 The range of types allowed for the value to cast entirely depends on the target
 type. Although cast operations may vary from one implementation to another, ADQL
-SHOULD support the following ones:
+SHOULD support the ones listed in Table \ref{table:cast.inputtypes}.
 
 \begin{table}[!h]
     \center{
@@ -2597,7 +2597,9 @@ SHOULD support the following ones:
                 \hline
             \end{tabular}
         }
-        \textit{\footnotesize{X: supported ; X*: supported but possible implementation differences}}
+    \textit{\footnotesize{X: supported ; X*: supported but possible implementation differences}}
+    \caption{CAST allowed types}
+    \label{table:cast.inputtypes}
     }
 \end{table}
 
@@ -2715,7 +2717,7 @@ unit conversion functions:
 The \verb:IN_UNIT(): function returns the value of the first argument
 transformed into the unit defined by the second argument.
 
-The first argument MUST be a numeric expression.
+The first argument MUST be a numeric value expression.
 
 The second argument MUST be a string literal containing a valid unit
 description using the formatting defined in the \VOUnitSpec{}.
@@ -2754,7 +2756,7 @@ dependent.
 Currently, ADQL does not provide any way to specify the unit of a numeric
 literal (e.g. a number such as \verb:42: or \verb:3.14:) or of the result of an
 operation or function. Consequently, regarding the unitless aspect of such
-numeric expression, \verb:IN_UNIT(): MUST report an error.
+a numeric expression, \verb:IN_UNIT(): MUST report an error.
 
 Examples:
 
