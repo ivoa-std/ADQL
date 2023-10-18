@@ -383,11 +383,19 @@ moving between backend RDBMSes.
 \subsubsection{Literals}
 \label{sec:literals}
 
-String literals are expressed as a character expression delimited by single quotes.
+String literals are expressed as a character expression delimited by single
+quotes.
 
 \begin{verbatim}
     <character_string_literal> ::=
         <quote> [ <character_representation>... ] <quote>
+\end{verbatim}
+
+A single quote inside a string literal must be escaped with a second single
+quote. For instance:
+
+\begin{verbatim}
+    'Earth''s satellite is the Moon.'
 \end{verbatim}
 
 Numeric literals are expressed as an exact decimal value, e.g. \verb:12: or
@@ -2920,6 +2928,8 @@ For example, the following XML fragment describes a service that supports the
                           (see \AppendixRef{sec:features})
                     \item Syntax description for comments inside a query
                           (see \SectionRef{sec:comments})
+                    \item Description of how to escape single quotes in a string
+                          literal (see \SectionRef{sec:literals})
                 \end{itemize}
             \item \textbf{Updated}
                 \begin{itemize}
