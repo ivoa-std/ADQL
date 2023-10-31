@@ -383,11 +383,19 @@ moving between backend RDBMSes.
 \subsubsection{Literals}
 \label{sec:literals}
 
-String literals are expressed as a character expression delimited by single quotes.
+String literals are expressed as a character expression delimited by single
+quotes.
 
 \begin{verbatim}
     <character_string_literal> ::=
         <quote> [ <character_representation>... ] <quote>
+\end{verbatim}
+
+A single quote inside a string literal must be escaped with a second single
+quote. For instance:
+
+\begin{verbatim}
+    'Earth''s satellite is the Moon.'
 \end{verbatim}
 
 Numeric literals are expressed as an exact decimal value, e.g. \verb:12: or
@@ -424,6 +432,23 @@ Numeric literals are expressed as an exact decimal value, e.g. \verb:12: or
 
 The rules on where whitespace is allowed and required are as in SQL-92;
 essentially, any \verb:<token>: may be followed by a \verb:<separator>:.
+
+\subsubsection{Comments}
+\label{sec:comments}
+
+As in SQL-92, comments are supported in ADQL. A comment is syntactically legal
+wherever whitespace is legal and can then stand in for that whitespace. It
+starts with a double minus sign and ends with the end of line.
+
+\begin{verbatim}
+    <comment> ::= <comment_introducer> [ <comment_character>... ] <newline>
+
+    <comment_character> ::= <nonquote_character> | <quote>
+
+    <comment_introducer> ::= <minus_sign><minus_sign> [<minus_sign>...]
+\end{verbatim}
+
+Comments are not expected to be interpreted by ADQL parsers.
 
 \clearpage % to keep the entire verbatim block for query syntax on the same page
 \subsection{Query syntax}
@@ -1450,12 +1475,13 @@ implementation dependent.
 \subsubsection{Datatype functions}
 \label{sec:functions.geom.type}
 
-The following functions provide constructors for each of the geometry datatypes.
-The semantics of these datatypes are based on the corresponding
-concepts from the \STCSpec{} data model.
+Some of the functions described in this section (e.g. \verb:POINT:,
+\verb:CIRCLE:) are constructors for each of the geometry datatypes. The
+semantics of these datatypes are based on the corresponding concepts from the
+\STCSpec{} data model.
 
-The geometry datatypes and expressions are part of the core \verb:<value_expression>:
-in the ADQL grammar.
+The geometry datatypes and expressions are part of the core
+\verb:<value_expression>: in the ADQL grammar.
 
 \begin{verbatim}
     <value_expression> ::=
@@ -1519,9 +1545,9 @@ coordinates of its geometric operands if they are expressed in different
 coordinate systems. However, be aware that in a future version of ADQL, these
 functions will no longer be expected to perform any coordinate conversion.
 Consequently, it is recommanded to avoid relying on this deprecated feature.
-For interoperability reasons, queries against 2.0 services SHOULD NOT pass
-arguments with differing COOSYS arguments to \verb:DISTANCE:, \verb:CONTAINS:
-or \verb:INTERSECTS:, as behaviour is undefined in that case.
+For interoperability reasons, queries against 2.0 or later services SHOULD NOT
+pass arguments with differing COOSYS arguments to \verb:DISTANCE:,
+\verb:CONTAINS: or \verb:INTERSECTS:, as behaviour is undefined in that case.
 
 \subsubsection{Predicate functions}
 \label{sec:functions.geom.predicate}
@@ -2217,6 +2243,12 @@ following functions:
     ivo_string_agg()
 \end{verbatim}
 
+The \CatalogueUDF{} collects many \verb:ivo: prefixed functions defined in other
+IVOA specifications, Endorsed Notes and functions defined in at least two
+implementations. At the time of this writing it is the only endorsed IVOA
+document providing such a collection of \verb:ivo: prefixed functions. It is
+then strongly recommended to follow function names and definitions from this
+catalogue when providing functions offering identical or similar functionnality.
 
 \subsubsection{Metadata}
 \label{sec:user.metadata}
@@ -2896,6 +2928,10 @@ For example, the following XML fragment describes a service that supports the
                           \verb:BLOB: \SectionSee{sec:types}
                     \item Language feature description
                           (see \AppendixRef{sec:features})
+                    \item Syntax description for comments inside a query
+                          (see \SectionRef{sec:comments})
+                    \item Description of how to escape single quotes in a string
+                          literal (see \SectionRef{sec:literals})
                 \end{itemize}
             \item \textbf{Updated}
                 \begin{itemize}
