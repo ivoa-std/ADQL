@@ -1486,8 +1486,14 @@ and column references.
 The arguments for a geometric function represent spherical coordinates
 in units of degrees (square degrees for area).
 
-Coordinates SHOULD be expressed in ranges matching the coordinate system they
-are expressed in (e.g. [0, 360] and [-90, 90] for equatorial coordinates).
+ADQL implementors and users MUST follow coordinate ranges defined in DALI 1.1
+and later.
+
+Note that at the time of the ADQL 2.1 recommendation, no agreed-upon, reliable,
+IVOA-approved convention for what ranges apply to which reference system exists.
+Such convention is foreseen to be defined in DALI. Presently, DALI 1.1 only
+defines ranges for equatorial coordinates. However, this is expected to be
+updated in future DALI versions.
 
 Details of the mechanism for reporting the out of range arguments are
 implementation dependent.
@@ -1666,10 +1672,9 @@ where:
 \begin{itemize}
     \item the center position is given by a pair of numeric coordinates
           in degrees, or a single geometric POINT
-    \item the coordinates of the center position SHOULD be within the ranges
-          matching their coordinate system
-          (see \SectionRef{sec:functions.geom.limits})
-    \item the width and height are given by numeric values in degrees.
+    \item the values of coordinates of the center position are subject to the
+          constraints laid down in \SectionRef{sec:functions.geom.limits}
+    \item the width and height are given by numeric values in degrees
 \end{itemize}
 
 For example, a BOX of ten degrees centered on a position
@@ -1744,9 +1749,8 @@ The function arguments specify the center position and the radius, where:
 \begin{itemize}
     \item the center position is given by a pair of numeric coordinates
           in degrees, or a single geometric POINT
-    \item the coordinates of the center position SHOULD be within the ranges
-          matching their coordinate system
-          (see \SectionRef{sec:functions.geom.limits})
+    \item the values of coordinates of the center position are subject to the
+          constraints laid down in \SectionRef{sec:functions.geom.limits}
     \item the radius is a numeric value in degrees.
 \end{itemize}
 
@@ -2051,8 +2055,8 @@ the \STCSpec{}.
 The function arguments specify the position, where:
 \begin{itemize}
     \item the position is given by a pair of numeric coordinates in degrees
-    \item the coordinates SHOULD be within the ranges matching their coordinate
-          system (see \SectionRef{sec:functions.geom.limits}).
+    \item the values of coordinates are subject to the constraints laid down in
+          \SectionRef{sec:functions.geom.limits}
 \end{itemize}
 
 For example, a function expressing a point with right ascension of 25 degrees
@@ -2102,8 +2106,8 @@ The function arguments specify three or more vertices, where:
 \begin{itemize}
     \item the position of the vertices are given as a sequence of numeric
           coordinates in degrees, or as a sequence of geometric POINTs
-    \item the coordinates SHOULD be within the ranges matching their coordinate
-          system (see \SectionRef{sec:functions.geom.limits}).
+    \item the values of coordinates are subject to the constraints laid down in
+          \SectionRef{sec:functions.geom.limits}
 \end{itemize}
 
 For example, a function expressing a triangle with vertices at (10.0,
