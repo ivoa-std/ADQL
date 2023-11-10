@@ -2757,10 +2757,20 @@ unit conversion functions:
 The \verb:IN_UNIT(): function returns the value of the first argument
 transformed into the unit defined by the second argument.
 
-The first argument MUST be a numeric value expression.
+The first argument MUST be a numeric value expression. If this argument is a
+column name, the VOUnits for this column ought to be found in the metadata
+attached to this column (e.g. \verb|TAP_SCHEMA.columns.unit| in a TAP service).
 
 The second argument MUST be a string literal containing a valid unit
 description using the formatting defined in the \VOUnitSpec{}.
+
+Example:
+
+\begin{verbatim}
+    -- ra: column expressed in 'deg'
+    IN_UNIT(ra, 'rad')     -- OK
+    IN_UNIT(ra, 'arcmin')  -- OK
+\end{verbatim}
 
 It has to be noted that a unitless value, as defined by the \VOUnitSpec{}, can not
 be converted. Similarly a non-unitless value can not be converted into a
