@@ -1,4 +1,4 @@
-![ADQL version](https://img.shields.io/badge/ADQL-PR--2.1-yellow.svg)
+![ADQL version](https://img.shields.io/badge/ADQL-REC--2.1-green.svg)
 [![CI build of the ADQL standard](../../actions/workflows/build.yml/badge.svg)](../../actions/workflows/build.yml)
 [![PDF-Preview](https://img.shields.io/badge/Preview-PDF-blue)](../../releases/download/auto-pdf-preview/ADQL-draft.pdf)
 
@@ -22,12 +22,7 @@ specific to astronomy.
 ## Status?
 
 The last stable version is
-**[REC-2.0](http://www.ivoa.net/documents/latest/ADQL.html)**.
-
-Next version will be 2.1. A
-[Proposed Recommendation](https://www.ivoa.net/documents/ADQL/20230418/) is
-available. ADQL-2.1 is now (18th April 2023) starting its RFC period
-(6+2 weeks minimum).
+**[REC-2.1](http://www.ivoa.net/documents/latest/ADQL.html)**.
 
 See also the section
 [Releases](https://github.com/ivoa-std/ADQL/releases) of this GitHub Repository.
