@@ -1,7 +1,15 @@
+# This file generated from a template file maintained in the ivoatex repository.
+# To create and install it into a project repository, do:
+#    make github-preview
+#    git commit
+#    git push
+#
 name: Update PDF Preview
 
 env:
-  doc_name: ADQL
+  doc_name   : ADQL
+  branch_name: ${{ github.head_ref || github.ref_name }}
+  tag_preview: auto-pdf-preview
 
 on:
   push:
@@ -10,51 +18,49 @@ on:
 
 jobs:
   build:
-    
+
     runs-on: ubuntu-latest
-    
+
     steps:
-    
+
     - name: Checkout the repository
-      uses: actions/checkout@v1
+      uses: actions/checkout@v4
       with:
         submodules: true
-    
+
     - name: Setup dependencies
       run: |
-        sudo apt update
-        sudo apt install texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended xsltproc
-        sudo snap install pdftk
-    
+        sudo apt install texlive-latex-base texlive-latex-recommended \
+                         texlive-latex-extra texlive-fonts-recommended \
+                         pdftk xsltproc latexmk cm-super
+
     - name: Build the document
       run: make biblio ${{ env.doc_name }}-draft.pdf
-    
+
     - name: Check the output
       run: |
         test -f ${{ env.doc_name }}-draft.pdf
         test -f ${{ env.doc_name }}.bbl
-    
-    - name: Move the auto-pdf-preview tag
-      uses: weareyipyip/walking-tag-action@v2
-      with:
-        tag-name: auto-pdf-preview
-        tag-message: |
-          Last commit taken into account for the automatically updated PDF preview of this IVOA document.
+
+    - name: Remove the former PDF preview
+      run: |
+        gh release delete ${{ env.tag_preview }} --cleanup-tag --yes
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
-    - name: Update the PDF preview
-      uses: Xotl/cool-github-releases@v1
-      with:
-        mode: update
-        isPrerelease: true
-        tag_name: auto-pdf-preview
-        release_name: "Auto PDF Preview"
-        body_mrkdwn: |
-          This release aims to provide a PDF preview of the last commit applied on this repository.
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload the new PDF preview
+      run: |
+        RELEASE_NOTES="This release aims to provide a PDF preview of the last commit applied on this repository.
           It will be updated automatically after each merge of a PullRequest.
-          **DO NOT PUBLISH THIS PRE-RELEASE!**"
-          _Corresponding commit: ${{ github.sha }}_
-        assets: ${{ env.doc_name }}-draft.pdf
-        replace_assets: true
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+          **DO NOT PUBLISH THIS PRE-RELEASE!**
+          _Corresponding commit: ${{ github.sha }}_"
+
+        gh release create ${{ env.tag_preview }} \
+                          ${{ env.doc_name }}-draft.pdf \
+                          --prerelease \
+                          --target "${{ env.branch_name }}" \
+                          --title 'Auto PDF Preview' \
+                          --notes "$RELEASE_NOTES"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

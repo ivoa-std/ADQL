@@ -1,3 +1,9 @@
+# This file generated from a template file maintained in the ivoatex repository.
+# To create and install it into a project repository, do:
+#    make github-preview
+#    git commit
+#    git push
+#
 name: Check the IVOA document
 
 env:
@@ -11,29 +17,31 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    
+
     steps:
-    
+
     - name: Checkout the repository
-      uses: actions/checkout@v1
+      uses: actions/checkout@v4
       with:
         submodules: true
-    
+
     - name: Setup dependencies
       run: |
         sudo apt update
-        sudo apt install texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended xsltproc
-      
+        sudo apt install texlive-latex-base texlive-latex-recommended \
+                         texlive-latex-extra texlive-fonts-recommended \
+                         pdftk xsltproc latexmk cm-super
+
     - name: Build the document
-      run: make biblio forcetex
-      
+      run: make
+
     - name: Check the output
       run: |
         test -f ${{ env.doc_name }}.pdf
         test -f ${{ env.doc_name }}.bbl
-        
-    - name: Keep the PDF artefact 
-      uses: actions/upload-artifact@v1
+
+    - name: Keep the PDF artefact
+      uses: actions/upload-artifact@v4
       with:
         name: PDF Preview
         path: ${{ env.doc_name }}.pdf
