@@ -588,14 +588,15 @@ A search condition may contain the following predicates:
     \item Non-empty subquery check: \verb:EXISTS:
 \end{itemize}
 
-In addition, some service implementations may also support the optional \verb:ILIKE:
-case-insensitive string comparison operator, defined in \SectionRef{sec:string.functions.ilike}.
+In addition, some service implementations may also support the optional
+\verb:ILIKE: case-insensitive string comparison operator, defined in
+\SectionRef{sec:optional.string.functions.ilike}.
 
 \begin{itemize}
     \item \verb:ILIKE:
 \end{itemize}
 
-\subsection{Mathematical and Trigonometrical Functions}
+\subsection{Mathematical and trigonometrical functions}
 \label{sec:math.functions}
 
 ADQL declares a list of reserved keywords \SectionSee{sec:keywords} which
@@ -695,6 +696,59 @@ usage and description are detailed in below.
     \item[\texttt{$\textbf{tan}(double\ x) \to double$}]
     Returns the tangent of the angle \textit{x} in radians.
 \end{description}
+
+\subsection{String functions}
+\label{sec:string.functions}
+
+An ADQL service implementation MUST include support for the following string
+manipulation functions:
+
+\begin{itemize}
+    \item \verb:LOWER(): Lower case conversion
+    \item \verb:UPPER(): Upper case conversion
+\end{itemize}
+
+\subsubsection{Case folding}
+
+Since case folding is a nontrivial operation in a multi-encoding world, ADQL
+requires standard behaviour for the ASCII characters, and recommends
+following algorithms described in Section 3.13, ``Default Case Algorithms''
+of \citet{std:UNICODE} for characters outside the ASCII set:
+
+\begin{itemize}
+    \item algorithm R1 for \verb:UPPER():
+    \item algorithm R2 for \verb:LOWER(): and \verb:ILIKE: \SectionRef{sec:optional.string.functions.ilike}
+\end{itemize}
+
+\subsubsection{LOWER}
+\label{sec:string.functions.lower}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-string|}\\
+{\footnotesize \verb|name: LOWER|}\\
+
+The LOWER function converts its string parameter to lower case in accordance
+with the rules of the database's locale.
+
+\begin{verbatim}
+    LOWER('Francis Albert Augustus Charles Emmanuel')
+    =>
+    francis albert augustus charles emmanuel
+\end{verbatim}
+
+\subsubsection{UPPER}
+\label{sec:string.functions.upper}
+{\footnotesize Language feature :}\\
+{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-string|}\\
+{\footnotesize \verb|name: UPPER|}\\
+
+The UPPER function converts its string parameter to upper case in accordance
+with the rules of the database's locale.
+
+\begin{verbatim}
+    UPPER('Francis Albert Augustus Charles Emmanuel')
+    =>
+    FRANCIS ALBERT AUGUSTUS CHARLES EMMANUEL
+\end{verbatim}
 
 \section{Type system}
 \label{sec:types}
@@ -2189,60 +2243,18 @@ depending on the regular expression pattern matching:
 See the \TAPRegSpec{} for full details on how to use the
 XML schema to declare user defined functions.
 
-\subsection{String functions and operators}
-\label{sec:string.functions}
+\subsection{String operator}
+\label{sec:optional.string.functions}
 
 An ADQL service implementation MAY include support for the following optional
-string manipulation and comparison operators:
+string operators:
 
 \begin{itemize}
-    \item \verb:LOWER(): Lower case conversion
-    \item \verb:UPPER(): Upper case conversion
     \item \verb:ILIKE: Case-insensitive comparison.
 \end{itemize}
 
-\subsubsection{Case folding}
-
-Since case folding is a nontrivial operation in a multi-encoding world, ADQL
-requires standard behaviour for the ASCII characters, and recommends
-following algorithms described in Section 3.13, ``Default Case Algorithms''
-of \citet{std:UNICODE} for characters outside the ASCII set:
-
-\begin{itemize}
-    \item algorithm R1 for \verb:UPPER():
-    \item algorithm R2 for \verb:LOWER(): and \verb:ILIKE:
-\end{itemize}
-
-\subsubsection{LOWER}
-\label{sec:string.functions.lower}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-string|}\\
-{\footnotesize \verb|name: LOWER|}\\
-
-The LOWER function converts its string parameter to lower case in accordance with the rules of the database's locale.
-
-\begin{verbatim}
-    LOWER('Francis Albert Augustus Charles Emmanuel')
-    =>
-    francis albert augustus charles emmanuel
-\end{verbatim}
-
-\subsubsection{UPPER}
-\label{sec:string.functions.upper}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-string|}\\
-{\footnotesize \verb|name: UPPER|}\\
-
-The UPPER function converts its string parameter to upper case in accordance with the rules of the database's locale.
-
-\begin{verbatim}
-    UPPER('Francis Albert Augustus Charles Emmanuel')
-    =>
-    FRANCIS ALBERT AUGUSTUS CHARLES EMMANUEL
-\end{verbatim}
-
 \subsubsection{ILIKE}
-\label{sec:string.functions.ilike}
+\label{sec:optional.string.functions.ilike}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-string|}\\
 {\footnotesize \verb|name: ILIKE|}\\
@@ -2255,6 +2267,10 @@ of its string operands.
 
     'Francis' ILIKE 'francis' => True
 \end{verbatim}
+
+% Supported by PostgreSQL but not by SQLServer (only LIKE is available but the
+% ADQL's ILIKE could be translated into LOWER(a) LIKE LOWER(b)...are
+% performances really worst?...to be tested and discussed)
 
 \subsection{Common table expressions}
 \label{sec:common-table}
@@ -2885,8 +2901,10 @@ For example, the following XML fragment describes a service that supports the
             \item \textbf{Added}
                 \begin{itemize}
                     \item Case sensitive functions and operators:
-                          \verb:LOWER():, \verb:UPPER(): and \verb:ILIKE:
+                          \verb:LOWER():, \verb:UPPER():
                           \SectionSee{sec:string.functions}
+                          and \verb:ILIKE:
+                          \SectionSee{sec:optional.string.functions.ilike}
                     \item Common table expressions (i.e. \verb:WITH: keyword)
                           \SectionSee{sec:common-table}
                     \item Set operators: \verb:UNION:, \verb:INTERSECT: and
