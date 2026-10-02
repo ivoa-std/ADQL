@@ -596,6 +596,30 @@ In addition, some service implementations may also support the optional
     \item \verb:ILIKE:
 \end{itemize}
 
+\subsubsection{OFFSET}
+\label{sec:offset}
+
+An ADQL service implementation MUST include support for the \texttt{OFFSET}
+clause which limits the number of rows returned by removing a specified number
+of rows from the beginning of the result set.
+
+In order to guarantee the consistency in the returned rows, an \texttt{ORDER BY}
+clause MUST always be used when the \texttt{OFFSET} clause is present. The
+\texttt{ORDER BY} is applied before the specified number of rows are dropped by
+the \texttt{OFFSET} clause.
+%
+% ORDER BY is mandatory with OFFSET, in MS-SQLServer databases but not in
+% PostgreSQL and MySQL databases. Making this mandatory in ADQL helps producing
+% consistent results and allows a better support on the most used DBMS.
+
+If the total number of rows is less than the value
+specified by the \texttt{OFFSET} clause, then the result set is empty.
+
+If a query contains both an \texttt{OFFSET} clause and a \texttt{TOP} clause,
+then the \texttt{OFFSET} clause is applied first, dropping the specified
+number of rows from the beginning of the result set before the
+\texttt{TOP} clause is applied to limit the number of rows returned.
+
 \subsection{Mathematical and trigonometrical functions}
 \label{sec:math.functions}
 
@@ -733,6 +757,7 @@ with the rules of the database's locale.
 \end{verbatim}
 
 \subsubsection{UPPER}
+\label{sec:string.functions.upper}
 
 The UPPER function converts its string parameter to upper case in accordance
 with the rules of the database's locale.
@@ -2746,39 +2771,6 @@ Note that the complexity and the behavior of a unit inference mechanism is
 implementation dependent. This mechanism is OPTIONAL and is described here
 as it could significantly improve the behavior of \verb:IN_UNIT():.
 
-\subsection{Cardinality}
-\label{sec:cardinality}
-
-An ADQL service implementation MAY include support for the following optional
-clauses to modify the cardinality of query results:
-
-\begin{itemize}
-    \item \verb:OFFSET:
-\end{itemize}
-
-\subsubsection{OFFSET}
-\label{sec:offset}
-
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-offset|}\\
-{\footnotesize \verb|name: OFFSET|}\\
-
-An ADQL service implementation MAY include support for the OFFSET clause
-which limits the number of rows returned by removing a specified number
-of rows from the beginning of the result set.
-
-If a query contains both an ORDER BY clause and an OFFSET clause,
-then the ORDER BY is applied before the specified number of
-rows are dropped by the OFFSET clause.
-
-If the total number of rows is less than the value
-specified by the OFFSET clause, then the result set is empty.
-
-If a query contains both an OFFSET clause and a TOP clause,
-then the OFFSET clause is applied first, dropping the specified
-number of rows from the beginning of the result set before the
-TOP clause is applied to limit the number of rows returned.
-
 \clearpage % section cut
 \appendix
 \section[BNF grammar]{BNF grammar \footnote{
@@ -2827,18 +2819,15 @@ For example, the following XML fragment describes a service that supports the
 \label{sec:changes-2.2}
 
 \begin{itemize}
-    \item \textbf{Applied ADQL-2.1's errata}:
-        \begin{itemize}
-            \item Erratum 1 - Addition of auxiliary files for the BNF grammar
-        \end{itemize}
-    \item \textbf{General}
-        \begin{itemize}
-            \item \textbf{Updated}
-                \begin{itemize}
-                    \item Convert the tables for mathematical and trigonometrical
-                          functions into lists (see \SectionRef{sec:math.functions})
-                \end{itemize}
-        \end{itemize}
+    \item Apply Erratum 1 - Addition of auxiliary files for the BNF grammar
+    \item Convert the tables for mathematical and trigonometrical
+          functions into lists (see \SectionRef{sec:math.functions})
+    \item Make \texttt{LOWER} and \texttt{UPPER} mandatory
+          (see \SectionRef{sec:string.functions.lower} and
+          \SectionRef{sec:string.functions.upper})
+    \item Make \texttt{OFFSET} mandatory and require the usage of
+          \texttt{ORDER BY} when it is used
+          (see \SectionRef{sec:offset})
 \end{itemize}
 
 \subsection{Between 2.0 and 2.1}
@@ -2909,7 +2898,7 @@ For example, the following XML fragment describes a service that supports the
                     \item Unit conversion function: \verb:IN_UNIT():
                           \SectionSee{sec:unit}
                     \item \verb:OFFSET:
-                          \SectionSee{sec:cardinality}
+                          \SectionSee{sec:offset}
                 \end{itemize}
             \item \textbf{Updated}
                 \begin{itemize}
