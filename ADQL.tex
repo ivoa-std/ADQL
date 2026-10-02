@@ -566,8 +566,9 @@ Common Table Expressions (CTE) are introduced with the \texttt{WITH} clause.
 They create a temporary named result set that can be referred to elsewhere in
 the main query.
 
-Using a CTE can make complex queries easier to understand by factoring
-sub-queries out of the main ADQL statement.
+Using a CTE can simplify complex queries by factoring sub-queries out of the
+main ADQL statement. Additionally, some implementations may optimise the use of
+sets defined with a CTE, resulting in faster query execution.
 
 For example, the following query with a nested sub-query:
 \begin{verbatim}
@@ -580,8 +581,9 @@ For example, the following query with a nested sub-query:
     WHERE ra > 10
       AND ra < 20
 \end{verbatim}
-\noindent
+
 can be refactored as a named \texttt{WITH} query and a simpler main query:
+
 \begin{verbatim}
     WITH alpha_subset AS (
       SELECT *
