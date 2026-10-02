@@ -559,6 +559,46 @@ named result sets in the \verb:WITH: clause of the main query:
     WHERE alpha_source.id >= 5
 \end{verbatim}
 
+\subsubsection{Common table expressions}
+
+Common Table Expressions (CTE) are introduced with the \texttt{WITH} clause.
+They create a temporary named result set that can be referred to elsewhere in
+the main query.
+
+Using a CTE can make complex queries easier to understand by factoring
+sub-queries out of the main ADQL statement.
+
+For example, the following query with a nested sub-query:
+\begin{verbatim}
+    SELECT ra, dec
+    FROM (
+           SELECT *
+           FROM alpha_source
+           WHERE id % 10 = 0
+         ) AS alpha_subset
+    WHERE ra > 10
+      AND ra < 20
+\end{verbatim}
+\noindent
+can be refactored as a named \texttt{WITH} query and a simpler main query:
+\begin{verbatim}
+    WITH alpha_subset AS (
+      SELECT *
+      FROM alpha_source
+      WHERE id % 10 = 0
+    )
+    SELECT ra, dec
+    FROM alpha_subset
+    WHERE ra > 10
+      AND ra < 20
+\end{verbatim}
+
+The current version of ADQL does not support recursive common table expressions.
+
+% Recursive CTE are not yet supported by all DBMS (e.g. MySQL).
+
+CTE can be defined only in the main query. They are not allowed in sub-queries.
+
 \subsubsection{Joins}
 \label{sec:joins}
 %TBD - cosmopterix tests for this
@@ -2475,57 +2515,6 @@ of its string operands.
 % Supported by PostgreSQL but not by SQLServer (only LIKE is available but the
 % ADQL's ILIKE could be translated into LOWER(a) LIKE LOWER(b)...are
 % performances really worst?...to be tested and discussed)
-
-\subsection{Common table expressions}
-\label{sec:common-table}
-
-An ADQL service implementation MAY include support for the following optional
-common table expressions:
-
-\begin{itemize}
-    \item \verb:WITH:
-\end{itemize}
-
-\subsubsection{WITH}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-common-table|}\\
-{\footnotesize \verb|name: WITH|}\\
-
-The WITH operator creates a temporary named result set that can be referred
-to elsewhere in the main query.
-
-Using a common table expression can make complex queries easier to understand
-by factoring subqueries out of the main SQL statement.
-
-For example, the following query with a nested subquery:
-\begin{verbatim}
-    SELECT ra, dec
-    FROM (
-           SELECT *
-           FROM alpha_source
-           WHERE id % 10 = 0
-         ) AS alpha_subset
-    WHERE ra > 10
-      AND ra < 20
-\end{verbatim}
-\noindent
-can be refactored as a named WITH query and a simpler main query:
-\begin{verbatim}
-    WITH alpha_subset AS (
-      SELECT *
-      FROM alpha_source
-      WHERE id % 10 = 0
-    )
-    SELECT ra, dec
-    FROM alpha_subset
-    WHERE ra > 10
-      AND ra < 20
-\end{verbatim}
-
-The current version of ADQL does not support recursive common table expressions.
-
-Common table expressions can be defined only in the main
-query. They are not allowed in sub-queries.
 
 \subsection{Set operators}
 \label{sec:set.operators}
