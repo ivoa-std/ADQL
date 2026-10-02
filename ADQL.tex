@@ -596,7 +596,7 @@ In addition, some service implementations may also support the optional
     \item \verb:ILIKE:
 \end{itemize}
 
-\subsubsection{OFFSET}
+\subsubsection{Offset}
 \label{sec:offset}
 
 An ADQL service implementation MUST include support for the \texttt{OFFSET}
@@ -747,8 +747,8 @@ of \citet{std:UNICODE} for characters outside the ASCII set:
 \subsubsection{LOWER}
 \label{sec:string.functions.lower}
 
-The LOWER function converts its string parameter to lower case in accordance
-with the rules of the database's locale.
+The \texttt{LOWER} function converts its string parameter to lower case in
+accordance with the rules of the database's locale.
 
 \begin{verbatim}
     LOWER('Francis Albert Augustus Charles Emmanuel')
@@ -759,14 +759,42 @@ with the rules of the database's locale.
 \subsubsection{UPPER}
 \label{sec:string.functions.upper}
 
-The UPPER function converts its string parameter to upper case in accordance
-with the rules of the database's locale.
+The \texttt{UPPER} function converts its string parameter to upper case in
+accordance with the rules of the database's locale.
 
 \begin{verbatim}
     UPPER('Francis Albert Augustus Charles Emmanuel')
     =>
     FRANCIS ALBERT AUGUSTUS CHARLES EMMANUEL
 \end{verbatim}
+
+\subsection{Conditional Functions}
+\label{sec:condfunc}
+
+An ADQL service implementation MUST include support for the following
+conditional functions:
+
+\begin{itemize}
+    \item \verb:COALESCE():
+\end{itemize}
+
+\subsubsection{COALESCE}
+\label{sec:coalesce}
+
+The \texttt{COALESCE} function returns the first of its arguments that is not
+\verb|NULL|. \verb|NULL| is returned only if all arguments are \verb|NULL|.
+
+All arguments must be of the same datatype. An error should be returned
+if this rule is not respected. The way to report this error is implementation
+dependent.
+
+This is typically used to provide fallback values. For instance,
+
+\begin{verbatim}
+    COALESCE(access_url, '')
+\end{verbatim}
+
+\noindent will return an empty string when \verb|access_url| is \verb|NULL|.
 
 \section{Type system}
 \label{sec:types}
@@ -2632,37 +2660,6 @@ Examples:
 Note that other serializations (e.g. STC-S) or any other kind of value MAY also
 be supported.
 
-\subsection{Conditional Functions}
-\label{sec:condfunc}
-
-An ADQL service implementation MAY include support for the following optional
-conditional functions:
-
-\begin{itemize}
-    \item \verb:COALESCE():
-\end{itemize}
-
-\subsubsection{COALESCE}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-conditional|}\\
-{\footnotesize \verb|name: COALESCE|}\\
-
-The COALESCE function returns the first of its arguments that is not
-NULL. NULL is returned only if all arguments are NULL.
-
-All arguments must be of the same datatype. An error should be returned
-if this rule is not respected. The way to report this error is
-implementation dependent.
-
-This is typically used to provide fallback values. For instance,
-
-\begin{verbatim}
-    COALESCE(access_url, '')
-\end{verbatim}
-
-\noindent will return an empty string when \verb|access_url| is NULL.
-
-
 \subsection{Unit operations}
 \label{sec:unit}
 
@@ -2822,11 +2819,14 @@ For example, the following XML fragment describes a service that supports the
     \item Apply Erratum 1 - Addition of auxiliary files for the BNF grammar
     \item Convert the tables for mathematical and trigonometrical
           functions into lists (see \SectionRef{sec:math.functions})
-    \item Make \texttt{LOWER} and \texttt{UPPER} mandatory
-          (see \SectionRef{sec:string.functions.lower} and
-          \SectionRef{sec:string.functions.upper})
-    \item Make \texttt{OFFSET} mandatory and require the usage of
-          \texttt{ORDER BY} when it is used
+    \item Make some features mandatory
+        \begin{itemize}
+            \item \texttt{LOWER} (see \SectionRef{sec:string.functions.lower})
+            \item \texttt{UPPER} (see \SectionRef{sec:string.functions.upper})
+            \item \texttt{OFFSET} (see \SectionRef{sec:offset})
+            \item \texttt{COALESCE} (see \SectionRef{sec:coalesce})
+        \end{itemize}
+    \item \texttt{OFFSET} require the usage of \texttt{ORDER BY} when it is used
           (see \SectionRef{sec:offset})
 \end{itemize}
 
