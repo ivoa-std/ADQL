@@ -14,6 +14,10 @@
 
 \usepackage{hyperref}
 
+% Redefine description blocks so that the definition is always on a new line instead of being just after the label:
+\usepackage{enumitem} \SetLabelAlign{parleft}{\parbox[t]\textwidth{#1}}
+\setdescription{ align=parleft, style=nextline }
+
 % Macros for referring to IVOA standards and notes.
 \input{ivoa-cite.tex}
 
@@ -36,9 +40,8 @@
 \author{Alexander Szalay}
 
 \editor[http://wiki.ivoa.net/twiki/bin/view/IVOA/GregoryMantelet]{Grégory Mantelet}
-\editor[http://wiki.ivoa.net/twiki/bin/view/IVOA/DaveMorris]{Dave Morris}
 
-\previousversion[http://www.ivoa.net/Documents/ADQL/2.0]{ADQL-2.0}
+\previousversion[https://www.ivoa.net/Documents/ADQL/20231215/]{ADQL-2.1}
 
 \begin{document}
 
@@ -595,215 +598,103 @@ case-insensitive string comparison operator, defined in \SectionRef{sec:string.f
 \subsection{Mathematical and Trigonometrical Functions}
 \label{sec:math.functions}
 
-ADQL declares a list of reserved keywords \SectionSee{sec:keywords} which include
-the mathematical and trigonometrical function names. Their syntax,
-usage and description are detailed in tables~\ref{table:math.functions}
-and \ref{table:trig.functions}.
+ADQL declares a list of reserved keywords \SectionSee{sec:keywords} which
+include the mathematical and trigonometrical function names. Their syntax,
+usage and description are detailed in below.
 
-\begin{table}[tpb]\footnotesize
-    \begin{tabular}{|p{0.20\textwidth}|p{0.125\textwidth}|p{0.125\textwidth}|p{0.55\textwidth}|}
-
-        \hline
-        \textbf{Name} &
-        \textbf{Argument \newline datatype} &
-        \textbf{Return \newline datatype} &
-        \textbf{Description}
-        \tabularnewline
-
-        \hline
-        abs(x) &
-        \textit{x} double &
-        double &
-        Returns the absolute value of \textit{x}.
-        \tabularnewline
-
-        \hline
-        ceiling(x) &
-        \textit{x} double &
-        double &
-        Returns the smallest integer that is not less than \textit{x}.
-        \tabularnewline
-
-        \hline
-        degrees(x) &
-        \textit{x} double &
-        double &
-        Converts the angle \textit{x} from radians to degrees.
-        \tabularnewline
-
-        \hline
-        exp(x) &
-        \textit{x} double &
-        double &
-        Returns Euler’s number \textit{e} raised to the power of \textit{x}.
-        \tabularnewline
-
-        \hline
-        floor(x) &
-        \textit{x} double &
-        double &
-        Returns the largest integer that is not greater than \textit{x}.
-        \tabularnewline
-
-        \hline
-        log(x) &
-        \textit{x} double &
-        double &
-        Returns the natural logarithm (base \textit{e}) of \textit{x}. The value of \textit{x} must be greater than zero.
-        \tabularnewline
-
-        \hline
-        log10(x) &
-        \textit{x} double &
-        double &
-        Returns the base 10 logarithm of \textit{x}. The value of \textit{x} must be greater than zero.
-        \tabularnewline
-
-        \hline
-        mod(x,y) &
-        \textit{x} double,
-        \newline
-        \textit{y} double &
-        double &
-        Returns the remainder \textit{r} of \textit{x/y} as a double,
-        where:
-        \begin{itemize}
-            \item \textit{r} has the same sign as \textit{x}
-            \item |\textit{r}| is less than |\textit{y}|
+\subsubsection{Mathematical Functions}
+\begin{description}
+    \item[\texttt{$\textbf{abs}(double\ x) \to double$}]
+    Returns the absolute value of x.
+    
+    \item[\texttt{$\textbf{ceiling}(double\ x) \to double$}]
+    Returns the smallest integer that is not less than \textit{x}.
+    
+    \item[\texttt{$\textbf{degrees}(double\ x) \to double$}]
+    Converts the angle \textit{x} from radians to degrees.
+    
+    \item[\texttt{$\textbf{exp}(double\ x) \to double$}]
+    Returns Euler’s number \textit{e} raised to the power of \textit{x}.
+    
+    \item[\texttt{$\textbf{floor}(double\ x) \to double$}]
+    Returns the largest integer that is not greater than \textit{x}.
+    
+    \item[\texttt{$\textbf{log}(double\ x) \to double$}]
+    Returns the natural logarithm (base \textit{e}) of \textit{x}. The value of \textit{x} must be greater than zero.
+    
+    \item[\texttt{$\textbf{log10}(double\ x) \to double$}]
+    Returns the base 10 logarithm of \textit{x}. The value of \textit{x} must be greater than zero.
+    
+    \item[\texttt{$\textbf{mod}(double\ x,\ double\ y) \to double$}]
+    Returns the remainder \textit{r} of \textit{x/y} as a double,
+    where:
+    \begin{itemize}
+        \item \textit{r} has the same sign as \textit{x}
+            \item \textit{$|r|$} is less than \textit{$|y|$}
             \item \textit{x} = (\textit{f} * \textit{y}) + \textit{r} for a given integer \textit{f}
-        \end{itemize}
-        \tabularnewline
+    \end{itemize}
+    
+    \item[\texttt{$\textbf{pi}() \to double$}]
+    The numeric constant \(\pi\).
+    
+    \item[\texttt{$\textbf{power}(double\ x,\ double\ y) \to double$}]
+    Returns the value of \textit{x} raised to the power of \textit{y}.
+    
+    \item[\texttt{$\textbf{radians}(double\ x) \to double$}]
+    Converts the angle \textit{x} from degrees to radians.
+    
+    \item[\texttt{$\textbf{sqrt}(double\ x) \to double$}]
+    Returns the positive square root of \textit{x}.
+    
+    \item[\texttt{$\textbf{rand}(double\ x) \to double$}]
+    Returns a random value between 0.0 and 1.0.
+    The optional argument, \textit{x}, originally intended to provide a
+    random seed, has undefined semantics. Query writers are advised to omit
+    this argument.
+    
+    \item[\texttt{$\textbf{round}(double\ x,\ integer\ n) \to double$}]
+    Rounds \textit{x} to \textit{n} decimal places.
+    The integer \textit{n} is optional and defaults to 0 if not specified.
+    A negative value of \textit{n} will round to the left of the decimal
+    point.
+    
+    \item[\texttt{$\textbf{truncate}(double\ x,\ integer\ n) \to double$}]
+    Truncates \textit{x} to \textit{n} decimal places.
+    The integer \textit{n} is optional and defaults to 0 if not specified.
+\end{description}
 
-        \hline
-        pi() &
-        &
-        double &
-        The numeric constant \(\pi\).
-        \tabularnewline
-
-        \hline
-        power(x,y) &
-        \textit{x} double,
-        \newline
-        \textit{y} double &
-        double &
-        Returns the value of \textit{x} raised to the power of \textit{y}.
-        \tabularnewline
-
-        \hline
-        radians(x) &
-        \textit{x} double &
-        double &
-        Converts the angle \textit{x} from degrees to radians.
-        \tabularnewline
-
-        \hline
-        sqrt(x) &
-        \textit{x} double &
-        double &
-        Returns the positive square root of \textit{x}.
-        \tabularnewline
-
-        \hline
-        rand(x) &
-        \textit{x} double &
-        double &
-        Returns a random value between 0.0 and 1.0.
-        The optional argument, \textit{x}, originally intended to provide a random seed,
-        has undefined semantics. Query writers are advised to omit this argument.
-        \tabularnewline
-
-        \hline
-        round(x,n) &
-        \textit{x} double,
-        \newline
-        \textit{n} integer &
-        double &
-        Rounds \textit{x} to \textit{n} decimal places.
-        The integer \textit{n} is optional and defaults to 0 if not specified.
-        A negative value of \textit{n} will round to the left of the decimal point.
-        \tabularnewline
-
-        \hline
-        truncate(x, n) &
-        \textit{x} double
-        \newline
-        \textit{n} integer &
-        double &
-        Truncates \textit{x} to \textit{n} decimal places.
-        The integer \textit{n} is optional and defaults to 0 if not specified.
-        \tabularnewline
-        \hline
-    \end{tabular}
-    \caption{Mathematical functions}
-    \label{table:math.functions}
-\end{table}
-
-\begin{table}[tbh]\footnotesize
-    \begin{tabular}{|p{0.20\textwidth}|p{0.125\textwidth}|p{0.125\textwidth}|p{0.55\textwidth}|}
-
-        \hline
-        \textbf{Name} &
-        \textbf{Argument \newline datatype} &
-        \textbf{Return \newline datatype} &
-        \textbf{Description}
-        \tabularnewline
-
-        \hline
-        acos(x) &
-        \textit{x} double &
-        double &
-        Returns the arc cosine of \textit{x}, in the range of 0 through \(\pi\) radians. The absolute value of \textit{x} must be less than or equal to 1.0.
-        \tabularnewline
-
-        \hline
-        asin(x) &
-        \textit{x} double &
-        double &
-        Returns the arc sine of \textit{x}, in the range of -\(\pi\)/2 through \(\pi\)/2 radians. The absolute value of \textit{x} must be less than or equal to 1.0.
-        \tabularnewline
-
-        \hline
-        atan(x) &
-        \textit{x} double &
-        double &
-        Returns the arc tangent of \textit{x} , in the range of -\(\pi\)/2 through \(\pi\)/2 radians.
-        \tabularnewline
-
-        \hline
-        atan2(y,x) &
-        \textit{x} double,
-        \newline
-        \textit{y} double &
-        double &
-        Converts rectangular coordinates \textit{x,y} to polar angle. It computes the arc tangent of \textit{y/x} in the range of –\(\pi\) through \(\pi\) radians.
-        \tabularnewline
-
-        \hline
-        cos(x) &
-        \textit{x} double &
-        double &
-        Returns the cosine of the angle \textit{x} in radians, in the range of -1.0 through 1.0.
-        \tabularnewline
-
-        \hline
-        sin(x) &
-        \textit{x} double &
-        double &
-        Returns the sine of the angle \textit{x} in radians, in the range of -1.0 through 1.0.
-        \tabularnewline
-
-        \hline
-        tan(x) &
-        \textit{x} double &
-        double &
-        Returns the tangent of the angle \textit{x} in radians.
-        \tabularnewline
-        \hline
-    \end{tabular}
-    \caption{Trigonometrical functions}
-    \label{table:trig.functions}
-\end{table}
+\subsubsection{Trigonometrical Functions}
+\begin{description}
+    \item[\texttt{$\textbf{acos}(double\ x) \to double$}]
+    Returns the arc cosine of \textit{x}, in the range of 0 through
+    \(\pi\) radians. The absolute value of \textit{x} must be less than or
+    equal to 1.0.
+    
+    \item[\texttt{$\textbf{asin}(double\ x) \to double$}]
+    Returns the arc sine of \textit{x}, in the range of -\(\pi\)/2 through
+    \(\pi\)/2 radians. The absolute value of \textit{x} must be less than or
+    equal to 1.0.
+    
+    \item[\texttt{$\textbf{atan}(double\ x) \to double$}]
+    Returns the arc tangent of \textit{x} , in the range of -\(\pi\)/2
+    through \(\pi\)/2 radians.
+    
+    \item[\texttt{$\textbf{atan2}(double\ y,\ double\ x) \to double$}]
+    Converts rectangular coordinates \textit{x,y} to polar angle. It
+    computes the arc tangent of \textit{y/x} in the range of –\(\pi\)
+    through \(\pi\) radians.
+    
+    \item[\texttt{$\textbf{cos}(double\ x) \to double$}]
+    Returns the cosine of the angle \textit{x} in radians, in the range of
+    -1.0 through 1.0.
+    
+    \item[\texttt{$\textbf{sin}(double\ x) \to double$}]
+    Returns the sine of the angle \textit{x} in radians, in the range of
+    -1.0 through 1.0.
+    
+    \item[\texttt{$\textbf{tan}(double\ x) \to double$}]
+    Returns the tangent of the angle \textit{x} in radians.
+\end{description}
 
 \section{Type system}
 \label{sec:types}
@@ -2930,6 +2821,14 @@ For example, the following XML fragment describes a service that supports the
     \item \textbf{Applied ADQL-2.1's errata}:
         \begin{itemize}
             \item Erratum 1 - Addition of auxiliary files for the BNF grammar
+        \end{itemize}
+    \item \textbf{General}
+        \begin{itemize}
+            \item \textbf{Updated}
+                \begin{itemize}
+                    \item Convert the tables for mathematical and trigonometrical
+                          functions into lists (see \SectionRef{sec:math.functions})
+                \end{itemize}
         \end{itemize}
 \end{itemize}
 

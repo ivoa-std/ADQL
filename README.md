@@ -21,6 +21,8 @@ specific to astronomy.
 
 ## Status?
 
+_**The version presently available in this repository is WD-2.2.**_
+
 The last stable version is
 **[REC-2.1](http://www.ivoa.net/documents/latest/ADQL.html)**.
 
