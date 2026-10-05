@@ -598,43 +598,34 @@ case-insensitive string comparison operator, defined in \SectionRef{sec:string.f
 \subsection{Mathematical and Trigonometrical Functions}
 \label{sec:math.functions}
 
-ADQL declares a list of reserved keywords \SectionSee{sec:keywords} which include
-the mathematical and trigonometrical function names. Their syntax,
+ADQL declares a list of reserved keywords \SectionSee{sec:keywords} which
+include the mathematical and trigonometrical function names. Their syntax,
 usage and description are detailed in below.
 
 \subsubsection{Mathematical Functions}
-
 \begin{description}
-    \item[\texttt{abs(x)}]
-    \texttt{double abs(double x)} \\
+    \item[\texttt{$\textbf{abs}(double\ x) \to double$}]
     Returns the absolute value of x.
     
-    \item[\texttt{ceiling(x)}]
-    \texttt{double ceiling(double x)} \\
+    \item[\texttt{$\textbf{ceiling}(double\ x) \to double$}]
     Returns the smallest integer that is not less than \textit{x}.
     
-    \item[\texttt{degrees(x)}]
-    \texttt{double degrees(double x)} \\
+    \item[\texttt{$\textbf{degrees}(double\ x) \to double$}]
     Converts the angle \textit{x} from radians to degrees.
     
-    \item[\texttt{exp(x)}]
-    \texttt{double exp(double x)} \\
+    \item[\texttt{$\textbf{exp}(double\ x) \to double$}]
     Returns Euler’s number \textit{e} raised to the power of \textit{x}.
     
-    \item[\texttt{floor(x)}]
-    \texttt{double floor(double x)} \\
+    \item[\texttt{$\textbf{floor}(double\ x) \to double$}]
     Returns the largest integer that is not greater than \textit{x}.
     
-    \item[\texttt{log(x)}]
-    \texttt{double log(double x)} \\
+    \item[\texttt{$\textbf{log}(double\ x) \to double$}]
     Returns the natural logarithm (base \textit{e}) of \textit{x}. The value of \textit{x} must be greater than zero.
     
-    \item[\texttt{log10(x)}]
-    \texttt{double log10(double x)} \\
+    \item[\texttt{$\textbf{log10}(double\ x) \to double$}]
     Returns the base 10 logarithm of \textit{x}. The value of \textit{x} must be greater than zero.
     
-    \item[\texttt{mod(x,y)}]
-    \texttt{double mod(double x, double y)} \\
+    \item[\texttt{$\textbf{mod}(double\ x,\ double\ y) \to double$}]
     Returns the remainder \textit{r} of \textit{x/y} as a double,
     where:
     \begin{itemize}
@@ -643,80 +634,65 @@ usage and description are detailed in below.
             \item \textit{x} = (\textit{f} * \textit{y}) + \textit{r} for a given integer \textit{f}
     \end{itemize}
     
-    \item[\texttt{pi()}]
-    \texttt{double pi()} \\
+    \item[\texttt{$\textbf{pi}() \to double$}]
     The numeric constant \(\pi\).
     
-    \item[\texttt{power(x,y)}]
-    \texttt{double power(double x, double y)} \\
+    \item[\texttt{$\textbf{power}(double\ x,\ double\ y) \to double$}]
     Returns the value of \textit{x} raised to the power of \textit{y}.
     
-    \item[\texttt{radians(x)}]
-    \texttt{double radians(double x)} \\
+    \item[\texttt{$\textbf{radians}(double\ x) \to double$}]
     Converts the angle \textit{x} from degrees to radians.
     
-    \item[\texttt{sqrt(x)}]
-    \texttt{double sqrt(double x)} \\
+    \item[\texttt{$\textbf{sqrt}(double\ x) \to double$}]
     Returns the positive square root of \textit{x}.
     
-    \item[\texttt{rand(x)}]
-    \texttt{double rand(double x)} \\
+    \item[\texttt{$\textbf{rand}(double\ x) \to double$}]
     Returns a random value between 0.0 and 1.0.
     The optional argument, \textit{x}, originally intended to provide a
     random seed, has undefined semantics. Query writers are advised to omit
     this argument.
     
-    \item[\texttt{round(x,n)}]
-    \texttt{double round(double x, integer n)} \\
+    \item[\texttt{$\textbf{round}(double\ x,\ integer\ n) \to double$}]
     Rounds \textit{x} to \textit{n} decimal places.
     The integer \textit{n} is optional and defaults to 0 if not specified.
     A negative value of \textit{n} will round to the left of the decimal
     point.
     
-    \item[\texttt{truncate(x, n)}]
-    \texttt{double truncate(double x, integer n)} \\
+    \item[\texttt{$\textbf{truncate}(double\ x,\ integer\ n) \to double$}]
     Truncates \textit{x} to \textit{n} decimal places.
     The integer \textit{n} is optional and defaults to 0 if not specified.
 \end{description}
 
 \subsubsection{Trigonometrical Functions}
-
 \begin{description}
-    \item[\texttt{acos(x)}]
-    \texttt{double acos(double x)} \\
+    \item[\texttt{$\textbf{acos}(double\ x) \to double$}]
     Returns the arc cosine of \textit{x}, in the range of 0 through
     \(\pi\) radians. The absolute value of \textit{x} must be less than or
     equal to 1.0.
     
-    \item[\texttt{asin(x)}]
-    \texttt{double asin(double x)} \\
+    \item[\texttt{$\textbf{asin}(double\ x) \to double$}]
     Returns the arc sine of \textit{x}, in the range of -\(\pi\)/2 through
     \(\pi\)/2 radians. The absolute value of \textit{x} must be less than or
     equal to 1.0.
     
-    \item[\texttt{atan(x)}]
-    \texttt{double atan(double x)} \\
+    \item[\texttt{$\textbf{atan}(double\ x) \to double$}]
     Returns the arc tangent of \textit{x} , in the range of -\(\pi\)/2
     through \(\pi\)/2 radians.
     
-    \item[\texttt{atan2(y,x)}]
-    \texttt{double atan2(double y, double x)} \\
+    \item[\texttt{$\textbf{atan2}(double\ y,\ double\ x) \to double$}]
     Converts rectangular coordinates \textit{x,y} to polar angle. It
     computes the arc tangent of \textit{y/x} in the range of –\(\pi\)
     through \(\pi\) radians.
     
-    \item[\texttt{cos(x)}]
-    \texttt{double cos(double x)} \\
+    \item[\texttt{$\textbf{cos}(double\ x) \to double$}]
     Returns the cosine of the angle \textit{x} in radians, in the range of
     -1.0 through 1.0.
     
-    \item[\texttt{sin(x)}]
-    \texttt{double sin(double x)} \\
+    \item[\texttt{$\textbf{sin}(double\ x) \to double$}]
     Returns the sine of the angle \textit{x} in radians, in the range of
     -1.0 through 1.0.
     
-    \item[\texttt{tan(x)}]
-    \texttt{double tan(double x)} \\
+    \item[\texttt{$\textbf{tan}(double\ x) \to double$}]
     Returns the tangent of the angle \textit{x} in radians.
 \end{description}
 
