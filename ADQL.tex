@@ -18,6 +18,14 @@
 \usepackage{enumitem} \SetLabelAlign{parleft}{\parbox[t]\textwidth{#1}}
 \setdescription{ align=parleft, style=nextline }
 
+% Define a new block for a note:
+\newenvironment{note}{%
+    \par%
+    \noindent\textbf{Note}\enspace
+}{%
+    \par\vspace{1em}%
+}
+
 % Macros for referring to IVOA standards and notes.
 \input{ivoa-cite.tex}
 
@@ -1248,18 +1256,32 @@ and (30.0, 30.5) degrees.
 \subsubsection{REGION}
 \label{sec:types.geom.region}
 
-\verb:REGION: is introduced as the type of the result of intersections and
-unions of other geometries (although ADQL at this point does not support
-these operations).
+The \verb:REGION: datatype is introduced as the type of the result of
+intersections and unions of other geometries (although ADQL at this point does
+not support these operations). It maps the types \verb:shape: in \DALISpec{}
+(v1.2 and upper).
 
-We do not specify the serialisation of \verb:REGION:-typed values in result
-sets.  It is expected that next version of DALI will provide normative
-guidance on this. However, at least for the \textit{s\_region}
-column described in the \ObsCoreSpec{},
-% ObsCore 1.1 Section 4.12
-% http://ivoa.net/documents/ObsCore/20170509/REC-ObsCore-v1.1-20170509.pdf#26
-informal practice is to produce strings conforming to the \STCSAppendix{} with
-an xtype of \texttt{adql:region}.
+\verb:REGION: values are serialized as the name of the represented geometry
+followed by its values. It uses the \verb:shape: xtype, as defined by
+\DALISpec{}. For example:
+
+\begin{verbatim}
+    circle 12.3 45.6 0.5
+    polygon 10.0 10.0 10.2 10.0 10.2 10.2 10.0 10.2
+\end{verbatim}
+
+\begin{note}
+    Before v2.2, \verb:REGION: values were mostly serialized using the
+    STC-s serialization as defined in the \STCSAppendix{}. The best example is
+    the column \textit{s\_region} of \ObsCoreSpec{}. In order to keep as much
+    interoperability as possible, it is recommended to use the User Defined
+    Function \verb:region_to_stcs(): defined in the \CatalogueUDF{}.
+\end{note}
+
+% TODO: Define the function `region_to_stcs(REGION) -> VARCHAR` in the Catalogue of UDF
+
+\verb:REGION: literals can be expressed using the \verb:REGION():
+constructor defined in \SectionRef{sec:functions.geom.polygon}.
 
 \clearpage % section cut
 \section{Optional components}
@@ -2080,17 +2102,28 @@ Future versions of this specification may remove this parameter
 {\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adqlgeo|}\\
 {\footnotesize \verb|name: REGION|}\\
 
+The \verb:REGION: function provides a way of expressing a complex region
+represented by a single string literal. The syntax defined for the type
+\verb:shape: in the \DALISpec{} MUST be supported. For example:
 
-The REGION function provides a way of expressing a complex region
-represented by a single string literal. The standard expressly only
-requires literals as arguments rather than string expressions or column
-references. The latter would require parsing these representations
-within the database, which is not intended.
+\begin{verbatim}
+    REGION('circle 12.3 45.6 0.5')
+    REGION('polygon 10.0 10.0 10.2 10.0 10.2 10.2 10.0 10.2')
+\end{verbatim}
 
-This document does not specify possible syntaxes for REGION literals. A de-facto
-standard that many services understanding ADQL 2.0 implemented at least
-partially is given by the \STCSAppendix{}, and implementations of ADQL 2.1 are
-encouraged to support as much of that as reasonable for them.
+The standard expressly only requires literals as argument rather than string
+expressions or column references. The latter would require parsing these
+representations within the database, which is not intended.
+
+Until v2.2, no serialization was recommended for this function. The most used
+serialization was STC-s defined in the \STCSAppendix{}. For backward
+compatibility, an ADQL implementation MAY still support this or other
+serializations. It is however recommended to use a User Defined Function to
+create a \verb:REGION: from a non-DALI serialization. For instance, the
+\CatalogueUDF{} defines the function \verb:stcs_to_region(): to create a
+\verb:REGION: value from an STC-s expression.
+
+% TODO Define the UDF `stcs_to_region(VARCHAR) -> REGION` in the Catalogue of UDF
 
 \subsection{User defined functions}
 \label{sec:user.functions}
@@ -2828,6 +2861,17 @@ For example, the following XML fragment describes a service that supports the
                 \begin{itemize}
                     \item Convert the tables for mathematical and trigonometrical
                           functions into lists (see \SectionRef{sec:math.functions})
+                \end{itemize}
+        \end{itemize}
+    \item \textbf{Geometries}
+        \begin{itemize}
+            \item \textbf{Updated}
+                \begin{itemize}
+                    \item Use the serialization of the \verb:shape: xtype
+                          defined by \DALISpec{} for the \verb:REGION: type and
+                          the \verb:REGION(): function (see
+                          \SectionRef{sec:types.geom.region} and
+                          \SectionRef{sec:functions.geom.region})
                 \end{itemize}
         \end{itemize}
 \end{itemize}
