@@ -559,6 +559,49 @@ named result sets in the \verb:WITH: clause of the main query:
     WHERE alpha_source.id >= 5
 \end{verbatim}
 
+\subsubsection{Common table expressions}
+\label{sec:common-table}
+
+Common Table Expressions (CTE) are introduced with the \texttt{WITH} clause.
+They create a temporary named result set that can be referred to elsewhere in
+the main query.
+
+Using a CTE can simplify complex queries by factoring sub-queries out of the
+main ADQL statement. Additionally, some implementations may optimise the use of
+sets defined with a CTE, resulting in faster query execution.
+
+For example, the following query with a nested sub-query:
+\begin{verbatim}
+    SELECT ra, dec
+    FROM (
+           SELECT *
+           FROM alpha_source
+           WHERE id % 10 = 0
+         ) AS alpha_subset
+    WHERE ra > 10
+      AND ra < 20
+\end{verbatim}
+
+can be refactored as a named \texttt{WITH} query and a simpler main query:
+
+\begin{verbatim}
+    WITH alpha_subset AS (
+      SELECT *
+      FROM alpha_source
+      WHERE id % 10 = 0
+    )
+    SELECT ra, dec
+    FROM alpha_subset
+    WHERE ra > 10
+      AND ra < 20
+\end{verbatim}
+
+The current version of ADQL does not support recursive common table expressions.
+
+% Recursive CTE are not yet supported by all DBMS (e.g. MySQL).
+
+CTE can be defined only in the main query. They are not allowed in sub-queries.
+
 \subsubsection{Joins}
 \label{sec:joins}
 %TBD - cosmopterix tests for this
@@ -569,6 +612,128 @@ default is \verb:INNER:. All of these can be \verb:NATURAL: or not.
 
 %REMOVED: The join condition does not support embedded sub joins.
 %REASON: The BNF allows nested JOINs.
+
+\subsubsection{Set operations}
+\label{sec:set.operators}
+
+An ADQL service implementation MUST include support for the following set
+operators:
+
+\begin{itemize}
+    \item \verb:UNION:
+    \item \verb:EXCEPT:
+    \item \verb:INTERSECT:
+\end{itemize}
+
+For a set operation to be valid in ADQL, the following criteria must be met:
+\begin{itemize}
+    \item the two queries MUST result in the same number of columns
+    \item the columns in the operands MUST have the same datatypes.
+\end{itemize}
+
+In addition, the columns returned by a set operation SHOULD have the same
+metadata, e.g. units, UCD, etc. These metadata SHOULD be generated from the
+left-hand operand of the set operation.
+
+\paragraph{UNION}
+
+This operator combines the results of two queries, accepting rows from
+both the first and second set of results.
+
+\paragraph{EXCEPT}
+
+This operator combines the results of two queries, accepting rows that are
+in the first set of results but are not in the second one.
+
+\paragraph{INTERSECT}
+
+This operator combines the results of two queries, accepting rows
+that are strictly in both the first and second set of results.
+
+\paragraph{Duplicated rows}
+
+\verb:UNION:, \verb:EXCEPT: and \verb:INTERSECT: remove duplicated rows,
+while \verb:UNION ALL:, \verb:EXCEPT ALL: and \verb:INTERSECT ALL: keep all of
+them.
+
+Note that the comparison used for removing duplicated rows is based purely on
+the column value and does not take into account the units. This means that a row
+with a numeric value of \verb:2: and unit of \verb:m: and a row with a numeric
+value of \verb:2: and unit of \verb:km: will be considered equal, despite the
+difference in units.
+
+\paragraph{Operands}
+
+Operands of any of the set operators can only be \verb:SELECT: queries.
+Unless within parentheses, such queries can not use any \verb:ORDER BY: or
+\verb:OFFSET: clause.
+
+Example: sorting result of a \verb:UNION: operation:
+
+\begin{verbatim}
+        SELECT id, ra, dec FROM table1
+    UNION
+        SELECT id, ra, dec FROM table2
+    ORDER BY id -- sort the UNION result
+\end{verbatim}
+
+Example: sorting result of the \verb:UNION: operands:
+
+\begin{verbatim}
+        -- take the 10 first
+        (SELECT TOP 10 id, ra, dec FROM atable ORDER BY id ASC)
+    UNION
+        -- take the 10 last
+        (SELECT TOP 10 id, ra, dec FROM atable ORDER BY id DESC)
+\end{verbatim}
+
+Common Table Expressions are not allowed in any set operator operand. They must
+always be declared at the main level.
+
+Example: sorting result of the \verb:UNION: operands: with common table
+expressions
+
+\begin{verbatim}
+WITH tenFirst AS (SELECT TOP 10 id, ra, dec FROM atable ORDER BY id ASC),
+     tenLast  AS (SELECT TOP 10 id, ra, dec FROM atable ORDER BY id DESC)
+  SELECT * FROM tenFirst
+UNION
+  SELECT * FROM tenLast
+\end{verbatim}
+
+\paragraph{Precedence}
+
+When set operators are used together, the resulting expression is
+evaluated in the context of the following precedence:
+
+\begin{enumerate}
+    \item Expressions within parentheses
+    \item The \verb:INTERSECT: operator
+    \item The \verb:UNION: and \verb:EXCEPT: operators evaluated from left to
+          right
+\end{enumerate}
+
+Example:
+
+\begin{verbatim}
+        SELECT id, ra, dec FROM table1
+    UNION
+        SELECT id, ra, dec FROM table2
+    INTERSECT
+        SELECT id, ra, dec FROM table3
+\end{verbatim}
+
+is equivalent to:
+
+\begin{verbatim}
+        SELECT id, ra, dec FROM table1
+    UNION
+        (
+            SELECT id, ra, dec FROM table2
+        INTERSECT
+            SELECT id, ra, dec FROM table3
+        )
+\end{verbatim}
 
 \subsubsection{Search condition}
 \label{sec:search}
@@ -588,14 +753,39 @@ A search condition may contain the following predicates:
     \item Non-empty subquery check: \verb:EXISTS:
 \end{itemize}
 
-In addition, some service implementations may also support the optional \verb:ILIKE:
-case-insensitive string comparison operator, defined in \SectionRef{sec:string.functions.ilike}.
+In addition, some service implementations may also support the optional
+\verb:ILIKE: case-insensitive string comparison operator, defined in
+\SectionRef{sec:optional.string.functions.ilike}.
 
 \begin{itemize}
     \item \verb:ILIKE:
 \end{itemize}
 
-\subsection{Mathematical and Trigonometrical Functions}
+\subsubsection{Offset}
+\label{sec:offset}
+
+An ADQL service implementation MUST include support for the \texttt{OFFSET}
+clause which limits the number of rows returned by removing a specified number
+of rows from the beginning of the result set.
+
+In order to guarantee the consistency in the returned rows, an \texttt{ORDER BY}
+clause MUST always be used when the \texttt{OFFSET} clause is present. The
+\texttt{ORDER BY} is applied before the specified number of rows are dropped by
+the \texttt{OFFSET} clause.
+%
+% ORDER BY is mandatory with OFFSET, in MS-SQLServer databases but not in
+% PostgreSQL and MySQL databases. Making this mandatory in ADQL helps producing
+% consistent results and allows a better support on the most used DBMS.
+
+If the total number of rows is less than the value
+specified by the \texttt{OFFSET} clause, then the result set is empty.
+
+If a query contains both an \texttt{OFFSET} clause and a \texttt{TOP} clause,
+then the \texttt{OFFSET} clause is applied first, dropping the specified
+number of rows from the beginning of the result set before the
+\texttt{TOP} clause is applied to limit the number of rows returned.
+
+\subsection{Mathematical and trigonometrical functions}
 \label{sec:math.functions}
 
 ADQL declares a list of reserved keywords \SectionSee{sec:keywords} which
@@ -695,6 +885,239 @@ usage and description are detailed in below.
     \item[\texttt{$\textbf{tan}(double\ x) \to double$}]
     Returns the tangent of the angle \textit{x} in radians.
 \end{description}
+
+\subsection{String functions}
+\label{sec:string.functions}
+
+An ADQL service implementation MUST include support for the following string
+manipulation functions:
+
+\begin{itemize}
+    \item \verb:LOWER(): Lower case conversion
+    \item \verb:UPPER(): Upper case conversion
+\end{itemize}
+
+\subsubsection{Case folding}
+
+Since case folding is a nontrivial operation in a multi-encoding world, ADQL
+requires standard behaviour for the ASCII characters, and recommends
+following algorithms described in Section 3.13, ``Default Case Algorithms''
+of \citet{std:UNICODE} for characters outside the ASCII set:
+
+\begin{itemize}
+    \item algorithm R1 for \verb:UPPER():
+    \item algorithm R2 for \verb:LOWER(): and \verb:ILIKE: \SectionRef{sec:optional.string.functions.ilike}
+\end{itemize}
+
+\subsubsection{LOWER}
+\label{sec:string.functions.lower}
+
+The \texttt{LOWER} function converts its string parameter to lower case in
+accordance with the rules of the database's locale.
+
+\begin{verbatim}
+    LOWER('Francis Albert Augustus Charles Emmanuel')
+    =>
+    francis albert augustus charles emmanuel
+\end{verbatim}
+
+\subsubsection{UPPER}
+\label{sec:string.functions.upper}
+
+The \texttt{UPPER} function converts its string parameter to upper case in
+accordance with the rules of the database's locale.
+
+\begin{verbatim}
+    UPPER('Francis Albert Augustus Charles Emmanuel')
+    =>
+    FRANCIS ALBERT AUGUSTUS CHARLES EMMANUEL
+\end{verbatim}
+
+\subsection{Type operations}
+\label{sec:type}
+
+An ADQL service implementation MUST include support for the following
+type conversion functions:
+
+\begin{itemize}
+    \item \verb:CAST():
+\end{itemize}
+
+\subsubsection{CAST}
+\label{sec:type.cast}
+
+The \verb:CAST(): function returns the value of the first argument converted
+into the datatype specified by the second argument.
+
+\paragraph{Syntax} \verb:<cast_specification>:
+\begin{verbatim}
+CAST <left_paren>
+         <value_expression> AS <cast_target>
+     <right_paren>
+\end{verbatim}
+
+\paragraph{Target types}
+
+This function does not replicate the full functionality and range of types
+supported by common RDBMS implementations of \verb:CAST():. Here is the minimum
+range of types that MUST be supported:
+
+\begin{itemize}
+    \item Exact numeric:
+    \begin{itemize}
+        \item \verb:INTEGER:
+        \item \verb:SMALLINT:
+        \item \verb:BIGINT:
+    \end{itemize}
+    \item Approximate numeric:
+    \begin{itemize}
+        \item \verb:REAL:
+        \item \verb:DOUBLE PRECISION:
+    \end{itemize}
+    \item Character:
+    \begin{itemize}
+        \item \verb:CHAR: or \verb:CHAR(n): (where n is the fixed string length)
+        \item \verb:VARCHAR: or \verb:VARCHAR(n): (where n is the maximum string length)
+    \end{itemize}
+    \item Date, Time:
+    \begin{itemize}
+        \item \verb:TIMESTAMP:
+    \end{itemize}
+\end{itemize}
+
+Examples:
+
+\begin{verbatim}
+    CAST(3 AS REAL)
+    CAST('3.14159265358979323846' AS DOUBLE PRECISION)
+\end{verbatim}
+
+\paragraph{Input types}
+
+The range of types allowed for the value to cast entirely depends on the target
+type. Although cast operations may vary from one implementation to another, ADQL
+SHOULD support the ones listed in Table \ref{table:cast.inputtypes}.
+
+\begin{table}[!h]
+    \center{
+        \resizebox{\linewidth}{!}{
+            \begin{tabular}{| c | c | c | c | c | c |}
+                \hline
+                \multirow{3}{*}{\diaghead{\theadfont Output TyInput Ty}%
+                {\textbf{Input}}{\textbf{Output}}}
+                                     & \textbf{Exact}      & \textbf{Approximate} & \textbf{Variable}  & \textbf{Fixed}      &                    \\
+                                     & \textbf{numeric}    & \textbf{numeric}     & \textbf{length}    & \textbf{length}     & \textbf{Timestamp} \\
+                                     &                     &                      & \textbf{character} & \textbf{character}  &                    \\
+                \hline
+                \textbf{Exact}       & \multirow{2}{*}{X}  & \multirow{2}{*}{X}   & \multirow{2}{*}{X} & \multirow{2}{*}{X*} &                    \\
+                \textbf{numeric}     & & & & & \\
+                \hline
+                \textbf{Approximate} & \multirow{2}{*}{X*} & \multirow{2}{*}{X}   & \multirow{2}{*}{X} & \multirow{2}{*}{X*} &                    \\
+                \textbf{numeric}     & & & & & \\
+                \hline
+                \textbf{Character}   &         X           &          X           &          X         &          X*         &         X          \\
+                \hline
+                \textbf{Timestamp}   &                     &                      &          X         &          X*         &         X          \\
+                \hline
+            \end{tabular}
+        }
+    \textit{\footnotesize{X: supported ; X*: supported but possible implementation differences}}
+    \caption{CAST allowed types}
+    \label{table:cast.inputtypes}
+    }
+\end{table}
+
+\paragraph{Cast into a smaller datatype}
+
+Converting a value to a datatype that is too small to represent it SHOULD be
+treated as an error. Details of the mechanism for reporting the error condition
+are implementation dependent.
+
+This rule especially applies when casting a value into a character string too
+small to contain its entire serialization. The output string may be truncated,
+adjusted to the needed length, or an error may be thrown.
+
+\paragraph{Fixed-length character}
+
+The creation of a fixed-length character string is implementation dependent.
+In function of the implementation, \verb:CHAR: may be equivalent to
+\verb:CHAR(1): or to a \verb:CHAR: just big enough to contain the entire string
+to create.
+
+\paragraph{Approximate numeric}
+
+The rounding mechanism used when converting from approximate numerics
+(\verb:REAL: or \verb:DOUBLE PRECISION:) to precise numerics (\verb:SMALLINT:,
+\verb:INTEGER: or \verb:BIGINT:) is implementation dependent.
+
+\paragraph{Timestamp}
+
+Only a character string can be casted into a timestamp. This string MUST follow
+the syntax defined in the \DALISpec{}:
+\begin{verbatim}
+    YYYY-MM-DD[’T’hh:mm:ss[.SSS][’Z’]]
+\end{verbatim}
+
+Example:
+
+\begin{verbatim}
+    CAST('2021-01-14T11:25:00' AS TIMESTAMP)
+\end{verbatim}
+
+Note that other serializations or any other kind of value MAY also be supported.
+
+\paragraph{Geometry}
+
+\verb:CAST(): MAY also produce geometries. If an implementation wants to support
+this particular cast operation, it MUST accept a character string following the
+DALI serialization matching the precise geometry type to produce.
+
+Then, the supported geometry types SHOULD be:
+
+\begin{itemize}
+    \item \verb:POINT:
+    \item \verb:CIRCLE:
+    \item \verb:POLYGON:
+\end{itemize}
+
+Examples:
+
+\begin{verbatim}
+    CAST('12.3 45.6' AS POINT)
+    CAST('12.3 45.6 1.0' AS CIRCLE)
+    CAST('1.0 0.1 2.0 0.2 3.0 0.3' AS POLYGON)
+\end{verbatim}
+
+Note that other serializations (e.g. STC-S) or any other kind of value MAY also
+be supported.
+
+\subsection{Conditional Functions}
+\label{sec:condfunc}
+
+An ADQL service implementation MUST include support for the following
+conditional functions:
+
+\begin{itemize}
+    \item \verb:COALESCE():
+\end{itemize}
+
+\subsubsection{COALESCE}
+\label{sec:coalesce}
+
+The \texttt{COALESCE} function returns the first of its arguments that is not
+\verb|NULL|. \verb|NULL| is returned only if all arguments are \verb|NULL|.
+
+All arguments must be of the same datatype. An error should be returned
+if this rule is not respected. The way to report this error is implementation
+dependent.
+
+This is typically used to provide fallback values. For instance,
+
+\begin{verbatim}
+    COALESCE(access_url, '')
+\end{verbatim}
+
+\noindent will return an empty string when \verb|access_url| is \verb|NULL|.
 
 \section{Type system}
 \label{sec:types}
@@ -873,8 +1296,8 @@ The \verb:TIMESTAMP: datatype maps to the corresponding type defined in the
     \label{table:types.datetime.timestamp}
 \end{table}
 
-\verb:TIMESTAMP:-s can be created from string literals using the \verb:CAST(): function
-(if supported) described in \SectionRef{sec:type.cast}.
+\verb:TIMESTAMP:-s can be created from string literals using the \verb:CAST():
+function described in \SectionRef{sec:type.cast}.
 
 The basic comparison operators \verb:=:, \verb:<:, \verb:>:, \verb:<=:, \verb:>=:,
 \verb:<>: and \verb:BETWEEN: can all be applied to \verb:TIMESTAMP: values.
@@ -2189,60 +2612,18 @@ depending on the regular expression pattern matching:
 See the \TAPRegSpec{} for full details on how to use the
 XML schema to declare user defined functions.
 
-\subsection{String functions and operators}
-\label{sec:string.functions}
+\subsection{String operator}
+\label{sec:optional.string.functions}
 
 An ADQL service implementation MAY include support for the following optional
-string manipulation and comparison operators:
+string operators:
 
 \begin{itemize}
-    \item \verb:LOWER(): Lower case conversion
-    \item \verb:UPPER(): Upper case conversion
     \item \verb:ILIKE: Case-insensitive comparison.
 \end{itemize}
 
-\subsubsection{Case folding}
-
-Since case folding is a nontrivial operation in a multi-encoding world, ADQL
-requires standard behaviour for the ASCII characters, and recommends
-following algorithms described in Section 3.13, ``Default Case Algorithms''
-of \citet{std:UNICODE} for characters outside the ASCII set:
-
-\begin{itemize}
-    \item algorithm R1 for \verb:UPPER():
-    \item algorithm R2 for \verb:LOWER(): and \verb:ILIKE:
-\end{itemize}
-
-\subsubsection{LOWER}
-\label{sec:string.functions.lower}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-string|}\\
-{\footnotesize \verb|name: LOWER|}\\
-
-The LOWER function converts its string parameter to lower case in accordance with the rules of the database's locale.
-
-\begin{verbatim}
-    LOWER('Francis Albert Augustus Charles Emmanuel')
-    =>
-    francis albert augustus charles emmanuel
-\end{verbatim}
-
-\subsubsection{UPPER}
-\label{sec:string.functions.upper}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-string|}\\
-{\footnotesize \verb|name: UPPER|}\\
-
-The UPPER function converts its string parameter to upper case in accordance with the rules of the database's locale.
-
-\begin{verbatim}
-    UPPER('Francis Albert Augustus Charles Emmanuel')
-    =>
-    FRANCIS ALBERT AUGUSTUS CHARLES EMMANUEL
-\end{verbatim}
-
 \subsubsection{ILIKE}
-\label{sec:string.functions.ilike}
+\label{sec:optional.string.functions.ilike}
 {\footnotesize Language feature :}\\
 {\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-string|}\\
 {\footnotesize \verb|name: ILIKE|}\\
@@ -2256,378 +2637,9 @@ of its string operands.
     'Francis' ILIKE 'francis' => True
 \end{verbatim}
 
-\subsection{Common table expressions}
-\label{sec:common-table}
-
-An ADQL service implementation MAY include support for the following optional
-common table expressions:
-
-\begin{itemize}
-    \item \verb:WITH:
-\end{itemize}
-
-\subsubsection{WITH}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-common-table|}\\
-{\footnotesize \verb|name: WITH|}\\
-
-The WITH operator creates a temporary named result set that can be referred
-to elsewhere in the main query.
-
-Using a common table expression can make complex queries easier to understand
-by factoring subqueries out of the main SQL statement.
-
-For example, the following query with a nested subquery:
-\begin{verbatim}
-    SELECT ra, dec
-    FROM (
-           SELECT *
-           FROM alpha_source
-           WHERE id % 10 = 0
-         ) AS alpha_subset
-    WHERE ra > 10
-      AND ra < 20
-\end{verbatim}
-\noindent
-can be refactored as a named WITH query and a simpler main query:
-\begin{verbatim}
-    WITH alpha_subset AS (
-      SELECT *
-      FROM alpha_source
-      WHERE id % 10 = 0
-    )
-    SELECT ra, dec
-    FROM alpha_subset
-    WHERE ra > 10
-      AND ra < 20
-\end{verbatim}
-
-The current version of ADQL does not support recursive common table expressions.
-
-Common table expressions can be defined only in the main
-query. They are not allowed in sub-queries.
-
-\subsection{Set operators}
-\label{sec:set.operators}
-
-An ADQL service implementation MAY include support for the following optional
-set operators:
-
-\begin{itemize}
-    \item \verb:UNION:
-    \item \verb:EXCEPT:
-    \item \verb:INTERSECT:
-\end{itemize}
-
-For a set operation to be valid in ADQL, the following criteria must be met:
-\begin{itemize}
-    \item the two queries MUST result in the same number of columns
-    \item the columns in the operands MUST have the same datatypes.
-\end{itemize}
-
-In addition, the columns returned by a set operation SHOULD have the same
-metadata, e.g. units, UCD, etc. These metadata SHOULD be generated from the
-left-hand operand of the set operation.
-
-\subsubsection{UNION}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-sets|}\\
-{\footnotesize \verb|name: UNION|}\\
-
-The UNION operator combines the results of two queries, accepting rows from
-both the first and second set of results.
-
-\subsubsection{EXCEPT}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-sets|}\\
-{\footnotesize \verb|name: EXCEPT|}\\
-
-The EXCEPT operator combines the results of two queries, accepting rows that are
-in the first set of results but are not in the second one.
-
-\subsubsection{INTERSECT}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-sets|}\\
-{\footnotesize \verb|name: INTERSECT|}\\
-
-The INTERSECT operator combines the results of two queries, accepting rows
-that are strictly in both the first and second set of results.
-
-\subsubsection{Duplicated rows}
-
-\verb:UNION:, \verb:EXCEPT: and \verb:INTERSECT: remove duplicated rows,
-while \verb:UNION ALL:, \verb:EXCEPT ALL: and \verb:INTERSECT ALL: keep all of
-them.
-
-Note that the comparison used for removing duplicated rows is based purely on
-the column value and does not take into account the units. This means that a row
-with a numeric value of \verb:2: and unit of \verb:m: and a row with a numeric
-value of \verb:2: and unit of \verb:km: will be considered equal, despite the
-difference in units.
-
-\subsubsection{Operands}
-
-Operands of any of the set operators can only be \verb:SELECT: queries.
-Unless within parentheses, such queries can not use any \verb:ORDER BY: or
-\verb:OFFSET: clause.
-
-Example: sorting result of a \verb:UNION: operation:
-
-\begin{verbatim}
-        SELECT id, ra, dec FROM table1
-    UNION
-        SELECT id, ra, dec FROM table2
-    ORDER BY id -- sort the UNION result
-\end{verbatim}
-
-Example: sorting result of the \verb:UNION: operands:
-
-\begin{verbatim}
-        -- take the 10 first
-        (SELECT TOP 10 id, ra, dec FROM atable ORDER BY id ASC)
-    UNION
-        -- take the 10 last
-        (SELECT TOP 10 id, ra, dec FROM atable ORDER BY id DESC)
-\end{verbatim}
-
-Common table expressions are not allowed in any set operator operand. They must
-always be declared at the main level.
-
-Example: sorting result of the \verb:UNION: operands: with common table
-expressions
-
-\begin{verbatim}
-WITH tenFirst AS (SELECT TOP 10 id, ra, dec FROM atable ORDER BY id ASC),
-     tenLast  AS (SELECT TOP 10 id, ra, dec FROM atable ORDER BY id DESC)
-  SELECT * FROM tenFirst
-UNION
-  SELECT * FROM tenLast
-\end{verbatim}
-
-\subsubsection{Precedence}
-
-When set operators are used together, the resulting expression is
-evaluated in the context of the following precedence:
-
-\begin{enumerate}
-    \item Expressions within parentheses
-    \item The \verb:INTERSECT: operator
-    \item The \verb:UNION: and \verb:EXCEPT: operators evaluated from left to right
-\end{enumerate}
-
-Example:
-
-\begin{verbatim}
-        SELECT id, ra, dec FROM table1
-    UNION
-        SELECT id, ra, dec FROM table2
-    INTERSECT
-        SELECT id, ra, dec FROM table3
-\end{verbatim}
-
-is equivalent to:
-
-\begin{verbatim}
-        SELECT id, ra, dec FROM table1
-    UNION
-        (
-            SELECT id, ra, dec FROM table2
-        INTERSECT
-            SELECT id, ra, dec FROM table3
-        )
-\end{verbatim}
-
-\subsection{Type operations}
-\label{sec:type}
-
-An ADQL service implementation MAY include support for the following optional
-type conversion functions:
-
-\begin{itemize}
-    \item \verb:CAST():
-\end{itemize}
-
-\subsubsection{CAST}
-\label{sec:type.cast}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-type|}\\
-{\footnotesize \verb|name: CAST|}\\
-
-The \verb:CAST(): function returns the value of the first argument converted
-into the datatype specified by the second argument.
-
-\paragraph{Syntax} \verb:<cast_specification>:
-\begin{verbatim}
-CAST <left_paren>
-         <value_expression> AS <cast_target>
-     <right_paren>
-\end{verbatim}
-
-\paragraph{Target types}
-
-This function does not replicate the full functionality and range of types
-supported by common RDBMS implementations of \verb:CAST():. Here is the minimum
-range of types that MUST be supported if \verb:CAST(): is implemented:
-
-\begin{itemize}
-    \item Exact numeric:
-    \begin{itemize}
-        \item \verb:INTEGER:
-        \item \verb:SMALLINT:
-        \item \verb:BIGINT:
-    \end{itemize}
-    \item Approximate numeric:
-    \begin{itemize}
-        \item \verb:REAL:
-        \item \verb:DOUBLE PRECISION:
-    \end{itemize}
-    \item Character:
-    \begin{itemize}
-        \item \verb:CHAR: or \verb:CHAR(n): (where n is the fixed string length)
-        \item \verb:VARCHAR: or \verb:VARCHAR(n): (where n is the maximum string length)
-    \end{itemize}
-    \item Date, Time:
-    \begin{itemize}
-        \item \verb:TIMESTAMP:
-    \end{itemize}
-\end{itemize}
-
-Examples:
-
-\begin{verbatim}
-    CAST(3 AS REAL)
-    CAST('3.14159265358979323846' AS DOUBLE PRECISION)
-\end{verbatim}
-
-\paragraph{Input types}
-
-The range of types allowed for the value to cast entirely depends on the target
-type. Although cast operations may vary from one implementation to another, ADQL
-SHOULD support the ones listed in Table \ref{table:cast.inputtypes}.
-
-\begin{table}[!h]
-    \center{
-        \resizebox{\linewidth}{!}{
-            \begin{tabular}{| c | c | c | c | c | c |}
-                \hline
-                \multirow{3}{*}{\diaghead{\theadfont Output TyInput Ty}%
-                {\textbf{Input}}{\textbf{Output}}}
-                                     & \textbf{Exact}      & \textbf{Approximate} & \textbf{Variable}  & \textbf{Fixed}      &                    \\
-                                     & \textbf{numeric}    & \textbf{numeric}     & \textbf{length}    & \textbf{length}     & \textbf{Timestamp} \\
-                                     &                     &                      & \textbf{character} & \textbf{character}  &                    \\
-                \hline
-                \textbf{Exact}       & \multirow{2}{*}{X}  & \multirow{2}{*}{X}   & \multirow{2}{*}{X} & \multirow{2}{*}{X*} &                    \\
-                \textbf{numeric}     & & & & & \\
-                \hline
-                \textbf{Approximate} & \multirow{2}{*}{X*} & \multirow{2}{*}{X}   & \multirow{2}{*}{X} & \multirow{2}{*}{X*} &                    \\
-                \textbf{numeric}     & & & & & \\
-                \hline
-                \textbf{Character}   &         X           &          X           &          X         &          X*         &         X          \\
-                \hline
-                \textbf{Timestamp}   &                     &                      &          X         &          X*         &         X          \\
-                \hline
-            \end{tabular}
-        }
-    \textit{\footnotesize{X: supported ; X*: supported but possible implementation differences}}
-    \caption{CAST allowed types}
-    \label{table:cast.inputtypes}
-    }
-\end{table}
-
-\paragraph{Cast into a smaller datatype}
-
-Converting a value to a datatype that is too small to represent it SHOULD be
-treated as an error. Details of the mechanism for reporting the error condition
-are implementation dependent.
-
-This rule especially applies when casting a value into a character string too
-small to contain its entire serialization. The output string may be truncated,
-adjusted to the needed length, or an error may be thrown.
-
-\paragraph{Fixed-length character}
-
-The creation of a fixed-length character string is implementation dependent.
-In function of the implementation, \verb:CHAR: may be equivalent to
-\verb:CHAR(1): or to a \verb:CHAR: just big enough to contain the entire string
-to create.
-
-\paragraph{Approximate numeric}
-
-The rounding mechanism used when converting from approximate numerics
-(\verb:REAL: or \verb:DOUBLE PRECISION:) to precise numerics (\verb:SMALLINT:,
-\verb:INTEGER: or \verb:BIGINT:) is implementation dependent.
-
-\paragraph{Timestamp}
-
-Only a character string can be casted into a timestamp. This string MUST follow
-the syntax defined in the \DALISpec{}:
-\begin{verbatim}
-    YYYY-MM-DD[’T’hh:mm:ss[.SSS][’Z’]]
-\end{verbatim}
-
-Example:
-
-\begin{verbatim}
-    CAST('2021-01-14T11:25:00' AS TIMESTAMP)
-\end{verbatim}
-
-Note that other serializations or any other kind of value MAY also be supported.
-
-\paragraph{Geometry}
-
-\verb:CAST(): MAY also produce geometries. If an implementation wants to support
-this particular cast operation, it MUST accept a character string following the
-DALI serialization matching the precise geometry type to produce.
-
-Then, the supported geometry types SHOULD be:
-
-\begin{itemize}
-    \item \verb:POINT:
-    \item \verb:CIRCLE:
-    \item \verb:POLYGON:
-\end{itemize}
-
-Examples:
-
-\begin{verbatim}
-    CAST('12.3 45.6' AS POINT)
-    CAST('12.3 45.6 1.0' AS CIRCLE)
-    CAST('1.0 0.1 2.0 0.2 3.0 0.3' AS POLYGON)
-\end{verbatim}
-
-Note that other serializations (e.g. STC-S) or any other kind of value MAY also
-be supported.
-
-\subsection{Conditional Functions}
-\label{sec:condfunc}
-
-An ADQL service implementation MAY include support for the following optional
-conditional functions:
-
-\begin{itemize}
-    \item \verb:COALESCE():
-\end{itemize}
-
-\subsubsection{COALESCE}
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-conditional|}\\
-{\footnotesize \verb|name: COALESCE|}\\
-
-The COALESCE function returns the first of its arguments that is not
-NULL. NULL is returned only if all arguments are NULL.
-
-All arguments must be of the same datatype. An error should be returned
-if this rule is not respected. The way to report this error is
-implementation dependent.
-
-This is typically used to provide fallback values. For instance,
-
-\begin{verbatim}
-    COALESCE(access_url, '')
-\end{verbatim}
-
-\noindent will return an empty string when \verb|access_url| is NULL.
-
+% Supported by PostgreSQL but not by SQLServer (only LIKE is available but the
+% ADQL's ILIKE could be translated into LOWER(a) LIKE LOWER(b)...are
+% performances really worst?...to be tested and discussed)
 
 \subsection{Unit operations}
 \label{sec:unit}
@@ -2737,39 +2749,6 @@ Note that the complexity and the behavior of a unit inference mechanism is
 implementation dependent. This mechanism is OPTIONAL and is described here
 as it could significantly improve the behavior of \verb:IN_UNIT():.
 
-\subsection{Cardinality}
-\label{sec:cardinality}
-
-An ADQL service implementation MAY include support for the following optional
-clauses to modify the cardinality of query results:
-
-\begin{itemize}
-    \item \verb:OFFSET:
-\end{itemize}
-
-\subsubsection{OFFSET}
-\label{sec:offset}
-
-{\footnotesize Language feature :}\\
-{\footnotesize \verb|type: ivo://ivoa.net/std/tapregext#features-adql-offset|}\\
-{\footnotesize \verb|name: OFFSET|}\\
-
-An ADQL service implementation MAY include support for the OFFSET clause
-which limits the number of rows returned by removing a specified number
-of rows from the beginning of the result set.
-
-If a query contains both an ORDER BY clause and an OFFSET clause,
-then the ORDER BY is applied before the specified number of
-rows are dropped by the OFFSET clause.
-
-If the total number of rows is less than the value
-specified by the OFFSET clause, then the result set is empty.
-
-If a query contains both an OFFSET clause and a TOP clause,
-then the OFFSET clause is applied first, dropping the specified
-number of rows from the beginning of the result set before the
-TOP clause is applied to limit the number of rows returned.
-
 \clearpage % section cut
 \appendix
 \section[BNF grammar]{BNF grammar \footnote{
@@ -2818,18 +2797,23 @@ For example, the following XML fragment describes a service that supports the
 \label{sec:changes-2.2}
 
 \begin{itemize}
-    \item \textbf{Applied ADQL-2.1's errata}:
+    \item Apply Erratum 1 - Addition of auxiliary files for the BNF grammar
+    \item Convert the tables for mathematical and trigonometrical
+          functions into lists (see \SectionRef{sec:math.functions})
+    \item Make some features mandatory
         \begin{itemize}
-            \item Erratum 1 - Addition of auxiliary files for the BNF grammar
+            \item \texttt{LOWER} (see \SectionRef{sec:string.functions.lower})
+            \item \texttt{UPPER} (see \SectionRef{sec:string.functions.upper})
+            \item \texttt{OFFSET} (see \SectionRef{sec:offset})
+            \item \texttt{COALESCE} (see \SectionRef{sec:coalesce})
+            \item \texttt{CAST} (see \SectionRef{sec:type.cast})
+            \item Common Table Expressions (\texttt{WITH} clause)
+                  (see \SectionRef{sec:common-table})
+            \item Set operations (\texttt{UNION}, \texttt{INTERSECT} and
+                  \texttt{EXCEPT}) (see \SectionRef{sec:set.operators})
         \end{itemize}
-    \item \textbf{General}
-        \begin{itemize}
-            \item \textbf{Updated}
-                \begin{itemize}
-                    \item Convert the tables for mathematical and trigonometrical
-                          functions into lists (see \SectionRef{sec:math.functions})
-                \end{itemize}
-        \end{itemize}
+    \item \texttt{OFFSET} require the usage of \texttt{ORDER BY} when it is used
+          (see \SectionRef{sec:offset})
 \end{itemize}
 
 \subsection{Between 2.0 and 2.1}
@@ -2885,8 +2869,10 @@ For example, the following XML fragment describes a service that supports the
             \item \textbf{Added}
                 \begin{itemize}
                     \item Case sensitive functions and operators:
-                          \verb:LOWER():, \verb:UPPER(): and \verb:ILIKE:
+                          \verb:LOWER():, \verb:UPPER():
                           \SectionSee{sec:string.functions}
+                          and \verb:ILIKE:
+                          \SectionSee{sec:optional.string.functions.ilike}
                     \item Common table expressions (i.e. \verb:WITH: keyword)
                           \SectionSee{sec:common-table}
                     \item Set operators: \verb:UNION:, \verb:INTERSECT: and
@@ -2898,7 +2884,7 @@ For example, the following XML fragment describes a service that supports the
                     \item Unit conversion function: \verb:IN_UNIT():
                           \SectionSee{sec:unit}
                     \item \verb:OFFSET:
-                          \SectionSee{sec:cardinality}
+                          \SectionSee{sec:offset}
                 \end{itemize}
             \item \textbf{Updated}
                 \begin{itemize}
